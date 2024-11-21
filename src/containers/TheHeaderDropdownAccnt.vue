@@ -18,18 +18,11 @@
     <CDropdownHeader tag="div" class="text-center text-light" color="dark">
       <strong>Cuenta del Usuario</strong>
     </CDropdownHeader>
-    <!--
-    <CDropdownItem>
-      <CIcon name="cil-bell"/> Alertas
-      <CBadge color="danger" class="mfs-auto">{{ itemsCount }}</CBadge>
+    <CDropdownItem to="/perfiles/perfilusuario" v-if="$store.state.idRol != 12">
+      <CIcon name="cil-user" /> Datos Usuario
     </CDropdownItem>
-    <CDropdownItem>
-      <CIcon name="cil-envelope-open" /> Mensajes
-      <CBadge color="info" class="mfs-auto">{{ itemsCount }}</CBadge>
-    </CDropdownItem>
-    -->
-    <CDropdownItem to="/perfil">
-      <CIcon name="cil-user" /> Perfil
+    <CDropdownItem to="/perfiles/cambioclave">
+      <CIcon name="cilShieldAlt" /> Cambiar Contraseña
     </CDropdownItem>
     <CDropdownDivider/>
     <CDropdownItem @click="cerrarSesion">
@@ -51,13 +44,18 @@
     methods: {
       cerrarSesion() {
         this.$bvModal.msgBoxConfirm('¿Esta seguro de terminar la sesión?', {
+          headerBgVariant: 'primary',
+          headerTextVariant: 'light',
+          bodyBgVariant: 'light',
+          bodyBgClass: 'text-center',
           title: 'Cerrar Sesión',
           size: '',
-          buttonSize: '',
-          okVariant: 'success',
+          buttonSize: 'sm',
+          okVariant: 'primary',
           okTitle: 'Si, quiero terminar la sesión',
           cancelTitle: 'Cancelar',
           footerClass: 'p-2',
+          bodyClass: 'p-5',
           hideHeaderClose: false,
           centered: true
         })

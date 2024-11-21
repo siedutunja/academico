@@ -14,7 +14,6 @@
 
 <script>
   import { version,description } from '@/../package.json'
-  import * as CONFIG from '@/assets/config.js'
   export default {
     name: 'TheFooter',
     data () {

@@ -32,6 +32,11 @@ import {
   cifPl
 } from '@coreui/icons'
 import {
+  cilArrowThickFromTop,
+  cilEducation,
+  cilHappy,
+  cilBlurLinear,
+  cilDialpad,
   cilBook,
   cilAddressBook,
   cilCash,
@@ -122,6 +127,11 @@ export const iconsSet = Object.assign(
   {},
   { logo },
   {
+    cilArrowThickFromTop,
+    cilEducation,
+    cilHappy,
+    cilBlurLinear,
+    cilDialpad,
     cilBook,
     cilAddressBook,
     cilCash,

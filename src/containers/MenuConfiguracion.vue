@@ -5,33 +5,41 @@
         <CIcon name="cilSettings"/>Configuración
       </CHeaderNavLink>
     </template>
-    <CDropdownHeader tag="div" class="text-center" color="dark"></CDropdownHeader>
-    <CDropdownItem to="/usuarios/usuarios">
-      <CIcon name="cilUserFollow" />Usuarios
+    <CDropdownHeader tag="div" class="text-center text-light" color="dark">
+      <strong>Configuración del Sistema</strong>
+    </CDropdownHeader>
+    <CDropdownItem to="/configuracion/sedesie">
+      <CIcon name="cilBuilding" />Sedes
+    </CDropdownItem>
+    <CDropdownItem to="/configuracion/gradossedeie">
+      <CIcon name="cilDialpad" />Grados por Sede
+    </CDropdownItem>
+    <CDropdownItem to="/configuracion/cursosgrado">
+      <CIcon name="cilBlurLinear" />Cursos por Sede y Grado
+    </CDropdownItem>
+    <!--
+    <CDropdownDivider/>
+    <CDropdownItem to="/configuracion/listaareas">
+      <CIcon name="cilList" />Areas
+    </CDropdownItem>
+    <CDropdownItem to="/configuracion/listaasignaturas">
+      <CIcon name="cilListRich" />Asignaturas
+    </CDropdownItem>
+    <CDropdownItem to="/configuracion/planestudios">
+      <CIcon name="cilBraille" />Plan de Estudios por Grado
     </CDropdownItem>
     <CDropdownDivider/>
     <CDropdownItem to="infoinstitucional">
-      <CIcon name="cilBuilding" />Información Institucional
+      <CIcon name="cilBuilding" />Datos Generales de la IE
     </CDropdownItem>
-    <!--
-    <CDropdownItem to="/planeacion/seguimientopa">
-      <CIcon name="cilChartPie" />Seguimiento al Plan de Acción
-    </CDropdownItem>
-    <CDropdownDivider/>
-    <CDropdownItem to="/planeacion/avancepa">
-      <CIcon name="cilBraille" />Avance Plan de Acción
-    </CDropdownItem>
-    <CDropdownDivider/>
-    <CDropdownItem to="/planeacion/metaspa">
-      <CIcon name="cilChart" />Metas por Indicador
-    </CDropdownItem>
-    <CDropdownItem to="/planeacion/actividadespa">
-      <CIcon name="cilList" />Actividades por Indicador
-    </CDropdownItem>
-    <CDropdownItem to="/planeacion/gestionpa">
-      <CIcon name="cilBlur" />Gestión del Plan de Acción
+    <CDropdownItem to="/configuracion/nuevavigencia" v-if="$store.state.idRol == 1">
+      <CIcon name="cilBuilding" />Habilitar Nuevo Año Lectivo
     </CDropdownItem>
     -->
+    <CDropdownDivider/>
+    <CDropdownItem to="/configuracion/superadmin">
+      <CIcon name="cilSpeedometer" />Super Administrador
+    </CDropdownItem>
   </CDropdown>
 </template>
 

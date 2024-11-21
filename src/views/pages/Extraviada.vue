@@ -7,7 +7,7 @@
             <b-card class="text-center">
               <h1 class="display-4">¡Ups!</h1>
               <h5>No se encontró la página que está solicitando.</h5>
-              <b-button type="submit" class="btn mb-2 mt-4" variant="info" @click="regresar">Regresar</b-button>
+              <b-button type="submit" class="btn mb-2 mt-4" variant="danger" @click="regresar">Regresar</b-button>
             </b-card>
           </div>
         </div>

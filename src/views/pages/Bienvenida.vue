@@ -39,127 +39,254 @@
       return {
         btnHabilitado: false,
         escudoI: null,
-        idUsuario: null,
-        datosPermisos: {},
-        idInstitucion: null
+        tokenDecodificado: {}
       }
     },
     methods: {
       continuar() {
         this.$router.push('/')
       },
-      async cargarDatosSesion() {
+      async trazaProceso(descProceso) {
+        let traza = { idUsuario: this.tokenDecodificado.id, descProceso: descProceso, ip: null}
         await axios
-        .get(CONFIG.ROOT_PATH + 'login/usuario/institucion', { params: { idUsuario: this.idUsuario }})
+        .post(CONFIG.ROOT_PATH + 'academico/trazaproceso', JSON.stringify(traza), { headers: {"Content-Type": "application/json; charset=utf-8" }})
         .then(response => {
           if (response.data.error){
-            alert(response.data.mensaje + ' - Consulta Usuario Login')
+            alert('¡Lo sentimos!, se presento un problema al registrar la traza de la sesión.! Es necesario iniciar una nueva sesión.')
+            location.replace(CONFIG.ROOT_WEBSITE)
+          }
+        })
+        .catch(err => {
+          alert('Algo salio mal y no se pudo registrar la traza de la Sesión. Intente más tarde. ' + err)
+          location.replace(CONFIG.ROOT_WEBSITE)
+        })
+      },
+      async cargarDatosTablas() {
+        await axios
+        .get(CONFIG.ROOT_PATH + 'academico/carguetablas')
+        .then(response => {
+          if (response.data.error){
+            alert(response.data.mensaje + ' - Consulta datos tablas de la Sesión')
+            location.replace(CONFIG.ROOT_MODULO_LOGIN)
+          } else {
+            if(response.data.datos != 0) {
+              this.$store.commit('set', ['datosTablas', response.data.datos])
+            } else {
+              this.$store.commit('set', ['datosTablas', []])
+            }
+          }
+        })
+        .catch(err => {
+          alert('Algo salio mal y no se pudo realizar: Consulta datos tablas de la Sesión. Intente más tarde. ' + err)
+          location.replace(CONFIG.ROOT_WEBSITE)
+        })
+      },
+      async cargarDatosSedesGradosConfig() {
+        await axios
+        .get(CONFIG.ROOT_PATH + 'academico/carguesedesgradosconfig', {params: {idInstitucion: this.$store.state.idInstitucion, vigencia: this.$store.state.aLectivo}})
+        .then(response => {
+          if (response.data.error){
+            alert(response.data.mensaje + ' - Consulta datos Sedes')
+            location.replace(CONFIG.ROOT_MODULO_LOGIN)
+          } else {
+            if(response.data.datos != 0) {
+              this.$store.commit('set', ['datosSedesGradosConfig', response.data.datos])
+            } else {
+              this.$store.commit('set', ['datosSedesGradosConfig', []])
+            }
+          }
+        })
+        .catch(err => {
+          alert('Algo salio mal y no se pudo realizar: Consulta datos Sedes. Intente más tarde. ' + err)
+          location.replace(CONFIG.ROOT_WEBSITE)
+        })
+      },
+      async cargarDatosSedes() {
+        await axios
+        .get(CONFIG.ROOT_PATH + 'academico/carguesedes', {params: {idInstitucion: this.$store.state.idInstitucion, vigencia: this.$store.state.aLectivo}})
+        .then(response => {
+          if (response.data.error){
+            alert(response.data.mensaje + ' - Consulta datos Sedes Activas')
+            location.replace(CONFIG.ROOT_MODULO_LOGIN)
+          } else {
+            if(response.data.datos != 0) {
+              this.$store.commit('set', ['datosSedes', response.data.datos])
+            } else {
+              this.$store.commit('set', ['datosSedes', []])
+            }
+          }
+        })
+        .catch(err => {
+          alert('Algo salio mal y no se pudo realizar: Consulta datos Sedes Activas. Intente más tarde. ' + err)
+          location.replace(CONFIG.ROOT_WEBSITE)
+        })
+      },
+      async cargarDatosGrados() {
+        await axios
+        .get(CONFIG.ROOT_PATH + 'academico/carguegrados', {params: {idInstitucion: this.$store.state.idInstitucion, vigencia: this.$store.state.aLectivo}})
+        .then(response => {
+          if (response.data.error){
+            alert(response.data.mensaje + ' - Consulta datos Grados Activos')
+            location.replace(CONFIG.ROOT_MODULO_LOGIN)
+          } else {
+            if(response.data.datos != 0) {
+              this.$store.commit('set', ['datosGrados', response.data.datos])
+            } else {
+              this.$store.commit('set', ['datosGrados', []])
+            }
+          }
+        })
+        .catch(err => {
+          alert('Algo salio mal y no se pudo realizar: Consulta datos Grados Activos. Intente más tarde. ' + err)
+          location.replace(CONFIG.ROOT_WEBSITE)
+        })
+      },
+      async cargarDatosCursos() {
+        await axios
+        .get(CONFIG.ROOT_PATH + 'academico/carguecursos', {params: {idInstitucion: this.$store.state.idInstitucion, vigencia: this.$store.state.aLectivo}})
+        .then(response => {
+          if (response.data.error){
+            alert(response.data.mensaje + ' - Consulta datos Cursos Activos')
+            location.replace(CONFIG.ROOT_MODULO_LOGIN)
+          } else {
+            if(response.data.datos != 0) {
+              response.data.datos.forEach(element => {
+                let indice = this.$store.state.datosDocentes.find(docen => docen.id === element.id_director)
+                if (indice === undefined) {
+                  element.director = null
+                } else {
+                  element.director = indice.docente
+                }
+              })
+              this.$store.commit('set', ['datosCursos', response.data.datos])
+            } else {
+              this.$store.commit('set', ['datosCursos', []])
+            }
+          }
+        })
+        .catch(err => {
+          alert('Algo salio mal y no se pudo realizar: Consulta datos Cursos Activos. Intente más tarde. ' + err)
+          location.replace(CONFIG.ROOT_WEBSITE)
+        })
+      },
+      async cargarDatosDocentes() {
+        await axios
+        .get(CONFIG.ROOT_PATH + 'academico/carguedocentes', {params: {idInstitucion: this.$store.state.idInstitucion}})
+        .then(response => {
+          if (response.data.error){
+            alert(response.data.mensaje + ' - Consulta datos Docentes Activos')
+            location.replace(CONFIG.ROOT_MODULO_LOGIN)
+          } else {
+            if(response.data.datos != 0) {
+              this.$store.commit('set', ['datosDocentes', response.data.datos])
+            } else {
+              this.$store.commit('set', ['datosDocentes', []])
+            }
+          }
+        })
+        .catch(err => {
+          alert('Algo salio mal y no se pudo realizar: Consulta datos Docentes Activos. Intente más tarde. ' + err)
+          location.replace(CONFIG.ROOT_WEBSITE)
+        })
+      },
+      async cargarDatosRutas() {
+        await axios
+        .get(CONFIG.ROOT_PATH + 'academico/carguerutas', {params: {idInstitucion: this.$store.state.idInstitucion}})
+        .then(response => {
+          if (response.data.error){
+            alert(response.data.mensaje + ' - Consulta datos Rutas IE')
+            location.replace(CONFIG.ROOT_MODULO_LOGIN)
+          } else {
+            if(response.data.datos != 0) {
+              this.$store.commit('set', ['datosRutas', response.data.datos])
+            } else {
+              this.$store.commit('set', ['datosRutas', []])
+            }
+          }
+        })
+        .catch(err => {
+          alert('Algo salio mal y no se pudo realizar: Consulta datos Rutas IE. Intente más tarde. ' + err)
+          location.replace(CONFIG.ROOT_WEBSITE)
+        })
+      },
+      async cargarDatosSesionUsuario() {
+        await axios
+        .get(CONFIG.ROOT_PATH + 'academico/iniciosesion', { params: { idPersona: this.tokenDecodificado.id_persona, idRol: this.tokenDecodificado.id_rol, idIE: this.tokenDecodificado.id_institucion }})
+        .then(response => {
+          if (response.data.error){
+            alert(response.data.mensaje + ' - Consulta datos del Usuario de la Sesión')
             location.replace(CONFIG.ROOT_MODULO_LOGIN)
           } else{
+            //console.log('Sesion: ' + JSON.stringify(response.data.datos))
             if (response.data.datos == 0) {
               alert('¡Lo sentimos!. El Usuario no tiene permisos asignados.')
               location.replace(CONFIG.ROOT_MODULO_LOGIN)
             } else {
-              this.$store.commit('set', ['idUsuario', response.data.datos.id])
-              this.$store.commit('set', ['usuario', response.data.datos.usuario])
-              this.$store.commit('set', ['clave', response.data.datos.clave])
-              this.$store.commit('set', ['idPersona', response.data.datos.id_persona])
-              this.$store.commit('set', ['idRol', response.data.datos.id_rol])
-              this.$store.commit('set', ['idDependencia', response.data.datos.id_dependencia])
-              this.$store.commit('set', ['nombreUsuario', response.data.datos.nombre1])
-              this.$store.commit('set', ['apellidoUsuario', response.data.datos.apellido1])
-              this.$store.commit('set', ['generoUsuario', response.data.datos.id_genero])
-              this.$store.commit('set', ['rol', response.data.datos.rol])
-              this.$store.commit('set', ['nemoRol', response.data.datos.nemo])
-              this.$store.commit('set', ['dependencia', response.data.datos.dependencia])
-              if (response.data.datos.foto == null || response.data.datos.foto == '') {
+              this.$store.commit('set', ['nombreUsuario', response.data.datos.usuario.nombre1])
+              this.$store.commit('set', ['apellidoUsuario', response.data.datos.usuario.apellido1])
+              this.$store.commit('set', ['generoUsuario', response.data.datos.usuario.id_genero])
+              this.$store.commit('set', ['rol', response.data.datos.usuario.rol])
+              this.$store.commit('set', ['nemoRol', response.data.datos.usuario.nemo])
+              if (response.data.datos.usuario.foto == null || response.data.datos.usuario.foto == '') {
                 this.$store.commit('set', ['foto', CONFIG.FOTO])
               } else {
-                this.$store.commit('set', ['foto', response.data.datos.foto])
+                this.$store.commit('set', ['foto', response.data.datos.usuario.foto])
               }
-              this.$store.commit('set', ['idEntorno', response.data.datos.id_entorno])
-              this.$store.commit('set', ['correoUsuario', response.data.datos.correo])
+              this.$store.commit('set', ['correoUsuario', response.data.datos.usuario.correo])
+
+              this.$store.commit('set', ['nombreInstitucion', response.data.datos.ie.institucion])
+              this.$store.commit('set', ['nemoInstitucion', response.data.datos.ie.nemo])
+              this.$store.commit('set', ['escudoInstitucion', response.data.datos.ie.escudo])
+              this.$store.commit('set', ['correoInstitucion', response.data.datos.ie.correo])
+              this.$store.commit('set', ['sectorInstitucion', response.data.datos.ie.sector])
+              this.$store.commit('set', ['daneInstitucion', response.data.datos.ie.dane])
+              this.$store.commit('set', ['nitInstitucion', response.data.datos.ie.nit])
+
+              this.$store.commit('set', ['aLectivo', response.data.datos.configuracion.a_lectivo])
+              this.$store.commit('set', ['aMatriculas', response.data.datos.configuracion.a_matriculas])
+              
+              this.cargarDatosSedesGradosConfig()
+              this.cargarDatosDocentes()
+              this.cargarDatosSedes()
+              this.cargarDatosGrados()
+              this.cargarDatosCursos()
+              this.cargarDatosRutas()
+
+              this.trazaProceso('Inicio de Sesión')
             }
           }
         })
         .catch(err => {
-          alert('Algo salio mal y no se pudo realizar: Consulta Usuario Login. Intente más tarde. ' + err)
+          alert('Algo salio mal y no se pudo realizar: Consulta datos del Usuario de la Sesión. Intente más tarde. ' + err)
           location.replace(CONFIG.ROOT_WEBSITE)
         })
-      },
-      async cargarConfiguracionesAdmon() {
-        await axios
-        .get(CONFIG.ROOT_PATH + 'configuraciones/admon')
-        .then(response => {
-          if (response.data.error){
-            this.mensajeEmergente('danger',CONFIG.TITULO_MSG,response.data.mensaje + ' - Datos de configuración del Admon')
-          } else{
-            if (response.data.datos != 0) {
-              this.$store.commit('set', ['idCuatrienio', response.data.datos.id])
-              this.$store.commit('set', ['descCuatrienio', response.data.datos.descripcion])
-              this.$store.commit('set', ['aIniCuatrienio', response.data.datos.a_inicial])
-              this.$store.commit('set', ['aFinCuatrienio', response.data.datos.a_final])
-              this.$store.commit('set', ['aLectivoAdmon', response.data.datos.a_lectivo])
-            }
-          }
-        })
-        .catch(err => {
-          this.mensajeEmergente('danger',CONFIG.TITULO_MSG,'Algo salio mal y no se pudo realizar: Datos de configuración del Admon. Intente más tarde.' + err)
-        })
-      },
-      async cargarConfiguracionesColegio() {
-        await axios
-        .get(CONFIG.ROOT_PATH + 'configuraciones/institucion', { params: { idInstitucion: this.idInstitucion }})
-        .then(response => {
-          if (response.data.error){
-            this.mensajeEmergente('danger',CONFIG.TITULO_MSG,response.data.mensaje + ' - Datos de configuración del Colegio')
-          } else{
-            if (response.data.datos != 0) {
-              this.$store.commit('set', ['idInstitucion', this.idInstitucion])
-              this.$store.commit('set', ['nombreInstitucion', response.data.datos.institucion])
-              this.$store.commit('set', ['nemoInstitucion', response.data.datos.nemo])
-              this.$store.commit('set', ['aLectivo', response.data.datos.a_lectivo])
-              this.$store.commit('set', ['escudoInstitucion', response.data.datos.escudo])
-              this.$store.commit('set', ['correoInstitucion', response.data.datos.correo])
-              this.$store.commit('set', ['idSectorInstitucion', response.data.datos.id_sector])
-              this.$store.commit('set', ['sectorInstitucion', response.data.datos.sector])
-              this.$store.commit('set', ['daneInstitucion', response.data.datos.dane])
-              this.$store.commit('set', ['nitInstitucion', response.data.datos.nit])
-            }
-          }
-        })
-        .catch(err => {
-          this.mensajeEmergente('danger',CONFIG.TITULO_MSG,'Algo salio mal y no se pudo realizar: Datos de configuración del Colegio. Intente más tarde.' + err)
-        })
-      },
-      async cargarPermisos() {
-        this.$store.commit('set', ['colpresupuesto', this.datosPermisos.colpresupuesto])
-        this.$store.commit('set', ['coltramites', this.datosPermisos.coltramites])
-        this.$store.commit('set', ['colcobertura', this.datosPermisos.colcobertura])
-        this.$store.commit('set', ['colpmidirectiva', this.datosPermisos.colpmidirectiva])
-        this.$store.commit('set', ['colpmiacademica', this.datosPermisos.colpmiacademica])
-        this.$store.commit('set', ['colpmiadmin', this.datosPermisos.colpmiadmin])
-        this.$store.commit('set', ['colpmicomunidad', this.datosPermisos.colpmicomunidad])
-        this.$store.commit('set', ['colsiee', this.datosPermisos.colsiee])
-        this.$store.commit('set', ['colpmi', this.datosPermisos.colpmi])
       },
       async iniciarVista() {
         let token = sessionStorage.getItem('token')
         jwt.verify(token, CONFIG.SECRET_KEY, (err, data) => {
           if (err) {
-            alert('¡Bienvenida. Lo sentimos, el token no es válido o el token ha expirado.! Es necesario iniciar una nueva sesión.')
+            alert('¡Lo sentimos!, el token no es válido o el token ha expirado.! Es necesario iniciar una nueva sesión.')
             location.replace(CONFIG.ROOT_WEBSITE)
           } else {
-            let tokenDecodificado = jwt.decode(token)
-            this.idUsuario = tokenDecodificado.id
-            this.idInstitucion = tokenDecodificado.id_institucion
-            this.datosPermisos = tokenDecodificado.permisos
-            console.log(JSON.stringify(tokenDecodificado))
-            this.cargarDatosSesion()
-            this.cargarConfiguracionesAdmon()
-            this.cargarConfiguracionesColegio()
-            this.cargarPermisos()
+            this.tokenDecodificado = jwt.decode(token)
+            //console.log(JSON.stringify(this.tokenDecodificado))
+            this.$store.commit('set', ['idUsuario', this.tokenDecodificado.id])
+            this.$store.commit('set', ['usuario', this.tokenDecodificado.usuario])
+            this.$store.commit('set', ['clave', this.tokenDecodificado.clave])
+            this.$store.commit('set', ['idPersona', this.tokenDecodificado.id_persona])
+            this.$store.commit('set', ['idRol', this.tokenDecodificado.id_rol])
+            this.$store.commit('set', ['idEntorno', this.tokenDecodificado.id_entorno])
+            this.$store.commit('set', ['idInstitucion', this.tokenDecodificado.id_institucion])
+            this.$store.commit('set', ['idSector', this.tokenDecodificado.id_sector])
+            this.$store.commit('set', ['perMatricular', this.tokenDecodificado.permisos.matricular])
+            this.$store.commit('set', ['perOrgaListas', this.tokenDecodificado.permisos.orglistas])
+            this.$store.commit('set', ['perProgPeriodos', this.tokenDecodificado.permisos.programarper])
+            this.$store.commit('set', ['perActDocente', this.tokenDecodificado.permisos.actdoc])
+            this.$store.commit('set', ['perActEstudiante', this.tokenDecodificado.permisos.actest])
+            this.$store.commit('set', ['perAsigCarga', this.tokenDecodificado.permisos.asigcarga])
             this.escudoI = CONFIG.ROOT_ESCUDOS
+            this.cargarDatosSesionUsuario()
+            this.cargarDatosTablas()
             setTimeout(()=>{
               this.btnHabilitado = true
             },1500)

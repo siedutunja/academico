@@ -45,4 +45,15 @@
     margin-top: 0;
     box-shadow: 0 3px 6px rgba(0, 0, 0, 0.5);
   }
+
+  .etiqueta {
+    font-weight: bold;
+    //font-size: 16;
+  }
+
+  .fondoTitulo {
+    font-weight: bold;
+    background: rgb(210, 237, 100);
+    //font-size: 16;
+  }
 </style>

@@ -17,6 +17,7 @@ jwt.verify(token, CONFIG.SECRET_KEY, (err, data) => {
     sessionStorage.setItem('token', token)
     let tokenDecodificado = jwt.decode(token)
     let tokenPermisos = tokenDecodificado.permisos
+    //console.log(tokenDecodificado)
     let indice = 0
     menu = [
       {
@@ -29,6 +30,63 @@ jwt.verify(token, CONFIG.SECRET_KEY, (err, data) => {
         ]
       }
     ]
+    if (tokenDecodificado.id_rol == 1 || tokenDecodificado.id_rol == 12  || tokenDecodificado.id_rol == 17 || tokenDecodificado.permisos.matricular == 1) {
+      menu[0]._children.push(
+        {
+          _name: 'CSidebarNavDropdown',
+          name: 'Matriculas',
+          icon: 'cilUserPlus',
+          items: []
+        }
+      )
+      indice++
+      menu[0]._children[indice].items.push({ name: 'Matricular Preinscrito', to: '/matriculas/preinscritos'})
+      menu[0]._children[indice].items.push({ name: 'Renovar Matricula', to: '/matriculas/buscarrenovacion'})
+      menu[0]._children[indice].items.push({ name: 'Matriculados Sin Curso', to: '/matriculas/matriculadossincurso'})
+    }
+
+
+
+    //-----------------
+    menu[0]._children.push(
+      {
+        _name: 'CSidebarNavDropdown',
+        name: 'Estudiantes',
+        icon: 'cilEducation',
+        items: []
+      }
+    )
+    indice++
+    menu[0]._children[indice].items.push({ name: 'Consulta Ficha Matricula', to: '/estudiantes/fichamatricula'})
+
+    //if (tokenDecodificado.mestasIndicador == 1 || tokenDecodificado.gestionEntregables == 1 || tokenDecodificado.gestionPA == 1 || tokenDecodificado.avancePA == 1) {
+      menu[0]._children.push(
+        {
+          _name: 'CSidebarNavDropdown',
+          name: 'Docentes',
+          icon: 'cilPeople',
+          items: []
+        }
+      )
+      indice++
+      menu[0]._children[indice].items.push({ name: 'Consulta Docente', to: '/docentes/consultadocente'})
+      menu[0]._children[indice].items.push({ name: 'Directores de Curso', to: '/docentes/directorescurso'})
+      menu[0]._children[indice].items.push({ name: 'Asignación Académica', to: '/docentes/asignacioncurso'})
+      menu[0]._children[indice].items.push({ name: 'Directorio Docentes', to: '/docentes/directoriodocentes'})
+
+    //}
+
+    menu[0]._children.push(
+      {
+        _name: 'CSidebarNavDropdown',
+        name: 'Listas y Planillas',
+        icon: 'cilEducation',
+        items: []
+      }
+    )
+    indice++
+    menu[0]._children[indice].items.push({ name: 'Lista General de Consulta', to: '/listados/Listados'})
+    //menu[0]._children[indice].items.push({ name: 'Planillas', to: '/estudiantes/fichamatricula'})
 
   }
 })

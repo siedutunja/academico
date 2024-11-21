@@ -9,26 +9,58 @@
                 <CRow>
                   <CCol lg="2" md="3">
                     <div class="text-center">
-                      <img :src="escudoInstitucion" height="80"/>
+                      <b-avatar class="c-sidebar-brand-minimized" variant="light" :src="escudoInstitucion"  size="5rem"></b-avatar>
                     </div>
                   </CCol>
-                  <CCol lg="10" md="9">
-                    <div class="mt-2">
-                      <h6 style="margin-top: -5">{{ secretaria }}</h6>
+                  <CCol lg="8" md="6">
+                    <div class="mt-2 text-center">
+                      <h6 style="margin-top: -5" class="text-muted">{{ secretaria }}</h6>
                       <h4 style="margin-top: -1">{{ $store.state.nombreInstitucion }}</h4>
-                      <h6 style="margin-top: -1" class="text-black">INSTITUCIÓN EDUCATIVA {{ $store.state.sectorInstitucion }}</h6>
-                      <h6 style="margin-top: -1">CÓDIGO DANE: {{ $store.state.daneInstitucion }}</h6>
-                      <h6 style="margin-top: -1">NIT: {{ $store.state.nitInstitucion }}</h6>
-                      <h6 style="margin-top: -1">AÑO LECTIVO {{ $store.state.aLectivo }}</h6>
+                      <h6 style="margin-top: -1" class="text-muted">DANE: {{ $store.state.daneInstitucion }} - NIT: {{ $store.state.nitInstitucion }}</h6>
                     </div>
                   </CCol>
                 </CRow>
               </CCardFooter>
             </CCard>
+            <b-card-group deck class="mt-5">
+              <b-card border-variant="light" class="text-center linkini">
+                <b-card-text>
+                  <span><b-icon icon="card-list" font-scale="3"></b-icon></span>
+                  <h5 class="mt-2">Listados</h5>
+                </b-card-text>
+                <b-card-text>Genere listados o planillas de Estudiantes</b-card-text>
+              </b-card>
+              <b-card border-variant="light" class="text-center linkini" @click="irFichaMatricula">
+                <b-card-text>
+                  <span><b-icon icon="filter-square" font-scale="3"></b-icon></span>
+                  <h5 class="mt-2">Ficha Matricula</h5>
+                </b-card-text>
+                <b-card-text>Consulte la Ficha de Matricula de Estudiantes</b-card-text>
+              </b-card>
+              <b-card border-variant="light" class="text-center linkini" @click="irAsignacionAcademica">
+                <b-card-text>
+                  <span><b-icon icon="person-check" font-scale="3"></b-icon></span>
+                  <h5 class="mt-2">Asignación Académica</h5>
+                </b-card-text>
+                <b-card-text>Consulte y actualice la Asignación Académica por Curso</b-card-text>
+              </b-card>
+              <b-card border-variant="light" class="text-center linkini">
+                <b-card-text>
+                  <span><b-icon icon="shop" font-scale="3"></b-icon></span>
+                  <h5 class="mt-2">Datos Institución</h5>
+                </b-card-text>
+                <b-card-text>Consulte y actualice la información de la Institución Educativa</b-card-text>
+              </b-card>
+            </b-card-group>
           </CCardBody>
         </CCard>
       </CCol>
     </CRow>
+    <b-row>
+      <b-col>
+        <span class="text-muted" v-if="$store.state.idRol == 1">ID Institución: {{$store.state.idInstitucion}}</span>
+      </b-col>
+    </b-row>
   </div>
 </template>
 
@@ -44,13 +76,16 @@
       }
     },
     methods: {
-      iniciarVista() {
-        this.escudoInstitucion = CONFIG.ROOT_ESCUDOS + this.$store.state.escudoInstitucion
-        this.secretaria = CONFIG.SECRETARIA
+      irFichaMatricula() {
+        this.$router.push('/estudiantes/fichamatricula')
+      },
+      irAsignacionAcademica() {
+        this.$router.push('/docentes/asignacioncurso')
       }
     },
     beforeMount() {
-      this.iniciarVista()
+      this.escudoInstitucion = CONFIG.ROOT_ESCUDOS + this.$store.state.escudoInstitucion
+      this.secretaria = CONFIG.SECRETARIA
     }
   }
 </script>
