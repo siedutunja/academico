@@ -23,7 +23,7 @@
               </CCardFooter>
             </CCard>
             <b-card-group deck class="mt-5">
-              <b-card border-variant="light" class="text-center linkini">
+              <b-card border-variant="light" class="text-center linkini" @click="irListados">
                 <b-card-text>
                   <span><b-icon icon="card-list" font-scale="3"></b-icon></span>
                   <h5 class="mt-2">Listados</h5>
@@ -76,8 +76,11 @@
       }
     },
     methods: {
+      irListados() {
+        this.$router.push('/listados/listados')
+      },
       irFichaMatricula() {
-        this.$router.push('/estudiantes/fichamatricula')
+        this.$router.push('/matriculas/buscarcarpetamatricula')
       },
       irAsignacionAcademica() {
         this.$router.push('/docentes/asignacioncurso')

@@ -193,7 +193,7 @@
       }
     },
     beforeMount() {
-      if(this.$store.state.idRol == 1 || this.$store.state.idRol == 12) {
+      if(this.$store.state.idRol == 1 || this.$store.state.idRol == 12 || this.$store.state.perMatricular == 1) {
         this.ocuparComboSedes()
         this.verMatriculadosSinCurso(0)
       } else {

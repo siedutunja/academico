@@ -4,14 +4,14 @@
       <b-col lg="12">
         <b-card>
           <template #header>
-            <h5 class="mb-0"><b-icon icon="search" aria-hidden="true"></b-icon> BUSCAR ESTUDIANTE</h5>
+            <h5 class="mb-0"><b-icon icon="search" aria-hidden="true"></b-icon> BUSCAR FICHA MATRÍCULA ESTUDIANTE</h5>
           </template>
           <b-card-text>
             <b-row>
               <b-col lg="6" md="6">
                 <b-form-group label="Criterio de Busqueda*" label-for="texto" class="etiqueta">
                   <b-form-input id="texto" ref="texto" v-model.trim="$v.buscarTexto.textoBusqueda.$model" :state="validateStateT('textoBusqueda')" aria-describedby="feedTextoB" autocomplete="off" maxlength="50" v-on:keyup.enter="buscarEstudiante()" autofocus></b-form-input>
-                  <b-form-invalid-feedback id="feedTextoB" >La busqueda debe contener mínimo 5 caracteres.</b-form-invalid-feedback>
+                  <b-form-invalid-feedback id="feedTextoB" >Campo requerido.</b-form-invalid-feedback>
                 </b-form-group>
                 <p>
                   Realice la busqueda de un estudiante digitando el número de documento sin puntos ni comas o digitando el nombre y/o apellido del estudiante.
@@ -45,8 +45,7 @@
                   }">
                   <template slot="table-row" slot-scope="props">
                     <span v-if="props.column.field == 'estudiante'">
-                      <span v-if="props.row.grado == null" style="font-weight: bold; color: blue; cursor: pointer" @click="renovarMatricula(props.row)">{{props.row.estudiante}}</span> 
-                      <span v-else>{{props.row.estudiante}}</span> 
+                      <span style="font-weight: bold; color: blue; cursor: pointer" @click="verCarpetaMatricula(props.row)">{{props.row.estudiante}}</span> 
                     </span>
                   </template>
                   <div slot="emptystate">
@@ -77,7 +76,7 @@
   import { VueGoodTable } from 'vue-good-table'
 
   export default {
-    name: 'buscarrenovacion',
+    name: 'buscarcarpetatricula',
     mixins: [validationMixin],
     components: {
       VueGoodTable
@@ -91,34 +90,39 @@
         encabColumnas : [
           { label: 'Nombre del Estudiante', field: 'estudiante', sortable: true },
           { label: 'Documento', field: 'documento', sortable: false },
+          { label: 'Sede', field: 'sede', sortable: true },
           { label: 'Grado', field: 'grado', sortable: true },
-          //{ label: 'Repitente', field: 'id_repitente', formatFn: this.formatFnF, sortable: false }
+          { label: 'Curso', field: 'nomenclatura', sortable: true },
+          { label: 'Jornada', field: 'jornada', sortable: true },
+          { label: 'Estado', field: 'estado', sortable: true },
+          //{ label: '', field: 'idMatricula', sortable: false }
         ]
       }
     },
     validations: {
       buscarTexto: {
-        textoBusqueda: { required, minLength: minLength(5) }
+        textoBusqueda: { required, minLength: minLength(0) }
       }
     },
     methods: {
-      renovarMatricula(fila) {
-        this.$store.commit('set', ['datosEstudianteRenovar', fila])
-        this.$router.push('/matriculas/FichaRenovacionMatricula')
+      verCarpetaMatricula(fila) {
+        //alert(JSON.stringify(fila))
+        this.$store.commit('set', ['idMatricula', fila.idMatricula])
+        this.$router.push('/matriculas/CarpetaMatricula')
       },
       async buscarEstudiante() {
         this.listaEstudiantes = []
         this.$v.buscarTexto.$touch()
         if (this.$v.buscarTexto.$anyError) {
-          this.mensajeEmergente('danger',CONFIG.TITULO_MSG,'El criterio de busqueda es menor a 5 caracteres.')
+          this.mensajeEmergente('danger',CONFIG.TITULO_MSG,'El criterio de busqueda esta vacio.')
           this.$refs.texto.focus()
           return false
         } else {
           await axios
-          .get(CONFIG.ROOT_PATH + 'academico/buscarestudiante/renovacion', { params: { texto: this.buscarTexto.textoBusqueda, idInstitucion: this.$store.state.idInstitucion, vigencia: this.$store.state.aMatriculas }})
+          .get(CONFIG.ROOT_PATH + 'academico/buscarestudiante/carpetamatricula', { params: { texto: this.buscarTexto.textoBusqueda, idInstitucion: this.$store.state.idInstitucion, vigencia: this.$store.state.aMatriculas }})
           .then(response => {
             if (response.data.error){
-              this.mensajeEmergente('danger',CONFIG.TITULO_MSG,response.data.mensaje + ' - Buscar estudiante')
+              this.mensajeEmergente('danger',CONFIG.TITULO_MSG,response.data.mensaje + ' - Buscar carpeta estudiante')
             } else{
               if (response.data.datos != 0) {
                 this.listaEstudiantes = response.data.datos
@@ -129,7 +133,7 @@
             }
           })
           .catch(err => {
-              this.mensajeEmergente('danger',CONFIG.TITULO_MSG,'Algo salio mal y no se pudo realizar: Buscar estudiante. Intente más tarde. ' + err)
+              this.mensajeEmergente('danger',CONFIG.TITULO_MSG,'Algo salio mal y no se pudo realizar: Buscar carpeta estudiante. Intente más tarde. ' + err)
           })
         }
         return true

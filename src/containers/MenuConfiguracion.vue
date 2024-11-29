@@ -37,7 +37,7 @@
     </CDropdownItem>
     -->
     <CDropdownDivider/>
-    <CDropdownItem to="/configuracion/superadmin">
+    <CDropdownItem to="/configuracion/superadmin" v-if="$store.state.idRol == 1">
       <CIcon name="cilSpeedometer" />Super Administrador
     </CDropdownItem>
   </CDropdown>

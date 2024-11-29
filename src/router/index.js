@@ -35,12 +35,26 @@ function configRoutes () {
             render (c) { return c('router-view') }
           },
           children: [
+            // 2024-11-22
+            {
+              path: 'carpetamatricula',
+              beforeEnter: autenticar,
+              name: 'Consultar Carpeta Matricula',
+              component: () => import('@/views/matriculas/CarpetaMatricula')
+            },
             // 2024-11-19
             {
               path: 'buscarrenovacion',
               beforeEnter: autenticar,
               name: 'Buscar Estudiante Renovación',
               component: () => import('@/views/matriculas/BuscarRenovacion')
+            },
+            // 2024-11-19
+            {
+              path: 'buscarcarpetamatricula',
+              beforeEnter: autenticar,
+              name: 'Buscar Carpeta Matricula',
+              component: () => import('@/views/matriculas/BuscarCarpetaMatricula')
             },
             // 2024-11-18
             {
@@ -74,7 +88,7 @@ function configRoutes () {
             {
               path: 'fichamatriculapreinscrito2',
               beforeEnter: autenticar,
-              name: 'Ficha Matricula',
+              name: 'Ficha Matricula Preinscrito2',
               component: () => import('@/views/matriculas/FichaMatriculaPreinscrito2')
             },
             // 2024-10-22
@@ -202,13 +216,6 @@ function configRoutes () {
               beforeEnter: autenticar,
               name: 'Matricula Estudiantes',
               component: () => import('@/views/estudiantes/Matricula')
-            },
-            // 2024-03-08
-            {
-              path: 'matricula2',
-              beforeEnter: autenticar,
-              name: 'Matricula Estudiantes2',
-              component: () => import('@/views/estudiantes/Matricula2')
             },
           ]
         },

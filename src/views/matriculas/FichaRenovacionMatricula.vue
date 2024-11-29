@@ -162,7 +162,7 @@
                       </b-col>
                       <b-col lg="3" md="6">
                         <b-form-group label="Barrio*" label-for="barrio" class="etiqueta">
-                          <b-form-input id="barrio" ref="barrio" v-model.trim="$v.infoEstudiante.barrio.$model" :state="validateStateD('barrio')" aria-describedby="feedBarrio" autocomplete="off" maxlength="50"></b-form-input>
+                          <b-form-input id="barrio" ref="barrio" v-model.trim="$v.infoEstudiante.barrio.$model" :state="validateStateD('barrio')" aria-describedby="feedBarrio" autocomplete="on" maxlength="50"></b-form-input>
                           <b-form-invalid-feedback id="feedBarrio">Campo requerido.</b-form-invalid-feedback>
                         </b-form-group>
                       </b-col>
@@ -217,64 +217,70 @@
                     <b-row>
                       <b-col lg="3" md="6">
                         <b-form-group label="Número de Documento*" label-for="docA" class="etiqueta">
-                          <b-form-input id="docA" ref="docA" v-model="infoEstudiante.documentoA" :state="validateStateD('documentoA')" aria-describedby="feedDocA" autocomplete="off" maxlength="50" @keydown="soloNumerosLetras"></b-form-input>
-                          <b-form-invalid-feedback id="feedDocA">Campo requerido.</b-form-invalid-feedback>
+                          <b-input-group>
+                            <b-form-input id="docA" ref="docA" v-model="infoEstudiante.documentoA" :state="validateStateD('documentoA')" aria-describedby="feedDocA" autocomplete="off" maxlength="50" @keydown="soloNumerosLetras"></b-form-input>
+                            <b-input-group-append>
+                              <b-button variant="primary" @click="buscarDocumentoAcudiente">Buscar</b-button>
+                            </b-input-group-append>
+                            <b-form-invalid-feedback id="feedDocA">Campo requerido.</b-form-invalid-feedback>
+                          </b-input-group>
                         </b-form-group>
                       </b-col>
                       <b-col lg="3" md="6">
                         <b-form-group label="Tipo Documento*" label-for="tipoDocA" class="etiqueta">
-                          <b-form-select  id="tipoDocA" ref="tipoDocA" v-model="$v.infoEstudiante.id_tipo_documentoA.$model" :options="comboTiposDoc" :state="validateStateD('id_tipo_documentoA')" aria-describedby="feedTipoDocA"></b-form-select>
+                          <b-form-select  id="tipoDocA" ref="tipoDocA" v-model="$v.infoEstudiante.id_tipo_documentoA.$model" :options="comboTiposDoc" :state="validateStateD('id_tipo_documentoA')" aria-describedby="feedTipoDocA" :disabled="!documentoBuscado"></b-form-select>
                           <b-form-invalid-feedback id="feedTipoDocA">Campo requerido.</b-form-invalid-feedback>
                         </b-form-group>
                       </b-col>
                       <b-col lg="6" md="6">
                         <b-form-group label="Municipio de Expedición del Documento*" label-for="muniDocA" class="etiqueta">
-                          <b-form-select  id="muniDocA" ref="muniDocA" v-model="$v.infoEstudiante.id_municipio_documentoA.$model" :options="comboMunicipios" :state="validateStateD('id_municipio_documentoA')" aria-describedby="feedMuniDocA"></b-form-select>
+                          <b-form-select  id="muniDocA" ref="muniDocA" v-model="$v.infoEstudiante.id_municipio_documentoA.$model" :options="comboMunicipios" :state="validateStateD('id_municipio_documentoA')" aria-describedby="feedMuniDocA" :disabled="!documentoBuscado"></b-form-select>
                           <b-form-invalid-feedback id="feedMuniDocA">Campo requerido.</b-form-invalid-feedback>
                         </b-form-group>
                       </b-col>
                       <b-col lg="3" md="6">
                         <b-form-group label="Primer Apellido*" label-for="ape1A" class="etiqueta">
-                          <b-form-input id="ape1A" ref="ape1A" v-model.trim="$v.infoEstudiante.apellido1A.$model" :state="validateStateD('apellido1A')" aria-describedby="feedApe1A" autocomplete="off" maxlength="30" @keydown="soloLetras"></b-form-input>
+                          <b-form-input id="ape1A" ref="ape1A" v-model.trim="$v.infoEstudiante.apellido1A.$model" :state="validateStateD('apellido1A')" aria-describedby="feedApe1A" autocomplete="off" maxlength="30" @keydown="soloLetras" :disabled="!documentoBuscado"></b-form-input>
                           <b-form-invalid-feedback id="feedApe1A" >Campo requerido.</b-form-invalid-feedback>
                         </b-form-group>
                       </b-col>
                       <b-col lg="3" md="6">
                         <b-form-group label="Segundo Apellido" label-for="ape2A" class="etiqueta">
-                          <b-form-input id="ape2A" ref="ape2A" v-model.trim="$v.infoEstudiante.apellido2A.$model" :state="validateStateD('apellido2A')" aria-describedby="feedApe2A" autocomplete="off" maxlength="30" @keydown="soloLetras"></b-form-input>
+                          <b-form-input id="ape2A" ref="ape2A" v-model.trim="$v.infoEstudiante.apellido2A.$model" :state="validateStateD('apellido2A')" aria-describedby="feedApe2A" autocomplete="off" maxlength="30" @keydown="soloLetras" :disabled="!documentoBuscado"></b-form-input>
                           <b-form-invalid-feedback id="feedApe2A">Campo requerido.</b-form-invalid-feedback>
                         </b-form-group>
                       </b-col>
                       <b-col lg="3" md="6">
                         <b-form-group label="Primer Nombre*" label-for="nom1A" class="etiqueta">
-                          <b-form-input id="nom1A" ref="nom1A" v-model.trim="$v.infoEstudiante.nombre1A.$model" :state="validateStateD('nombre1A')" aria-describedby="feedNom1A" autocomplete="off" maxlength="30" @keydown="soloLetras"></b-form-input>
+                          <b-form-input id="nom1A" ref="nom1A" v-model.trim="$v.infoEstudiante.nombre1A.$model" :state="validateStateD('nombre1A')" aria-describedby="feedNom1A" autocomplete="off" maxlength="30" @keydown="soloLetras" :disabled="!documentoBuscado"></b-form-input>
                           <b-form-invalid-feedback id="feedNom1A">Campo requerido.</b-form-invalid-feedback>
                         </b-form-group>
                       </b-col>
                       <b-col lg="3" md="6">
                         <b-form-group label="Segundo Nombre" label-for="nom2A" class="etiqueta">
-                          <b-form-input id="nom2A" ref="nom2A" v-model.trim="$v.infoEstudiante.nombre2A.$model" :state="validateStateD('nombre2A')" aria-describedby="feedNom2A" autocomplete="off" maxlength="30" @keydown="soloLetras"></b-form-input>
+                          <b-form-input id="nom2A" ref="nom2A" v-model.trim="$v.infoEstudiante.nombre2A.$model" :state="validateStateD('nombre2A')" aria-describedby="feedNom2A" autocomplete="off" maxlength="30" @keydown="soloLetras" :disabled="!documentoBuscado"></b-form-input>
                           <b-form-invalid-feedback id="feedNom2A">Campo requerido.</b-form-invalid-feedback>
                         </b-form-group>
                       </b-col>
                       <b-col lg="3" md="6">
                         <b-form-group label="Fecha de Nacimiento*" label-for="fechaNA" class="etiqueta">
-                          <b-form-input id="fechaNA" ref="fechaNA" type="date" v-model.trim="$v.infoEstudiante.fecha_nacimientoA.$model" :state="validateStateD('fecha_nacimientoA')" aria-describedby="feedFechaNA"></b-form-input>
+                          <b-form-input id="fechaNA" ref="fechaNA" type="date" v-model.trim="$v.infoEstudiante.fecha_nacimientoA.$model" :state="validateStateD('fecha_nacimientoA')" aria-describedby="feedFechaNA" :disabled="!documentoBuscado"></b-form-input>
                           <b-form-invalid-feedback id="feedFechaNA" >Campo requerido.</b-form-invalid-feedback>            
                         </b-form-group>
                       </b-col>
                       <b-col lg="3" md="6">
                         <b-form-group label="Nacionalidad*" label-for="paisA" class="etiqueta">
-                          <b-form-select  id="paisA" ref="paisA" v-model="$v.infoEstudiante.id_nacionalidadA.$model" :options="comboPaises" :state="validateStateD('id_nacionalidadA')" aria-describedby="feedPaisA" @change="habilitaMunicipioNaceA"></b-form-select>
+                          <b-form-select  id="paisA" ref="paisA" v-model="$v.infoEstudiante.id_nacionalidadA.$model" :options="comboPaises" :state="validateStateD('id_nacionalidadA')" aria-describedby="feedPaisA" @change="habilitaMunicipioNaceA" :disabled="!documentoBuscado"></b-form-select>
                           <b-form-invalid-feedback id="feedPaisA">Campo requerido.</b-form-invalid-feedback>
                         </b-form-group>
                       </b-col>
                       <b-col lg="6" md="6">
                         <b-form-group label="Municipio de Nacimiento*" label-for="muniNaceA" class="etiqueta">
-                          <b-form-select  id="muniNaceA" ref="muniNaceA" v-model="$v.infoEstudiante.id_municipio_nacimientoA.$model" :options="comboMunicipios" :state="validateStateD('id_municipio_nacimientoA')" aria-describedby="feedMuniNaceA" :disabled="deshabMunNaceA"></b-form-select>
+                          <b-form-select  id="muniNaceA" ref="muniNaceA" v-model="$v.infoEstudiante.id_municipio_nacimientoA.$model" :options="comboMunicipios" :state="validateStateD('id_municipio_nacimientoA')" aria-describedby="feedMuniNaceA" :disabled="!documentoBuscado"></b-form-select>
                           <b-form-invalid-feedback id="feedMuniNaceA">Campo requerido.</b-form-invalid-feedback>
                         </b-form-group>
                       </b-col>
+                      <!--+
                       <b-col lg="3" md="6">
                         <b-form-group label="Género*" label-for="generoA" class="etiqueta">
                           <b-form-select  id="generoA" ref="generoA" v-model="$v.infoEstudiante.id_generoA.$model" :options="comboGeneros" :state="validateStateD('id_generoA')" aria-describedby="feedGeneroA"></b-form-select>
@@ -293,18 +299,20 @@
                           <b-form-invalid-feedback id="feedEpsA">Campo requerido.</b-form-invalid-feedback>
                         </b-form-group>
                       </b-col>
+                      -->
                       <b-col lg="6" md="12">
                         <b-form-group label="Municipio de Domicilio*" label-for="muniDirA" class="etiqueta">
-                          <b-form-select  id="muniDirA" ref="muniDirA" v-model="$v.infoEstudiante.id_municipio_direccionA.$model" :options="comboMunicipios" :state="validateStateD('id_municipio_direccionA')" aria-describedby="feedMuniDirA"></b-form-select>
+                          <b-form-select  id="muniDirA" ref="muniDirA" v-model="$v.infoEstudiante.id_municipio_direccionA.$model" :options="comboMunicipios" :state="validateStateD('id_municipio_direccionA')" aria-describedby="feedMuniDirA" :disabled="!documentoBuscado"></b-form-select>
                           <b-form-invalid-feedback id="feedMuniDirA">Campo requerido.</b-form-invalid-feedback>
                         </b-form-group>
                       </b-col>
                       <b-col lg="6" md="12">
                         <b-form-group label="Dirección Domicilio*" label-for="direccionA" class="etiqueta">
-                          <b-form-input id="direccionA" ref="direccionA" v-model.trim="$v.infoEstudiante.direccionA.$model" :state="validateStateD('direccionA')" aria-describedby="feedDirA" autocomplete="off" maxlength="100"></b-form-input>
+                          <b-form-input id="direccionA" ref="direccionA" v-model.trim="$v.infoEstudiante.direccionA.$model" :state="validateStateD('direccionA')" aria-describedby="feedDirA" autocomplete="off" maxlength="100" :disabled="!documentoBuscado"></b-form-input>
                           <b-form-invalid-feedback id="feedDirA">Campo requerido.</b-form-invalid-feedback>
                         </b-form-group>
                       </b-col>
+                      <!--
                       <b-col lg="3" md="6">
                         <b-form-group label="Barrio*" label-for="barrioA" class="etiqueta">
                           <b-form-input id="barrioA" ref="barrioA" v-model.trim="$v.infoEstudiante.barrioA.$model" :state="validateStateD('barrioA')" aria-describedby="feedBarrioA" autocomplete="off" maxlength="50"></b-form-input>
@@ -329,33 +337,34 @@
                           <b-form-invalid-feedback id="feedSisbenA">Campo requerido.</b-form-invalid-feedback>
                         </b-form-group>
                       </b-col>
+                      -->
                       <b-col lg="3" md="6">
                         <b-form-group label="Teléfono Principal*" label-for="tel1A" class="etiqueta">
-                          <b-form-input id="tel1A" ref="tel1A" v-model.trim="$v.infoEstudiante.telefono1A.$model" :state="validateStateD('telefono1A')" aria-describedby="feedTel1A" autocomplete="off" maxlength="15" @keydown="soloNumeros"></b-form-input>
+                          <b-form-input id="tel1A" ref="tel1A" v-model.trim="$v.infoEstudiante.telefono1A.$model" :state="validateStateD('telefono1A')" aria-describedby="feedTel1A" autocomplete="off" maxlength="15" @keydown="soloNumeros" :disabled="!documentoBuscado"></b-form-input>
                           <b-form-invalid-feedback id="feedTel1A" >El número debe contener 10 dígitos.</b-form-invalid-feedback>
                         </b-form-group>
                       </b-col>
                       <b-col lg="3" md="6">
                         <b-form-group label="Teléfono Opcional" label-for="tel2A" class="etiqueta">
-                          <b-form-input id="tel2A" ref="tel2A" v-model.trim="infoEstudiante.telefono2A" aria-describedby="feedTel2A" autocomplete="off" maxlength="15" @keydown="soloNumeros"></b-form-input>
+                          <b-form-input id="tel2A" ref="tel2A" v-model.trim="infoEstudiante.telefono2A" aria-describedby="feedTel2A" autocomplete="off" maxlength="15" @keydown="soloNumeros" :disabled="!documentoBuscado"></b-form-input>
                           <b-form-invalid-feedback id="feedTel2A" >El número debe contener 10 dígitos.</b-form-invalid-feedback>
                         </b-form-group>
                       </b-col>
                       <b-col lg="6" md="6">
                         <b-form-group label="Correo Electrónico*" label-for="correoA" class="etiqueta">
-                          <b-form-input id="correoA" ref="correoA" v-model.trim="infoEstudiante.correoA" :state="validateStateD('correoA')" aria-describedby="feedCorreoA" autocomplete="off" maxlength="50"></b-form-input>
+                          <b-form-input id="correoA" ref="correoA" v-model.trim="infoEstudiante.correoA" :state="validateStateD('correoA')" aria-describedby="feedCorreoA" autocomplete="off" maxlength="50" :disabled="!documentoBuscado"></b-form-input>
                           <b-form-invalid-feedback id="feedCorreoA" >Campo requerido.</b-form-invalid-feedback>
                         </b-form-group>
                       </b-col>
                       <b-col lg="6" md="6">
                         <b-form-group label="Ocupación Laboral" label-for="ocupacionA" class="etiqueta">
-                          <b-form-input id="ocupacionA" ref="ocupacionA" v-model.trim="infoEstudiante.ocupacionA" aria-describedby="feedOcupacionA" autocomplete="on" maxlength="100"></b-form-input>
+                          <b-form-input id="ocupacionA" ref="ocupacionA" v-model.trim="infoEstudiante.ocupacionA" aria-describedby="feedOcupacionA" autocomplete="on" maxlength="100" :disabled="!documentoBuscado"></b-form-input>
                           <b-form-invalid-feedback id="feedOcupacionA" >Campo requerido.</b-form-invalid-feedback>
                         </b-form-group>
                       </b-col>
                       <b-col lg="6" md="6">
                         <b-form-group label="Parentesco con el Estudiante*" label-for="parentesco" class="etiqueta">
-                          <b-form-select  id="parentesco" ref="parentesco" v-model="$v.infoEstudiante.id_parentesco.$model" :options="comboParentescos" :state="validateStateD('id_parentesco')" aria-describedby="feedParentesco"></b-form-select>
+                          <b-form-select  id="parentesco" ref="parentesco" v-model="$v.infoEstudiante.id_parentesco.$model" :options="comboParentescos" :state="validateStateD('id_parentesco')" aria-describedby="feedParentesco" :disabled="!documentoBuscado"></b-form-select>
                           <b-form-invalid-feedback id="feedParentesco">Campo requerido.</b-form-invalid-feedback>
                         </b-form-group>
                       </b-col>
@@ -396,6 +405,7 @@
                           <b-form-invalid-feedback id="feedEspecial">Campo requerido.</b-form-invalid-feedback>
                         </b-form-group>
                       </b-col>
+                      <!--
                       <b-col lg="6" md="12">
                         <b-form-group label="Metodología*" label-for="metodologia" class="etiqueta">
                           <b-form-select  id="metodologia" ref="metodologia" v-model="$v.infoEstudiante.id_metodologia.$model" :options="comboMetodologias" :state="validateStateD('id_metodologia')" aria-describedby="feedMetodologia"></b-form-select>
@@ -414,28 +424,29 @@
                           <b-form-invalid-feedback id="feedProcedencia" >Campo requerido.</b-form-invalid-feedback>
                         </b-form-group>
                       </b-col>
-                      <b-col lg="3" md="6">
-                        <b-form-group label="Repitente*" label-for="repitente" class="etiqueta">
-                          <b-form-select  id="repitente" ref="repitente" v-model="$v.infoEstudiante.id_repitente.$model" :options="comboRepitente" :state="validateStateD('id_repitente')" aria-describedby="feedRepite"></b-form-select>
-                          <b-form-invalid-feedback id="feedRepite">Campo requerido.</b-form-invalid-feedback>
-                        </b-form-group>
-                      </b-col>
                       <b-col lg="3">
                         <b-form-group label="Ruta Trasporte*" label-for="ruta" class="etiqueta">
                           <b-form-select  id="ruta" ref="ruta" v-model="$v.infoEstudiante.id_ruta.$model" :options="comboRutas" :state="validateStateD('id_ruta')" aria-describedby="feedRuta"></b-form-select>
                           <b-form-invalid-feedback id="feedRuta">Campo requerido.</b-form-invalid-feedback>
                         </b-form-group>
                       </b-col>
-                      <b-col lg="3" md="12">
-                        <b-form-group label="Seguro*" label-for="seguro" class="etiqueta">
-                          <b-form-select  id="seguro" ref="seguro" v-model="$v.infoEstudiante.id_seguro.$model" :options="comboSeguro" :state="validateStateD('id_seguro')" aria-describedby="feedSeguro" @change="infoEstudiante.aseguradora=null"></b-form-select>
-                          <b-form-invalid-feedback id="feedSeguro">Campo requerido.</b-form-invalid-feedback>
-                        </b-form-group>
-                      </b-col>
                       <b-col lg="6" md="12">
                         <b-form-group label="Aseguradora" label-for="aseguradora" class="etiqueta">
                           <b-form-input id="aseguradora" ref="aseguradora" v-model.trim="infoEstudiante.aseguradora" aria-describedby="feedAsegura" autocomplete="off" maxlength="100" :disabled="infoEstudiante.id_seguro=='S' ? false : true"></b-form-input>
                           <b-form-invalid-feedback id="feedAsegura" >Campo requerido.</b-form-invalid-feedback>
+                        </b-form-group>
+                      </b-col>
+                      -->
+                      <b-col lg="3" md="6">
+                        <b-form-group label="Repitente*" label-for="repitente" class="etiqueta">
+                          <b-form-select  id="repitente" ref="repitente" v-model="$v.infoEstudiante.id_repitente.$model" :options="comboRepitente" :state="validateStateD('id_repitente')" aria-describedby="feedRepite"></b-form-select>
+                          <b-form-invalid-feedback id="feedRepite">Campo requerido.</b-form-invalid-feedback>
+                        </b-form-group>
+                      </b-col>
+                      <b-col lg="3" md="12">
+                        <b-form-group label="Seguro*" label-for="seguro" class="etiqueta">
+                          <b-form-select  id="seguro" ref="seguro" v-model="$v.infoEstudiante.id_seguro.$model" :options="comboSeguro" :state="validateStateD('id_seguro')" aria-describedby="feedSeguro" @change="infoEstudiante.aseguradora=null"></b-form-select>
+                          <b-form-invalid-feedback id="feedSeguro">Campo requerido.</b-form-invalid-feedback>
                         </b-form-group>
                       </b-col>
                       <b-col lg="12" md="12">
@@ -483,6 +494,7 @@
     },
     data () {
       return {
+        documentoBuscado: false,
         infoEstudiante: {
           idPreinscrito: null,
           idEstudiante: null,//
@@ -520,11 +532,11 @@
           id_grado: null,//
           id_curso: null,//
           id_especialidad: null,//
-          id_metodologia: null,//
-          id_nuevo: null,//
+          id_metodologia: 1,//
+          id_nuevo: 'N',//
           procedencia: null,//
           id_repitente: null,//
-          id_ruta: null,//
+          id_ruta: 1,//
           id_seguro: null,//
           aseguradora: null,//
           obs_matricula: null,//
@@ -542,15 +554,15 @@
           fecha_nacimientoA: null,
           id_nacionalidadA: null,
           id_municipio_nacimientoA: null,
-          id_generoA: null,
-          id_rhA: null,
-          id_estratoA: null,
-          id_sisbenA: null,
+          id_generoA: 'M',
+          id_rhA: '',
+          id_estratoA: 9,
+          id_sisbenA: '0',
           id_epsA: '000000',
           direccionA: null,
           id_municipio_direccionA: '15001',
-          barrioA: null,
-          id_zonaA: null,
+          barrioA: '-',
+          id_zonaA: 1,
           telefono1A: null,
           telefono2A: null,
           correoA: null,
@@ -648,6 +660,50 @@
       }
     },
     methods: {
+      async buscarDocumentoAcudiente() {
+        await axios
+        .get(CONFIG.ROOT_PATH + 'academico/matriculas/buscardocumentopersona', { params: { documento: this.infoEstudiante.documentoA }})
+        .then(response => {
+          if (response.data.error){
+            this.mensajeEmergente('danger',CONFIG.TITULO_MSG,response.data.mensaje + ' - Buscar documento persona')
+          } else{
+            this.documentoBuscado = true
+            if (response.data.datos != 0) {
+              this.infoEstudiante.apellido1A = response.data.datos.apellido1
+              this.infoEstudiante.apellido2A = response.data.datos.apellido2
+              this.infoEstudiante.nombre1A = response.data.datos.nombre1
+              this.infoEstudiante.nombre2A = response.data.datos.nombre2
+              this.infoEstudiante.documentoA = response.data.datos.documento
+              this.infoEstudiante.id_tipo_documentoA = response.data.datos.id_tipo_documento
+              this.infoEstudiante.id_municipio_documentoA = response.data.datos.id_municipio_documento
+              if (response.data.datos.fecha_nacimiento!=null)
+                this.infoEstudiante.fecha_nacimientoA = response.data.datos.fecha_nacimiento.substr(0,10)
+              else 
+                this.infoEstudiante.fecha_nacimientoA = null
+              this.infoEstudiante.id_nacionalidadA = response.data.datos.id_nacionalidad
+              this.infoEstudiante.id_municipio_nacimientoA = response.data.datos.id_municipio_nacimiento
+              this.infoEstudiante.id_generoA = response.data.datos.id_genero
+              this.infoEstudiante.id_rhA = response.data.datos.id_rh
+              this.infoEstudiante.id_estratoA = response.data.datos.id_estrato
+              this.infoEstudiante.id_sisbenA = response.data.datos.id_sisben
+              this.infoEstudiante.id_epsA = response.data.datos.id_eps
+              this.infoEstudiante.direccionA = response.data.datos.direccion
+              this.infoEstudiante.id_municipio_direccionA = response.data.datos.id_municipio_direccion
+              this.infoEstudiante.barrioA = response.data.datos.barrio
+              this.infoEstudiante.id_zonaA = response.data.datos.id_zona
+              this.infoEstudiante.telefono1A = response.data.datos.telefono1
+              this.infoEstudiante.telefono2A = response.data.datos.telefono2
+              this.infoEstudiante.correoA = response.data.datos.correo
+              this.infoEstudiante.id_parentesco = null
+              this.infoEstudiante.ocupacionA = response.data.datos.ocupacion
+             }
+            //console.log(JSON.stringify(response.data.datos))
+          }
+        })
+        .catch(err => {
+            this.mensajeEmergente('danger',CONFIG.TITULO_MSG,'Algo salio mal y no se pudo realizar: Buscar documento persona. Intente más tarde. ' + err)
+        })
+      },
       validarDatosFormulario() {
         this.$v.infoEstudiante.$touch()
         if (this.$v.infoEstudiante.$anyError) {
@@ -777,23 +833,23 @@
             this.infoEstudiante.desGrado = document.getElementById('grados')[document.getElementById('grados').selectedIndex].text
             this.infoEstudiante.desCurso = document.getElementById('cursos')[document.getElementById('cursos').selectedIndex].text
             this.infoEstudiante.desEspecialidad = document.getElementById('especialidad')[document.getElementById('especialidad').selectedIndex].text
-            this.infoEstudiante.desMetodologia = document.getElementById('metodologia')[document.getElementById('metodologia').selectedIndex].text
-            this.infoEstudiante.desNuevo = document.getElementById('nuevo')[document.getElementById('nuevo').selectedIndex].text
+            this.infoEstudiante.desMetodologia = ''//document.getElementById('metodologia')[document.getElementById('metodologia').selectedIndex].text
+            this.infoEstudiante.desNuevo = ''//document.getElementById('nuevo')[document.getElementById('nuevo').selectedIndex].text
             this.infoEstudiante.desRepitente = document.getElementById('repitente')[document.getElementById('repitente').selectedIndex].text
-            this.infoEstudiante.desRuta = document.getElementById('ruta')[document.getElementById('ruta').selectedIndex].text
+            this.infoEstudiante.desRuta = ''//document.getElementById('ruta')[document.getElementById('ruta').selectedIndex].text
             this.infoEstudiante.desSeguro = document.getElementById('seguro')[document.getElementById('seguro').selectedIndex].text
             this.infoEstudiante.barrioA = this.infoEstudiante.barrioA.toUpperCase()
             this.infoEstudiante.desTipoDocumentoA = document.getElementById('tipoDocA')[document.getElementById('tipoDocA').selectedIndex].text
             this.infoEstudiante.desMunicipioDocumentoA = document.getElementById('muniDocA')[document.getElementById('muniDocA').selectedIndex].text
             this.infoEstudiante.desMunicipioNaceA = document.getElementById('muniNaceA')[document.getElementById('muniNaceA').selectedIndex].text
             this.infoEstudiante.desPaisA = document.getElementById('paisA')[document.getElementById('paisA').selectedIndex].text
-            this.infoEstudiante.desGeneroA = document.getElementById('generoA')[document.getElementById('generoA').selectedIndex].text
-            this.infoEstudiante.desRhA = document.getElementById('rhA')[document.getElementById('rhA').selectedIndex].text
-            this.infoEstudiante.desEstratoA = document.getElementById('estratoA')[document.getElementById('estratoA').selectedIndex].text
-            this.infoEstudiante.desSisbenA = document.getElementById('sisbenA')[document.getElementById('sisbenA').selectedIndex].text
-            this.infoEstudiante.desEpsA = document.getElementById('epsA')[document.getElementById('epsA').selectedIndex].text
+            this.infoEstudiante.desGeneroA = ''//document.getElementById('generoA')[document.getElementById('generoA').selectedIndex].text
+            this.infoEstudiante.desRhA = ''//document.getElementById('rhA')[document.getElementById('rhA').selectedIndex].text
+            this.infoEstudiante.desEstratoA = ''//document.getElementById('estratoA')[document.getElementById('estratoA').selectedIndex].text
+            this.infoEstudiante.desSisbenA = ''//document.getElementById('sisbenA')[document.getElementById('sisbenA').selectedIndex].text
+            this.infoEstudiante.desEpsA = ''//document.getElementById('epsA')[document.getElementById('epsA').selectedIndex].text
             this.infoEstudiante.desMunicipioDireccionA = document.getElementById('muniDirA')[document.getElementById('muniDirA').selectedIndex].text
-            this.infoEstudiante.desZonaA = document.getElementById('zonaA')[document.getElementById('zonaA').selectedIndex].text
+            this.infoEstudiante.desZonaA = ''//document.getElementById('zonaA')[document.getElementById('zonaA').selectedIndex].text
             this.infoEstudiante.desParentesco = document.getElementById('parentesco')[document.getElementById('parentesco').selectedIndex].text
             //this.enviarCorreoNuevo()
             this.$store.commit('set', ['datosMatriculaPreinscrito', this.infoEstudiante])
@@ -896,8 +952,8 @@
         this.infoEstudiante.id_metodologia = 1
         this.infoEstudiante.id_nuevo = 'N'
         this.infoEstudiante.id_repitente = 'N'
-        this.infoEstudiante.id_ruta = null
-        this.infoEstudiante.id_seguro = 'N'
+        this.infoEstudiante.id_ruta = 1
+        this.infoEstudiante.id_seguro = 'S'
         //------------------------- Información del Acudiente
         this.infoEstudiante.documentoA = null
         this.infoEstudiante.id_tipo_documentoA = 1
@@ -907,8 +963,8 @@
         this.infoEstudiante.apellido1A = null
         this.infoEstudiante.apellido2A = null
         this.infoEstudiante.id_municipio_nacimientoA = '00000'
-        this.infoEstudiante.id_generoA = null
-        this.infoEstudiante.id_rhA = null
+        this.infoEstudiante.id_generoA = 'M'
+        this.infoEstudiante.id_rhA = 9
         this.infoEstudiante.id_estratoA = 9
         this.infoEstudiante.id_sisbenA = 0
         this.infoEstudiante.id_epsA = '000000'
@@ -1039,7 +1095,7 @@
       }
     },
     beforeMount() {
-      if(this.$store.state.idRol == 1 || this.$store.state.idRol == 12  || tokenDecodificado.id_rol == 17) {
+      if(this.$store.state.idRol == 1 || this.$store.state.idRol == 12 || this.$store.state.perMatricular == 1) {
         //console.log(JSON.stringify(this.$store.state.datosEstudianteRenovar))
         this.llenarFormulario()
         this.ocuparCombos()
