@@ -44,12 +44,12 @@
                 </b-card-text>
                 <b-card-text>Consulte y actualice la Asignación Académica por Curso</b-card-text>
               </b-card>
-              <b-card border-variant="light" class="text-center linkini">
+              <b-card border-variant="light" class="text-center linkini" @click="irManuales">
                 <b-card-text>
-                  <span><b-icon icon="shop" font-scale="3"></b-icon></span>
-                  <h5 class="mt-2">Datos Institución</h5>
+                  <span><b-icon icon="book" font-scale="3"></b-icon></span>
+                  <h5 class="mt-2">Manuales</h5>
                 </b-card-text>
-                <b-card-text>Consulte y actualice la información de la Institución Educativa</b-card-text>
+                <b-card-text>Consulte los Manuales de Usuario del sistema</b-card-text>
               </b-card>
             </b-card-group>
           </CCardBody>
@@ -84,6 +84,9 @@
       },
       irAsignacionAcademica() {
         this.$router.push('/docentes/asignacioncurso')
+      },
+      irManuales() {
+        this.$router.push('/manuales')
       }
     },
     beforeMount() {

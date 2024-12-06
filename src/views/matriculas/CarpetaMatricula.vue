@@ -16,7 +16,7 @@
               <b-col lg="6">
                 <b-card header-bg-variant="secondary">
                   <template #header>
-                    <b-button @click="verFichaEstudiante()" class="small float-right" variant="dark" v-if="$store.state.idRol==1 || $store.state.idRol==12 || this.$store.state.perMatricular == 1">Editar Datos</b-button>
+                    <b-button @click="verFichaEstudiante()" class="small float-right" variant="dark" v-if="$store.state.idRol==1 || $store.state.idRol==12 || $store.state.perMatricular == 1">Editar Datos</b-button>
                     <h5 class="mb-0"><b-icon icon="card-checklist" aria-hidden="true"></b-icon> Datos del Estudiante</h5>
                   </template>
                   <b-card-text>
@@ -59,9 +59,7 @@
               <b-col lg="6">
                 <b-card header-bg-variant="secondary">
                   <template #header>
-                    <!--
-                    <b-button class="small float-right" variant="dark" v-if="$store.state.idRol==1 || $store.state.idRol==12 || this.$store.state.perMatricular == 1">Editar Datos</b-button>
-                    -->
+                    <b-button @click="verFichamatricula()" class="small float-right" variant="dark" v-if="$store.state.idRol==1 || $store.state.idRol==12 || $store.state.perMatricular == 1">Editar Datos</b-button>
                     <h5 class="mb-0"><b-icon icon="card-checklist" aria-hidden="true"></b-icon> Datos de la Matrícula</h5>
                   </template>
                   <b-card-text>
@@ -75,10 +73,11 @@
                             <b-tr><b-th>Grado</b-th><b-td>{{datosFichaE.grado}}</b-td></b-tr>
                             <b-tr><b-th>Curso</b-th><b-td>{{datosFichaE.nomenclatura}}</b-td></b-tr>
                             <b-tr><b-th>Jornada</b-th><b-td>{{datosFichaE.jornada}}</b-td></b-tr>
-                            <b-tr><b-th>Metodología</b-th><b-td>{{datosFichaE.metodologia}}</b-td></b-tr>
+                            <b-tr><b-th>Especialidad</b-th><b-td>{{datosFichaE.especialidad}}</b-td></b-tr>
                             <b-tr><b-th>Nuevo</b-th><b-td>{{datosFichaE.id_nuevo}}</b-td></b-tr>
                             <b-tr><b-th>Procedencia</b-th><b-td>{{datosFichaE.procedencia}}</b-td></b-tr>
                             <b-tr><b-th>Repitente</b-th><b-td>{{datosFichaE.id_repitente}}</b-td></b-tr>
+                            <b-tr><b-th>Observaciones</b-th><b-td>{{datosFichaE.obs_matricula}}</b-td></b-tr>
                             <b-tr><b-th>ID</b-th><b-td>{{idMatricula}}</b-td></b-tr>
                           </b-tbody>
                         </b-table-simple>
@@ -104,7 +103,7 @@
                             <CCard style="margin-top: -17">
                               <CCardBody>
                                 <b-row class="p-3">
-                                  <b-col lg="12" class="mt-3 text-center">
+                                  <b-col lg="12" class="mt-1 text-center">
                                     <img :src="datosFichaE.foto" id="photo" alt="photo">
                                   </b-col>
                                   <b-col lg="12" class="mt-3 text-center">
@@ -121,7 +120,7 @@
                                 <b-row>
                                   <b-col lg="12" md="12" v-if="firmaEstudianteValida">
                                     <b-form-group label="Firma del Estudiante" label-for="firma" class="etiqueta">
-                                      <img class="text-center mt-3" :src="datosFichaE.firma_estudiante" alt="Firma" width="100%">
+                                      <img class="text-center mt-1" :src="datosFichaE.firma_estudiante" alt="Firma" width="100%">
                                     </b-form-group>
                                   </b-col>
                                   <b-col lg="12" md="12" v-if="!firmaEstudianteValida">
@@ -151,7 +150,7 @@
                                 <b-row>
                                   <b-col lg="12" md="12" v-if="firmaAcudienteValida">
                                     <b-form-group label="Firma del Acudiente" label-for="firma" class="etiqueta">
-                                      <img class="text-center mt-3" :src="datosFichaE.firma_acudiente" alt="Firma" width="100%">
+                                      <img class="text-center mt-1" :src="datosFichaE.firma_acudiente" alt="Firma" width="100%">
                                     </b-form-group>
                                   </b-col>
                                   <b-col lg="12" md="12" v-if="!firmaAcudienteValida">
@@ -196,7 +195,7 @@
                       <b-col lg="12">
                         <h5>{{ datosFichaE.acudiente != null ? datosFichaE.acudiente : 'SIN ASOCIAR' }}</h5>
                         <h6>{{ datosFichaE.telefonoA != null ? datosFichaE.telefonoA : '-'}}</h6>
-                        <b-button @click="verFichaAcudiente()" class="small" variant="dark" v-if="$store.state.idRol==1 || $store.state.idRol==12 || this.$store.state.perMatricular == 1">Editar Datos</b-button>
+                        <b-button @click="verFichaAcudiente()" class="small" variant="dark" v-if="$store.state.idRol==1 || $store.state.idRol==12 || $store.state.perMatricular == 1">Editar Datos</b-button>
                       </b-col>
                     </b-row>
                   </b-card-text>
@@ -218,7 +217,7 @@
                       <b-col lg="12">
                         <h5>{{ datosFichaE.padre != null ? datosFichaE.padre : 'SIN ASOCIAR' }}</h5>
                         <h6>{{ datosFichaE.telefonoP != null ? datosFichaE.telefonoP : '-' }}</h6>
-                        <b-button @click="verFichaPapa()" class="small" variant="dark" v-if="$store.state.idRol==1 || $store.state.idRol==12 || this.$store.state.perMatricular == 1">Editar Datos</b-button>
+                        <b-button @click="verFichaPapa()" class="small" variant="dark" v-if="$store.state.idRol==1 || $store.state.idRol==12 || $store.state.perMatricular == 1">Editar Datos</b-button>
                       </b-col>
                     </b-row>
                   </b-card-text>
@@ -240,7 +239,7 @@
                       <b-col lg="12">
                         <h5>{{ datosFichaE.madre != null ? datosFichaE.madre : 'SIN ASOCIAR' }}</h5>
                         <h6>{{ datosFichaE.telefonoM != null ? datosFichaE.telefonoM : '-' }}</h6>
-                        <b-button @click="verFichaMama()" class="small" variant="dark" v-if="$store.state.idRol==1 || $store.state.idRol==12 || this.$store.state.perMatricular == 1">Editar Datos</b-button>
+                        <b-button @click="verFichaMama()" class="small" variant="dark" v-if="$store.state.idRol==1 || $store.state.idRol==12 || $store.state.perMatricular == 1">Editar Datos</b-button>
                       </b-col>
                     </b-row>
                   </b-card-text>
@@ -289,6 +288,13 @@
         </div>
       </div>
     </b-modal>
+    <b-modal ref="modalFichaMatricula" size="xl" scrollable hide-footer title="Ficha de la Matricula" ok-only>
+      <div class="mx-3">
+        <div>
+          <FichaMatricula :datosMatricula="datosFichaMatricula" @retorno="datosRecibidosMatricula"/>
+        </div>
+      </div>
+    </b-modal>
   </div>
 </template>
 
@@ -300,6 +306,7 @@
   import FichaPapa from '@/views/matriculas/FichaPapa'
   import FichaMama from '@/views/matriculas/FichaMama'
   import FichaEstudiante from '@/views/matriculas/FichaEstudiante'
+  import FichaMatricula from '@/views/matriculas/FichaMatricula'
 
   export default {
     name: 'carpetamatricula',
@@ -308,7 +315,8 @@
       FichaAcudiente,
       FichaPapa,
       FichaMama,
-      FichaEstudiante
+      FichaEstudiante,
+      FichaMatricula
     },
     data () {
       return {
@@ -327,12 +335,24 @@
         datosFichaA: {},
         datosFichaP: {},
         datosFichaM: {},
+        datosFichaMatricula: {},
         fotoA: CONFIG.FOTO,
         fotoP: CONFIG.FOTO,
         fotoM: CONFIG.FOTO,
       }
     },
     methods: {
+      verFichamatricula() {
+        this.datosFichaMatricula.idMatricula = this.idMatricula
+        this.$refs['modalFichaMatricula'].show()
+      },
+      datosRecibidosMatricula(retorno) {
+        if(retorno == 1) {
+          this.consultaFichaMatricula()
+          this.mensajeEmergente('success',CONFIG.TITULO_MSG,'Los datos de la Matricula del Estudiante se han actualizado correctamente.')
+        }
+        this.$refs['modalFichaMatricula'].hide()
+      },
       verFichaEstudiante() {
         this.datosEstudiante.idEstudiante = this.datosFichaE.idEstudiante
         this.$refs['modalFichaEstudiante'].show()

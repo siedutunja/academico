@@ -1,19 +1,21 @@
 <template>
   <div>
-    <b-row>
-      <b-col lg="12">
-        <h3 class="ml-2"><b-icon icon="building" aria-hidden="true"></b-icon> ASIGNAR GRADOS A SEDE</h3>
-      </b-col>
-    </b-row>
     <b-row class="mt-2">
       <b-col lg="12">
         <b-card>
+          <template #header>
+            <h5 class="mb-0"><b-icon icon="card-checklist" aria-hidden="true"></b-icon> CURSOS POR SEDE Y GRADO</h5>
+          </template>
           <b-card-text>
             <b-row>
-              <b-col lg="12">
+              <b-col lg="6">
+                
               </b-col>
             </b-row>
           </b-card-text>
+          <template #footer>
+            <em>Actualice los datos de un curso haciendo clic en el lapiz.</em>
+          </template>
         </b-card>
       </b-col>
     </b-row>

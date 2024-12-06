@@ -63,13 +63,13 @@
               </b-col>
               <b-col lg="3" md="6">
                 <b-form-group label="Nacionalidad*" label-for="nacional" class="etiqueta">
-                  <b-form-select  id="nacional" ref="nacional" v-model="$v.infoMama.id_nacionalidad.$model" :options="comboPaises" :state="validateStateD('id_nacionalidad')" aria-describedby="feedNal"></b-form-select>
+                  <b-form-select  id="nacional" ref="nacional" v-model="$v.infoMama.id_nacionalidad.$model" :options="comboPaises" :state="validateStateD('id_nacionalidad')" aria-describedby="feedNal" @change="habilitaMunicipioNace"></b-form-select>
                   <b-form-invalid-feedback id="feedNal">Campo requerido.</b-form-invalid-feedback>
                 </b-form-group>
               </b-col>
               <b-col lg="6" md="6">
                 <b-form-group label="Municipio de Nacimiento*" label-for="muniNace" class="etiqueta">
-                  <b-form-select  id="muniNace" ref="muniNace" v-model="$v.infoMama.id_municipio_nacimiento.$model" :options="comboMunicipios" :state="validateStateD('id_municipio_nacimiento')" aria-describedby="feedMuniNaceA"></b-form-select>
+                  <b-form-select  id="muniNace" ref="muniNace" v-model="$v.infoMama.id_municipio_nacimiento.$model" :options="comboMunicipios" :state="validateStateD('id_municipio_nacimiento')" aria-describedby="feedMuniNaceA" :disabled="deshabMunNace"></b-form-select>
                   <b-form-invalid-feedback id="feedMuniNace">Campo requerido.</b-form-invalid-feedback>
                 </b-form-group>
               </b-col>
@@ -165,6 +165,7 @@
         comboGeneros: [],
         comboPaises: [],
         mamaExiste: true,
+        deshabMunNace: false
       }
     },
     validations: {
@@ -187,8 +188,18 @@
       }
     },
     methods: {
+      habilitaMunicipioNace() {
+        if (this.infoMama.id_nacionalidad == '170') {
+          this.infoMama.id_municipio_nacimiento = null
+          this.deshabMunNace = false
+        } else {
+          this.infoMama.id_municipio_nacimiento = '00000'
+          this.deshabMunNace = true
+        }
+      },
       async buscarDocumentoMama() {
         this.mamaExiste = false
+        this.deshabMunNace = false
         await axios
         .get(CONFIG.ROOT_PATH + 'academico/matriculas/buscardocumentopersona', { params: { documento: this.infoMama.documento }})
         .then(response => {
@@ -245,6 +256,10 @@
               this.infoMama.ocupacion = null
               this.infoMama.idEstudiante = this.datosMama.idEstudiante
               this.mamaExiste = false
+            }
+            if (this.infoMama.id_nacionalidad != '170') {
+              this.infoMama.id_municipio_nacimiento = '00000'
+              this.deshabMunNace = true
             }
           }
         })
@@ -308,7 +323,6 @@
         }
         this.infoMama.correo = this.infoMama.correo.toLowerCase()
         this.infoMama.mamaExiste = this.mamaExiste
-        //console.log(JSON.stringify(this.infoMama))
         await axios
         .post(CONFIG.ROOT_PATH + 'academico/mama', JSON.stringify(this.infoMama), { headers: {"Content-Type": "application/json; charset=utf-8" }})
         .then(response => {
@@ -356,6 +370,10 @@
             }
             this.infoMama.idMama = this.datosMama.idMama
             this.infoMama.idEstudiante = this.datosMama.idEstudiante
+            if (this.infoMama.id_nacionalidad != '170') {
+              this.infoMama.id_municipio_nacimiento = '00000'
+              this.deshabMunNace = true
+            }
           }
         })
         .catch(err => {

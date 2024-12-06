@@ -209,6 +209,26 @@
           location.replace(CONFIG.ROOT_WEBSITE)
         })
       },
+      async cargarDatosEspecialidades() {
+        await axios
+        .get(CONFIG.ROOT_PATH + 'academico/cargueespecialidades', {params: {idInstitucion: this.$store.state.idInstitucion}})
+        .then(response => {
+          if (response.data.error){
+            alert(response.data.mensaje + ' - Consulta datos Especialidades IE')
+            location.replace(CONFIG.ROOT_MODULO_LOGIN)
+          } else {
+            if(response.data.datos != 0) {
+              this.$store.commit('set', ['datosEspecialidades', response.data.datos])
+            } else {
+              this.$store.commit('set', ['datosEspecialidades', []])
+            }
+          }
+        })
+        .catch(err => {
+          alert('Algo salio mal y no se pudo realizar: Consulta datos Especialidades IE. Intente más tarde. ' + err)
+          location.replace(CONFIG.ROOT_WEBSITE)
+        })
+      },
       async cargarDatosSesionUsuario() {
         await axios
         .get(CONFIG.ROOT_PATH + 'academico/iniciosesion', { params: { idPersona: this.tokenDecodificado.id_persona, idRol: this.tokenDecodificado.id_rol, idIE: this.tokenDecodificado.id_institucion }})
@@ -251,6 +271,7 @@
               this.cargarDatosGrados()
               this.cargarDatosCursos()
               this.cargarDatosRutas()
+              this.cargarDatosEspecialidades()
 
               this.trazaProceso('Inicio de Sesión')
             }

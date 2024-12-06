@@ -48,10 +48,17 @@
                     </b-row>
                   </b-card-text>
                   <p>Total Estudiantes: {{ contadorEstudiantes }}</p>
+                  <!--
+                  <b-row>
+                    <b-col lg="12"><hr></b-col>
+                    <b-col lg="12">
+                      <b-button class="small mx-1 mt-2" variant="primary" @click="imprimirFormulario">Imprimir Listado</b-button>
+                    </b-col>
+                  </b-row>
+                  -->
                 </b-card>
               </b-col>
             </b-row>
-
           </b-card-text>
         </b-card>
       </b-col>
@@ -90,6 +97,10 @@
       }
     },
     methods: {
+      imprimirFormulario() {
+        window.open("https://siedutunja.gov.co/php/listados/Listado_001.php?idCurso=" + this.idCurso,"_blank")
+        return true
+      },
       seleccionarEstudiante(fila) {
         console.log(fila)
       },

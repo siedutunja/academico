@@ -317,6 +317,11 @@ function configRoutes () {
           path: 'restringida',
           component: () => import('@/views/pages/Restringida')
         },    
+        // 2024-12-03
+        {
+          path: 'manuales',
+          component: () => import('@/views/pages/Manuales')
+        },    
       ]
     },
     // 2024-10-21

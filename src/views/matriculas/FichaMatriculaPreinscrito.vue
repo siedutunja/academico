@@ -896,10 +896,14 @@
             this.infoEstudiante.desZonaA = ''//document.getElementById('zonaA')[document.getElementById('zonaA').selectedIndex].text
             this.infoEstudiante.desParentesco = document.getElementById('parentesco')[document.getElementById('parentesco').selectedIndex].text
             //this.enviarCorreoNuevo()
-            this.$store.commit('set', ['datosMatriculaPreinscrito', this.infoEstudiante])
-            sessionStorage.setItem('datosMatriculaPreinscrito', JSON.stringify(this.infoEstudiante))
-            this.mensajeEmergente('success',CONFIG.TITULO_MSG,'El estudiante preinscrito se ha matriculado correctamente.')
-            this.$router.push('/matriculas/FichaMatriculaPreinscrito2')
+            //this.$store.commit('set', ['datosMatriculaPreinscrito', this.infoEstudiante])
+            //sessionStorage.setItem('datosMatriculaPreinscrito', JSON.stringify(this.infoEstudiante))
+            //this.mensajeEmergente('success',CONFIG.TITULO_MSG,'El estudiante preinscrito se ha matriculado correctamente.')
+            //this.$router.push('/matriculas/FichaMatriculaPreinscrito2')
+
+            //Llama la carpeta de matricula del estudiante
+            this.$store.commit('set', ['idMatricula', this.infoEstudiante.idMatricula])
+            this.$router.push('/matriculas/CarpetaMatricula')
           }
         })
         .catch(err => {
@@ -1041,7 +1045,7 @@
         this.infoEstudiante.telefono2 = this.$store.state.datosPreinscrito.telefono2
         this.infoEstudiante.correo = this.$store.state.datosPreinscrito.correo
         this.infoEstudiante.codigo = null
-        this.infoEstudiante.id_especialidad = '05'
+        this.infoEstudiante.id_especialidad = null
         this.infoEstudiante.id_metodologia = 1
         this.infoEstudiante.id_nuevo = 'S'
         this.infoEstudiante.id_repitente = 'N'
@@ -1094,7 +1098,7 @@
           this.comboRutas.push({ 'value': element.id, 'text': element.ruta.toUpperCase() })
         })
         this.comboEspecialidades = []
-        this.$store.state.datosTablas.especialidades.forEach(element => {
+        this.$store.state.datosEspecialidades.forEach(element => {
           this.comboEspecialidades.push({ 'value': element.id, 'text': element.especialidad.toUpperCase() })
         })
         this.comboRepitente = []

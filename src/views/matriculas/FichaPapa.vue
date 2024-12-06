@@ -63,13 +63,13 @@
               </b-col>
               <b-col lg="3" md="6">
                 <b-form-group label="Nacionalidad*" label-for="nacional" class="etiqueta">
-                  <b-form-select  id="nacional" ref="nacional" v-model="$v.infoPapa.id_nacionalidad.$model" :options="comboPaises" :state="validateStateD('id_nacionalidad')" aria-describedby="feedNal"></b-form-select>
+                  <b-form-select  id="nacional" ref="nacional" v-model="$v.infoPapa.id_nacionalidad.$model" :options="comboPaises" :state="validateStateD('id_nacionalidad')" aria-describedby="feedNal" @change="habilitaMunicipioNace"></b-form-select>
                   <b-form-invalid-feedback id="feedNal">Campo requerido.</b-form-invalid-feedback>
                 </b-form-group>
               </b-col>
               <b-col lg="6" md="6">
                 <b-form-group label="Municipio de Nacimiento*" label-for="muniNace" class="etiqueta">
-                  <b-form-select  id="muniNace" ref="muniNace" v-model="$v.infoPapa.id_municipio_nacimiento.$model" :options="comboMunicipios" :state="validateStateD('id_municipio_nacimiento')" aria-describedby="feedMuniNaceA"></b-form-select>
+                  <b-form-select  id="muniNace" ref="muniNace" v-model="$v.infoPapa.id_municipio_nacimiento.$model" :options="comboMunicipios" :state="validateStateD('id_municipio_nacimiento')" aria-describedby="feedMuniNaceA" :disabled="deshabMunNace"></b-form-select>
                   <b-form-invalid-feedback id="feedMuniNace">Campo requerido.</b-form-invalid-feedback>
                 </b-form-group>
               </b-col>
@@ -165,6 +165,7 @@
         comboGeneros: [],
         comboPaises: [],
         papaExiste: true,
+        deshabMunNace: false
       }
     },
     validations: {
@@ -187,8 +188,18 @@
       }
     },
     methods: {
+      habilitaMunicipioNace() {
+        if (this.infoPapa.id_nacionalidad == '170') {
+          this.infoPapa.id_municipio_nacimiento = null
+          this.deshabMunNace = false
+        } else {
+          this.infoPapa.id_municipio_nacimiento='00000'
+          this.deshabMunNace = true
+        }
+      },
       async buscarDocumentoPapa() {
         this.papaExiste = false
+        this.deshabMunNace = false
         await axios
         .get(CONFIG.ROOT_PATH + 'academico/matriculas/buscardocumentopersona', { params: { documento: this.infoPapa.documento }})
         .then(response => {
@@ -238,6 +249,10 @@
               this.infoPapa.ocupacion = null
               this.infoPapa.idEstudiante = this.datosPapa.idEstudiante
               this.papaExiste = false
+            }
+            if (this.infoPapa.id_nacionalidad != '170') {
+              this.infoPapa.id_municipio_nacimiento = '00000'
+              this.deshabMunNace = true
             }
           }
         })
@@ -326,8 +341,6 @@
               if (this.infoPapa.fecha_nacimiento != null && this.infoPapa.fecha_nacimiento != '') {
                 this.infoPapa.fecha_nacimiento = this.infoPapa.fecha_nacimiento.substr(0,10)
               }
-              this.infoPapa.idPapa = this.datosPapa.id
-              this.infoPapa.idEstudiante = this.datosPapa.idEstudiante
               this.papaExiste = true
             } else {
               this.infoPapa.documento = null
@@ -346,9 +359,13 @@
               this.infoPapa.telefono2 = null
               this.infoPapa.correo = null
               this.infoPapa.ocupacion = null
-              this.infoPapa.idPapa = null
-              this.infoPapa.idEstudiante = this.datosPapa.idEstudiante
               this.papaExiste = false
+            }
+            this.infoPapa.idPapa = this.datosPapa.idPapa
+            this.infoPapa.idEstudiante = this.datosPapa.idEstudiante
+            if (this.infoPapa.id_nacionalidad != '170') {
+              this.infoPapa.id_municipio_nacimiento = '00000'
+              this.deshabMunNace = true
             }
           }
         })
