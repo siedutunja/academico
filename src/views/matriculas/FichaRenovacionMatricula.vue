@@ -682,21 +682,42 @@
                 this.infoEstudiante.fecha_nacimientoA = null
               this.infoEstudiante.id_nacionalidadA = response.data.datos.id_nacionalidad
               this.infoEstudiante.id_municipio_nacimientoA = response.data.datos.id_municipio_nacimiento
-              this.infoEstudiante.id_generoA = response.data.datos.id_genero
-              this.infoEstudiante.id_rhA = response.data.datos.id_rh
-              this.infoEstudiante.id_estratoA = response.data.datos.id_estrato
-              this.infoEstudiante.id_sisbenA = response.data.datos.id_sisben
-              this.infoEstudiante.id_epsA = response.data.datos.id_eps
+              if (response.data.datos.id_generoA == null)
+                this.infoEstudiante.id_generoA = 'M'
+              else
+                this.infoEstudiante.id_generoA = response.data.datos.id_genero
+              if (response.data.datos.id_rhA == null)
+                this.infoEstudiante.id_rhA = 9
+              else
+                this.infoEstudiante.id_rhA = response.data.datos.id_rh
+              if (response.data.datos.id_estratoA == null)
+                this.infoEstudiante.id_estratoA = 9
+              else
+                this.infoEstudiante.id_estratoA = response.data.datos.id_estrato
+              if (response.data.datos.id_sisbenA == null)
+                this.infoEstudiante.id_sisbenA = 0
+              else
+                this.infoEstudiante.id_sisbenA = response.data.datos.id_sisben
+              if (response.data.datos.id_epsA == null)
+                this.infoEstudiante.id_epsA = '000000'
+              else
+                this.infoEstudiante.id_epsA = response.data.datos.id_eps
               this.infoEstudiante.direccionA = response.data.datos.direccion
               this.infoEstudiante.id_municipio_direccionA = response.data.datos.id_municipio_direccion
-              this.infoEstudiante.barrioA = response.data.datos.barrio
-              this.infoEstudiante.id_zonaA = response.data.datos.id_zona
+              if (response.data.datos.barrioA == null)
+                this.infoEstudiante.barrioA = '-'
+              else
+                this.infoEstudiante.barrioA = response.data.datos.barrio
+              if (response.data.datos.id_zonaA == null)
+                this.infoEstudiante.id_zonaA = 1
+              else
+                this.infoEstudiante.id_zonaA = response.data.datos.id_zona
               this.infoEstudiante.telefono1A = response.data.datos.telefono1
               this.infoEstudiante.telefono2A = response.data.datos.telefono2
               this.infoEstudiante.correoA = response.data.datos.correo
               this.infoEstudiante.id_parentesco = null
               this.infoEstudiante.ocupacionA = response.data.datos.ocupacion
-             }
+            }
             //console.log(JSON.stringify(response.data.datos))
           }
         })

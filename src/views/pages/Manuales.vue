@@ -11,7 +11,7 @@
               <b-col lg="12">
                 <h5>
                   <ul>
-                    <li class="mt-3"><a href="https://siedutunja.gov.co/manuales/academico/ManualLogin_1.pdf" target="_blank"> Manual de Ingreso al Sistema</a></li>
+                    <li class="mt-3"><a href="https://siedutunja.gov.co/manuales/ManualLogin_1.pdf" target="_blank"> Manual de Ingreso al Sistema</a></li>
                     <li class="mt-3"><a href="https://siedutunja.gov.co/manuales/academico/ManualAdmon_1.pdf" target="_blank"> Manual Administrador del Sistema</a></li>
                   </ul>
                 </h5>

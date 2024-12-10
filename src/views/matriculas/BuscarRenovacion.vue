@@ -118,7 +118,7 @@
           .get(CONFIG.ROOT_PATH + 'academico/buscarestudiante/renovacion', { params: { texto: this.buscarTexto.textoBusqueda, idInstitucion: this.$store.state.idInstitucion, vigencia: this.$store.state.aMatriculas }})
           .then(response => {
             if (response.data.error){
-              this.mensajeEmergente('danger',CONFIG.TITULO_MSG,response.data.mensaje + ' - Buscar estudiante')
+              this.mensajeEmergente('danger',CONFIG.TITULO_MSG,response.data.mensaje + ' - Intente realizar una nueva busqueda de estudiante')
             } else{
               if (response.data.datos != 0) {
                 this.listaEstudiantes = response.data.datos
