@@ -401,10 +401,6 @@
         }
         this.$refs['modalAsociarAcudiente'].hide()
       },
-      imprimirFormulario() {
-        window.open("https://siedutunja.gov.co/php/matriculas/FichaMatricula.php?token=" + this.idMatricula,"_blank")
-        return true
-      },
       cancelarValidarFirmaEstudiante() {
         this.firmaEstudianteValida = true
         this.cancelarFirmaEstudiante = false
@@ -621,7 +617,8 @@
         }
       },
       imprimirFormulario() {
-        window.open("https://siedutunja.gov.co/php/matriculas/FichaMatricula.php?token=" + this.idMatricula,"_blank")
+        //window.open("https://siedutunja.gov.co/php/matriculas/FichaMatricula.php?token=" + this.idMatricula,"_blank")
+        window.open("https://siedutunja.gov.co/" + this.$store.state.FichaMatricula + "?token=" + this.idMatricula,"_blank")
         return true
       },
       nuevoFormulario() {

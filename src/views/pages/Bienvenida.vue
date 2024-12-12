@@ -264,6 +264,7 @@
 
               this.$store.commit('set', ['aLectivo', response.data.datos.configuracion.a_lectivo])
               this.$store.commit('set', ['aMatriculas', response.data.datos.configuracion.a_matriculas])
+              this.$store.commit('set', ['FichaMatricula', response.data.datos.configuracion.ficha_matricula])
               
               this.cargarDatosSedesGradosConfig()
               this.cargarDatosDocentes()
