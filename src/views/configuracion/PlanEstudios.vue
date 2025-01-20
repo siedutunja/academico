@@ -1,23 +1,21 @@
 <template>
   <div>
-    <b-row>
-      <b-col lg="12">
-        <h3 class="ml-2"><b-icon icon="filter-square" aria-hidden="true"></b-icon> PLAN DE ESTUDIOS POR GRADOS</h3>
-      </b-col>
-    </b-row>
     <b-row class="mt-2">
       <b-col lg="12">
         <b-card>
+          <template #header>
+            <h5 class="mb-0"><b-icon icon="card-checklist" aria-hidden="true"></b-icon> PLAN DE ESTUDIOS POR GRADOS</h5>
+          </template>
           <b-card-text>
             <b-row>
               <b-col lg="6">
                 <b-form-group label="Sedes*" label-for="sedes" class="etiqueta">
-                  <b-form-select  id="sedes" ref="sedes" v-model="idSedeVigencia" :options="comboSedesVigencia" @change="idGradoSede=null,ocuparComboGradosSede()"></b-form-select>
+                  <b-form-select  id="sedes" ref="sedes" v-model="idSede" :options="comboSedes" @change="idGradoSede=null,ocuparComboGradosSede()"></b-form-select>
                 </b-form-group>
               </b-col>
               <b-col lg="6">
                 <b-form-group label="Grados*" label-for="grados" class="etiqueta">
-                  <b-form-select  id="grados" ref="grados" v-model="idGradoSede" :options="comboGradosSede" @change="consultarPlanEstudios()" :disabled="idSedeVigencia!=null ? false : true"></b-form-select>
+                  <b-form-select  id="grados" ref="grados" v-model="idGradoSede" :options="comboGradosSede" @change="consultarPlanEstudios()" :disabled="idSede!=null ? false : true"></b-form-select>
                 </b-form-group>
               </b-col>
             </b-row>
@@ -72,6 +70,12 @@
                     <span v-if="props.column.field == 'asignatura'">
                       {{props.row.asignatura}}
                     </span>
+                    <span v-if="props.column.field == 'modalidad'">
+                      {{props.row.modalidad}}
+                    </span>
+                    <span v-if="props.column.field == 'idEspecialidad'">
+                      <b-form-select v-model="props.row.idEspecialidad" @change="actualizarItem(props.row)" :options="comboEspecialidades"></b-form-select>
+                    </span>
                     <span v-if="props.column.field == 'ih'">
                       <b-form-input v-model="props.row.ih" @blur="actualizarItem(props.row)" autocomplete="off" maxlength="2" @keydown="soloNumeros"></b-form-input>
                     </span>
@@ -117,15 +121,18 @@
     data () {
       return {
         listaAsignaturas: [],
-        comboSedesVigencia: [],
-        idSedeVigencia: null,
+        comboSedes: [],
+        idSede: null,
         comboGradosSede: [],
         idGradoSede: null,
         encabColumnasAsig : [
-          { label: 'Asignatura', field: 'asignatura', sortable: false }
+          { label: 'Asignatura', field: 'asignatura', sortable: false },
+          { label: 'Modalidad', field: 'modalidad', sortable: false }
         ],
         encabColumnasPlan : [
           { label: 'Asignatura', field: 'asignatura', sortable: false },
+          { label: 'Modalidad', field: 'modalidad', sortable: false },
+          { label: 'Especialidad', field: 'idEspecialidad', sortable: false },
           { label: 'IH', field: 'ih', width: '70px', sortable: false },
           { label: 'Peso', field: 'porcentaje',width: '100px', sortable: false }
         ],
@@ -133,6 +140,7 @@
         listaAsignaturasSiAsignadas: [],
         listaAsignaturasParaAsignar: [],
         listaAsignaturasParaQuitar: [],
+        comboEspecialidades: [],
         textGrado: null
       }
     },
@@ -166,17 +174,22 @@
         })
       },
       confirmarPlanEstudios() {
-        let titulo = 'Actualizar Datos del Plan de estudios'
-        let pregunta = '¿Esta seguro de Actualizar el Plan de estudios?'
+        let titulo = 'Actualizar datos del Plan de Estudios'
+        let pregunta = '¿Esta seguro de actualizar el Plan de Estudios?'
         this.$bvModal.msgBoxConfirm(pregunta, {
+          headerBgVariant: 'primary',
+          headerTextVariant: 'light',
+          bodyBgVariant: 'light',
+          bodyBgClass: 'text-center',
           title: titulo,
           size: '',
           buttonSize: 'sm',
-          okVariant: 'success',
+          okVariant: 'primary',
           okTitle: 'Si, ' + titulo,
           cancelVariant: 'danger',
           cancelTitle: 'Cancelar',
           footerClass: 'p-2',
+          bodyClass: 'p-5',
           hideHeaderClose: false,
           centered: true
         })
@@ -189,13 +202,14 @@
       },
       actualizarItem(item) {
         let indice = this.listaAsignaturasSiAsignadas.findIndex(asigna => asigna.idAsignatura === item.idAsignatura)
+        this.listaAsignaturasSiAsignadas[indice].idEspecialidad = item.idEspecialidad
         this.listaAsignaturasSiAsignadas[indice].ih = item.ih
         this.listaAsignaturasSiAsignadas[indice].porcentaje = item.porcentaje
       },
       quitarDelPlan() {
         this.listaAsignaturasParaQuitar = this.$refs['tablaAsignaturasPlan'].selectedRows
         this.listaAsignaturasParaQuitar.forEach(element => {
-          this.listaAsignaturasNoAsignadas.push({ 'idAsignatura': element.idAsignatura, 'asignatura': element.asignatura, 'idGradoSede': this.idGradoSede })
+          this.listaAsignaturasNoAsignadas.push({ 'idAsignatura': element.idAsignatura, 'asignatura': element.asignatura, 'modalidad': element.modalidad, 'idGradoSede': this.idGradoSede })
           let indice = this.listaAsignaturasSiAsignadas.findIndex(asigna => asigna.idAsignatura === element.idAsignatura)
           this.listaAsignaturasSiAsignadas.splice(indice,1)
         })
@@ -203,7 +217,7 @@
       asignarAlPlan() {
         this.listaAsignaturasParaAsignar = this.$refs['tablaAsignaturas'].selectedRows
         this.listaAsignaturasParaAsignar.forEach(element => {
-          this.listaAsignaturasSiAsignadas.push({ 'idAsignatura': element.idAsignatura, 'ih': 0, 'porcentaje': 0, 'asignatura': element.asignatura, 'idGradoSede': this.idGradoSede })
+          this.listaAsignaturasSiAsignadas.push({ 'idAsignatura': element.idAsignatura, 'ih': 0, 'porcentaje': 0, 'asignatura': element.asignatura, 'modalidad': element.modalidad, 'idGradoSede': this.idGradoSede, 'idEspecialidad': 0 })
           let indice = this.listaAsignaturasNoAsignadas.findIndex(asigna => asigna.idAsignatura === element.idAsignatura)
           this.listaAsignaturasNoAsignadas.splice(indice,1)
         })
@@ -212,7 +226,7 @@
         this.textGrado = document.getElementById('grados')[document.getElementById('grados').selectedIndex].text
         this.listaAsignaturasNoAsignadas = []
         this.listaAsignaturas.forEach(element => {
-          this.listaAsignaturasNoAsignadas.push({ 'idAsignatura': element.idAsignatura, 'asignatura': element.asignatura, 'idGradoSede': this.idGradoSede })
+          this.listaAsignaturasNoAsignadas.push({ 'idAsignatura': element.id, 'asignatura': element.asignatura, 'modalidad': element.modalidad, 'idGradoSede': this.idGradoSede })
         })
         this.listaAsignaturasSiAsignadas = []
         await axios
@@ -224,7 +238,7 @@
             if (response.data.datos != 0) {
               this.listaAsignaturasSiAsignadas = response.data.datos
               this.listaAsignaturasSiAsignadas.forEach(element => {
-                let indice = this.listaAsignaturasNoAsignadas.findIndex(asigna => asigna.idAsignatura === element.idAsignatura)
+                let indice = this.listaAsignaturasNoAsignadas.findIndex(asigna => asigna.idAsignatura === element.id)
                 this.listaAsignaturasNoAsignadas.splice(indice,1)
               })
             }
@@ -235,61 +249,26 @@
         })
       },
       async consultarListaAsignaturas() {
-        await axios
-        .get(CONFIG.ROOT_PATH + 'academico/asignaturas/plan', {params: {idInstitucion: this.$store.state.idInstitucion, vigencia: this.$store.state.aLectivo}})
-        .then(response => {
-          if (response.data.error){
-            this.mensajeEmergente('danger',CONFIG.TITULO_MSG,response.data.mensaje + ' - Lista asignaturas del plan')
-          } else{
-            if (response.data.datos != 0) {
-              this.listaAsignaturas = response.data.datos
-              /*
-              response.data.datos.forEach(element => {
-                this.listaAsignaturasNoAsignadas.push({ 'idAsignatura': element.idAsignatura, 'asignatura': element.asignatura, 'idGradoSede': this.idGradoSede })
-              })
-              */
-            }
-          }
-        })
-        .catch(err => {
-          this.mensajeEmergente('danger',CONFIG.TITULO_MSG,'Algo salio mal y no se pudo realizar: Lista asignaturas del plan. Intente más tarde.' + err)
-        })
+        this.listaAsignaturas = this.$store.state.datosAsignaturas
       },
       async ocuparComboGradosSede() {
         this.comboGradosSede = []
-        await axios
-        .get(CONFIG.ROOT_PATH + 'academico/combo/gradossede', {params: {idSede: this.idSedeVigencia}})
-        .then(response => {
-          if (response.data.error){
-            this.mensajeEmergente('danger',CONFIG.TITULO_MSG,response.data.mensaje + ' - Combo grados')
-          } else{
-            if (response.data.datos != 0) {
-              response.data.datos.forEach(element => {
-                this.comboGradosSede.push({ 'value': element.idGradoSede, 'text': element.descripcion.toUpperCase() })
-              })
-            }
+        this.$store.state.datosGrados.forEach(element => {
+          if (element.id_sede == this.idSede) {
+            this.comboGradosSede.push({ 'value': element.id, 'text': element.grado.toUpperCase() })
           }
-        })
-        .catch(err => {
-          this.mensajeEmergente('danger',CONFIG.TITULO_MSG,'Algo salio mal y no se pudo realizar: Combo grados. Intente más tarde.' + err)
         })
       },
       async ocuparComboSedes() {
-        await axios
-        .get(CONFIG.ROOT_PATH + 'academico/combo/sedes', {params: {idInstitucion: this.$store.state.idInstitucion, vigencia: this.$store.state.aLectivo}})
-        .then(response => {
-          if (response.data.error){
-            this.mensajeEmergente('danger',CONFIG.TITULO_MSG,response.data.mensaje + ' - Combo sedes')
-          } else{
-            if (response.data.datos != 0) {
-              response.data.datos.forEach(element => {
-                this.comboSedesVigencia.push({ 'value': element.idSedeVigencia, 'text': element.sede.toUpperCase() })
-              })
-            }
-          }
+        this.comboSedes = []
+        this.$store.state.datosSedes.forEach(element => {
+          this.comboSedes.push({ 'value': element.id, 'text': element.sede.toUpperCase() })
         })
-        .catch(err => {
-          this.mensajeEmergente('danger',CONFIG.TITULO_MSG,'Algo salio mal y no se pudo realizar: Combo sedes. Intente más tarde.' + err)
+      },
+      async ocuparComboEspecialidades() {
+        this.comboEspecialidades = []
+        this.$store.state.datosEspecialidades.forEach(element => {
+          this.comboEspecialidades.push({ 'value': element.id, 'text': element.especialidad.toUpperCase() })
         })
       },
       soloNumeros(e) {
@@ -306,6 +285,7 @@
       if(this.$store.state.idRol == 1 || this.$store.state.idRol == 12) {
         this.consultarListaAsignaturas()
         this.ocuparComboSedes()
+        this.ocuparComboEspecialidades()
       } else {
         this.$router.push('/restringida')
       }

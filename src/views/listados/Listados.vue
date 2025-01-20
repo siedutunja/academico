@@ -4,62 +4,45 @@
       <b-col lg="12">
         <b-card>
           <template #header>
-            <h5 class="mb-0"><b-icon icon="card-checklist" aria-hidden="true"></b-icon> LISTAS GENERAL DE ESTUDIANTES POR CURSO</h5>
+            <h5 class="mb-0"><b-icon icon="card-checklist" aria-hidden="true"></b-icon> GENERADOR DE LISTAS DE ESTUDIANTES</h5>
           </template>
           <b-card-text>
             <b-row>
               <b-col lg="6">
                 <b-form-group label="Seleccione la Sede" label-for="sedes" class="etiqueta">
-                  <b-form-select  id="sedes" ref="sedes" v-model="idSede" :options="comboSedes" @change="idGrado=null,idCurso=null,ocuparComboGradosSede()"></b-form-select>
-                </b-form-group>
-              </b-col>
-              <b-col lg="3">
-                <b-form-group label="Seleccione el Grado" label-for="grados" class="etiqueta">
-                  <b-form-select  id="grados" ref="grados" v-model="idGrado" :options="comboGrados" @change="idCurso=null,ocuparComboCursosGradosSede()"></b-form-select>
-                </b-form-group>
-              </b-col>
-              <b-col lg="3">
-                <b-form-group label="Seleccione el Curso" label-for="cursos" class="etiqueta">
-                  <b-form-select  id="cursos" ref="cursos" v-model="idCurso" :options="comboCursos" @change="verEstudiantesCurso"></b-form-select>
+                  <b-form-select id="sedes" ref="sedes" v-model="idSede" :options="comboSedes" @change="ocuparlistaCursosSede()"></b-form-select>
                 </b-form-group>
               </b-col>
             </b-row>
-            <b-row class="mt-0" v-if="idCurso!=null">
-              <b-col lg="12"><hr></b-col>
-              <b-col lg="12">
-                <b-card header-bg-variant="secondary">
-                  <template #header>
-                    <h5 class="mb-0"><b-icon icon="card-checklist" aria-hidden="true"></b-icon> Lista de Estudiantes</h5>
-                  </template>
-                  <b-card-text>
-                    <b-row>
-                      <b-col lg="12">
-                        <vue-good-table :columns="encabColumnas" :rows="listaEstudiantes" styleClass="vgt-table condensed bordered striped " :line-numbers="true">
-                          <template slot="table-row" slot-scope="props">
-                            <span v-if="props.column.field == 'idMatricula'">
-                              <span style="font-weight: bold; color: blue; cursor: pointer" @click="seleccionarEstudiante(props.row)" title="Consultar Estudiante"><CIcon name="cilPencil"/></span>
-                            </span>
-                          </template>
-                          <div slot="emptystate">
-                            <h5 class="text-danger ml-5">No existen estudiantes matriculados en el curso</h5>
-                          </div>
-                        </vue-good-table>
-                      </b-col>
-                    </b-row>
-                  </b-card-text>
-                  <p>Total Estudiantes: {{ contadorEstudiantes }}</p>
-                  <!--
-                  <b-row>
-                    <b-col lg="12"><hr></b-col>
-                    <b-col lg="12">
-                      <b-button class="small mx-1 mt-2" variant="primary" @click="imprimirFormulario">Imprimir Listado</b-button>
-                    </b-col>
-                  </b-row>
-                  -->
-                </b-card>
-              </b-col>
-            </b-row>
+            <div v-if="idSede!=null">
+              <b-row>
+                <b-col lg="12"><hr></b-col>
+              </b-row>
+              <b-row>
+                <b-col lg="6">
+                  <vue-good-table ref="cursitos" :columns="encabColumnas" :rows="listaCursos" styleClass="vgt-table condensed bordered striped" :line-numbers="true"
+                    :select-options="{
+                        enabled: true,
+                        selectionText: 'cursos seleccionados',
+                        clearSelectionText: 'Limpiar',
+                      }">
+                    <template #selected-row-actions>
+                      <button @click="imprimirListas()">Imprimir Listas</button>
+                    </template>
+                    <div slot="emptystate">
+                      <h5 class="text-danger ml-5">No existen Cursos en la Sede</h5>
+                    </div>
+                  </vue-good-table>
+                </b-col>
+                <b-col lg="6">
+                  <p>*</p>
+                </b-col>
+              </b-row>
+            </div>
           </b-card-text>
+          <template #footer>
+            <em>Imprima las Listas de Estudiantes seleccionando la Sede y luego seleccionando el o los Cursos.</em>
+          </template>
         </b-card>
       </b-col>
     </b-row>
@@ -80,62 +63,34 @@
     data () {
       return {
         idSede: null,
-        idGrado: null,
         idCurso: null,
         comboSedes: [],
-        comboGrados: [],
-        comboCursos: [],
+        listaCursos: [],
         listaEstudiantes: [],
         encabColumnas : [
-          { label: 'Estudiante', field: 'estudiante' },
-          { label: 'Documento', field: 'documento', sortable: false },
-          { label: 'Nuevo', field: 'id_nuevo', sortable: false },
-          { label: 'Repitente', field: 'id_repitente', sortable: false },
-          { label: '', field: 'idMatricula', sortable: false }
+          { label: 'Curso', field: 'nomenclatura' },
+          { label: 'Jornada', field: 'jornada', sortable: false }
         ],
-        contadorEstudiantes: 0,
+        cursosSeleccionados: []
       }
     },
     methods: {
-      imprimirFormulario() {
-        window.open("https://siedutunja.gov.co/php/listados/Listado_001.php?idCurso=" + this.idCurso,"_blank")
+      imprimirListas() {
+        this.cursosSeleccionados = []
+        this.$refs.cursitos.selectedRows.forEach(element => {
+          this.cursosSeleccionados.push({ 'id': element.id, 'cu': element.nomenclatura, 'se': element.sede, 'jo': element.jornada })
+        });
+        let uri = "?datos=" + JSON.stringify(this.cursosSeleccionados) + "&ie=" + this.$store.state.nombreInstitucion + "&vigencia=" + this.$store.state.aLectivo
+        let encoded = encodeURI(uri);
+        //window.open("http://localhost/siedutunja/php/listas/listas-01.php" + encoded,"_blank")
+        window.open("https://siedutunja.gov.co/php/listas/listas-01.php" + encoded,"_blank")
         return true
       },
-      seleccionarEstudiante(fila) {
-        console.log(fila)
-      },
-      async verEstudiantesCurso() {
-        this.listaEstudiantes = []
-        await axios
-        .get(CONFIG.ROOT_PATH + 'academico/listas/general', { params: { idCurso: this.idCurso }})
-        .then(response => {
-          if (response.data.error){
-            this.mensajeEmergente('danger',CONFIG.TITULO_MSG,response.data.mensaje + ' - Listado General')
-          } else{
-            if (response.data.datos != 0) {
-              this.listaEstudiantes = response.data.datos
-              this.contadorEstudiantes = this.listaEstudiantes.length
-            }
-          }
-        })
-        .catch(err => {
-            this.mensajeEmergente('danger',CONFIG.TITULO_MSG,'Algo salio mal y no se pudo realizar: Listado General. Intente más tarde. ' + err)
-        })
-      },
-      async ocuparComboCursosGradosSede() {
-        this.comboCursos = []
-        this.contadorEstudiantes = 0
+      async ocuparlistaCursosSede() {
+        this.listaCursos = []
         this.$store.state.datosCursos.forEach(element => {
-          if (element.id_grado_sede == this.idGrado) {
-            this.comboCursos.push({ 'value': element.id, 'text': element.nomenclatura.toUpperCase() })
-          }
-        })
-      },
-      async ocuparComboGradosSede() {
-        this.comboGrados = []
-        this.$store.state.datosGrados.forEach(element => {
           if (element.id_sede == this.idSede) {
-            this.comboGrados.push({ 'value': element.id, 'text': element.grado.toUpperCase() })
+            this.listaCursos.push(element)
           }
         })
       },
@@ -144,9 +99,6 @@
         this.$store.state.datosSedes.forEach(element => {
           this.comboSedes.push({ 'value': element.id, 'text': element.sede.toUpperCase() })
         })
-      },
-      cancelarFormulario() {
-        this.$router.push('/')
       },
       mensajeEmergente(variante, titulo, contenido) {
         this.$bvToast.toast(contenido, { title: titulo, variant: variante, toaster: "b-toaster-top-center", solid: true, autoHideDelay: 4000, appendToast: false })

@@ -13,7 +13,12 @@
       </CHeaderNavItem>
       <CHeaderNavItem class="px-1" v-if="$store.state.idRol == 1 || $store.state.idRol == 12">
         <CHeaderNavLink>
-          <MenuGestion/>
+          <MenuPei/>
+        </CHeaderNavLink>
+      </CHeaderNavItem>
+      <CHeaderNavItem class="px-1">
+        <CHeaderNavLink>
+          <MenuSecciones/>
         </CHeaderNavLink>
       </CHeaderNavItem>
       <CHeaderNavItem class="px-1" v-if="$store.state.idRol == 1 || $store.state.idRol == 12">
@@ -39,15 +44,19 @@
 
 <script>
   import TheHeaderDropdownAccnt from './TheHeaderDropdownAccnt'
+  import MenuPei from './MenuPei'
   import MenuConfiguracion from './MenuConfiguracion'
   import MenuGestion from './MenuGestion'
+  import MenuSecciones from './MenuSecciones'
 
   export default {
     name: 'TheHeader',
     components: {
       TheHeaderDropdownAccnt,
+      MenuPei,
       MenuConfiguracion,
-      MenuGestion
+      MenuGestion,
+      MenuSecciones
     },
     data () {
       return { 

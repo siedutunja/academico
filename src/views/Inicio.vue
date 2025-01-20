@@ -9,7 +9,7 @@
                 <CRow>
                   <CCol lg="2" md="3">
                     <div class="text-center">
-                      <b-avatar class="c-sidebar-brand-minimized" variant="light" :src="escudoInstitucion"  size="5rem"></b-avatar>
+                      <b-avatar class="c-sidebar-brand-minimized" variant="light" :src="escudoInstitucion"  size="6rem"></b-avatar>
                     </div>
                   </CCol>
                   <CCol lg="8" md="6">
@@ -17,6 +17,7 @@
                       <h6 style="margin-top: -5" class="text-muted">{{ secretaria }}</h6>
                       <h4 style="margin-top: -1">{{ $store.state.nombreInstitucion }}</h4>
                       <h6 style="margin-top: -1" class="text-muted">DANE: {{ $store.state.daneInstitucion }} - NIT: {{ $store.state.nitInstitucion }}</h6>
+                      <h5 style="margin-top: -1">SECCIÓN: {{ $store.state.nombreSeccion }}</h5>
                     </div>
                   </CCol>
                 </CRow>
@@ -52,15 +53,16 @@
                 <b-card-text>Consulte los Manuales de Usuario del sistema</b-card-text>
               </b-card>
             </b-card-group>
+            <b-row>
+              <b-col lg="12"><hr></b-col>
+              <b-col>
+                <span class="text-muted" v-if="$store.state.idRol == 1">ID Institución: {{$store.state.idInstitucion}}</span>
+              </b-col>
+            </b-row>
           </CCardBody>
         </CCard>
       </CCol>
     </CRow>
-    <b-row>
-      <b-col>
-        <span class="text-muted" v-if="$store.state.idRol == 1">ID Institución: {{$store.state.idInstitucion}}</span>
-      </b-col>
-    </b-row>
   </div>
 </template>
 

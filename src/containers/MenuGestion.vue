@@ -8,12 +8,9 @@
     <CDropdownHeader tag="div" class="text-center text-light" color="dark">
       <strong>Gestión del Sistema</strong>
     </CDropdownHeader>
+    <CDropdownDivider/>
     <CDropdownItem to="/administrativos/listaadministrativos" v-if="$store.state.idRol == 1 || $store.state.idRol == 12">
       <CIcon name="cilGroup" />Personal Administrativo
-    </CDropdownItem>
-    <CDropdownDivider/>
-    <CDropdownItem to="/docentes/listadocentes" v-if="$store.state.idRol == 1 || $store.state.idRol == 12">
-      <CIcon name="cilGroup" />Docentes
     </CDropdownItem>
   </CDropdown>
 </template>

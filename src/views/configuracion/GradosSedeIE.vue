@@ -33,6 +33,7 @@
                         <h5 class="text-danger ml-5">No existen grados asociados a la Sede</h5>
                       </div>
                     </vue-good-table>
+                    <!--{{ $store.state.datosGrados }}-->
                   </b-card-text>
                   <template #footer>
                     <b-button class="small mx-1 mt-2" variant="primary" @click="confirmarEstadosGrados" v-if="$store.state.idRol==1 && idSede!=null && listaGradosSede.length!=0">Actualizar el Estado de los Grados</b-button>
@@ -105,6 +106,7 @@
       async asociarGradosSede() {
         let infoSede = {}
         infoSede.idSede = this.idSede
+        infoSede.vigencia = this.$store.state.aLectivo
         await axios
         .post(CONFIG.ROOT_PATH + 'academico/gradossede', JSON.stringify(infoSede), { headers: {"Content-Type": "application/json; charset=utf-8" }})
         .then(response => {
@@ -121,6 +123,7 @@
       async asociarCursosGradosSede() {
         let infoSede = {}
         infoSede.idSede = this.idSede
+        infoSede.vigencia = this.$store.state.aLectivo
         await axios
         .post(CONFIG.ROOT_PATH + 'academico/cursosgradossede', JSON.stringify(infoSede), { headers: {"Content-Type": "application/json; charset=utf-8" }})
         .then(response => {
@@ -129,6 +132,7 @@
           } else{
             this.cargarDatosGrados()
             this.cargarDatosSedesGradosConfig()
+            this.mensajeEmergente('success',CONFIG.TITULO_MSG,'Los Grados y Cursos se han asociado a la Sede correctamente.')
           }
         })
         .catch(err => {
@@ -144,7 +148,6 @@
             location.replace(CONFIG.ROOT_MODULO_LOGIN)
           } else {
             this.$store.commit('set', ['datosGrados', response.data.datos])
-            console.log('Grados: ' + JSON.stringify(response.data.datos))
           }
         })
         .catch(err => {
@@ -152,43 +155,8 @@
           location.replace(CONFIG.ROOT_WEBSITE)
         })
       },
-      async cargarDatosSedesGradosConfig() {
-        await axios
-        .get(CONFIG.ROOT_PATH + 'academico/carguesedesgradosconfig', {params: {idInstitucion: this.$store.state.idInstitucion, vigencia: this.$store.state.aLectivo}})
-        .then(response => {
-          if (response.data.error){
-            alert(response.data.mensaje + ' - Consulta datos Sedes')
-            location.replace(CONFIG.ROOT_MODULO_LOGIN)
-          } else {
-            this.$store.commit('set', ['datosSedesGradosConfig', response.data.datos])
-            this.verGradosSede()
-            this.$bvModal.msgBoxOk('Los grados se han asociado a la sede y se han actualizado correctamente.', {
-              headerBgVariant: 'success',
-              headerTextVariant: 'light',
-              bodyBgVariant: 'light',
-              bodyBgClass: 'text-center',
-              title: CONFIG.TITULO_MSG,
-              size: '',
-              buttonSize: 'sm',
-              okVariant: 'success',
-              okTitle: 'Aceptar',
-              footerClass: 'p-2',
-              bodyClass: 'p-5',
-              hideHeaderClose: true,
-              centered: true
-            })
-            .then(value => {
-              return true
-            })
-          }
-        })
-        .catch(err => {
-          alert('Algo salio mal y no se pudo realizar: Asociar Grados Sede. Intente más tarde. ' + err)
-          location.replace(CONFIG.ROOT_WEBSITE)
-        })
-      },
       async confirmarEstadosGrados() {
-        this.$bvModal.msgBoxConfirm('¿Esta seguro de Actualizar el estado de los Grados asociados a la Sede?', {
+        this.$bvModal.msgBoxConfirm('¿Esta seguro de actualizar el estado de los Grados asociados a la Sede?', {
           headerBgVariant: 'primary',
           headerTextVariant: 'light',
           bodyBgVariant: 'light',
@@ -219,26 +187,9 @@
           if (response.data.error){
             this.mensajeEmergente('danger',CONFIG.TITULO_MSG,response.data.mensaje + ' - Actualizar Grados')
           } else{
-            this.$bvModal.msgBoxOk('Los estados de los Grados asociados a la Sede se han actualizado correctamente.', {
-              headerBgVariant: 'success',
-              headerTextVariant: 'light',
-              bodyBgVariant: 'light',
-              bodyBgClass: 'text-center',
-              title: CONFIG.TITULO_MSG,
-              size: '',
-              buttonSize: 'sm',
-              okVariant: 'success',
-              okTitle: 'Aceptar',
-              footerClass: 'p-2',
-              bodyClass: 'p-5',
-              hideHeaderClose: true,
-              centered: true
-            })
-            .then(value => {
-              this.cargarDatosGrados()
-              this.cargarDatosSedesGradosConfig()
-              return true
-            })
+            this.cargarDatosGrados()
+            this.cargarDatosSedesGradosConfig()
+            this.mensajeEmergente('success',CONFIG.TITULO_MSG,'Los estados de los Grados se han actualizado correctamente.')
           }
         })
         .catch(err => {
@@ -257,7 +208,6 @@
             element.estado = nuevoEstado
           }
         })
-        //console.log(JSON.stringify(this.listaGradosSede))
       },
       async verGradosSede() {
         this.listaGradosSede = []
@@ -271,6 +221,27 @@
         this.comboSedes = []
         this.$store.state.datosSedes.forEach(element => {
           this.comboSedes.push({ 'value': element.id, 'text': element.sede.toUpperCase() })
+        })
+      },
+      async cargarDatosSedesGradosConfig() {
+        await axios
+        .get(CONFIG.ROOT_PATH + 'academico/carguesedesgradosconfig', {params: {idInstitucion: this.$store.state.idInstitucion, idSeccion: this.$store.state.idSeccion, vigencia: this.$store.state.aLectivo}})
+        .then(response => {
+          if (response.data.error){
+            alert(response.data.mensaje + ' - Consulta datos Sedes')
+            location.replace(CONFIG.ROOT_MODULO_LOGIN)
+          } else {
+            if(response.data.datos != 0) {
+              this.$store.commit('set', ['datosSedesGradosConfig', response.data.datos])
+            } else {
+              this.$store.commit('set', ['datosSedesGradosConfig', []])
+            }
+            this.verGradosSede()
+          }
+        })
+        .catch(err => {
+          alert('Algo salio mal y no se pudo realizar: Consulta datos Sedes. Intente más tarde. ' + err)
+          location.replace(CONFIG.ROOT_WEBSITE)
         })
       },
       cancelarFormulario() {
@@ -296,6 +267,7 @@
     beforeMount() {
       if(this.$store.state.idRol == 1 || this.$store.state.idRol == 12) {
         this.ocuparComboSedes()
+        this.cargarDatosSedesGradosConfig()
       } else {
         this.$router.push('/restringida')
       }

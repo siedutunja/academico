@@ -174,21 +174,35 @@
           <template #footer>
             <div class="float-right text-medium-emphasis text-info">* Campo requerido</div>
             <div v-if="!documentoValido">
-              <b-button class="small" variant="success" @click="validarDocumento">Validar Documento</b-button>
-              <b-button class="small ml-3" variant="secondary" @click="cancelarFormulario">Cancelar</b-button>
+              <b-button class="small mx-1 mt-2" variant="primary" @click="validarDocumento">Validar Documento</b-button>
+              <b-button class="small mx-1 mt-2" variant="secondary" @click="cancelarFormulario">Cancelar</b-button>
             </div>
             <div v-else>
-              <b-button class="small" variant="primary" @click="validarDatosFormulario">
+              <b-button class="small mx-1 mt-2" variant="primary" @click="validarDatosFormulario">
                 <div v-if="datosPersona.editarAdministrativo">Actualizar Datos del Funcionario</div>
                 <div v-else>Crear Funcionario</div>
               </b-button>
-              <b-button v-if="datosPersona.editarAdministrativo" class="small ml-3" variant="info" @click="validarRetiroFuncionario">Retirar Funcionario</b-button>
-              <b-button class="small ml-3" variant="secondary" @click="cancelarFormulario">Cancelar</b-button>
+              <b-button v-if="datosPersona.editarAdministrativo" class="small mx-1 mt-2" variant="danger" @click="validarRetiroFuncionario">Desvincular Funcionario</b-button>
+              <b-button class="small mx-1 mt-2" variant="secondary" @click="cancelarFormulario">Cancelar</b-button>
             </div>
           </template>
         </b-card>
       </b-col>
     </b-row>
+    <b-modal ref="modalMensaje" size="" title="Mensaje" ok-only>
+      <div class="mx-3">
+        <div>
+          <h5 class="mb-2">¡Lo sentimos!</h5>
+          <h5 class="mb-4 text-danger">El número de documento {{nuevoDocumento}} ya tiene un usuario registrado en el sistema.</h5>
+          <h6>Institución asociada al documento:</h6>
+          <h5 class="mb-4">{{ IeVinculante }}</h5>
+          <h6>Por favor comuníquese con la entidad y solicite que el usuario sea desvinculado.</h6>
+        </div>
+      </div>
+      <template #modal-footer="{ ok }">
+        <b-button size="sm" variant="primary" @click="ok()">Aceptar</b-button>
+      </template>
+    </b-modal>
   </div>
 </template>
 
@@ -209,7 +223,7 @@
     data () {
       return {
         datosPersona: {
-          idPersona: null,
+          id: null,
           documento: null,
           id_tipo_documento: null,
           id_municipio_documento: null,
@@ -232,11 +246,14 @@
           telefono1: null,
           telefono2: null,
           correo: null,
-          vigencia: null,
-          id_rol: null,
           idUsuario: null,
           usuario: null,
           clave: null,
+          id_rol: null,
+          id_entorno: null,
+          id_institucion: null,
+          id_dependencia: null,
+          vigencia: null,
           editarAdministrativo: true
         },
         comboZonas: [],
@@ -251,12 +268,13 @@
         comboRoles: [],
         nuevoDocumento: null,
         documentoValido: false,
-        personaExiste: false
+        personaExiste: false,
+        IeVinculante: null
       }
     },
     validations: {
       datosPersona: {
-        documento: { minLength: minLength(7) },
+        documento: { minLength: minLength(6) },
         id_tipo_documento: { required },
         id_municipio_documento: { required },
         nombre1: { required },
@@ -283,72 +301,22 @@
       }
     },
     methods: {
-      async retirarFuncionario() {
-        await axios
-        .delete(CONFIG.ROOT_PATH + 'academico/perfil/funcionario', {params: {id: this.datosPersona.idUsuario}})
-        .then(response => {
-          if (response.data.error){
-            this.mensajeEmergente('danger',CONFIG.TITULO_MSG,response.data.mensaje + ' - Retirar funcionario')
-          } else{
-            this.enviarCorreoRetiro()
-            this.$emit("retorno", 3)
-          }
-        })
-        .catch(err => {
-          this.mensajeEmergente('danger',CONFIG.TITULO_MSG,'Algo salio mal y no se pudo realizar: Retirar funcionario. Intente más tarde. ' + err)
-        })
-        
-      },
-      validarRetiroFuncionario() {
-        let titulo = 'Retirar Funcionario'
-        let pregunta = 'Recuerde que al retirar un funcionario de la Institución Educativa, este no podrá volver a ingresar con las credenciales asignadas actualmente. ¿Esta seguro de Retirar el Funcionario?'
-        this.$bvModal.msgBoxConfirm(pregunta, {
-          title: titulo,
-          size: '',
-          buttonSize: 'sm',
-          okVariant: 'success',
-          okTitle: 'Si, ' + titulo,
-          cancelVariant: 'danger',
-          cancelTitle: 'Cancelar',
-          footerClass: 'p-2',
-          hideHeaderClose: false,
-          centered: true
-        })
-        .then(value => {
-          if (value) {
-            this.retirarFuncionario()
-          }
-        })
-        return true
-      },
       async validarDocumento() {
         let cadena = new String(this.nuevoDocumento)
-        if (cadena.length > 6) {
+        if (cadena.length > 5) {
           await axios
-          .get(CONFIG.ROOT_PATH + 'academico/personas/documento', { params: { documento: this.nuevoDocumento, idInstitucion: this.$store.state.idInstitucion }})
+          .get(CONFIG.ROOT_PATH + 'academico/administrativos/validadocumento', { params: { documento: this.nuevoDocumento }})
           .then(response => {
             if (response.data.error){
               this.mensajeEmergente('danger',CONFIG.TITULO_MSG,response.data.mensaje + ' - Validar documento funcionario')
             } else{
-              if (response.data.datos != 0) {
-                if (response.data.datos.id != null) {
-                  this.mensajeEmergente('danger',CONFIG.TITULO_MSG,'El documento ' + this.nuevoDocumento + ' ya se encuentra registrado en la Institución Educativa.' + response.data.datos.institucion)
-                  this.nuevoDocumento = ''
-                  this.$refs.docV.focus()
-                  this.documentoValido = false
-                } else {
-                  this.datosPersona = response.data.datos
-                  if (this.datosPersona.fecha_nacimiento != null && this.datosPersona.fecha_nacimiento != '') {
-                    this.datosPersona.fecha_nacimiento = this.datosPersona.fecha_nacimiento.substr(0,10)
-                  }
-                  this.datosPersona.editarAdministrativo = false
-                  this.personaExiste = true
-                  this.documentoValido = true
-                }
+              if (response.data.datos == 0) {
+                this.consultarPersonaDocumento()
               } else {
-                this.datosPersona.documento = this.nuevoDocumento
-                this.personaExiste = false
-                this.documentoValido = true
+                this.IeVinculante = response.data.datos.institucion == null ? 'SET' : response.data.datos.institucion
+                this.$refs.docV.focus()
+                this.documentoValido = false
+                this.$refs['modalMensaje'].show()
               }
             }
           })
@@ -359,8 +327,63 @@
           this.nuevoDocumento = ''
           this.$refs.docV.focus()
           this.documentoValido = false
-          this.mensajeEmergente('danger',CONFIG.TITULO_MSG,'El documento debe contener mínimo 7 dígitos.')
+          this.mensajeEmergente('danger',CONFIG.TITULO_MSG,'El documento debe contener mínimo 6 dígitos.')
         }
+      },
+      async consultarPersonaDocumento() {
+        await axios
+        .get(CONFIG.ROOT_PATH + 'academico/personas/documento', { params: { documento: this.nuevoDocumento }})
+        .then(response => {
+          if (response.data.error){
+            this.mensajeEmergente('danger',CONFIG.TITULO_MSG,response.data.mensaje + ' - Consultar Persona por Documento')
+          } else{
+            if (response.data.datos != 0) {
+              this.datosPersona.id = response.data.datos.id
+              this.datosPersona.documento = response.data.datos.documento
+              this.datosPersona.id_tipo_documento = response.data.datos.id_tipo_documento
+              this.datosPersona.id_municipio_documento = response.data.datos.id_municipio_documento
+              this.datosPersona.nombre1 = response.data.datos.nombre1
+              this.datosPersona.nombre2 = response.data.datos.nombre2
+              this.datosPersona.apellido1 = response.data.datos.apellido1
+              this.datosPersona.apellido2 = response.data.datos.apellido2
+              this.datosPersona.id_genero = response.data.datos.id_genero
+              if (response.data.datos.fecha_nacimiento != null && response.data.datos.fecha_nacimiento != '') {
+                this.datosPersona.fecha_nacimiento = response.data.datos.fecha_nacimiento.substr(0,10)
+              }
+              this.datosPersona.id_municipio_nacimiento = response.data.datos.id_municipio_nacimiento
+              this.datosPersona.id_nacionalidad = response.data.datos.id_nacionalidad
+              this.datosPersona.id_rh = response.data.datos.id_rh
+              this.datosPersona.id_estrato = response.data.datos.id_estrato
+              this.datosPersona.id_sisben = response.data.datos.id_sisben
+              this.datosPersona.id_eps = response.data.datos.id_eps
+              this.datosPersona.direccion = response.data.datos.direccion
+              this.datosPersona.id_municipio_direccion = response.data.datos.id_municipio_direccion
+              this.datosPersona.barrio = response.data.datos.barrio
+              this.datosPersona.id_zona = response.data.datos.id_zona
+              this.datosPersona.telefono1 = response.data.datos.telefono1
+              this.datosPersona.telefono2 = response.data.datos.telefono2
+              this.datosPersona.correo = response.data.datos.correo
+
+              this.personaExiste = true
+            } else {
+              this.datosPersona.id = uuid.v1()
+              this.datosPersona.documento = this.nuevoDocumento
+              this.personaExiste = false
+            }
+            this.datosPersona.idUsuario = uuid.v1()
+            this.datosPersona.usuario = this.nuevoDocumento
+            this.datosPersona.clave = this.nuevoDocumento
+            this.datosPersona.id_rol = null
+            this.datosPersona.id_entorno = 3
+            this.datosPersona.id_institucion = this.$store.state.idInstitucion
+            this.datosPersona.id_dependencia = 12
+            this.datosPersona.vigencia = null
+            this.documentoValido = true
+          }
+        })
+        .catch(err => {
+          this.mensajeEmergente('danger',CONFIG.TITULO_MSG,'Algo salio mal y no se pudo realizar: Consultar Persona por Documento. Intente más tarde. ' + err)
+        })
       },
       validarDatosFormulario() {
         this.$v.datosPersona.$touch()
@@ -368,7 +391,7 @@
           this.mensajeEmergente('danger',CONFIG.TITULO_MSG,'Algunos campos están incompletos.')
           return false
         } else {
-          let titulo = this.datosPersona.editarAdministrativo ? 'Actualizar Datos del Funcionario' : 'Crear Datos del Funcionario'
+          let titulo = this.datosPersona.editarAdministrativo ? 'Actualizar Datos del Funcionario' : 'Crear Funcionario'
           let pregunta = this.datosPersona.editarAdministrativo ? '¿Esta seguro de Actualizar los Datos del Funcionario?' : '¿Esta seguro de Crear el Funcionario?'
           this.$bvModal.msgBoxConfirm(pregunta, {
             headerBgVariant: 'primary',
@@ -378,7 +401,7 @@
             title: titulo,
             size: '',
             buttonSize: 'sm',
-            okVariant: 'success',
+            okVariant: 'primary',
             okTitle: 'Si, ' + titulo,
             cancelVariant: 'danger',
             cancelTitle: 'Cancelar',
@@ -413,11 +436,10 @@
         }
         this.datosPersona.correo = this.datosPersona.correo.toLowerCase()
         this.datosPersona.barrio = this.datosPersona.barrio.toUpperCase()
-        this.datosPersona.personaExiste = this.personaExiste
+
         if (this.datosPersona.editarAdministrativo) {
-          //console.log(JSON.stringify(this.datosPersona))
           await axios
-          .put(CONFIG.ROOT_PATH + 'academico/perfil/funcionario', JSON.stringify(this.datosPersona), { headers: {"Content-Type": "application/json; charset=utf-8" }})
+          .put(CONFIG.ROOT_PATH + 'academico/administrativo', JSON.stringify(this.datosPersona), { headers: {"Content-Type": "application/json; charset=utf-8" }})
           .then(response => {
             if (response.data.error){
               this.mensajeEmergente('danger',CONFIG.TITULO_MSG,response.data.mensaje + ' - Actualizar Perfil Usuario')
@@ -430,17 +452,11 @@
           })
         } else {
           if (!this.personaExiste) {
-            this.datosPersona.idPersona = uuid.v1()
+            this.datosPersona.id = uuid.v1()
           }
-          this.datosPersona.usuario = this.datosPersona.documento
-          this.datosPersona.clave = this.datosPersona.documento
-          this.datosPersona.id_persona = this.datosPersona.idPersona
-          this.datosPersona.id_entorno = 3
-          this.datosPersona.id_institucion = this.$store.state.idInstitucion
-          this.datosPersona.id_dependencia = 12
-          this.datosPersona.idUsuario = uuid.v1()
+          this.datosPersona.personaExiste = this.personaExiste
           await axios
-          .post(CONFIG.ROOT_PATH + 'academico/perfil/funcionario', JSON.stringify(this.datosPersona), { headers: {"Content-Type": "application/json; charset=utf-8" }})
+          .post(CONFIG.ROOT_PATH + 'academico/administrativo', JSON.stringify(this.datosPersona), { headers: {"Content-Type": "application/json; charset=utf-8" }})
           .then(response => {
             if (response.data.error){
               this.mensajeEmergente('danger',CONFIG.TITULO_MSG,response.data.mensaje + ' - Crear Perfil Usuario')
@@ -453,6 +469,48 @@
             this.mensajeEmergente('danger',CONFIG.TITULO_MSG,'Algo salio mal y no se pudo realizar: Crear Perfil Usuario. Intente más tarde. ' + err)
           })
         }
+      },
+      validarRetiroFuncionario() {
+        let titulo = 'Desvincular Funcionario'
+        let pregunta = 'Recuerde que al desvincular (retirar) un funcionario de la Institución Educativa, este no podrá volver a ingresar con las credenciales asignadas actualmente. ¿Esta seguro de Desvincular el Funcionario de la Institución Educativa?'
+        this.$bvModal.msgBoxConfirm(pregunta, {
+          headerBgVariant: 'danger',
+          headerTextVariant: 'light',
+          bodyBgVariant: 'light',
+          bodyBgClass: 'text-center',
+          title: titulo,
+          size: '',
+          buttonSize: 'sm',
+          okVariant: 'primary',
+          okTitle: 'Si, ' + titulo,
+          cancelVariant: '',
+          cancelTitle: 'Cancelar',
+          footerClass: 'p-2',
+          bodyClass: 'p-5',
+          hideHeaderClose: false,
+          centered: true
+        })
+        .then(value => {
+          if (value) {
+            this.retirarFuncionario()
+          }
+        })
+        return true
+      },
+      async retirarFuncionario() {
+        await axios
+        .delete(CONFIG.ROOT_PATH + 'academico/administrativo', {params: {idUsuario: this.datosPersona.idUsuario}})
+        .then(response => {
+          if (response.data.error){
+            this.mensajeEmergente('danger',CONFIG.TITULO_MSG,response.data.mensaje + ' - Retirar funcionario')
+          } else{
+            this.enviarCorreoRetiro()
+            this.$emit("retorno", 3)
+          }
+        })
+        .catch(err => {
+          this.mensajeEmergente('danger',CONFIG.TITULO_MSG,'Algo salio mal y no se pudo realizar: Retirar funcionario. Intente más tarde. ' + err)
+        })
       },
       consultaDatosPersona() {
         this.datosPersona = this.datosAdministrativo

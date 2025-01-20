@@ -2,24 +2,27 @@
   <CDropdown inNav class="c-header-nav-items" add-menu-classes="pt-0">
     <template #toggler>
       <CHeaderNavLink>
-        <CIcon name="cilSettings"/>Configuración
+        <CIcon name="cilApps"/>Pei
       </CHeaderNavLink>
     </template>
     <CDropdownHeader tag="div" class="text-center text-light" color="dark">
-      <strong>Configuración del Sistema</strong>
+      <strong>Plan Educativo Institucional</strong>
     </CDropdownHeader>
-    <CDropdownItem to="/configuracion/especialidadesie">
-      <CIcon name="cilTag" />Especialidades
+    <CDropdownItem to="/configuracion/gradossedeie">
+      <CIcon name="cilDialpad" />Grados
     </CDropdownItem>
-    <CDropdownItem to="/configuracion/rutasie">
-      <CIcon name="cilLocationPin" />Rutas
+    <CDropdownItem to="/configuracion/cursosgrado">
+      <CIcon name="cilBlurLinear" />Cursos
     </CDropdownItem>
     <CDropdownDivider/>
-    <CDropdownItem to="/configuracion/sedesie">
-      <CIcon name="cilBuilding" />Sedes
+    <CDropdownItem to="/configuracion/listaareas">
+      <CIcon name="cilList" />Areas
     </CDropdownItem>
-    <CDropdownItem to="/configuracion/seccionesie">
-      <CIcon name="cilBank" />Secciones
+    <CDropdownItem to="/configuracion/listaasignaturas">
+      <CIcon name="cilListRich" />Asignaturas
+    </CDropdownItem>
+    <CDropdownItem to="/configuracion/planestudios">
+      <CIcon name="cilBraille" />Plan de Estudios por Grado
     </CDropdownItem>
     <!--
     <CDropdownDivider/>
@@ -30,22 +33,12 @@
       <CIcon name="cilBuilding" />Habilitar Nuevo Año Lectivo
     </CDropdownItem>
     -->
-    <CDropdownDivider/>
-    <CDropdownItem to="/administrativos/listaadministrativos">
-      <CIcon name="cilGroup" />Gestión de Personal Administrativo
-    </CDropdownItem>
-    <div v-if="$store.state.idRol == 1">
-      <CDropdownDivider/>
-      <CDropdownItem to="/configuracion/superadmin">
-        <CIcon name="cilSpeedometer" />Super Administrador
-      </CDropdownItem>
-    </div>
   </CDropdown>
 </template>
 
 <script>
   export default {
-    name: 'MenuConfiguracion',
+    name: 'MenuPei',
     data () {
       return { 
       }

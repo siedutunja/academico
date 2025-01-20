@@ -10,7 +10,7 @@
             <b-row>
               <b-col lg="6" md="12">
                 <b-form-group label="Descripción del curso*" label-for="nomenclatura" class="etiqueta">
-                  <b-form-input id="nomenclatura" ref="nomenclatura" v-model.trim="$v.infoCurso.nomenclatura.$model" :state="validateStateC('nomenclatura')" aria-describedby="feedCurso" autocomplete="off" maxlength="50" :disabled="$store.state.idRol==1 ? false : true"></b-form-input>
+                  <b-form-input id="nomenclatura" ref="nomenclatura" v-model.trim="$v.infoCurso.nomenclatura.$model" :state="validateStateC('nomenclatura')" aria-describedby="feedCurso" autocomplete="off" maxlength="100"></b-form-input>
                   <b-form-invalid-feedback id="feedCurso" >Campo requerido.</b-form-invalid-feedback>
                 </b-form-group>
               </b-col>
@@ -105,7 +105,7 @@
             buttonSize: 'sm',
             okVariant: 'primary',
             okTitle: 'Si, ' + titulo,
-            cancelVariant: 'danger',
+            cancelVariant: '',
             cancelTitle: 'Cancelar',
             footerClass: 'p-2',
             bodyClass: 'p-5',
@@ -152,32 +152,6 @@
             this.mensajeEmergente('danger',CONFIG.TITULO_MSG,'Algo salio mal y no se pudo realizar: Crear Curso. Intente más tarde. ' + err)
           })
         }
-        this.cargarDatosCursos()
-      },
-      async cargarDatosCursos() {
-        await axios
-        .get(CONFIG.ROOT_PATH + 'academico/carguecursos', {params: {idInstitucion: this.$store.state.idInstitucion, vigencia: this.$store.state.aLectivo}})
-        .then(response => {
-          if (response.data.error){
-            alert(response.data.mensaje + ' - Consulta datos Cursos Activos')
-            location.replace(CONFIG.ROOT_MODULO_LOGIN)
-          } else {
-            response.data.datos.forEach(element => {
-              let indice = this.$store.state.datosDocentes.find(docen => docen.id === element.id_director)
-              if (indice === undefined) {
-                element.director = null
-              } else {
-                element.director = indice.docente
-              }
-            })
-            this.$store.commit('set', ['datosCursos', response.data.datos])
-            //console.log('Cursos: ' + JSON.stringify(response.data.datos))
-          }
-        })
-        .catch(err => {
-          alert('Algo salio mal y no se pudo realizar: Consulta datos Cursos Activos. Intente más tarde. ' + err)
-          location.replace(CONFIG.ROOT_WEBSITE)
-        })
       },
       consultaInfoCurso() {
         this.infoCurso = this.datosCursoGrado
@@ -187,7 +161,6 @@
       },
       async ocuparCombos() {
         this.comboDocentes = []
-        //console.log(JSON.stringify(this.$store.state.datosDocentes))
         this.$store.state.datosDocentes.forEach(element => {
           this.comboDocentes.push({ 'value': element.id, 'text': element.docente.toUpperCase() })
         })

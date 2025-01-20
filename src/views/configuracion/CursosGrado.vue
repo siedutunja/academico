@@ -43,7 +43,7 @@
                       </b-col>
                     </b-row>
                   </b-card-text>
-                  <p>Total cursos: {{ contadorCursos }}</p>
+                  <!--<p>Total cursos: {{ contadorCursos }}</p>-->
                 </b-card>
               </b-col>
             </b-row>
@@ -104,6 +104,7 @@
           estado: null,
           editarCurso: null
         },
+        datosCursosConfig: [],
         contadorCursos: null
       }
     },
@@ -134,35 +135,70 @@
       datosRecibidosCursoGrado(retorno) {
         let msj = null
         this.$refs['modalEditarCursoGrado'].hide()
-        if (retorno == 1) 
-          msj = 'El curso se ha creado correctamente.'
-        else if (retorno == 2)
-          msj = 'Los datos del curso se han actualizado correctamente.'
-        if (retorno == 1 || retorno == 2) {
-          this.$bvModal.msgBoxOk(msj, {
-            headerBgVariant: 'success',
-            headerTextVariant: 'light',
-            bodyBgVariant: 'light',
-            bodyBgClass: 'text-center',
-            title: CONFIG.TITULO_MSG,
-            size: '',
-            buttonSize: 'sm',
-            okVariant: 'success',
-            okTitle: 'Aceptar',
-            footerClass: 'p-2',
-            bodyClass: 'p-5',
-            hideHeaderClose: true,
-            centered: true
-          })
-          .then(value => {
-            this.verCursosGrado()
-          })
+        if (retorno == 1) {
+          msj = 'El Curso se ha creado correctamente.'
+        } else if (retorno == 2) {
+          msj = 'Los datos del Curso se han actualizado correctamente.'
         }
+        if (retorno == 1 || retorno == 2) {
+          this.cargarDatosCursos()
+          this.cargarDatosCursosConfig()
+          this.mensajeEmergente('success',CONFIG.TITULO_MSG,msj)
+        }
+      },
+      async cargarDatosCursos() {
+        await axios
+        .get(CONFIG.ROOT_PATH + 'academico/carguecursos', {params: {idInstitucion: this.$store.state.idInstitucion, vigencia: this.$store.state.aLectivo}})
+        .then(response => {
+          if (response.data.error){
+            alert(response.data.mensaje + ' - Consulta datos Cursos Activos')
+            location.replace(CONFIG.ROOT_MODULO_LOGIN)
+          } else {
+            response.data.datos.forEach(element => {
+              let indice = this.$store.state.datosDocentes.find(docen => docen.id === element.id_director)
+              if (indice === undefined) {
+                element.director = null
+              } else {
+                element.director = indice.docente
+              }
+            })
+            this.$store.commit('set', ['datosCursos', response.data.datos])
+          }
+        })
+        .catch(err => {
+          alert('Algo salio mal y no se pudo realizar: Consulta datos Cursos Activos. Intente más tarde. ' + err)
+          location.replace(CONFIG.ROOT_WEBSITE)
+        })
+      },
+      async cargarDatosCursosConfig() {
+        this.datosCursosConfig = []
+        await axios
+        .get(CONFIG.ROOT_PATH + 'academico/carguecursosconfig', {params: {idInstitucion: this.$store.state.idInstitucion, vigencia: this.$store.state.aLectivo}})
+        .then(response => {
+          if (response.data.error){
+            alert(response.data.mensaje + ' - Consulta datos Cursos Activos')
+            location.replace(CONFIG.ROOT_MODULO_LOGIN)
+          } else {
+            response.data.datos.forEach(element => {
+              let indice = this.$store.state.datosDocentes.find(docen => docen.id === element.id_director)
+              if (indice === undefined) {
+                element.director = null
+              } else {
+                element.director = indice.docente
+              }
+            })
+            this.datosCursosConfig = response.data.datos
+            this.verCursosGrado()
+          }
+        })
+        .catch(err => {
+          alert('Algo salio mal y no se pudo realizar: Consulta datos Cursos Activos. Intente más tarde. ' + err)
+          location.replace(CONFIG.ROOT_WEBSITE)
+        })
       },
       async verCursosGrado() {
         this.listaCursosGrado = []
-        this.contadorCursos = this.$store.state.datosCursos.length
-        this.$store.state.datosCursos.forEach(element => {
+        this.datosCursosConfig.forEach(element => {
           if (element.id_grado_sede == this.idGrado) {
             this.listaCursosGrado.push(element)
           }
@@ -202,6 +238,7 @@
     },
     beforeMount() {
       if(this.$store.state.idRol == 1 || this.$store.state.idRol == 12) {
+        this.cargarDatosCursosConfig()
         this.ocuparComboSedes()
       } else {
         this.$router.push('/restringida')

@@ -81,29 +81,9 @@
           location.replace(CONFIG.ROOT_WEBSITE)
         })
       },
-      async cargarDatosSedesGradosConfig() {
-        await axios
-        .get(CONFIG.ROOT_PATH + 'academico/carguesedesgradosconfig', {params: {idInstitucion: this.$store.state.idInstitucion, vigencia: this.$store.state.aLectivo}})
-        .then(response => {
-          if (response.data.error){
-            alert(response.data.mensaje + ' - Consulta datos Sedes')
-            location.replace(CONFIG.ROOT_MODULO_LOGIN)
-          } else {
-            if(response.data.datos != 0) {
-              this.$store.commit('set', ['datosSedesGradosConfig', response.data.datos])
-            } else {
-              this.$store.commit('set', ['datosSedesGradosConfig', []])
-            }
-          }
-        })
-        .catch(err => {
-          alert('Algo salio mal y no se pudo realizar: Consulta datos Sedes. Intente más tarde. ' + err)
-          location.replace(CONFIG.ROOT_WEBSITE)
-        })
-      },
       async cargarDatosSedes() {
         await axios
-        .get(CONFIG.ROOT_PATH + 'academico/carguesedes', {params: {idInstitucion: this.$store.state.idInstitucion, vigencia: this.$store.state.aLectivo}})
+        .get(CONFIG.ROOT_PATH + 'academico/carguesedes', {params: {idInstitucion: this.$store.state.idInstitucion, idSeccion: this.$store.state.idSeccion}})
         .then(response => {
           if (response.data.error){
             alert(response.data.mensaje + ' - Consulta datos Sedes Activas')
@@ -150,14 +130,6 @@
             location.replace(CONFIG.ROOT_MODULO_LOGIN)
           } else {
             if(response.data.datos != 0) {
-              response.data.datos.forEach(element => {
-                let indice = this.$store.state.datosDocentes.find(docen => docen.id === element.id_director)
-                if (indice === undefined) {
-                  element.director = null
-                } else {
-                  element.director = indice.docente
-                }
-              })
               this.$store.commit('set', ['datosCursos', response.data.datos])
             } else {
               this.$store.commit('set', ['datosCursos', []])
@@ -166,6 +138,75 @@
         })
         .catch(err => {
           alert('Algo salio mal y no se pudo realizar: Consulta datos Cursos Activos. Intente más tarde. ' + err)
+          location.replace(CONFIG.ROOT_WEBSITE)
+        })
+      },
+      async cargarDatosAsignaturas() {
+        await axios
+        .get(CONFIG.ROOT_PATH + 'academico/cargueasignaturas', {params: {idInstitucion: this.$store.state.idInstitucion, vigencia: this.$store.state.aLectivo}})
+        .then(response => {
+          if (response.data.error){
+            alert(response.data.mensaje + ' - Consulta datos Asignaturas')
+            location.replace(CONFIG.ROOT_MODULO_LOGIN)
+          } else {
+            if(response.data.datos != 0) {
+              this.$store.commit('set', ['datosAsignaturas', response.data.datos])
+            } else {
+              this.$store.commit('set', ['datosAsignaturas', []])
+            }
+            //console.log(JSON.stringify(response.data.datos))
+          }
+        })
+        .catch(err => {
+          alert('Algo salio mal y no se pudo realizar: Consulta datos Asignaturas. Intente más tarde. ' + err)
+          location.replace(CONFIG.ROOT_WEBSITE)
+        })
+      },
+      async cargarDatosAreas() {
+        await axios
+        .get(CONFIG.ROOT_PATH + 'academico/cargueareas', {params: {idInstitucion: this.$store.state.idInstitucion, vigencia: this.$store.state.aLectivo}})
+        .then(response => {
+          if (response.data.error){
+            alert(response.data.mensaje + ' - Consulta datos Areas')
+            location.replace(CONFIG.ROOT_MODULO_LOGIN)
+          } else {
+            if(response.data.datos != 0) {
+              this.$store.commit('set', ['datosAreas', response.data.datos])
+            } else {
+              this.$store.commit('set', ['datosAreas', []])
+            }
+            //console.log(JSON.stringify(response.data.datos))
+          }
+        })
+        .catch(err => {
+          alert('Algo salio mal y no se pudo realizar: Consulta datos Areas. Intente más tarde. ' + err)
+          location.replace(CONFIG.ROOT_WEBSITE)
+        })
+      },
+      async cargarDatosSecciones() {
+        await axios
+        .get(CONFIG.ROOT_PATH + 'academico/carguesecciones', {params: {idInstitucion: this.$store.state.idInstitucion}})
+        .then(response => {
+          if (response.data.error){
+            alert(response.data.mensaje + ' - Consulta datos Secciones')
+            location.replace(CONFIG.ROOT_MODULO_LOGIN)
+          } else {
+            if(response.data.datos != 0) {
+              this.$store.commit('set', ['datosSecciones', response.data.datos])
+              this.$store.state.datosSecciones.forEach(element => {
+                if (element.id_seccion == this.$store.state.idSeccion) {
+                  this.$store.commit('set', ['nombreSeccion', element.seccion])
+                }
+              })
+            } else {
+              this.$store.commit('set', ['datosSecciones', []])
+              this.$store.commit('set', ['nombreSeccion', 'SIN SECCIÓN ACTIVA'])
+            }
+            //console.log(JSON.stringify(response.data.datos))
+          }
+        })
+        .catch(err => {
+          alert('Algo salio mal y no se pudo realizar: Consulta datos Secciones. Intente más tarde. ' + err)
           location.replace(CONFIG.ROOT_WEBSITE)
         })
       },
@@ -203,6 +244,7 @@
               this.$store.commit('set', ['datosRutas', []])
             }
           }
+          //console.log(JSON.stringify(response.data.datos))
         })
         .catch(err => {
           alert('Algo salio mal y no se pudo realizar: Consulta datos Rutas IE. Intente más tarde. ' + err)
@@ -226,6 +268,26 @@
         })
         .catch(err => {
           alert('Algo salio mal y no se pudo realizar: Consulta datos Especialidades IE. Intente más tarde. ' + err)
+          location.replace(CONFIG.ROOT_WEBSITE)
+        })
+      },
+      async cargarDatosEscalafones() {
+        await axios
+        .get(CONFIG.ROOT_PATH + 'academico/cargueescalafones')
+        .then(response => {
+          if (response.data.error){
+            alert(response.data.mensaje + ' - Consulta datos Escalafones')
+            location.replace(CONFIG.ROOT_MODULO_LOGIN)
+          } else {
+            if(response.data.datos != 0) {
+              this.$store.commit('set', ['datosEscalafones', response.data.datos])
+            } else {
+              this.$store.commit('set', ['datosEscalafones', []])
+            }
+          }
+        })
+        .catch(err => {
+          alert('Algo salio mal y no se pudo realizar: Consulta datos Escalafones. Intente más tarde. ' + err)
           location.replace(CONFIG.ROOT_WEBSITE)
         })
       },
@@ -265,14 +327,17 @@
               this.$store.commit('set', ['aLectivo', response.data.datos.configuracion.a_lectivo])
               this.$store.commit('set', ['aMatriculas', response.data.datos.configuracion.a_matriculas])
               this.$store.commit('set', ['FichaMatricula', response.data.datos.configuracion.ficha_matricula])
-              
-              this.cargarDatosSedesGradosConfig()
+                            
               this.cargarDatosDocentes()
               this.cargarDatosSedes()
               this.cargarDatosGrados()
               this.cargarDatosCursos()
               this.cargarDatosRutas()
               this.cargarDatosEspecialidades()
+              this.cargarDatosAreas()
+              this.cargarDatosAsignaturas()
+              this.cargarDatosSecciones()
+              this.cargarDatosEscalafones()
 
               this.trazaProceso('Inicio de Sesión')
             }
@@ -284,6 +349,12 @@
         })
       },
       async iniciarVista() {
+        let idSeccion = sessionStorage.getItem('idSeccion')
+        if ( idSeccion == null ) {
+          idSeccion = 1
+          sessionStorage.setItem('idSeccion', idSeccion)
+        }
+        this.$store.commit('set', ['idSeccion', idSeccion])
         let token = sessionStorage.getItem('token')
         jwt.verify(token, CONFIG.SECRET_KEY, (err, data) => {
           if (err) {

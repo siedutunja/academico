@@ -1,24 +1,27 @@
 <template>
   <div>
-    <b-row class="mt-0">
+    <b-row class="mt-2">
       <b-col lg="12">
         <b-card>
           <template #header>
-            <div class="float-right">
-              <b-button class="mx-2" size="sm" variant="info" @click="verMatriculadosSinCurso()" title="Actualizar Lista Preinscritos"><b-icon icon="arrow-repeat"></b-icon></b-button>
-            </div>
-            <h5 class="mb-0"><b-icon icon="credit-card2-front" aria-hidden="true"></b-icon> MATRICULADOS SIN CURSO</h5>
+            <h5 class="mb-0"><b-icon icon="card-checklist" aria-hidden="true"></b-icon> CAMBIO DE CURSO</h5>
+            <!--{{listaMatriculados}}-->
+            <!--{{$store.state.datosCursos}}-->
           </template>
           <b-card-text>
             <b-row>
               <b-col lg="6">
-                <b-form-group label="Seleccione la Sede*" label-for="sedes" class="etiqueta">
-                  <b-form-select  id="sedes" ref="sedes" v-model="idSede" :options="comboSedes" @change="verMatriculadosSinCurso(),ocuparComboCursosSede()"></b-form-select>
+                <b-form-group label="Sede*" label-for="sedes" class="etiqueta">
+                  <b-form-select  id="sedes" ref="sedes" v-model="idSede" :options="comboSedes" @change="idCurso=null,ocuparComboCursosSede()"></b-form-select>
                 </b-form-group>
               </b-col>
-              <!--{{listaMatriculadosSinCurso}}-->
+              <b-col lg="6">
+                <b-form-group label="Curso*" label-for="cursos" class="etiqueta">
+                  <b-form-select  id="cursos" ref="cursos" v-model="idCurso" :options="comboCursosSede" @change="consultarMatriculados()" :disabled="idSede!=null ? false : true"></b-form-select>
+                </b-form-group>
+              </b-col>
             </b-row>
-            <b-row class="mt-2" v-if="idSede!=null">
+            <b-row class="mt-2" v-if="idCurso!=null">
               <b-col lg="12"><hr></b-col>
               <b-col lg="12">
                 <b-card header-bg-variant="secondary">
@@ -27,20 +30,20 @@
                   </template>
                   <b-card-text>
                     <b-col lg="12">
-                      <vue-good-table ref="tablaMatriculados" :columns="encabColumnas" :rows="listaMatriculadosSinCurso" styleClass="vgt-table condensed bordered striped" :line-numbers="true">
+                      <vue-good-table ref="tablaMatriculados" :columns="encabColumnasMatriculados" :rows="listaMatriculados" styleClass="vgt-table condensed bordered striped" :line-numbers="true">
                         <template slot="table-row" slot-scope="props">
                           <span v-if="props.column.field == 'id'">
                             <b-form-select v-model="props.row.id_curso" @change="actualizarItem(props.row)" :options="comboCursosSede"></b-form-select>
                           </span>
                         </template>
                         <div slot="emptystate">
-                          <h5 class="text-danger ml-5">No existen estudiantes sin curso</h5>
+                          <h5 class="text-danger ml-5">No existen estudiantes matriculados</h5>
                         </div>
                       </vue-good-table>
                     </b-col>
                   </b-card-text>
                   <template #footer>
-                    <b-button class="small mx-1 mt-2" variant="primary" @click="confirmarCambioCurso" v-if="$store.state.idRol==1 && idSede!=null && listaMatriculadosSinCurso.length!=0">Asignar Cursos</b-button>
+                    <b-button class="small mx-1 mt-2" variant="primary" @click="confirmarCambioCurso" v-if="$store.state.idRol==1 && idSede!=null && listaMatriculados.length!=0">Actualizar Cursos</b-button>
                     <b-button class="small mx-1 mt-2" variant="secondary" @click="cancelarFormulario">Cancelar</b-button>
                   </template>
                 </b-card>
@@ -48,7 +51,7 @@
             </b-row>
           </b-card-text>
           <template #footer>
-            <em>Seleccione el Curso a asignar al Estudiante y haga clic en el botón Actualizar Cursos.</em>
+            <em>Seleccione el Curso al que desea cambiar al Estudiante y haga clic en el botón Actualizar Cursos.</em>
           </template>
         </b-card>
       </b-col>
@@ -63,7 +66,7 @@
   import { VueGoodTable } from 'vue-good-table'
 
   export default {
-    name: 'matriculadossincurso',
+    name: 'cambiocurso',
     components: {
       VueGoodTable
     },
@@ -72,21 +75,21 @@
         comboSedes: [],
         idSede: null,
         comboCursosSede: [],
-        listaMatriculadosSinCurso: [],
-        encabColumnas : [
-          { label: 'Nombre del Estudiante', field: 'estudiante', sortable: true },
+        idCurso: null,
+        listaMatriculados: [],
+        encabColumnasMatriculados : [
+          { label: 'Estudiantes Matriculados 2025', field: 'estudiante', sortable: false },
           { label: 'Documento', field: 'documento', sortable: false },
-          { label: 'Nuevo', field: 'id_nuevo', sortable: true },
-          { label: 'Repitente', field: 'id_repitente', sortable: true },
-          { label: 'Grado', field: 'grado', sortable: true },
+          { label: 'Nuevo', field: 'id_nuevo', sortable: false },
+          { label: 'Repitente', field: 'id_repitente', sortable: false },
           { label: 'Curso', field: 'id', sortable: false },
-        ]
+        ],
       }
     },
     methods: {
       async confirmarCambioCurso() {
-        let titulo = 'Asignanar Curso'
-        let pregunta = '¿Esta seguro de Asignar el Curso a los Estudiantes seleccionados?'
+        let titulo = 'Cambiar de Curso'
+        let pregunta = '¿Esta seguro de cambiar de Curso a los Estudiantes seleccionados?'
         this.$bvModal.msgBoxConfirm(pregunta, {
           headerBgVariant: 'primary',
           headerTextVariant: 'light',
@@ -113,44 +116,44 @@
       },
       async guardarCambioCurso() {
         await axios
-        .put(CONFIG.ROOT_PATH + 'academico/matriculas/cambiocurso', JSON.stringify(this.listaMatriculadosSinCurso), { headers: {"Content-Type": "application/json; charset=utf-8" }})
+        .put(CONFIG.ROOT_PATH + 'academico/matriculas/cambiocurso', JSON.stringify(this.listaMatriculados), { headers: {"Content-Type": "application/json; charset=utf-8" }})
         .then(response => {
           if (response.data.error){
-            this.mensajeEmergente('danger',CONFIG.TITULO_MSG,response.data.mensaje + ' - Asignar Curso')
+            this.mensajeEmergente('danger',CONFIG.TITULO_MSG,response.data.mensaje + ' - Cambiar Curso')
           } else{
-            this.verMatriculadosSinCurso()
-            this.mensajeEmergente('success',CONFIG.TITULO_MSG,'La Asignación de Cursos se han realizado correctamente.')
+            this.consultarMatriculados()
+            this.mensajeEmergente('success',CONFIG.TITULO_MSG,'Los cambios de Curso se han realizado correctamente.')
           }
         })
         .catch(err => {
-          this.mensajeEmergente('danger',CONFIG.TITULO_MSG,'Algo salio mal y no se pudo realizar: Asignar Curso. Intente más tarde. ' + err)
+          this.mensajeEmergente('danger',CONFIG.TITULO_MSG,'Algo salio mal y no se pudo realizar: Cambiar Curso. Intente más tarde. ' + err)
         })
       },
-      async verMatriculadosSinCurso() {
-        this.listaMatriculadosSinCurso = []
+      actualizarItem(item) {
+        let indice = this.listaMatriculados.findIndex(estudiante => estudiante.id === item.id)
+        this.listaMatriculados[indice].id_curso = item.id_curso
+
+        this.$store.state.datosCursos.forEach(element => {
+          if (element.id == item.id_curso) {
+            this.listaMatriculados[indice].id_grado = element.id_grado_sede
+          }
+        })
+      },
+      async consultarMatriculados() {
+        this.listaMatriculados = []
         await axios
-        .get(CONFIG.ROOT_PATH + 'academico/matriculas/sincurso', { params: { idSede: this.idSede }})
+        .get(CONFIG.ROOT_PATH + 'academico/matriculas/cambiocurso', {params: {idCurso: this.idCurso}})
         .then(response => {
           if (response.data.error){
-            this.mensajeEmergente('danger',CONFIG.TITULO_MSG,response.data.mensaje + ' - Lista de matriculados sin curso')
+            this.mensajeEmergente('danger',CONFIG.TITULO_MSG,response.data.mensaje + ' - Cambiar curso')
           } else{
             if (response.data.datos != 0) {
-              this.listaMatriculadosSinCurso = response.data.datos
+              this.listaMatriculados = response.data.datos
             }
           }
         })
         .catch(err => {
-          this.mensajeEmergente('danger',CONFIG.TITULO_MSG,'Algo salio mal y no se pudo realizar: Lista de matriculados sin curso. Intente más tarde.' + err)
-        })
-      },
-      actualizarItem(item) {
-        let indice = this.listaMatriculadosSinCurso.findIndex(estudiante => estudiante.id === item.id)
-        this.listaMatriculadosSinCurso[indice].id_curso = item.id_curso
-
-        this.$store.state.datosCursos.forEach(element => {
-          if (element.id == item.id_curso) {
-            this.listaMatriculadosSinCurso[indice].id_grado = element.id_grado_sede
-          }
+          this.mensajeEmergente('danger',CONFIG.TITULO_MSG,'Algo salio mal y no se pudo realizar: Cambiar curso. Intente más tarde.' + err)
         })
       },
       async ocuparComboCursosSede() {
@@ -175,7 +178,7 @@
       }
     },
     beforeMount() {
-      if(this.$store.state.idRol == 1 || this.$store.state.idRol == 12 || this.$store.state.perMatricular == 1) {
+      if(this.$store.state.idRol == 1 || this.$store.state.idRol == 12) {
         this.ocuparComboSedes()
       } else {
         this.$router.push('/restringida')

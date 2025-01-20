@@ -9,14 +9,14 @@
           <b-card-text>
             <b-row>
               <b-col lg="3" md="6">
-                <b-form-group label="Año Lectivo*" label-for="anno" class="etiqueta">
-                  <b-form-input id="anno" ref="anno" v-model.trim="$v.infoSede.vigencia.$model" :state="validateStateS('vigencia')" aria-describedby="feedAnno" autocomplete="off" maxlength="4" @keydown="soloNumeros" :disabled="this.$store.state.idRol==1 ? false : true"></b-form-input>
-                  <b-form-invalid-feedback id="feedAnno">Campo requerido.</b-form-invalid-feedback>
+                <b-form-group label="Código Anterior*" label-for="codigo" class="etiqueta">
+                  <b-form-input id="codigo" ref="codigo" v-model.trim="$v.infoSede.codigo_anterior.$model" :state="validateStateS('codigo_anterior')" aria-describedby="feedCodigo" autocomplete="off" maxlength="12" @keydown="soloNumeros"></b-form-input>
+                  <b-form-invalid-feedback id="feedCodigo">Campo requerido.</b-form-invalid-feedback>
                 </b-form-group>
               </b-col>
               <b-col lg="3" md="6">
                 <b-form-group label="Consecutivo Sede (DANE)*" label-for="consecutivo" class="etiqueta">
-                  <b-form-input id="consecutivo" ref="consecutivo" v-model.trim="$v.infoSede.consecutivo_sede.$model" :state="validateStateS('consecutivo_sede')" aria-describedby="feedConsecutivo" autocomplete="off" maxlength="14" @keydown="soloNumeros" :disabled="this.$store.state.idRol==1 ? false : true"></b-form-input>
+                  <b-form-input id="consecutivo" ref="consecutivo" v-model.trim="$v.infoSede.consecutivo_sede.$model" :state="validateStateS('consecutivo_sede')" aria-describedby="feedConsecutivo" autocomplete="off" maxlength="14" @keydown="soloNumeros"></b-form-input>
                   <b-form-invalid-feedback id="feedConsecutivo">Campo requerido.</b-form-invalid-feedback>
                 </b-form-group>
               </b-col>
@@ -95,7 +95,8 @@
         infoSede: {
           id: null,
           id_institucion: null,
-          vigencia: null,
+          id_seccion: null,
+          codigo_anterior: null,
           consecutivo_sede: null,
           sede: null,
           direccion: null,
@@ -112,7 +113,7 @@
     },
     validations: {
       infoSede: {
-        vigencia: { required, minLength: minLength(4) },
+        codigo_anterior: { required, minLength: minLength(12) },
         consecutivo_sede: { required, minLength: minLength(14) },
         sede: { required, minLength: minLength(4) },
         direccion: { required, minLength: minLength(4) },
@@ -129,8 +130,8 @@
           this.mensajeEmergente('danger',CONFIG.TITULO_MSG,'Algunos campos están incompletos.')
           return false
         } else {
-          let titulo = this.infoSede.editarSede ? 'Actualizar Datos de la Sede' : 'Crear Sede'
-          let pregunta = this.infoSede.editarSede ? '¿Esta seguro de Actualizar los Datos de la Sede?' : '¿Esta seguro de Crear la Sede?'
+          let titulo = this.infoSede.editarSede ? 'Actualizar datos de la Sede' : 'Crear Sede'
+          let pregunta = this.infoSede.editarSede ? '¿Esta seguro de actualizar los datos de la Sede?' : '¿Esta seguro de crear la Sede?'
           this.$bvModal.msgBoxConfirm(pregunta, {
             headerBgVariant: 'primary',
             headerTextVariant: 'light',
@@ -157,6 +158,7 @@
         return true
       },
       async guardarDatosSede() {
+        this.infoSede.id_seccion = this.$store.state.idSeccion
         this.infoSede.sede = this.infoSede.sede.toUpperCase()
         this.infoSede.barrio = this.infoSede.barrio.toUpperCase()
         if (this.infoSede.editarSede) {
@@ -187,39 +189,21 @@
             this.mensajeEmergente('danger',CONFIG.TITULO_MSG,'Algo salio mal y no se pudo realizar: Crear Sede. Intente más tarde. ' + err)
           })
         }
-        this.cargarDatosSedesGradosConfig()
         this.cargarDatosSedes()
       },
       async cargarDatosSedes() {
         await axios
-        .get(CONFIG.ROOT_PATH + 'academico/carguesedes', {params: {idInstitucion: this.$store.state.idInstitucion, vigencia: this.$store.state.aLectivo}})
+        .get(CONFIG.ROOT_PATH + 'academico/carguesedes', {params: {idInstitucion: this.$store.state.idInstitucion, idSeccion: this.$store.state.idSeccion}})
         .then(response => {
           if (response.data.error){
             alert(response.data.mensaje + ' - Consulta datos Sedes Activas')
             location.replace(CONFIG.ROOT_MODULO_LOGIN)
           } else {
             this.$store.commit('set', ['datosSedes', response.data.datos])
-            //console.log('Sedes: ' + JSON.stringify(response.data.datos))
           }
         })
         .catch(err => {
           alert('Algo salio mal y no se pudo realizar: Consulta datos Sedes Activas. Intente más tarde. ' + err)
-          location.replace(CONFIG.ROOT_WEBSITE)
-        })
-      },
-      async cargarDatosSedesGradosConfig() {
-        await axios
-        .get(CONFIG.ROOT_PATH + 'academico/carguesedesgradosconfig', {params: {idInstitucion: this.$store.state.idInstitucion, vigencia: this.$store.state.aLectivo}})
-        .then(response => {
-          if (response.data.error){
-            alert(response.data.mensaje + ' - Consulta datos Sedes')
-            location.replace(CONFIG.ROOT_MODULO_LOGIN)
-          } else {
-            this.$store.commit('set', ['datosSedesGradosConfig', response.data.datos])
-          }
-        })
-        .catch(err => {
-          alert('Algo salio mal y no se pudo realizar: Consulta datos Sedes. Intente más tarde. ' + err)
           location.replace(CONFIG.ROOT_WEBSITE)
         })
       },

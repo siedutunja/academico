@@ -4,36 +4,39 @@
       <b-col lg="12">
         <b-card>
           <template #header>
-            <div class="card-header-actions float-right">
-              <CLink href="#" class="card-header-action btn-setting mx-1 text-primary" @click="nuevoAdministrativo" title="Nuevo Funcionario">
-                <CIcon name="cilMedicalCross"/>
-              </CLink>
-            </div>
-            <h5 class="mb-0"><b-icon icon="person-square" aria-hidden="true"></b-icon> GESTIÓN DEL PERSONAL ADMINISTRATIVO</h5>
+            <h5 class="mb-0"><b-icon icon="person-square" aria-hidden="true"></b-icon> ADMINISTRATIVOS DE LA INSTITUCIÓN EDUCATIVA</h5>
           </template>
           <b-card-text>
             <b-row>
               <b-col lg="12">
-                <vue-good-table :columns="encabColumnas" :rows="listaAdministrativos" styleClass="vgt-table condensed bordered striped" :line-numbers="true">
-                  <template slot="table-row" slot-scope="props">
-                    <span v-if="props.column.field == 'idPersona'">
-                      <span style="font-weight: bold; color: blue; cursor: pointer" @click="seleccionarFuncionario(props.row)" title="Consultar/Actualizar Datos del Funcionario"><CIcon name="cilPencil"/></span>
-                    </span>
+                <b-card header-bg-variant="secondary">
+                  <template #header>
+                    <b-button class="small float-right" variant="dark" @click="nuevoAdministrativo" v-if="$store.state.idRol==1 || $store.state.idRol==12">Nuevo Administrativo</b-button>
+                    <h5 class="mb-0"><b-icon icon="card-checklist" aria-hidden="true"></b-icon> Lista de Administrativos</h5>
                   </template>
-                  <div slot="emptystate">
-                    <h5 class="text-danger ml-5">No existen fucionarios creados</h5>
-                  </div>
-                </vue-good-table>
+                  <b-card-text>
+                    <vue-good-table :columns="encabColumnas" :rows="listaAdministrativos" styleClass="vgt-table condensed bordered striped" :line-numbers="true">
+                      <template slot="table-row" slot-scope="props">
+                        <span v-if="props.column.field == 'idPersona'">
+                          <span style="font-weight: bold; color: blue; cursor: pointer" @click="seleccionarFuncionario(props.row)" title="Consultar/Actualizar Datos del Funcionario"><CIcon name="cilPencil"/></span>
+                        </span>
+                      </template>
+                      <div slot="emptystate">
+                        <h5 class="text-danger ml-5">No existen Administrativos creados</h5>
+                      </div>
+                    </vue-good-table>
+                  </b-card-text>
+                </b-card>
               </b-col>
             </b-row>
           </b-card-text>
           <template #footer>
-            <em>Consulte o actualice los datos de un funcionario haciendo clic en el lapiz.</em>
+            <em>Consulte o actualice los datos de un administrativo haciendo clic en el lapiz.</em>
           </template>
         </b-card>
       </b-col>
     </b-row>
-    <b-modal ref="modalCrearEditarAdministrativo" size="xl" scrollable hide-footer :title="datosAdministrativo.editarAdministrativo ? 'Editar Datos del Funcionario' : 'Nuevo Funcionario'" ok-only>
+    <b-modal ref="modalCrearEditarAdministrativo" size="xl" scrollable hide-footer :title="datosAdministrativo.editarAdministrativo ? 'Editar Datos del Administrativo' : 'Nuevo Administrativo'" ok-only>
       <div class="mx-3">
         <div>
           <FichaAdministrativo :datosAdministrativo="datosAdministrativo"  @retorno="datosRecibidosAdministrativo"/>
@@ -60,7 +63,7 @@
       return {
         listaAdministrativos: [],
         datosAdministrativo: {
-          idPersona: null,
+          id: null,
           documento: null,
           id_tipo_documento: null,
           id_municipio_documento: null,
@@ -83,7 +86,6 @@
           telefono1: null,
           telefono2: null,
           correo: null,
-          //cargo: null,
           vigencia: null,
           id_rol: null,
           idUsuario: null,
@@ -92,7 +94,7 @@
           editarAdministrativo: true
         },
         encabColumnas : [
-          { label: 'Funcionario', field: 'funcionario' },
+          { label: 'Apellidos y Nombres', field: 'funcionario' },
           { label: 'Documento', field: 'documento', sortable: false },
           { label: 'Rol', field: 'rol', sortable: false },
           { label: 'Teléfono', field: 'telefono1', sortable: false },
@@ -104,40 +106,11 @@
     },
     methods: {
       nuevoAdministrativo() {
-        this.datosAdministrativo.idPersona = null
-        this.datosAdministrativo.documento = null
-        this.datosAdministrativo.id_tipo_documento = null
-        this.datosAdministrativo.id_municipio_documento = null
-        this.datosAdministrativo.nombre1 = null
-        this.datosAdministrativo.nombre2 = null
-        this.datosAdministrativo.apellido1 = null
-        this.datosAdministrativo.apellido2 = null
-        this.datosAdministrativo.id_genero = null
-        this.datosAdministrativo.fecha_nacimiento = null
-        this.datosAdministrativo.id_municipio_nacimiento = null
-        this.datosAdministrativo.id_nacionalidad = null
-        this.datosAdministrativo.id_rh = null
-        this.datosAdministrativo.id_estrato = null
-        this.datosAdministrativo.id_sisben = null
-        this.datosAdministrativo.id_eps = null
-        this.datosAdministrativo.direccion = null
-        this.datosAdministrativo.id_municipio_direccion = null
-        this.datosAdministrativo.barrio = null
-        this.datosAdministrativo.id_zona = null
-        this.datosAdministrativo.telefono1 = null
-        this.datosAdministrativo.telefono2 = null
-        this.datosAdministrativo.correo = null
-        //this.datosAdministrativo.cargo = null
-        this.datosAdministrativo.vigencia = null
-        this.datosAdministrativo.id_rol = null
-        this.datosAdministrativo.idUsuario = null
-        this.datosAdministrativo.usuario = null
-        this.datosAdministrativo.clave = null
         this.datosAdministrativo.editarAdministrativo = false
         this.$refs['modalCrearEditarAdministrativo'].show()
       },
       seleccionarFuncionario(item) {
-        this.datosAdministrativo.idPersona = item.id_persona
+        this.datosAdministrativo.id = item.id
         this.datosAdministrativo.documento = item.documento
         this.datosAdministrativo.id_tipo_documento = item.id_tipo_documento
         this.datosAdministrativo.id_municipio_documento = item.id_municipio_documento
@@ -175,11 +148,11 @@
       },
       datosRecibidosAdministrativo(retorno) {
         if (retorno == 1) 
-          this.mensajeEmergente('success',CONFIG.TITULO_MSG,'El funcionario se ha creado correctamente..')
+          this.mensajeEmergente('success',CONFIG.TITULO_MSG,'El funcionario se ha creado correctamente.')
         else if (retorno == 2)
           this.mensajeEmergente('success',CONFIG.TITULO_MSG,'Los datos del funcionario se han actualizado correctamente.')
         else if (retorno == 3)
-          this.mensajeEmergente('success',CONFIG.TITULO_MSG,'El funcionario se ha retirado correctamente.')
+          this.mensajeEmergente('success',CONFIG.TITULO_MSG,'El funcionario se ha desvinculado correctamente.')
 
         this.consultarListaAdministrativos()
         this.$refs['modalCrearEditarAdministrativo'].hide()
@@ -194,9 +167,9 @@
           } else{
             if (response.data.datos != 0) {
               this.listaAdministrativos = response.data.datos
-              console.log(JSON.stringify(this.listaAdministrativos))
             }
           }
+          //console.log(JSON.stringify(this.listaAdministrativos))
         })
         .catch(err => {
           this.mensajeEmergente('danger',CONFIG.TITULO_MSG,'Algo salio mal y no se pudo realizar: Lista admnistrativos. Intente más tarde.' + err)

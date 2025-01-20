@@ -43,19 +43,20 @@ jwt.verify(token, CONFIG.SECRET_KEY, (err, data) => {
       menu[0]._children[indice].items.push({ name: 'Matricular Preinscrito', to: '/matriculas/preinscritos'})
       menu[0]._children[indice].items.push({ name: 'Renovar Matricula', to: '/matriculas/buscarrenovacion'})
       menu[0]._children[indice].items.push({ name: 'Matriculados Sin Curso', to: '/matriculas/matriculadossincurso'})
-      menu[0]._children[indice].items.push({ name: 'Consultar Carpeta Matricula', to: '/matriculas/buscarcarpetamatricula'})
+      menu[0]._children[indice].items.push({ name: 'Renovación Masiva Antiguos', to: '/matriculas/renovacionmasiva2024'})
     }
-    if (tokenDecodificado.id_rol == 1 || tokenDecodificado.id_rol == 12 || tokenDecodificado.permisos.perMatricular == 1) {
-      menu[0]._children.push(
-        {
-          _name: 'CSidebarNavDropdown',
-          name: 'Estudiantes',
-          icon: 'cilEducation',
-          items: []
-        }
-      )
-      indice++
-      //menu[0]._children[indice].items.push({ name: 'Consulta Estudiante', to: '/matriculas/buscarcarpetamatricula'})
+    menu[0]._children.push(
+      {
+        _name: 'CSidebarNavDropdown',
+        name: 'Estudiantes',
+        icon: 'cilEducation',
+        items: []
+      }
+    )
+    indice++
+    menu[0]._children[indice].items.push({ name: 'Consultar Carpeta Matricula', to: '/matriculas/buscarcarpetamatricula'})
+    if (tokenDecodificado.id_rol == 1 || tokenDecodificado.id_rol == 12) {
+      menu[0]._children[indice].items.push({ name: 'Cambiar de Curso', to: '/estudiantes/cambiocurso'})
     }
     if (tokenDecodificado.id_rol == 1 || tokenDecodificado.id_rol == 12) {
       menu[0]._children.push(
@@ -71,19 +72,29 @@ jwt.verify(token, CONFIG.SECRET_KEY, (err, data) => {
       //menu[0]._children[indice].items.push({ name: 'Directores de Curso', to: '/docentes/directorescurso'})
       //menu[0]._children[indice].items.push({ name: 'Asignación Académica', to: '/docentes/asignacioncurso'})
       //menu[0]._children[indice].items.push({ name: 'Directorio Docentes', to: '/docentes/directoriodocentes'})
+      menu[0]._children[indice].items.push({ name: 'Gestión de Docentes', to: '/docentes/listadocentes'})
     }
-
     menu[0]._children.push(
       {
         _name: 'CSidebarNavDropdown',
         name: 'Listas y Planillas',
-        icon: 'cilEducation',
+        icon: 'cilListRich',
         items: []
       }
     )
     indice++
-    menu[0]._children[indice].items.push({ name: 'Lista General de Consulta', to: '/listados/listados'})
-    //menu[0]._children[indice].items.push({ name: 'Planillas', to: '/estudiantes/fichamatricula'})
+    menu[0]._children[indice].items.push({ name: 'Generador de Listas', to: '/listados/listados'})
+
+    menu[0]._children.push(
+      {
+        _name: 'CSidebarNavDropdown',
+        name: 'Informes',
+        icon: 'cilBarChart',
+        items: []
+      }
+    )
+    indice++
+    menu[0]._children[indice].items.push({ name: 'Consolidado Matricula', to: '/informes/consolidadomatricula'})
 
   }
 })

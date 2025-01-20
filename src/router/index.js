@@ -98,6 +98,13 @@ function configRoutes () {
               name: 'Matriculados Sin Curso',
               component: () => import('@/views/matriculas/MatriculadosSinCurso')
             },
+            // 2025-01-19
+            {
+              path: 'renovacionmasiva2024',
+              beforeEnter: autenticar,
+              name: 'Renovación Masiva Estudiantes Antiguos',
+              component: () => import('@/views/matriculas/RenovacionMasiva2024')
+            },
           ]
         },
         // 2024-10-26
@@ -137,6 +144,50 @@ function configRoutes () {
               name: 'Super Administrador',
               component: () => import('@/views/configuracion/SuperAdmin')
             },
+            // 2025-01-03
+            {
+              path: 'listaareas',
+              beforeEnter: autenticar,
+              name: 'Lista de Areas',
+              component: () => import('@/views/configuracion/ListaAreas')
+            },
+            // 2025-01-06
+            {
+              path: 'listaasignaturas',
+              beforeEnter: autenticar,
+              name: 'Lista de Asignaturas',
+              component: () => import('@/views/configuracion/ListaAsignaturas')
+            },
+            // 2025-01-06
+            {
+              path: 'planestudios',
+              beforeEnter: autenticar,
+              name: 'Plan de Estudios',
+              component: () => import('@/views/configuracion/PlanEstudios')
+            },
+            // 2025-01-08
+            {
+              path: 'seccionesie',
+              beforeEnter: autenticar,
+              name: 'Secciones',
+              component: () => import('@/views/configuracion/SeccionesIE')
+            },
+            // 2025-01-09
+            {
+              path: 'especialidadesie',
+              beforeEnter: autenticar,
+              name: 'Especialidades',
+              component: () => import('@/views/configuracion/EspecialidadesIE')
+            },
+            // 2025-01-09
+            {
+              path: 'rutasie',
+              beforeEnter: autenticar,
+              name: 'Rutas',
+              component: () => import('@/views/configuracion/RutasIE')
+            },
+
+
             // 2024-10-26 ????????????????????
             {
               path: 'nuevavigencia',
@@ -144,60 +195,48 @@ function configRoutes () {
               name: 'Nuevo Año Lectivo',
               component: () => import('@/views/configuracion/NuevaVigencia')
             },
-            /*
-            // 2024-02-24
-            // 2024-02-27
-            {
-              path: 'listaareas',
-              beforeEnter: autenticar,
-              name: 'Lista de Areas',
-              component: () => import('@/views/configuracion/ListaAreas')
-            },
-            // 2024-02-28
-            {
-              path: 'listaasignaturas',
-              beforeEnter: autenticar,
-              name: 'Lista de Asignaturas',
-              component: () => import('@/views/configuracion/ListaAsignaturas')
-            },
-            // 2024-02-28
-            {
-              path: 'planestudios',
-              beforeEnter: autenticar,
-              name: 'Plan de Estudios',
-              component: () => import('@/views/configuracion/PlanEstudios')
-            },
-            */
           ]
         },
-
-
-
-
-
-        //---------
-        // 2024-03-10
+        // 2024-12-12
         {
-          path: 'listados',
-          redirect: '/listados/listados',  
-          name: 'Listados',
+          path: 'informes',
+          redirect: '/informes/consolidadomatricula',  
+          name: 'Informes',
           component: {
             render (c) { return c('router-view') }
           },
           children: [
-            // 2024-03-06
+            // 2024-12-12
+            {
+              path: 'consolidadomatricula',
+              beforeEnter: autenticar,
+              name: 'Consolidado Matricula',
+              component: () => import('@/views/informes/ConsolidadoMatricula')
+            },
+          ]
+        },
+        // 2024-12-10
+        {
+          path: 'listados',
+          redirect: '/listados/listados',  
+          name: 'Listas y Planillas',
+          component: {
+            render (c) { return c('router-view') }
+          },
+          children: [
+            // 2024-12-10
             {
               path: 'listados',
               beforeEnter: autenticar,
-              name: 'Lista General de Estudiantes',
+              name: 'Generador de Listas',
               component: () => import('@/views/listados/Listados')
             },
           ]
         },
-        // 2024-03-06
+        // 2025-01-19
         {
           path: 'estudiantes',
-          redirect: '/estudiantes/matricula',  
+          redirect: '/estudiantes/cambiocurso',  
           name: 'Estudiantes',
           component: {
             render (c) { return c('router-view') }
@@ -205,21 +244,14 @@ function configRoutes () {
           children: [
             // 2024-03-06
             {
-              path: 'fichamatricula',
+              path: 'cambiocurso',
               beforeEnter: autenticar,
-              name: 'Ficha de Matricula Estudiante',
-              component: () => import('@/views/estudiantes/FichaMatricula')
-            },
-            // 22024-03-07
-            {
-              path: 'matricula',
-              beforeEnter: autenticar,
-              name: 'Matricula Estudiantes',
-              component: () => import('@/views/estudiantes/Matricula')
+              name: 'Cambio de Curso',
+              component: () => import('@/views/estudiantes/CambioCurso')
             },
           ]
         },
-        // 2024-02-25
+        // 2025-01-16
         {
           path: 'docentes',
           redirect: '/docentes/consultadocente',  
@@ -228,6 +260,14 @@ function configRoutes () {
             render (c) { return c('router-view') }
           },
           children: [
+            // 2025-01-16
+            {
+              path: 'listadocentes',
+              beforeEnter: autenticar,
+              name: 'Gestión Docentes',
+              component: () => import('@/views/docentes/ListaDocentes')
+            },
+            /*
             // 2024-03-05
             {
               path: 'directoriodocentes',
@@ -256,13 +296,7 @@ function configRoutes () {
               name: 'Asignación Académica',
               component: () => import('@/views/docentes/AsignacionCurso')
             },
-            // 2024-02-17
-            {
-              path: 'listadocentes',
-              beforeEnter: autenticar,
-              name: 'Gestión Docentes',
-              component: () => import('@/views/docentes/ListaDocentes')
-            },
+            */
           ]
         },
         // 2024-02-18
