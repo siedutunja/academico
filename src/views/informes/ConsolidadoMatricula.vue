@@ -9,6 +9,7 @@
           </template>
           <b-card-text>
             <b-row>
+              <!--
               <b-col lg="2">
                 <b-alert class="text-center" variant="success" show>
                   <p>Total Activos</p>
@@ -21,12 +22,14 @@
                   <h2>{{ totalIERetiros }}</h2>
                 </b-alert>
               </b-col>
-              <b-col lg="4">
-                <b-alert class="text-center" variant="warning" show>
+              -->
+              <b-col lg="12">
+                <b-alert class="text-center" variant="success" show>
                   <p>Total Matriculados</p>
                   <h2>{{ totalIE }}</h2>
                 </b-alert>
               </b-col>
+              <!--
               <b-col lg="2">
                 <b-alert class="text-center" variant="primary" show>
                   <p>Total Nuevos</p>
@@ -39,6 +42,7 @@
                   <h2>{{ totalIERepitentes }}</h2>
                 </b-alert>
               </b-col>
+              -->
             </b-row>
             <b-row>
               <b-col lg="12">
@@ -111,9 +115,10 @@
           { label: 'Nombre de la Sede', field: 'sede', sortable: false },
           { label: 'Activos', field: 'totalSedeActivos', sortable: false },
           { label: 'Retirados', field: 'totalSedeRetiros', sortable: false },
+          //{ label: 'Sin Curso', field: 'totalSedeSinCurso', sortable: false },
           { label: 'Total', field: 'totalSede', sortable: false },
-          { label: 'Nuevos', field: 'totalSedeNuevos', sortable: false },
-          { label: 'Repitentes', field: 'totalSedeRepitentes', sortable: false },
+          //{ label: 'Nuevos', field: 'totalSedeNuevos', sortable: false },
+          //{ label: 'Repitentes', field: 'totalSedeRepitentes', sortable: false },
           { label: '', field: 'id', sortable: false }
         ],
         encabColumnasExcel : [
@@ -169,6 +174,7 @@
         this.totalIERetiros = 0
         this.totalIENuevos = 0
         this.totalIERepitentes = 0
+        this.totalIESinCurso = 0
         await axios
         .get(CONFIG.ROOT_PATH + 'academico/informes/consolidadomatricula', {params: {idInstitucion: this.$store.state.idInstitucion, vigencia: this.$store.state.aLectivo}})
         .then(response => {
@@ -183,17 +189,20 @@
                 element.totalSedeRetiros = 0
                 element.totalSedeNuevos = 0
                 element.totalSedeRepitentes = 0
+                element.totalSedeSinCurso = 0
                 element.grados.forEach(element2 => {
                   element.totalSede += element2.totalMatGrado
                   element.totalSedeActivos += element2.totalActivosGrado
                   element.totalSedeRetiros += element2.totalRetirosGrado
                   element.totalSedeNuevos += element2.totalNuevosGrado
                   element.totalSedeRepitentes += element2.totalRepitentesGrado
+                  element.totalSedeSinCurso += element2.totalSinCursoGrado
                   this.totalIE += element2.totalMatGrado
                   this.totalIEActivos += element2.totalActivosGrado
                   this.totalIERetiros += element2.totalRetirosGrado
                   this.totalIENuevos += element2.totalNuevosGrado
                   this.totalIERepitentes += element2.totalRepitentesGrado
+                  this.totalIESinCurso += element2.totalSinCursoGrado
                 })
               })
             }

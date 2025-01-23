@@ -8,6 +8,7 @@
           </template>
           <b-card-text>
             <b-row>
+              <!--
               <b-col lg="2">
                 <b-alert class="text-center" variant="success" show>
                   <p>Total Activos</p>
@@ -20,12 +21,14 @@
                   <h2>{{ datosMatriculaSede.totalSedeRetiros }}</h2>
                 </b-alert>
               </b-col>
-              <b-col lg="4">
-                <b-alert class="text-center" variant="warning" show>
+              -->
+              <b-col lg="12">
+                <b-alert class="text-center" variant="success" show>
                   <p>Total Matriculados</p>
                   <h2>{{ datosMatriculaSede.totalSede }}</h2>
                 </b-alert>
               </b-col>
+              <!--
               <b-col lg="2">
                 <b-alert class="text-center" variant="primary" show>
                   <p>Total Nuevos</p>
@@ -38,6 +41,7 @@
                   <h2>{{ datosMatriculaSede.totalSedeRepitentes }}</h2>
                 </b-alert>
               </b-col>
+              -->
             </b-row>
             <vue-good-table :columns="encabColumnas" :rows="listaGrados" styleClass="vgt-table condensed bordered striped" :line-numbers="true">
               <div slot="emptystate">
@@ -76,8 +80,8 @@
           { label: 'Activos', field: 'totalActivosGrado', sortable: false },
           { label: 'Retirados', field: 'totalRetirosGrado', sortable: false },
           { label: 'Total Matriculados', field: 'totalMatGrado', sortable: false },
-          { label: 'Nuevos', field: 'totalNuevosGrado', sortable: false },
-          { label: 'Repitentes', field: 'totalRepitentesGrado', sortable: false },
+          //{ label: 'Nuevos', field: 'totalNuevosGrado', sortable: false },
+          //{ label: 'Repitentes', field: 'totalRepitentesGrado', sortable: false },
         ]
       }
     },

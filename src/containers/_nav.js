@@ -74,6 +74,18 @@ jwt.verify(token, CONFIG.SECRET_KEY, (err, data) => {
       //menu[0]._children[indice].items.push({ name: 'Directorio Docentes', to: '/docentes/directoriodocentes'})
       menu[0]._children[indice].items.push({ name: 'Gestión de Docentes', to: '/docentes/listadocentes'})
     }
+    if (tokenDecodificado.id_rol == 1 || tokenDecodificado.id_rol == 12) {
+      menu[0]._children.push(
+        {
+          _name: 'CSidebarNavDropdown',
+          name: 'Secretaría',
+          icon: 'cilUserPlus',
+          items: []
+        }
+      )
+      indice++
+      menu[0]._children[indice].items.push({ name: 'Documentos', to: '/secretaria/buscargenerardocumentos'})
+    }
     menu[0]._children.push(
       {
         _name: 'CSidebarNavDropdown',
@@ -84,6 +96,7 @@ jwt.verify(token, CONFIG.SECRET_KEY, (err, data) => {
     )
     indice++
     menu[0]._children[indice].items.push({ name: 'Generador de Listas', to: '/listados/listados'})
+    menu[0]._children[indice].items.push({ name: 'Listas Sin Curso', to: '/listados/listadossincurso'})
 
     menu[0]._children.push(
       {

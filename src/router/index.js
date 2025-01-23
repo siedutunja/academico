@@ -231,6 +231,13 @@ function configRoutes () {
               name: 'Generador de Listas',
               component: () => import('@/views/listados/Listados')
             },
+            // 2025-01-22
+            {
+              path: 'listadossincurso',
+              beforeEnter: autenticar,
+              name: 'Listas Sin Curso',
+              component: () => import('@/views/listados/ListadosSinCurso')
+            },
           ]
         },
         // 2025-01-19
@@ -248,6 +255,38 @@ function configRoutes () {
               beforeEnter: autenticar,
               name: 'Cambio de Curso',
               component: () => import('@/views/estudiantes/CambioCurso')
+            },
+          ]
+        },
+        // 2025-01-19
+        {
+          path: 'secretaria',
+          redirect: '/secretaria/buscargenerardocumentos',  
+          name: 'Secretaria',
+          component: {
+            render (c) { return c('router-view') }
+          },
+          children: [
+            // 2024-03-06
+            {
+              path: 'buscargenerardocumentos',
+              beforeEnter: autenticar,
+              name: 'Documentos',
+              component: () => import('@/views/secretaria/BuscarGenerarDocumentos')
+            },
+            // 2024-03-06
+            {
+              path: 'generardocumentos',
+              beforeEnter: autenticar,
+              name: 'Generar Documentos',
+              component: () => import('@/views/secretaria/GenerarDocumentos')
+            },
+            // 2024-03-06
+            {
+              path: 'constancia',
+              beforeEnter: autenticar,
+              name: 'Constancias',
+              component: () => import('@/views/secretaria/Constancia')
             },
           ]
         },

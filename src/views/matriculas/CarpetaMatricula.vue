@@ -87,6 +87,7 @@
                       <b-col lg="12"><hr></b-col>
                       <b-col lg="12">
                         <b-button class="small mx-1 mt-2" variant="primary" @click="imprimirFormulario">Imprimir Ficha Matricula del Estudiante</b-button>
+                        <b-button class="small mx-1 mt-2 float-right" variant="danger" @click="desvincularMatricula" v-if="$store.state.idRol==1 || $store.state.idRol==12">Desvincular Matricula del Estudiante</b-button>
                       </b-col>
                     </b-row>
                   </b-card-text>
@@ -342,6 +343,47 @@
       }
     },
     methods: {
+      desvincularMatricula() {
+        let titulo = 'Desvincular Estudiante'
+        let pregunta = 'Al desvincular el Estudiante de la Institución Educativa se eliminará el registro de la matrícula para el actual Año Lectivo y el Estudiante quedará disponible para ser matriculado en otra Institución Educativa. ¿Esta seguro de desvincular el estudiante?'
+        this.$bvModal.msgBoxConfirm(pregunta, {
+          headerBgVariant: 'primary',
+          headerTextVariant: 'light',
+          bodyBgVariant: 'light',
+          bodyBgClass: 'text-center',
+          title: titulo,
+          size: '',
+          buttonSize: 'sm',
+          okVariant: 'primary',
+          okTitle: 'Si, ' + titulo,
+          cancelVariant: 'danger',
+          cancelTitle: 'Cancelar',
+          footerClass: 'p-2',
+          bodyClass: 'p-5',
+          hideHeaderClose: false,
+          centered: true
+        })
+        .then(value => {
+          if (value) {
+            this.desvincularEstudiante()
+          }
+        })
+      },
+      async desvincularEstudiante() {
+        await axios
+        .delete(CONFIG.ROOT_PATH + 'academico/matriculas/desvincularestudiante', {params: {idMatricula: this.idMatricula}})
+        .then(response => {
+          if (response.data.error){
+            this.mensajeEmergente('danger',CONFIG.TITULO_MSG,response.data.mensaje + ' - Desvincular Estudiante')
+          } else{
+            this.mensajeEmergente('success',CONFIG.TITULO_MSG,'El estudiante se ha desvinculado correctamente.')
+            this.cancelarFormulario()
+          }
+        })
+        .catch(err => {
+          this.mensajeEmergente('danger',CONFIG.TITULO_MSG,'Algo salio mal y no se pudo realizar: Desvincular Estudiante. Intente más tarde. ' + err)
+        })
+      },
       verFichamatricula() {
         this.datosFichaMatricula.idMatricula = this.idMatricula
         this.$refs['modalFichaMatricula'].show()

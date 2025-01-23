@@ -327,6 +327,12 @@
               this.$store.commit('set', ['aLectivo', response.data.datos.configuracion.a_lectivo])
               this.$store.commit('set', ['aMatriculas', response.data.datos.configuracion.a_matriculas])
               this.$store.commit('set', ['FichaMatricula', response.data.datos.configuracion.ficha_matricula])
+              this.$store.commit('set', ['NombreRector', response.data.datos.configuracion.rector])
+              this.$store.commit('set', ['DocumentoRector', response.data.datos.configuracion.documento_rector])
+              this.$store.commit('set', ['CargoRector', response.data.datos.configuracion.cargo_rector])
+              this.$store.commit('set', ['NombreSecretaria', response.data.datos.configuracion.secretaria])
+              this.$store.commit('set', ['DocumentoSecretaria', response.data.datos.configuracion.documento_secretaria])
+              this.$store.commit('set', ['CargoSecretaria', response.data.datos.configuracion.cargo_secretaria])
                             
               this.cargarDatosDocentes()
               this.cargarDatosSedes()

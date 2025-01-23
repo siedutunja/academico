@@ -40,7 +40,7 @@
                     </b-col>
                   </b-card-text>
                   <template #footer>
-                    <b-button class="small mx-1 mt-2" variant="primary" @click="confirmarCambioCurso" v-if="$store.state.idRol==1 && idSede!=null && listaMatriculadosSinCurso.length!=0">Asignar Cursos</b-button>
+                    <b-button class="small mx-1 mt-2" variant="primary" @click="confirmarCambioCurso" v-if="($store.state.idRol==1 || $store.state.idRol==12) && idSede!=null && listaMatriculadosSinCurso.length!=0">Asignar Cursos</b-button>
                     <b-button class="small mx-1 mt-2" variant="secondary" @click="cancelarFormulario">Cancelar</b-button>
                   </template>
                 </b-card>
