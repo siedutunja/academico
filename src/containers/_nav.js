@@ -95,8 +95,9 @@ jwt.verify(token, CONFIG.SECRET_KEY, (err, data) => {
       }
     )
     indice++
-    menu[0]._children[indice].items.push({ name: 'Generador de Listas', to: '/listados/listados'})
+    menu[0]._children[indice].items.push({ name: 'Listas por Curso', to: '/listados/listadoscurso'})
     menu[0]._children[indice].items.push({ name: 'Listas Sin Curso', to: '/listados/listadossincurso'})
+    menu[0]._children[indice].items.push({ name: 'Planillas/Formatos por Curso', to: '/listados/planillascurso'})
 
     menu[0]._children.push(
       {

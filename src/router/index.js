@@ -218,7 +218,7 @@ function configRoutes () {
         // 2024-12-10
         {
           path: 'listados',
-          redirect: '/listados/listados',  
+          redirect: '/listados/listadoscurso',  
           name: 'Listas y Planillas',
           component: {
             render (c) { return c('router-view') }
@@ -226,10 +226,10 @@ function configRoutes () {
           children: [
             // 2024-12-10
             {
-              path: 'listados',
+              path: 'listadoscurso',
               beforeEnter: autenticar,
-              name: 'Generador de Listas',
-              component: () => import('@/views/listados/Listados')
+              name: 'Listas por Curso',
+              component: () => import('@/views/listados/ListadosCurso')
             },
             // 2025-01-22
             {
@@ -237,6 +237,13 @@ function configRoutes () {
               beforeEnter: autenticar,
               name: 'Listas Sin Curso',
               component: () => import('@/views/listados/ListadosSinCurso')
+            },
+            // 2025-01-26
+            {
+              path: 'planillascurso',
+              beforeEnter: autenticar,
+              name: 'Planillas y Formatos por Curso',
+              component: () => import('@/views/listados/PlanillasCurso')
             },
           ]
         },
