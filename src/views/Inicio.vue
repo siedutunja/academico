@@ -53,6 +53,15 @@
                 <b-card-text>Consulte los Manuales de Usuario del sistema</b-card-text>
               </b-card>
             </b-card-group>
+            <b-card-group deck class="mt-5">
+              <b-card border-variant="light" class="text-center linkini" @click="irMatriculaPFC" v-if="$store.state.idSeccion == 2">
+                <b-card-text>
+                  <span><b-icon icon="card-list" font-scale="3"></b-icon></span>
+                  <h5 class="mt-2">Matricula Nuevo PFC</h5>
+                </b-card-text>
+                <b-card-text>Matricula de Estudiantes Nuevos del PFC</b-card-text>
+              </b-card>
+            </b-card-group>
             <b-row>
               <b-col lg="12"><hr></b-col>
               <b-col>
@@ -78,8 +87,11 @@
       }
     },
     methods: {
+      irMatriculaPFC() {
+        this.$router.push('/matriculas/buscarnuevo')
+      },
       irListados() {
-        this.$router.push('/listados/listados')
+        this.$router.push('/listados/listadoscurso')
       },
       irFichaMatricula() {
         this.$router.push('/matriculas/buscarcarpetamatricula')

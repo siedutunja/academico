@@ -35,6 +35,13 @@ function configRoutes () {
             render (c) { return c('router-view') }
           },
           children: [
+            // 2025-01-27
+            {
+              path: 'fichamatriculanueva',
+              beforeEnter: autenticar,
+              name: 'Ficha Matricula Nueva',
+              component: () => import('@/views/matriculas/FichaMatriculaNueva')
+            },
             // 2024-11-22
             {
               path: 'carpetamatricula',
@@ -48,6 +55,13 @@ function configRoutes () {
               beforeEnter: autenticar,
               name: 'Buscar Estudiante Renovación',
               component: () => import('@/views/matriculas/BuscarRenovacion')
+            },
+            // 2025-01-27
+            {
+              path: 'buscarnuevo',
+              beforeEnter: autenticar,
+              name: 'Consultar Documento',
+              component: () => import('@/views/matriculas/BuscarNuevo')
             },
             // 2024-11-19
             {

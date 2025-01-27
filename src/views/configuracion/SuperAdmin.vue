@@ -10,7 +10,28 @@
             <b-row>
               <b-col lg="12">
                 <b-tabs content-class="mt-3">
-                  <b-tab title="Actualizar Datos Estudiantes" active>
+                  <b-tab title="Cargar y Crear Docentes" active>
+                    <CCard style="margin-top: -17">
+                      <CCardBody>
+                        <b-row>
+                          <b-col lg="12">
+                            <p>La tabla "docentes2025cargue" debe estar precargada con el excel de los datos a actualizar por el campo documento, Este se debe guardar en formato CSV para cargarla en la tabla "docentes2025cargue".</p>
+                            <p>Actualizar la tabla "personas" y "docentes" de la basede de datos academico2 con los datos de la tabla "docentes2025cargue".</p>
+                            <p>Actualizar la tabla "usuarios" de la basede de datos siedutunja con los datos de la tabla "docentes2025cargue".</p>
+                            <hr>
+                            <b-button class="small mx-1 mt-2" variant="primary" @click="cargarDocentes">Cargar Docentes</b-button>
+                          </b-col>
+                          <div v-if="esperar">
+                            <div class="text-center m-5">
+                              <b-spinner style="width: 3rem; height: 3rem;" label="Spinner"></b-spinner>
+                              <br><strong>Actualizando los datos...</strong>
+                            </div>
+                          </div>
+                        </b-row>
+                      </CCardBody>
+                    </CCard>
+                  </b-tab>
+                  <b-tab title="Actualizar Datos Estudiantes">
                     <CCard style="margin-top: -17">
                       <CCardBody>
                         <b-row>
@@ -79,6 +100,22 @@
       }
     },
     methods: {
+      async cargarDocentes() {
+        this.esperar = true
+        await axios
+        .post(CONFIG.ROOT_PATH + 'academico/cargardocentes', { headers: {"Content-Type": "application/json; charset=utf-8" }})
+        .then(response => {
+          if (response.data.error){
+            this.mensajeEmergente('danger',CONFIG.TITULO_MSG,response.data.mensaje + ' - Cargue Docentes')
+          } else {
+            this.mensajeEmergente('success',CONFIG.TITULO_MSG,'¡Los docentes se han cargado satisfactorimanete!')
+          }
+        })
+        .catch(err => {
+          this.mensajeEmergente('danger',CONFIG.TITULO_MSG,'Algo salio mal y no se pudo realizar: Cargue Docentes!. Intente más tarde. ' + err)
+        })
+        this.esperar = false
+      },
       async actualizarDatos() {
         this.esperar = true
         this.listaDatosEstudiantes = []

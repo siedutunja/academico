@@ -2,6 +2,10 @@ import * as CONFIG from '@/assets/config.js'
 import jwt from 'jsonwebtoken'
 
 let menu = []
+let idSeccion = sessionStorage.getItem('idSeccion')
+if ( idSeccion == null ) {
+  idSeccion = 1
+}
 let token = sessionStorage.getItem('token')
 if ( token == null ) {
   let valores = window.location.search
