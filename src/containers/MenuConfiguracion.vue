@@ -21,6 +21,14 @@
     <CDropdownItem to="/configuracion/seccionesie">
       <CIcon name="cilBank" />Secciones
     </CDropdownItem>
+    <CDropdownDivider/>
+    <CDropdownItem to="/configuracion/configurardocumentos">
+      <CIcon name="cilLayers" />Personalizar Documentos
+    </CDropdownItem>
+    <CDropdownDivider/>
+    <CDropdownItem to="/administrativos/listaadministrativos">
+      <CIcon name="cilGroup" />Gestión de Personal Administrativo
+    </CDropdownItem>
     <!--
     <CDropdownDivider/>
     <CDropdownItem to="infoinstitucional">
@@ -30,10 +38,6 @@
       <CIcon name="cilBuilding" />Habilitar Nuevo Año Lectivo
     </CDropdownItem>
     -->
-    <CDropdownDivider/>
-    <CDropdownItem to="/administrativos/listaadministrativos">
-      <CIcon name="cilGroup" />Gestión de Personal Administrativo
-    </CDropdownItem>
     <div v-if="$store.state.idRol == 1">
       <CDropdownDivider/>
       <CDropdownItem to="/configuracion/superadmin">

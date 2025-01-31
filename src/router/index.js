@@ -200,6 +200,13 @@ function configRoutes () {
               name: 'Rutas',
               component: () => import('@/views/configuracion/RutasIE')
             },
+            // 2025-01-28
+            {
+              path: 'configurardocumentos',
+              beforeEnter: autenticar,
+              name: 'Configurar Documentos',
+              component: () => import('@/views/configuracion/ConfigurarDocumentos')
+            },
 
 
             // 2024-10-26 ????????????????????
@@ -270,6 +277,20 @@ function configRoutes () {
             render (c) { return c('router-view') }
           },
           children: [
+            // 2025-01-30
+            {
+              path: 'buscarcambiodocumento',
+              beforeEnter: autenticar,
+              name: 'Cambio de Documento',
+              component: () => import('@/views/estudiantes/BuscarCambioDocumento')
+            },
+            // 2025-01-30
+            {
+              path: 'cambiardocumento',
+              beforeEnter: autenticar,
+              name: 'Cambiar Documento',
+              component: () => import('@/views/estudiantes/CambiarDocumento')
+            },
             // 2024-03-06
             {
               path: 'cambiocurso',

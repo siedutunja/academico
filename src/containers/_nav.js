@@ -63,6 +63,9 @@ jwt.verify(token, CONFIG.SECRET_KEY, (err, data) => {
       menu[0]._children[indice].items.push({ name: 'Cambiar de Curso', to: '/estudiantes/cambiocurso'})
     }
     if (tokenDecodificado.id_rol == 1 || tokenDecodificado.id_rol == 12) {
+      menu[0]._children[indice].items.push({ name: 'Cambiar Documento', to: '/estudiantes/buscarcambiodocumento'})
+    }
+    if (tokenDecodificado.id_rol == 1 || tokenDecodificado.id_rol == 12) {
       menu[0]._children.push(
         {
           _name: 'CSidebarNavDropdown',
@@ -88,7 +91,7 @@ jwt.verify(token, CONFIG.SECRET_KEY, (err, data) => {
         }
       )
       indice++
-      menu[0]._children[indice].items.push({ name: 'Documentos', to: '/secretaria/buscargenerardocumentos'})
+      menu[0]._children[indice].items.push({ name: 'Documentos por Estudiante', to: '/secretaria/buscargenerardocumentos'})
     }
     menu[0]._children.push(
       {

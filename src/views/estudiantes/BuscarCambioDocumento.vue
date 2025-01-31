@@ -4,7 +4,7 @@
       <b-col lg="12">
         <b-card>
           <template #header>
-            <h5 class="mb-0"><b-icon icon="search" aria-hidden="true"></b-icon> BUSCAR CARPETA MATRÍCULA DEL ESTUDIANTE</h5>
+            <h5 class="mb-0"><b-icon icon="search" aria-hidden="true"></b-icon> BUSCAR ESTUDIANTE</h5>
           </template>
           <b-card-text>
             <b-row>
@@ -45,7 +45,7 @@
                   }">
                   <template slot="table-row" slot-scope="props">
                     <span v-if="props.column.field == 'estudiante'">
-                      <span style="font-weight: bold; color: blue; cursor: pointer" @click="verCarpetaMatricula(props.row)">{{props.row.estudiante}}</span> 
+                      <span style="font-weight: bold; color: blue; cursor: pointer" @click="verMatricula(props.row)">{{props.row.estudiante}}</span> 
                     </span>
                   </template>
                   <div slot="emptystate">
@@ -76,7 +76,7 @@
   import { VueGoodTable } from 'vue-good-table'
 
   export default {
-    name: 'buscarcarpetatricula',
+    name: 'buscarcambiodocumento',
     mixins: [validationMixin],
     components: {
       VueGoodTable
@@ -105,10 +105,10 @@
       }
     },
     methods: {
-      verCarpetaMatricula(fila) {
+      verMatricula(fila) {
         //alert(JSON.stringify(fila))
         this.$store.commit('set', ['idMatricula', fila.idMatricula])
-        this.$router.push('/matriculas/CarpetaMatricula')
+        this.$router.push('/estudiantes/CambiarDocumento')
       },
       async buscarEstudiante() {
         this.listaEstudiantes = []
@@ -150,7 +150,7 @@
       }
     },
     beforeMount() {
-      if(this.$store.state.idRol == 1 || this.$store.state.idRol == 12 || this.$store.state.perMatricular == 1) {
+      if(this.$store.state.idRol == 1 || this.$store.state.idRol == 12) {
       } else {
         this.$router.push('/restringida')
       }

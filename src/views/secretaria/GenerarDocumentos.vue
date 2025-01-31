@@ -45,7 +45,6 @@
                     </b-card>
                   </b-col>
                 </b-row>
-                {{idMatricula}}
               </b-col>
               <b-col lg="6">
                 <b-row>
@@ -84,6 +83,31 @@
         </b-card>
       </b-col>
     </b-row>
+    <b-modal ref="modalSeleccionarDestinoConstancia" size="" scrollable hide-footer title="Seleccionar Destino Constancia" ok-only>
+      <div class="mx-3">
+        <b-row>
+          <b-col lg="12">
+            <b-form-group label="Destino de la Constancia*" label-for="destinito" class="etiqueta">
+              <b-form-input id="destinito" ref="destinito" v-model.trim="destinoConstancia" aria-describedby="feedDest" maxlength="100"></b-form-input>
+              <b-form-invalid-feedback id="feedDest" >Campo requerido.</b-form-invalid-feedback>
+            </b-form-group>
+
+            <!--
+            <b-form-group label="Destinos*" label-for="destinoC" class="etiqueta">
+              <b-form-select  id="destinoC" ref="destinoC" v-model="idDestinoC" :options="comboDestinos" aria-describedby="feedDestinoC"></b-form-select>
+            </b-form-group>
+            -->
+          </b-col>
+        </b-row>
+        <b-row>
+          <b-col lg="12"><hr></b-col>
+          <b-col lg="12">
+            <b-button class="small ml-3" variant="primary" @click="generarConstancia">Generar Constancia</b-button>
+            <b-button class="small ml-3" variant="secondary" @click="cancelarFormulario">Cancelar</b-button>
+          </b-col>
+        </b-row>
+      </div>
+    </b-modal>
   </div>
 </template>
 
@@ -99,12 +123,29 @@
       return {
         idMatricula: null,
         datosFichaE: {},
+        idDestinoC: 1,
+        destinoConstancia: null,
+        comboDestinos: [],
       }
     },
     methods: {
       irConstancia() {
+        this.$refs['modalSeleccionarDestinoConstancia'].show()
+      },
+      generarConstancia() {
         let campos = []
+        if (this.destinoConstancia != null || this.destinoConstancia != '') {
+          this.destinoConstancia = this.destinoConstancia.toUpperCase()
+        }
+        //let destino = document.getElementById('destinoC')[document.getElementById('destinoC').selectedIndex].text
         campos.push({ 
+          'token': this.$store.state.idInstitucion,
+          //'destino': destino,
+          'destino': this.destinoConstancia,
+          'esc' : this.$store.state.escudoInstitucion,
+          'ieo': this.$store.state.nombreInstitucion, 
+          'nit': this.$store.state.nitInstitucion, 
+          'dane': this.$store.state.daneInstitucion, 
           'vig': this.$store.state.aLectivo, 
           'est': this.datosFichaE.estudiante, 
           'tip': this.datosFichaE.tipodocumento,
@@ -113,18 +154,12 @@
           'gra': this.datosFichaE.grado,
           'sed': this.datosFichaE.sede,
           'jor': this.datosFichaE.jornada,
-          'nre': this.$store.state.NombreRector,
-          'dre': this.$store.state.DocumentoRector,
-          'cre': this.$store.state.CargoRector,
-          'nse': this.$store.state.NombreSecretaria,
-          'dse': this.$store.state.DocumentoSecretaria,
-          'cse': this.$store.state.CargoSecretaria,
-
         })
         let uri = "?campos=" + JSON.stringify(campos)
         let encoded = encodeURI(uri);
         //window.open("http://localhost/siedutunja/php/documentos/constancia_01.php" + encoded,"_blank")
         window.open("https://siedutunja.gov.co/php/documentos/constancia_01.php" + encoded,"_blank")
+        this.cancelarFormulario()
         return true
       },
       irFichaMatricula() {
@@ -152,6 +187,15 @@
           this.mensajeEmergente('danger',CONFIG.TITULO_MSG,'Algo salio mal y no se pudo realizar: Consulta Carpeta Matricula. Intente más tarde.' + err)
         })
       },
+      async ocuparComboDestinos() {
+        this.comboDestinos = []
+        this.$store.state.datosTablas.destinos.forEach(element => {
+          this.comboDestinos.push({ 'value': element.id, 'text': element.destino.toUpperCase() })
+        })
+      },
+      cancelarFormulario() {
+        this.$refs['modalSeleccionarDestinoConstancia'].hide()
+      },
       mensajeEmergente(variante, titulo, contenido) {
         this.$bvToast.toast(contenido, { title: titulo, variant: variante, toaster: "b-toaster-top-center", solid: true, autoHideDelay: 4000, appendToast: false })
       }
@@ -160,6 +204,7 @@
       if(this.$store.state.idRol == 1 || this.$store.state.idRol == 12) {
         this.idMatricula = this.$store.state.idMatricula
         this.consultaFichaMatricula()
+        this.ocuparComboDestinos()
       } else {
         this.$router.push('/restringida')
       }
