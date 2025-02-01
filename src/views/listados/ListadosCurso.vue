@@ -19,7 +19,31 @@
                 <b-col lg="12"><hr></b-col>
               </b-row>
               <b-row>
-                <b-col lg="6" class="mb-5">
+                <b-col lg="5">
+                  <b-row>
+                    <b-col lg="12">
+                      <b-form-group>
+                        <h4>Directores de Curso</h4>
+                        <b-form-checkbox class="ml-4 m-3" v-model="director" name="check-button" switch size="lg">
+                          <span class="ml-2">Incluir director de curso</span>
+                        </b-form-checkbox>
+                      </b-form-group>
+                    </b-col>
+                  </b-row>
+                  <b-row><b-col lg="12"><hr></b-col></b-row>
+                  <b-row>
+                    <b-col lg="12">
+                      <b-form-group>
+                        <h4>Campos a adicionar en las Listas</h4>
+                        <b-form-checkbox class="ml-4 m-2" v-for="campo in campos" v-model="camposSeleccionados" :key="campo.value" :value="campo.value" :disabled="campo.disabled" size="lg">
+                          {{ campo.text }}
+                        </b-form-checkbox>
+                      </b-form-group>
+                      <!--div>ORDEN DE LOS CAMPOS SELECCIONADOS: <strong>{{ camposSeleccionados }}</strong></div>-->
+                    </b-col>
+                  </b-row>
+                </b-col>
+                <b-col lg="7" class="mb-5">
                   <vue-good-table ref="cursitos" :columns="encabColumnas" :rows="listaCursos" styleClass="vgt-table condensed bordered striped" :line-numbers="true" :search-options="{enabled: true,placeholder: 'Filtrar cursos...'}"
                     :select-options="{enabled: true,selectionText: 'cursos seleccionados',clearSelectionText: 'Limpiar',}">
                     <template #selected-row-actions>
@@ -34,15 +58,6 @@
                       <h5 class="text-danger ml-5">No existen Cursos en la Sede</h5>
                     </div>
                   </vue-good-table>
-                </b-col>
-                <b-col lg="6">
-                  <b-form-group>
-                    <h4>Seleccione los campos que desea adicionar en las Listas</h4>
-                    <b-form-checkbox class="ml-4 m-3" v-for="campo in campos" v-model="camposSeleccionados" :key="campo.value" :value="campo.value" :disabled="campo.disabled" size="lg">
-                      {{ campo.text }}
-                    </b-form-checkbox>
-                  </b-form-group>
-                  <div>ORDEN DE LOS CAMPOS SELECCIONADOS: <strong>{{ camposSeleccionados }}</strong></div>
                 </b-col>
               </b-row>
             </div>
@@ -103,7 +118,8 @@
           { value: 9, text: 'Grupo Sanguineo - Rh'},
           { value: 10, text: 'Sisben'},
         ],
-        datosCurso: []
+        datosCurso: [],
+        director: true
       }
     },
     methods: {
@@ -117,9 +133,9 @@
       imprimirListas() {
         this.cursosSeleccionados = []
         this.$refs.cursitos.selectedRows.forEach(element => {
-          this.cursosSeleccionados.push({ 'id': element.id, 'cu': element.nomenclatura, 'se': element.sede, 'jo': element.jornada })
+          this.cursosSeleccionados.push({ 'id': element.id, 'cu': element.nomenclatura, 'se': element.sede, 'jo': element.jornada, 'di': element.docente })
         });
-        let uri = "?datos=" + JSON.stringify(this.cursosSeleccionados) + "&ie=" + this.$store.state.nombreInstitucion + "&vigencia=" + this.$store.state.aLectivo + '&campos=' + JSON.stringify(this.camposSeleccionados)
+        let uri = "?datos=" + JSON.stringify(this.cursosSeleccionados) + "&ie=" + this.$store.state.nombreInstitucion + "&vigencia=" + this.$store.state.aLectivo + '&campos=' + JSON.stringify(this.camposSeleccionados) + '&director=' + this.director
         let encoded = encodeURI(uri);
         //window.open("http://localhost/siedutunja/php/listas/listas-01.php" + encoded,"_blank")
         window.open("https://siedutunja.gov.co/php/listas/listas-01.php" + encoded,"_blank")
@@ -132,6 +148,7 @@
             this.listaCursos.push(element)
           }
         })
+        //console.log(JSON.stringify(this.$store.state.datosCursos))
       },
       async ocuparComboSedes() {
         this.comboSedes = []

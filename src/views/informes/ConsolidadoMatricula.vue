@@ -183,6 +183,7 @@
           } else {
             if(response.data.datos != 0) {
               this.listaSedes = response.data.datos
+              //console.log(JSON.stringify(this.listaSedes))
               this.listaSedes.forEach(element => {
                 element.totalSede = 0
                 element.totalSedeActivos = 0

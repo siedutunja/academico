@@ -19,17 +19,6 @@
                 <b-col lg="12"><hr></b-col>
               </b-row>
               <b-row>
-                <b-col lg="6" class="mb-5">
-                  <vue-good-table ref="cursitos" :columns="encabColumnas" :rows="listaCursos" styleClass="vgt-table condensed bordered striped" :line-numbers="true" :search-options="{enabled: true,placeholder: 'Filtrar cursos...'}"
-                    :select-options="{enabled: true,selectionText: 'cursos seleccionados',clearSelectionText: 'Limpiar',}">
-                    <template #selected-row-actions>
-                      <button @click="imprimirListas()">Imprimir Listas</button>
-                    </template>
-                    <div slot="emptystate">
-                      <h5 class="text-danger ml-5">No existen Cursos en la Sede</h5>
-                    </div>
-                  </vue-good-table>
-                </b-col>
                 <b-col lg="6">
                   <b-form-group>
                     <h4>Seleccione la planilla o formato que desea generar</h4>
@@ -41,6 +30,17 @@
                       <b-form-select id="numCol" ref="numCol" v-model="numeroColumnas" :options="comboNumeroColumnas"></b-form-select>
                     </b-form-group>
                   </div>
+                </b-col>
+                <b-col lg="6" class="mb-5">
+                  <vue-good-table ref="cursitos" :columns="encabColumnas" :rows="listaCursos" styleClass="vgt-table condensed bordered striped" :line-numbers="true" :search-options="{enabled: true,placeholder: 'Filtrar cursos...'}"
+                    :select-options="{enabled: true,selectionText: 'cursos seleccionados',clearSelectionText: 'Limpiar',}">
+                    <template #selected-row-actions>
+                      <button @click="imprimirListas()">Imprimir Listas</button>
+                    </template>
+                    <div slot="emptystate">
+                      <h5 class="text-danger ml-5">No existen Cursos en la Sede</h5>
+                    </div>
+                  </vue-good-table>
                 </b-col>
               </b-row>
             </div>
@@ -79,8 +79,9 @@
         cursosSeleccionados: [],
         planillaSeleccionada: '0',
         campos: [
-          { value: 1, text: 'Planilla Registro de Asistencia'},
-          { value: 0, text: 'Planilla general de estudiantes con columnas' },
+          { value: 0, text: 'Lista de estudiantes con columnas' },
+          { value: 1, text: 'Registro de asistencia mensual'},
+          { value: 2, text: 'Datos de contacto del acudiente'},
         ],
         comboNumeroColumnas: [
           {'value': 5, 'text': '5 columnas'},
@@ -88,7 +89,12 @@
           {'value': 7, 'text': '7 columnas'},
           {'value': 8, 'text': '8 columnas'},
           {'value': 9, 'text': '9 columnas'},
-          {'value': 10, 'text': '10 columnas'}
+          {'value': 10, 'text': '10 columnas'},
+          {'value': 11, 'text': '11 columnas'},
+          {'value': 12, 'text': '12 columnas'},
+          {'value': 13, 'text': '13 columnas'},
+          {'value': 14, 'text': '14 columnas'},
+          {'value': 15, 'text': '15 columnas'},
         ],
         numeroColumnas: 5,
       }
@@ -110,6 +116,12 @@
           let encoded = encodeURI(uri);
           //window.open("http://localhost/siedutunja/php/listas/planilla-01.php" + encoded,"_blank")
           window.open("https://siedutunja.gov.co/php/listas/planilla-01.php" + encoded,"_blank")
+        }
+        else if (this.planillaSeleccionada == 2) {
+          let uri = "?datos=" + JSON.stringify(this.cursosSeleccionados) + "&ie=" + this.$store.state.nombreInstitucion + "&vigencia=" + this.$store.state.aLectivo
+          let encoded = encodeURI(uri);
+          //window.open("http://localhost/siedutunja/php/listas/planilla-02.php" + encoded,"_blank")
+          window.open("https://siedutunja.gov.co/php/listas/planilla-02.php" + encoded,"_blank")
         }
         return true
       },
