@@ -26,12 +26,6 @@
                   <b-form-invalid-feedback id="feedArea">Campo requerido.</b-form-invalid-feedback>
                 </b-form-group>
               </b-col>
-              <b-col lg="3" md="12">
-                <b-form-group label="Modalidad*" label-for="modalidad" class="etiqueta">
-                  <b-form-select  id="modalidad" ref="modalidad" v-model="$v.infoAsignatura.id_modalidad.$model" :options="comboModalidades" :state="validateStateA('id_modalidad')" aria-describedby="feedModalidad"></b-form-select>
-                  <b-form-invalid-feedback id="feedModalidad">Campo requerido.</b-form-invalid-feedback>
-                </b-form-group>
-              </b-col>
               <b-col lg="3" md="6">
                 <b-form-group label="Estado de la Asignatura*" label-for="estado" class="etiqueta">
                   <b-form-select  id="estado" ref="estado" v-model="$v.infoAsignatura.estado.$model" :options="comboEstados" :state="validateStateA('estado')" aria-describedby="feedEstado"></b-form-select>
@@ -73,13 +67,11 @@
           id: null,
           asignatura: null,
           id_area: null,
-          id_modalidad: null,
           nemo: null,
           estado: null,
           editarAsignatura: true
         },
         comboAreas: [],
-        comboModalidades: [],
         comboEstados: []
       }
     },
@@ -88,7 +80,6 @@
         asignatura: { required, minLength: minLength(4) },
         nemo: { required },
         id_area: { required },
-        id_modalidad: { required },
         estado: { required }
       }
     },
@@ -188,10 +179,6 @@
         this.comboAreas = []
         this.$store.state.datosAreas.forEach(element => {
           this.comboAreas.push({ 'value': element.id, 'text': element.area.toUpperCase() })
-        })
-        this.comboModalidades = []
-        this.$store.state.datosTablas.modalidades.forEach(element => {
-          this.comboModalidades.push({ 'value': element.id, 'text': element.modalidad.toUpperCase() })
         })
         this.comboEstados = []
         this.$store.state.datosTablas.estados.forEach(element => {

@@ -37,6 +37,11 @@
                   <div slot="selected-row-actions">
                     <b-button class="" variant="success" @click="asignarAlPlan()">Asignar al Plan <b-icon icon="box-arrow-in-right" aria-hidden="true"></b-icon></b-button>
                   </div>
+                  <template slot="table-row" slot-scope="props">
+                    <span v-if="props.column.field == 'asignatura'">
+                      {{props.row.asignatura}}<br><span class="text-muted" style="font-size: 10px;">{{props.row.area}}</span>
+                    </span>
+                  </template>
                   <div slot="emptystate">
                     <h5 class="text-danger ml-5">No existen asignaturas creadas</h5>
                   </div>
@@ -64,14 +69,11 @@
                 <vue-good-table ref="tablaAsignaturasPlan" :columns="encabColumnasPlan" :rows="listaAsignaturasSiAsignadas" styleClass="vgt-table condensed bordered striped"
                   :select-options="{enabled: true, selectOnCheckboxOnly: true, selectionText: 'Marcados', clearSelectionText: 'Desmarcar', selectAllByGroup: true}">
                   <div slot="selected-row-actions">
-                    <b-button class="" variant="success" @click="quitarDelPlan()">Quitar del Plan <b-icon icon="box-arrow-in-right" aria-hidden="true"></b-icon></b-button>
+                    <b-button class="" variant="success" @click="quitarDelPlan()">Quitar del Plan <b-icon icon="box-arrow-in-left" aria-hidden="true"></b-icon></b-button>
                   </div>
                   <template slot="table-row" slot-scope="props">
                     <span v-if="props.column.field == 'asignatura'">
-                      {{props.row.asignatura}}
-                    </span>
-                    <span v-if="props.column.field == 'modalidad'">
-                      {{props.row.modalidad}}
+                      {{props.row.asignatura}}<br><span class="text-muted" style="font-size: 10px;">{{props.row.area}}</span>
                     </span>
                     <span v-if="props.column.field == 'idEspecialidad'">
                       <b-form-select v-model="props.row.idEspecialidad" @change="actualizarItem(props.row)" :options="comboEspecialidades"></b-form-select>
@@ -126,12 +128,10 @@
         comboGradosSede: [],
         idGradoSede: null,
         encabColumnasAsig : [
-          { label: 'Asignatura', field: 'asignatura', sortable: false },
-          { label: 'Modalidad', field: 'modalidad', sortable: false }
+          { label: 'Asignatura', field: 'asignatura', sortable: false }
         ],
         encabColumnasPlan : [
           { label: 'Asignatura', field: 'asignatura', sortable: false },
-          { label: 'Modalidad', field: 'modalidad', sortable: false },
           { label: 'Especialidad', field: 'idEspecialidad', sortable: false },
           { label: 'IH', field: 'ih', width: '70px', sortable: false },
           { label: 'Peso', field: 'porcentaje',width: '100px', sortable: false }
@@ -209,7 +209,7 @@
       quitarDelPlan() {
         this.listaAsignaturasParaQuitar = this.$refs['tablaAsignaturasPlan'].selectedRows
         this.listaAsignaturasParaQuitar.forEach(element => {
-          this.listaAsignaturasNoAsignadas.push({ 'idAsignatura': element.idAsignatura, 'asignatura': element.asignatura, 'modalidad': element.modalidad, 'idGradoSede': this.idGradoSede })
+          this.listaAsignaturasNoAsignadas.push({ 'idAsignatura': element.idAsignatura, 'asignatura': element.asignatura, 'idGradoSede': this.idGradoSede })
           let indice = this.listaAsignaturasSiAsignadas.findIndex(asigna => asigna.idAsignatura === element.idAsignatura)
           this.listaAsignaturasSiAsignadas.splice(indice,1)
         })
@@ -217,7 +217,7 @@
       asignarAlPlan() {
         this.listaAsignaturasParaAsignar = this.$refs['tablaAsignaturas'].selectedRows
         this.listaAsignaturasParaAsignar.forEach(element => {
-          this.listaAsignaturasSiAsignadas.push({ 'idAsignatura': element.idAsignatura, 'ih': 0, 'porcentaje': 0, 'asignatura': element.asignatura, 'modalidad': element.modalidad, 'idGradoSede': this.idGradoSede, 'idEspecialidad': 0 })
+          this.listaAsignaturasSiAsignadas.push({ 'idAsignatura': element.idAsignatura, 'ih': 0, 'porcentaje': 0, 'asignatura': element.asignatura, 'idGradoSede': this.idGradoSede, 'idEspecialidad': 0, 'area': element.area })
           let indice = this.listaAsignaturasNoAsignadas.findIndex(asigna => asigna.idAsignatura === element.idAsignatura)
           this.listaAsignaturasNoAsignadas.splice(indice,1)
         })
@@ -226,7 +226,7 @@
         this.textGrado = document.getElementById('grados')[document.getElementById('grados').selectedIndex].text
         this.listaAsignaturasNoAsignadas = []
         this.listaAsignaturas.forEach(element => {
-          this.listaAsignaturasNoAsignadas.push({ 'idAsignatura': element.id, 'asignatura': element.asignatura, 'modalidad': element.modalidad, 'idGradoSede': this.idGradoSede })
+          this.listaAsignaturasNoAsignadas.push({ 'idAsignatura': element.id, 'asignatura': element.asignatura, 'idGradoSede': this.idGradoSede, 'area': element.area })
         })
         this.listaAsignaturasSiAsignadas = []
         await axios
@@ -238,7 +238,7 @@
             if (response.data.datos != 0) {
               this.listaAsignaturasSiAsignadas = response.data.datos
               this.listaAsignaturasSiAsignadas.forEach(element => {
-                let indice = this.listaAsignaturasNoAsignadas.findIndex(asigna => asigna.idAsignatura === element.id)
+                let indice = this.listaAsignaturasNoAsignadas.findIndex(asigna => asigna.idAsignatura == element.idAsignatura)
                 this.listaAsignaturasNoAsignadas.splice(indice,1)
               })
             }

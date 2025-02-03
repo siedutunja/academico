@@ -81,16 +81,14 @@
           id: null,
           asignatura: null,
           id_area: null,
-          id_modalidad: null,
           nemo: null,
           estado: null,
           editarAsignatura: true
         },
         encabColumnas : [
+          //{ label: 'Area', field: 'area' },
           { label: 'Asignatura', field: 'asignatura' },
           { label: 'Nemo', field: 'nemo', sortable: false },
-          { label: 'Area', field: 'area' },
-          { label: 'Modalidad', field: 'modalidad', sortable: false },
           { label: 'Estado', field: 'estado', formatFn: this.formatFnE, tdClass: this.tdClassFuncE, sortable: false },
           { label: '', field: 'id', sortable: false }
         ]
@@ -101,7 +99,6 @@
         this.datosAsignatura.id = null
         this.datosAsignatura.asignatura = null
         this.datosAsignatura.id_area = this.idArea
-        this.datosAsignatura.id_modalidad = null
         this.datosAsignatura.nemo = null
         this.datosAsignatura.estado = 1
         this.datosAsignatura.editarAsignatura = false
@@ -111,7 +108,6 @@
         this.datosAsignatura.id = item.id
         this.datosAsignatura.asignatura = item.asignatura
         this.datosAsignatura.id_area = item.id_area
-        this.datosAsignatura.id_modalidad = item.id_modalidad
         this.datosAsignatura.nemo = item.nemo
         this.datosAsignatura.estado = item.estado
         this.datosAsignatura.editarAsignatura = true
