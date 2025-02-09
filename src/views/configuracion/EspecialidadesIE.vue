@@ -70,7 +70,7 @@
           editarEspecialidad: true
         },
         encabColumnas : [
-          { label: 'Especialidad', field: 'especialidad' },
+          { label: 'Nombre de la Especialidad o Técnica', field: 'especialidad' },
           { label: 'Estado', field: 'estado', formatFn: this.formatFnE, tdClass: this.tdClassFuncE, sortable: false },
           { label: '', field: 'id', sortable: false }
         ]

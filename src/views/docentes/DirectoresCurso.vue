@@ -1,59 +1,56 @@
 <template>
   <div>
-    <b-row>
-      <b-col lg="12">
-        <h3 class="ml-2"><b-icon icon="filter-square" aria-hidden="true"></b-icon> DIRECTORES DE CURSO</h3>
-      </b-col>
-    </b-row>
     <b-row class="mt-2">
       <b-col lg="12">
         <b-card>
+          <template #header>
+            <h5 class="mb-0"><b-icon icon="card-checklist" aria-hidden="true"></b-icon> DIRECTORES DE CURSO</h5>
+          </template>
           <b-card-text>
             <b-row>
               <b-col lg="6">
-                <b-form-group label="Sedes*" label-for="sedes" class="etiqueta">
-                  <b-form-select  id="sedes" ref="sedes" v-model="idSede" :options="comboSedes" @change="verListaCursosSede()"></b-form-select>
+                <b-form-group label="Seleccione la Sede:" label-for="sedes" class="etiqueta">
+                  <b-form-select id="sedes" ref="sedes" v-model="idSede" :options="comboSedes" @change="ocuparlistaCursosSede()"></b-form-select>
                 </b-form-group>
               </b-col>
             </b-row>
-          </b-card-text>
-        </b-card>
-      </b-col>
-    </b-row>
-    <b-row class="mt-2" v-if="idSede!=null">
-      <b-col lg="12">
-        <b-card >
-          <template #header>
-            <h5 class="mb-0"><b-icon icon="card-checklist" aria-hidden="true"></b-icon> LISTA DE CURSOS Y DIRECTORES .:. {{descripcionSede}}</h5>
-          </template>
-          <b-card-text>
-            <b-row>
-              <b-col lg="12">
-                <vue-good-table :columns="encabColumnas" :rows="listaCursos" styleClass="vgt-table condensed bordered striped " :line-numbers="true">
-                  <template slot="table-row" slot-scope="props">
-                    <span v-if="props.column.field == 'nomenclatura'">
-                      {{props.row.nomenclatura}}
-                    </span>
-                    <span v-if="props.column.field == 'jornada'">
-                      {{props.row.jornada}}
-                    </span>
-                    <span v-if="props.column.field == 'id_director'">
-                      <b-form-select v-model="props.row.id_director" @change="actualizarItem(props.row)" :options="comboDocentes"></b-form-select>
-                    </span>
-                  </template>
-                  <div slot="emptystate">
-                    <h5 class="text-danger ml-5">No existen cursos creados en la sede</h5>
-                  </div>
-                </vue-good-table>
-              </b-col>
-            </b-row>
+            <div v-if="idSede!=null">
+              <b-row> <b-col lg="12"><hr></b-col></b-row>
+              <b-row>
+                <b-col lg="12">
+                  <vue-good-table :columns="encabColumnas" :rows="listaCursos" styleClass="vgt-table condensed bordered striped " :line-numbers="true">
+                    <template slot="table-row" slot-scope="props">
+                      <span v-if="props.column.field == 'nomenclatura'">
+                        {{props.row.nomenclatura}}
+                      </span>
+                      <span v-if="props.column.field == 'jornada'">
+                        {{props.row.jornada}}
+                      </span>
+                      <span v-if="props.column.field == 'id_director'">
+                        <b-form-select v-model="props.row.id_director" @change="actualizarItem(props.row)" :options="comboDocentes" :disabled="$store.state.idRol==1 || $store.state.idRol==12 || $store.state.perActDirCurso == 1 ? false : true"></b-form-select>
+                      </span>
+                    </template>
+                    <div slot="emptystate">
+                      <h5 class="text-danger ml-5">No existen cursos creados en la sede</h5>
+                    </div>
+                  </vue-good-table>
+                </b-col>
+              </b-row>
+              <b-row class="mt-3">
+                <b-col>
+                  <b-button class="small mx-1 mt-2" variant="primary" v-if="$store.state.idRol==1 || $store.state.idRol==12 || $store.state.perActDirCurso == 1" @click="confirmarDirectoresCurso">Actualizar Directores de Curso</b-button>
+                  <b-button class="small mx-1 mt-2" variant="outline-primary" @click="imprimirInforme">Imprimir Directores de Curso</b-button>
+                </b-col>
+              </b-row>
+            </div>
           </b-card-text>
           <template #footer>
-            <b-button variant="primary" @click="confirmarDirectoresCurso">Actualizar los Directores de Curso</b-button>
+            <em>Cambie los directores de curso seleccionando el director y actualice los datos haciendo clic en Actualizar Directores de Curso.</em>
           </template>
         </b-card>
       </b-col>
     </b-row>
+
   </div>
 </template>
 
@@ -83,9 +80,21 @@
       }
     },
     methods: {
+      imprimirInforme() {
+        let cursos =[]
+        let sede = document.getElementById('sedes')[document.getElementById('sedes').selectedIndex].text
+        this.listaCursos.forEach(element => {
+          cursos.push({'curso': element.nomenclatura, 'jornada': element.jornada, 'docente': element.docente})
+        })
+        let uri = "?ie=" + this.$store.state.nombreInstitucion + "&vigencia=" + this.$store.state.aLectivo + "&sede=" + sede + "&datos=" + JSON.stringify(cursos)
+        let encoded = encodeURI(uri);
+        //window.open("http://localhost/siedutunja/php/informes/directores-curso.php" + encoded,"_blank")
+        window.open("https://siedutunja.gov.co/php/informes/directores-curso.php" + encoded,"_blank")
+        return true
+      },
       async guardarDirectoresCurso() {
         await axios
-        .put(CONFIG.ROOT_PATH + 'academico/cursossede/directores', JSON.stringify(this.listaCursos), { headers: {"Content-Type": "application/json; charset=utf-8" }})
+        .put(CONFIG.ROOT_PATH + 'academico/docentes/directores', JSON.stringify(this.listaCursos), { headers: {"Content-Type": "application/json; charset=utf-8" }})
         .then(response => {
           if (response.data.error){
             this.mensajeEmergente('danger',CONFIG.TITULO_MSG,response.data.mensaje + ' - Actualizar Directores de Curso')
@@ -101,14 +110,19 @@
         let titulo = 'Actualizar los Directores de Curso'
         let pregunta = '¿Esta seguro de Actualizar los Directores de Curso?'
         this.$bvModal.msgBoxConfirm(pregunta, {
+          headerBgVariant: 'primary',
+          headerTextVariant: 'light',
+          bodyBgVariant: 'light',
+          bodyBgClass: 'text-center',
           title: titulo,
           size: '',
           buttonSize: 'sm',
-          okVariant: 'success',
+          okVariant: 'primary',
           okTitle: 'Si, ' + titulo,
           cancelVariant: 'danger',
           cancelTitle: 'Cancelar',
           footerClass: 'p-2',
+          bodyClass: 'p-5',
           hideHeaderClose: false,
           centered: true
         })
@@ -120,62 +134,45 @@
         return true
       },
       actualizarItem(item) {
-        let indice = this.listaCursos.findIndex(asigna => asigna.idCurso === item.idCurso)
+        let indice = this.listaCursos.findIndex(curso => curso.id === item.id)
         this.listaCursos[indice].id_director = item.id_director
       },
-      async verListaCursosSede() {
+      async ocuparlistaCursosSede() {
         this.listaCursos = []
-        this.descripcionSede = document.getElementById('sedes')[document.getElementById('sedes').selectedIndex].text
         await axios
-        .get(CONFIG.ROOT_PATH + 'academico/cursossede', {params: {idSede: this.idSede}})
+        .get(CONFIG.ROOT_PATH + 'academico/carguecursos', {params: {idInstitucion: this.$store.state.idInstitucion, vigencia: this.$store.state.aLectivo}})
         .then(response => {
           if (response.data.error){
-            this.mensajeEmergente('danger',CONFIG.TITULO_MSG,response.data.mensaje + ' - Lista Cursos Sede')
-          } else{
-            if (response.data.datos != 0) {
-              this.listaCursos = response.data.datos
+            alert(response.data.mensaje + ' - Consulta datos Cursos Activos')
+            location.replace(CONFIG.ROOT_MODULO_LOGIN)
+          } else {
+            if(response.data.datos != 0) {
+              this.$store.commit('set', ['datosCursos', response.data.datos])
+              this.$store.state.datosCursos.forEach(element => {
+                if (element.id_sede == this.idSede) {
+                  this.listaCursos.push(element)
+                }
+              })
+            } else {
+              this.$store.commit('set', ['datosCursos', []])
             }
           }
         })
         .catch(err => {
-          this.mensajeEmergente('danger',CONFIG.TITULO_MSG,'Algo salio mal y no se pudo realizar: Lista Cursos Sede. Intente más tarde.' + err)
+          alert('Algo salio mal y no se pudo realizar: Consulta datos Cursos Activos. Intente más tarde. ' + err)
+          location.replace(CONFIG.ROOT_WEBSITE)
         })
       },
       async ocuparComboSedes() {
-        await axios
-        .get(CONFIG.ROOT_PATH + 'academico/combo/sedes', {params: {idInstitucion: this.$store.state.idInstitucion, vigencia: this.$store.state.aLectivo}})
-        .then(response => {
-          if (response.data.error){
-            this.mensajeEmergente('danger',CONFIG.TITULO_MSG,response.data.mensaje + ' - Combo sedes')
-          } else{
-            if (response.data.datos != 0) {
-              response.data.datos.forEach(element => {
-                this.comboSedes.push({ 'value': element.idSedeVigencia, 'text': element.sede.toUpperCase() })
-              })
-            }
-          }
-        })
-        .catch(err => {
-          this.mensajeEmergente('danger',CONFIG.TITULO_MSG,'Algo salio mal y no se pudo realizar: Combo sedes. Intente más tarde.' + err)
+        this.comboSedes = []
+        this.$store.state.datosSedes.forEach(element => {
+          this.comboSedes.push({ 'value': element.id, 'text': element.sede.toUpperCase() })
         })
       },
-      async consultarListaDocentes() {
-        await axios
-        .get(CONFIG.ROOT_PATH + 'academico/combo/docentes', {params: {idInstitucion: this.$store.state.idInstitucion}})
-        .then(response => {
-          if (response.data.error){
-            this.mensajeEmergente('danger',CONFIG.TITULO_MSG,response.data.mensaje + ' - Lista Docentes')
-          } else{
-            if (response.data.datos != 0) {
-              response.data.datos.forEach(element => {
-                this.comboDocentes.push({ 'value': element.idDocente, 'text': element.docente })
-              })
-              this.comboDocentes.push({ 'value': '99999', 'text': '--- SIN ASIGNAR DIRECTOR' })
-            }
-          }
-        })
-        .catch(err => {
-          this.mensajeEmergente('danger',CONFIG.TITULO_MSG,'Algo salio mal y no se pudo realizar: Lista Docentes. Intente más tarde.' + err)
+      async ocuparComboDocentes() {
+        this.comboDocentes = []
+        this.$store.state.datosDocentes.forEach(element => {
+          this.comboDocentes.push({ 'value': element.id, 'text': element.docente.toUpperCase() })
         })
       },
       mensajeEmergente(variante, titulo, contenido) {
@@ -183,12 +180,8 @@
       }
     },
     beforeMount() {
-      if(this.$store.state.idRol == 1 || this.$store.state.idRol == 12) {
-        //this.ocuparComboSedes()
-        this.consultarListaDocentes()
-      } else {
-        this.$router.push('/restringida')
-      }
+      this.ocuparComboSedes()
+      this.ocuparComboDocentes()
     }
   }
 </script>

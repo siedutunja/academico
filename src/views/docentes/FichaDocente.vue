@@ -17,25 +17,25 @@
             <b-row v-else>
               <b-col lg="3" md="6">
                 <b-form-group label="Primer Apellido*" label-for="ape1" class="etiqueta">
-                  <b-form-input id="ape1" ref="ape1" v-model.trim="$v.datosPersona.apellido1.$model" :state="validateStateD('apellido1')" aria-describedby="feedApe1" autocomplete="off" maxlength="30" @keydown="soloLetras"></b-form-input>
+                  <b-form-input id="ape1" ref="ape1" v-model.trim="$v.datosPersona.apellido1.$model" :state="validateStateD('apellido1')" aria-describedby="feedApe1" autocomplete="off" maxlength="30" @keydown="soloLetras" :disabled="!habilitarCampo"></b-form-input>
                   <b-form-invalid-feedback id="feedApe1" >Campo requerido.</b-form-invalid-feedback>
                 </b-form-group>
               </b-col>
               <b-col lg="3" md="6">
                 <b-form-group label="Segundo Apellido" label-for="ape2" class="etiqueta">
-                  <b-form-input id="ape2" ref="ape2" v-model.trim="$v.datosPersona.apellido2.$model" :state="validateStateD('apellido2')" aria-describedby="feedApe2" autocomplete="off" maxlength="30" @keydown="soloLetras"></b-form-input>
+                  <b-form-input id="ape2" ref="ape2" v-model.trim="$v.datosPersona.apellido2.$model" :state="validateStateD('apellido2')" aria-describedby="feedApe2" autocomplete="off" maxlength="30" @keydown="soloLetras" :disabled="!habilitarCampo"></b-form-input>
                   <b-form-invalid-feedback id="feedApe2">Campo requerido.</b-form-invalid-feedback>
                 </b-form-group>
               </b-col>
               <b-col lg="3" md="6">
                 <b-form-group label="Primer Nombre*" label-for="nom1" class="etiqueta">
-                  <b-form-input id="nom1" ref="nom1" v-model.trim="$v.datosPersona.nombre1.$model" :state="validateStateD('nombre1')" aria-describedby="feedNom1" autocomplete="off" maxlength="30" @keydown="soloLetras"></b-form-input>
+                  <b-form-input id="nom1" ref="nom1" v-model.trim="$v.datosPersona.nombre1.$model" :state="validateStateD('nombre1')" aria-describedby="feedNom1" autocomplete="off" maxlength="30" @keydown="soloLetras" :disabled="!habilitarCampo"></b-form-input>
                   <b-form-invalid-feedback id="feedNom1">Campo requerido.</b-form-invalid-feedback>
                 </b-form-group>
               </b-col>
               <b-col lg="3" md="6">
                 <b-form-group label="Segundo Nombre" label-for="nom2" class="etiqueta">
-                  <b-form-input id="nom2" ref="nom2" v-model.trim="$v.datosPersona.nombre2.$model" :state="validateStateD('nombre2')" aria-describedby="feedNom2" autocomplete="off" maxlength="30" @keydown="soloLetras"></b-form-input>
+                  <b-form-input id="nom2" ref="nom2" v-model.trim="$v.datosPersona.nombre2.$model" :state="validateStateD('nombre2')" aria-describedby="feedNom2" autocomplete="off" maxlength="30" @keydown="soloLetras" :disabled="!habilitarCampo"></b-form-input>
                   <b-form-invalid-feedback id="feedNom2">Campo requerido.</b-form-invalid-feedback>
                 </b-form-group>
               </b-col>
@@ -47,80 +47,80 @@
               </b-col>
               <b-col lg="3" md="6">
                 <b-form-group label="Tipo Documento*" label-for="tipoDoc" class="etiqueta">
-                  <b-form-select  id="tipoDoc" ref="tipoDoc" v-model="$v.datosPersona.id_tipo_documento.$model" :options="comboTiposDoc" :state="validateStateD('id_tipo_documento')" aria-describedby="feedTipoDoc"></b-form-select>
+                  <b-form-select  id="tipoDoc" ref="tipoDoc" v-model="$v.datosPersona.id_tipo_documento.$model" :options="comboTiposDoc" :state="validateStateD('id_tipo_documento')" aria-describedby="feedTipoDoc" :disabled="!habilitarCampo"></b-form-select>
                   <b-form-invalid-feedback id="feedTipoDoc">Campo requerido.</b-form-invalid-feedback>
                 </b-form-group>
               </b-col>
               <b-col lg="6" md="12">
                 <b-form-group label="Municipio de Expedición del Documento*" label-for="muniDoc" class="etiqueta">
-                  <b-form-select  id="muniDoc" ref="muniDoc" v-model="$v.datosPersona.id_municipio_documento.$model" :options="comboMunicipios" :state="validateStateD('id_municipio_documento')" aria-describedby="feedMuniDoc"></b-form-select>
+                  <b-form-select  id="muniDoc" ref="muniDoc" v-model="$v.datosPersona.id_municipio_documento.$model" :options="comboMunicipios" :state="validateStateD('id_municipio_documento')" aria-describedby="feedMuniDoc" :disabled="!habilitarCampo"></b-form-select>
                   <b-form-invalid-feedback id="feedMuniDoc">Campo requerido.</b-form-invalid-feedback>
                 </b-form-group>
               </b-col>
               <b-col lg="6" md="12">
                 <b-form-group label="Fecha de Nacimiento*" label-for="fechaN" class="etiqueta">
-                  <b-form-input id="fechaN" ref="fechaN" type="date" v-model.trim="$v.datosPersona.fecha_nacimiento.$model" :state="validateStateD('fecha_nacimiento')" aria-describedby="feedFechaN"></b-form-input>
+                  <b-form-input id="fechaN" ref="fechaN" type="date" v-model.trim="$v.datosPersona.fecha_nacimiento.$model" :state="validateStateD('fecha_nacimiento')" aria-describedby="feedFechaN" :disabled="!habilitarCampo"></b-form-input>
                   <b-form-invalid-feedback id="feedFechaN" >Campo requerido.</b-form-invalid-feedback>            
                 </b-form-group>
               </b-col>
               <b-col lg="3" md="6">
                 <b-form-group label="Género*" label-for="genero" class="etiqueta">
-                  <b-form-select  id="genero" ref="genero" v-model="$v.datosPersona.id_genero.$model" :options="comboGeneros" :state="validateStateD('id_genero')" aria-describedby="feedGenero"></b-form-select>
+                  <b-form-select  id="genero" ref="genero" v-model="$v.datosPersona.id_genero.$model" :options="comboGeneros" :state="validateStateD('id_genero')" aria-describedby="feedGenero" :disabled="!habilitarCampo"></b-form-select>
                   <b-form-invalid-feedback id="feedGenero">Campo requerido.</b-form-invalid-feedback>
                 </b-form-group>
               </b-col>
               <b-col lg="3" md="6">
                 <b-form-group label="Grupo y Factor RH*" label-for="rh" class="etiqueta">
-                  <b-form-select  id="rh" ref="rh" v-model="$v.datosPersona.id_rh.$model" :options="comboRhs" :state="validateStateD('id_rh')" aria-describedby="feedRh"></b-form-select>
+                  <b-form-select  id="rh" ref="rh" v-model="$v.datosPersona.id_rh.$model" :options="comboRhs" :state="validateStateD('id_rh')" aria-describedby="feedRh" :disabled="!habilitarCampo"></b-form-select>
                   <b-form-invalid-feedback id="feedRh">Campo requerido.</b-form-invalid-feedback>
                 </b-form-group>
               </b-col>
               <b-col lg="6" md="12">
                 <b-form-group label="Dirección de Residencia*" label-for="dir" class="etiqueta">
-                  <b-form-input id="dir" ref="dir" v-model.trim="$v.datosPersona.direccion.$model" :state="validateStateD('direccion')" aria-describedby="feedDir" autocomplete="off" maxlength="100"></b-form-input>
+                  <b-form-input id="dir" ref="dir" v-model.trim="$v.datosPersona.direccion.$model" :state="validateStateD('direccion')" aria-describedby="feedDir" autocomplete="off" maxlength="100" :disabled="!habilitarCampo"></b-form-input>
                   <b-form-invalid-feedback id="feedDir" >Campo requerido.</b-form-invalid-feedback>
                 </b-form-group>
               </b-col>
               <b-col lg="6" md="12">
                 <b-form-group label="Municipio de Residencia*" label-for="muniRes" class="etiqueta">
-                  <b-form-select  id="muniRes" ref="muniRes" v-model="$v.datosPersona.id_municipio_direccion.$model" :options="comboMunicipios" :state="validateStateD('id_municipio_direccion')" aria-describedby="feedMuniRes"></b-form-select>
+                  <b-form-select  id="muniRes" ref="muniRes" v-model="$v.datosPersona.id_municipio_direccion.$model" :options="comboMunicipios" :state="validateStateD('id_municipio_direccion')" aria-describedby="feedMuniRes" :disabled="!habilitarCampo"></b-form-select>
                   <b-form-invalid-feedback id="feedMuniRes">Campo requerido.</b-form-invalid-feedback>
                 </b-form-group>
               </b-col>
               <b-col lg="3" md="6">
                 <b-form-group label="Teléfono Principal*" label-for="tel1" class="etiqueta">
-                  <b-form-input id="tel1" ref="tel1" v-model.trim="$v.datosPersona.telefono1.$model" :state="validateStateD('telefono1')" aria-describedby="feedTel1" autocomplete="off" maxlength="15" @keydown="soloNumeros"></b-form-input>
+                  <b-form-input id="tel1" ref="tel1" v-model.trim="$v.datosPersona.telefono1.$model" :state="validateStateD('telefono1')" aria-describedby="feedTel1" autocomplete="off" maxlength="15" @keydown="soloNumeros" :disabled="!habilitarCampo"></b-form-input>
                   <b-form-invalid-feedback id="feedTel1" >El número debe contener 10 dígitos.</b-form-invalid-feedback>
                 </b-form-group>
               </b-col>
               <b-col lg="3" md="6">
                 <b-form-group label="Teléfono Opcional" label-for="tel2" class="etiqueta">
-                  <b-form-input id="tel2" ref="tel2" v-model.trim="$v.datosPersona.telefono2.$model" :state="validateStateD('telefono2')" aria-describedby="feedTel2" autocomplete="off" maxlength="15" @keydown="soloNumeros"></b-form-input>
+                  <b-form-input id="tel2" ref="tel2" v-model.trim="$v.datosPersona.telefono2.$model" :state="validateStateD('telefono2')" aria-describedby="feedTel2" autocomplete="off" maxlength="15" @keydown="soloNumeros" :disabled="!habilitarCampo"></b-form-input>
                   <b-form-invalid-feedback id="feedTel2" >El número debe contener 10 dígitos.</b-form-invalid-feedback>
                 </b-form-group>
               </b-col>
               <b-col lg="6" md="12">
                 <b-form-group label="Correo Electrónico*" label-for="correo" class="etiqueta">
-                  <b-form-input id="correo" ref="correo" v-model.trim="$v.datosPersona.correo.$model" :state="validateStateD('correo')" aria-describedby="feedCorreo" autocomplete="off" maxlength="50"></b-form-input>
+                  <b-form-input id="correo" ref="correo" v-model.trim="$v.datosPersona.correo.$model" :state="validateStateD('correo')" aria-describedby="feedCorreo" autocomplete="off" maxlength="50" :disabled="!habilitarCampo"></b-form-input>
                   <b-form-invalid-feedback id="feedCorreo" >Campo requerido.</b-form-invalid-feedback>
                 </b-form-group>
               </b-col>
               <b-col lg="12"><hr></b-col>
               <b-col lg="3" md="6">
                 <b-form-group label="Escalafón*" label-for="escala" class="etiqueta">
-                  <b-form-select  id="escala" ref="escala" v-model="$v.datosPersona.id_escalafon.$model" :options="comboEscalafones" :state="validateStateD('id_escalafon')" aria-describedby="feedEscala"></b-form-select>
+                  <b-form-select  id="escala" ref="escala" v-model="$v.datosPersona.id_escalafon.$model" :options="comboEscalafones" :state="validateStateD('id_escalafon')" aria-describedby="feedEscala" :disabled="!habilitarCampo"></b-form-select>
                   <b-form-invalid-feedback id="feedEscala">Campo requerido.</b-form-invalid-feedback>
                 </b-form-group>
               </b-col>
               <b-col lg="9" md="12">
                 <b-form-group label="Último Título Obtenido*" label-for="titulo" class="etiqueta">
-                  <b-form-input id="titulo" ref="titulo" v-model.trim="$v.datosPersona.titulo.$model" :state="validateStateD('titulo')" aria-describedby="feedTitulo" autocomplete="off" maxlength="255"></b-form-input>
+                  <b-form-input id="titulo" ref="titulo" v-model.trim="$v.datosPersona.titulo.$model" :state="validateStateD('titulo')" aria-describedby="feedTitulo" autocomplete="off" maxlength="255" :disabled="!habilitarCampo"></b-form-input>
                   <b-form-invalid-feedback id="feedTitulo">Campo requerido.</b-form-invalid-feedback>
                 </b-form-group>
               </b-col>
               <b-col lg="3" md="6">
                 <b-form-group label="Estado del Docente*" label-for="estado" class="etiqueta">
-                  <b-form-select  id="estado" ref="estado" v-model="$v.datosPersona.estado.$model" :options="comboEstados" :state="validateStateD('estado')" aria-describedby="feedEstado"></b-form-select>
+                  <b-form-select  id="estado" ref="estado" v-model="$v.datosPersona.estado.$model" :options="comboEstados" :state="validateStateD('estado')" aria-describedby="feedEstado" :disabled="!habilitarCampo"></b-form-select>
                   <b-form-invalid-feedback id="feedEstado">Campo requerido.</b-form-invalid-feedback>
                 </b-form-group>
               </b-col>
@@ -143,11 +143,11 @@
               <b-button class="small mx-1 mt-2" variant="secondary" @click="cancelarFormulario">Cancelar</b-button>
             </div>
             <div v-else>
-              <b-button class="small mx-1 mt-2" variant="primary" @click="validarDatosFormulario">
+              <b-button class="small mx-1 mt-2" variant="primary" @click="validarDatosFormulario" v-if="$store.state.idRol==1 || $store.state.idRol==12 || $store.state.perActDocente == 1">
                 <div v-if="datosPersona.editarDocente">Actualizar Datos del Docente</div>
                 <div v-else>Crear Docente</div>
               </b-button>
-              <b-button v-if="datosPersona.editarDocente" class="small mx-1 mt-2" variant="danger" @click="validarRetiroDocente">Desvincular Docente</b-button>
+              <b-button v-if="datosPersona.editarDocente && ($store.state.idRol==1 || $store.state.idRol==12)" class="small mx-1 mt-2" variant="danger" @click="validarRetiroDocente">Desvincular Docente</b-button>
               <b-button class="small mx-1 mt-2" variant="secondary" @click="cancelarFormulario">Cancelar</b-button>
             </div>
           </template>
@@ -226,7 +226,8 @@
         nuevoDocumento: null,
         documentoValido: false,
         personaExiste: false,
-        IeVinculante: null
+        IeVinculante: null,
+        habilitarCampo: false
       }
     },
     validations: {
@@ -573,6 +574,7 @@
       }
     },
     beforeMount() {
+      this.habilitarCampo = this.$store.state.idRol==1 || this.$store.state.idRol==12 || this.$store.state.perActDocente == 1 ? true : false
       this.ocuparCombos()
       this.ocuparComboEscalafones()
       this.consultaDatosPersona()

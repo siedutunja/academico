@@ -9,7 +9,7 @@
           <b-card-text>
             <b-row>
               <b-col lg="6">
-                <b-form-group label="Seleccione la Sede" label-for="sedes" class="etiqueta">
+                <b-form-group label="Seleccione la Sede:" label-for="sedes" class="etiqueta">
                   <b-form-select id="sedes" ref="sedes" v-model="idSede" :options="comboSedes" @change="ocuparlistaCursosSede()"></b-form-select>
                 </b-form-group>
               </b-col>
@@ -111,8 +111,8 @@
           { value: 2, text: 'Fecha de Nacimiento' },
           { value: 3, text: 'Edad'},
           { value: 4, text: 'Genero'},
-          { value: 5, text: 'Repitencia'},
-          { value: 6, text: 'Estudiante Nuevo'},
+          { value: 5, text: 'Repitencia', disabled: true},
+          { value: 6, text: 'Estudiante Nuevo', disabled: true},
           { value: 7, text: 'Nacionalidad'},
           { value: 8, text: 'Estrato Socioeconómico'},
           { value: 9, text: 'Grupo Sanguineo - Rh'},

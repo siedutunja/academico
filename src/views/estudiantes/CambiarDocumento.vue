@@ -13,7 +13,7 @@
                   <b-col lg="12">
                     <b-card header-bg-variant="secondary">
                       <template #header>
-                        <h5 class="mb-0"><b-icon icon="person" aria-hidden="true"></b-icon> Estudiante</h5>
+                        <h5 class="mb-0"><b-icon icon="person" aria-hidden="true"></b-icon> Datos del Estudiante</h5>
                       </template>
                       <b-card-text>
                         <b-row class="text-center">
@@ -62,7 +62,7 @@
                         </b-row>
                         <b-row>
                           <b-col lg="6">
-                            <b-form-group label="Nuevo Número de Documento" label-for="texto" class="etiqueta">
+                            <b-form-group label="Nuevo Número de Documento*" label-for="texto" class="etiqueta">
                               <b-form-input id="texto" ref="texto" v-model.trim="$v.datosNuevoDocumento.documento.$model" :state="validateStateT('documento')" aria-describedby="feedTextoB" autocomplete="off" maxlength="50" v-on:keyup.enter="buscarEstudiante()" autofocus></b-form-input>
                               <b-form-invalid-feedback id="feedTexto" >Campo requerido.</b-form-invalid-feedback>
                             </b-form-group>

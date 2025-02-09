@@ -44,11 +44,7 @@
       }
     },
     beforeMount() {
-      if(this.$store.state.idRol == 1 || this.$store.state.idRol == 12) {
-        this.listaSedes()
-      } else {
-        this.$router.push('/restringida')
-      }
+      this.listaSedes()
     }
   }
 </script>

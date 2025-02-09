@@ -13,7 +13,7 @@
                   <b-col lg="12">
                     <b-card header-bg-variant="secondary">
                       <template #header>
-                        <h5 class="mb-0"><b-icon icon="person" aria-hidden="true"></b-icon> Estudiante</h5>
+                        <h5 class="mb-0"><b-icon icon="person" aria-hidden="true"></b-icon> Datos del Estudiante</h5>
                       </template>
                       <b-card-text>
                         <b-row class="text-center">
@@ -201,13 +201,9 @@
       }
     },
     beforeMount() {
-      if(this.$store.state.idRol == 1 || this.$store.state.idRol == 12) {
-        this.idMatricula = this.$store.state.idMatricula
-        this.consultaFichaMatricula()
-        this.ocuparComboDestinos()
-      } else {
-        this.$router.push('/restringida')
-      }
+      this.idMatricula = this.$store.state.idMatricula
+      this.consultaFichaMatricula()
+      this.ocuparComboDestinos()
     }
   }
 </script>

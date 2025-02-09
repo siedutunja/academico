@@ -9,12 +9,12 @@
           <b-card-text>
             <b-row>
               <b-col lg="6">
-                <b-form-group label="Sede*" label-for="sedesA" class="etiqueta">
+                <b-form-group label="Seleccione la Sede:" label-for="sedesA" class="etiqueta">
                   <b-form-select  id="sedesA" ref="sedesA" v-model="idSedeA" :options="comboSedesA" @change="idGradoSedeA=null,ocuparComboGradosSedeA()"></b-form-select>
                 </b-form-group>
               </b-col>
               <b-col lg="6">
-                <b-form-group label="Grado*" label-for="grados" class="etiqueta">
+                <b-form-group label="Seleccione el Grado:" label-for="grados" class="etiqueta">
                   <b-form-select  id="grados" ref="grados" v-model="idGradoSedeA" :options="comboGradosSedeA" @change="consultarAntiguos()" :disabled="idSedeA!=null ? false : true"></b-form-select>
                 </b-form-group>
               </b-col>
@@ -43,12 +43,12 @@
           <b-card-text>
             <b-row>
               <b-col lg="6">
-                <b-form-group label="Sede*" label-for="sedes" class="etiqueta">
+                <b-form-group label="Seleccione la Sede:" label-for="sedes" class="etiqueta">
                   <b-form-select  id="sedes" ref="sedes" v-model="idSede" :options="comboSedes" @change="idCurso=null,ocuparlistaCursosSede()"></b-form-select>
                 </b-form-group>
               </b-col>
               <b-col lg="6">
-                <b-form-group label="Curso*" label-for="cursos" class="etiqueta">
+                <b-form-group label="Seleccione el Curso:" label-for="cursos" class="etiqueta">
                   <b-form-select  id="cursos" ref="cursos" v-model="idCurso" :options="listaCursosSede" @change="consultarMatriculados()" :disabled="idSede!=null ? false : true"></b-form-select>
                 </b-form-group>
               </b-col>
@@ -93,10 +93,10 @@
         idCurso: null,
         idGrado: null,
         encabColumnasAntiguos : [
-          { label: 'Estudiantes Antiguos', field: 'estudiante', sortable: false },
+          { label: 'Estudiantes Antiguos para Renovar', field: 'estudiante', sortable: false },
         ],
         encabColumnasMatriculados : [
-          { label: 'Estudiantes Matriculados 2025', field: 'estudiante', sortable: false },
+          { label: 'Estudiantes Matriculados', field: 'estudiante', sortable: false },
         ],
         listaAntiguosSinMatricular: [],
         listaMatriculados: [],
@@ -234,7 +234,7 @@
       }
     },
     beforeMount() {
-      if(this.$store.state.idRol == 1 || this.$store.state.idRol == 12) {
+      if(this.$store.state.idRol == 1 || this.$store.state.idRol == 12 || this.$store.state.perMatricular == 1) {
         this.idEspecialidad = this.$store.state.datosEspecialidades[0].id
         this.idRuta = this.$store.state.datosRutas[0].id
         this.ocuparComboSedes()

@@ -118,8 +118,8 @@
         return true
       },
       async guardarDatosAsignatura() {
-        this.infoAsignatura.asignatura = this.infoAsignatura.asignatura.toUpperCase()
-        this.infoAsignatura.nemo = this.infoAsignatura.nemo.toUpperCase()
+        //this.infoAsignatura.asignatura = this.infoAsignatura.asignatura.toUpperCase()
+        //this.infoAsignatura.nemo = this.infoAsignatura.nemo.toUpperCase()
         if (this.infoAsignatura.editarAsignatura) {
           await axios
           .put(CONFIG.ROOT_PATH + 'academico/asignaturas', JSON.stringify(this.infoAsignatura), { headers: {"Content-Type": "application/json; charset=utf-8" }})

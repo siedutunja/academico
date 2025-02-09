@@ -9,12 +9,12 @@
           <b-card-text>
             <b-row>
               <b-col lg="6">
-                <b-form-group label="Sedes*" label-for="sedes" class="etiqueta">
+                <b-form-group label="Seleccione la Sede:" label-for="sedes" class="etiqueta">
                   <b-form-select  id="sedes" ref="sedes" v-model="idSede" :options="comboSedes" @change="idGradoSede=null,ocuparComboGradosSede()"></b-form-select>
                 </b-form-group>
               </b-col>
               <b-col lg="6">
-                <b-form-group label="Grados*" label-for="grados" class="etiqueta">
+                <b-form-group label="Seleccione el Grado:" label-for="grados" class="etiqueta">
                   <b-form-select  id="grados" ref="grados" v-model="idGradoSede" :options="comboGradosSede" @change="consultarPlanEstudios()" :disabled="idSede!=null ? false : true"></b-form-select>
                 </b-form-group>
               </b-col>
@@ -39,7 +39,7 @@
                   </div>
                   <template slot="table-row" slot-scope="props">
                     <span v-if="props.column.field == 'asignatura'">
-                      {{props.row.asignatura}}<br><span class="text-muted" style="font-size: 10px;">{{props.row.area}}</span>
+                      <span class="text-muted" style="font-size: 10px;">{{props.row.area}}</span><br><strong>{{props.row.asignatura}}</strong>
                     </span>
                   </template>
                   <div slot="emptystate">
@@ -72,23 +72,26 @@
                     <b-button class="" variant="success" @click="quitarDelPlan()">Quitar del Plan <b-icon icon="box-arrow-in-left" aria-hidden="true"></b-icon></b-button>
                   </div>
                   <template slot="table-row" slot-scope="props">
-                    <span v-if="props.column.field == 'asignatura'">
-                      {{props.row.asignatura}}<br><span class="text-muted" style="font-size: 10px;">{{props.row.area}}</span>
+                    <span v-if="props.column.field == 'asignatura'" :style="(colorArea(props.row.orden))">
+                      <span style="font-size: 10px;">{{props.row.area}}</span><br><strong>{{props.row.asignatura}}</strong>
                     </span>
                     <span v-if="props.column.field == 'idEspecialidad'">
-                      <b-form-select v-model="props.row.idEspecialidad" @change="actualizarItem(props.row)" :options="comboEspecialidades"></b-form-select>
+                      <b-form-select v-model="props.row.idEspecialidad" @change="actualizarItem(props.row)" :options="comboEspecialidades" :style="(colorArea(props.row.orden))"></b-form-select>
                     </span>
                     <span v-if="props.column.field == 'ih'">
-                      <b-form-input v-model="props.row.ih" @blur="actualizarItem(props.row)" autocomplete="off" maxlength="2" @keydown="soloNumeros"></b-form-input>
+                      <b-form-input v-model="props.row.ih" @blur="actualizarItem(props.row)" autocomplete="off" maxlength="2" @keydown="soloNumeros" :style="(colorArea(props.row.orden))"></b-form-input>
                     </span>
                     <span v-if="props.column.field == 'porcentaje'">
-                      <b-form-input v-model="props.row.porcentaje" @blur="actualizarItem(props.row)" autocomplete="off" maxlength="3"  @keydown="soloNumeros"></b-form-input>
+                      <b-form-input v-model="props.row.porcentaje" @blur="actualizarItem(props.row)" autocomplete="off" maxlength="3" @keydown="soloNumeros" :style="(colorArea(props.row.orden))"></b-form-input>
                     </span>
                   </template>
                   <div slot="emptystate">
                     <h5 class="text-danger ml-5">No existen asignaturas en el plan de estudios</h5>
                   </div>
                 </vue-good-table>
+              </b-col>
+              <b-col lg="12">
+                <b-alert class="text-center" show><h4>IH Total = {{ totalIH }} horas</h4></b-alert>
               </b-col>
             </b-row>
             <b-row class="mt-3">
@@ -101,7 +104,7 @@
             </b-row>
           </b-card-text>
           <template #footer>
-              <b-button block variant="primary" @click="confirmarPlanEstudios">Actualizar el Plan de Estudios del Grado {{textGrado}}</b-button>
+            <b-button block variant="primary" @click="confirmarPlanEstudios">Actualizar el Plan de Estudios del Grado {{textGrado}}</b-button>
           </template>
         </b-card>
       </b-col>
@@ -128,10 +131,10 @@
         comboGradosSede: [],
         idGradoSede: null,
         encabColumnasAsig : [
-          { label: 'Asignatura', field: 'asignatura', sortable: false }
+          { label: 'Área/Asignatura', field: 'asignatura', sortable: false }
         ],
         encabColumnasPlan : [
-          { label: 'Asignatura', field: 'asignatura', sortable: false },
+          { label: 'Área/Asignatura', field: 'asignatura', sortable: false },
           { label: 'Especialidad', field: 'idEspecialidad', sortable: false },
           { label: 'IH', field: 'ih', width: '70px', sortable: false },
           { label: 'Peso', field: 'porcentaje',width: '100px', sortable: false }
@@ -141,7 +144,8 @@
         listaAsignaturasParaAsignar: [],
         listaAsignaturasParaQuitar: [],
         comboEspecialidades: [],
-        textGrado: null
+        textGrado: null,
+        totalIH: 0
       }
     },
     methods: {
@@ -153,6 +157,7 @@
             this.mensajeEmergente('danger',CONFIG.TITULO_MSG,response.data.mensaje + ' - Actualizar Plan Estudios')
           } else{
             this.quitarAsignaturasPlanEstudios()
+            this.consultarPlanEstudios()
           }
         })
         .catch(err => {
@@ -209,7 +214,7 @@
       quitarDelPlan() {
         this.listaAsignaturasParaQuitar = this.$refs['tablaAsignaturasPlan'].selectedRows
         this.listaAsignaturasParaQuitar.forEach(element => {
-          this.listaAsignaturasNoAsignadas.push({ 'idAsignatura': element.idAsignatura, 'asignatura': element.asignatura, 'idGradoSede': this.idGradoSede })
+          this.listaAsignaturasNoAsignadas.push({ 'idAsignatura': element.idAsignatura, 'asignatura': element.asignatura, 'idGradoSede': this.idGradoSede, 'area': element.area, 'orden': element.orden })
           let indice = this.listaAsignaturasSiAsignadas.findIndex(asigna => asigna.idAsignatura === element.idAsignatura)
           this.listaAsignaturasSiAsignadas.splice(indice,1)
         })
@@ -217,7 +222,7 @@
       asignarAlPlan() {
         this.listaAsignaturasParaAsignar = this.$refs['tablaAsignaturas'].selectedRows
         this.listaAsignaturasParaAsignar.forEach(element => {
-          this.listaAsignaturasSiAsignadas.push({ 'idAsignatura': element.idAsignatura, 'ih': 0, 'porcentaje': 0, 'asignatura': element.asignatura, 'idGradoSede': this.idGradoSede, 'idEspecialidad': 0, 'area': element.area })
+          this.listaAsignaturasSiAsignadas.push({ 'idAsignatura': element.idAsignatura, 'ih': 0, 'porcentaje': 0, 'asignatura': element.asignatura, 'idGradoSede': this.idGradoSede, 'idEspecialidad': 0, 'area': element.area, 'orden': element.orden })
           let indice = this.listaAsignaturasNoAsignadas.findIndex(asigna => asigna.idAsignatura === element.idAsignatura)
           this.listaAsignaturasNoAsignadas.splice(indice,1)
         })
@@ -226,9 +231,10 @@
         this.textGrado = document.getElementById('grados')[document.getElementById('grados').selectedIndex].text
         this.listaAsignaturasNoAsignadas = []
         this.listaAsignaturas.forEach(element => {
-          this.listaAsignaturasNoAsignadas.push({ 'idAsignatura': element.id, 'asignatura': element.asignatura, 'idGradoSede': this.idGradoSede, 'area': element.area })
+          this.listaAsignaturasNoAsignadas.push({ 'idAsignatura': element.id, 'asignatura': element.asignatura, 'idGradoSede': this.idGradoSede, 'area': element.area, 'orden': element.orden })
         })
         this.listaAsignaturasSiAsignadas = []
+        this.totalIH = 0
         await axios
         .get(CONFIG.ROOT_PATH + 'academico/planestudios', {params: {idGradoSede: this.idGradoSede}})
         .then(response => {
@@ -240,6 +246,7 @@
               this.listaAsignaturasSiAsignadas.forEach(element => {
                 let indice = this.listaAsignaturasNoAsignadas.findIndex(asigna => asigna.idAsignatura == element.idAsignatura)
                 this.listaAsignaturasNoAsignadas.splice(indice,1)
+                this.totalIH += element.ih
               })
             }
           }
@@ -276,6 +283,10 @@
         if (!((key >= 48 && key <= 57) || (key >= 96 && key <= 105) || (key == 8) || (key == 9) || (key == 37) || (key == 39))) {
             e.preventDefault()
         }
+      },
+      colorArea(orden) {
+        let color = ['#CC9900','#0033CC','#009900','#CCCC00','#006699','#FF00CC','#9933CC','#FF6600','#0033FF','#666600','#CC3300','#607d8b','#4a148c','#afb42b','#f57c00','#795548','#8e24aa','#c2185b','#f44336','#CC9900','#0033CC','#009900','#CCCC00','#006699','#FF00CC','#9933CC','#FF6600','#0033FF','#666600','#CC3300','#607d8b','#4a148c','#afb42b','#f57c00','#795548','#8e24aa','#c2185b','#f44336','#CC9900','#0033CC','#009900','#CCCC00','#006699','#FF00CC','#9933CC','#FF6600','#0033FF','#666600','#CC3300','#607d8b','#4a148c','#afb42b','#f57c00','#795548','#8e24aa','#c2185b','#f44336','#CC9900','#0033CC','#009900','#CCCC00','#006699','#FF00CC','#9933CC','#FF6600','#0033FF','#666600','#CC3300','#607d8b','#4a148c','#afb42b','#f57c00','#795548','#8e24aa','#c2185b','#f44336']
+        return 'color: ' + color[orden]
       },
       mensajeEmergente(variante, titulo, contenido) {
         this.$bvToast.toast(contenido, { title: titulo, variant: variante, toaster: "b-toaster-top-center", solid: true, autoHideDelay: 4000, appendToast: false })

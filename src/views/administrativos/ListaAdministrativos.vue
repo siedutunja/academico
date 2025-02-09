@@ -91,6 +91,13 @@
           idUsuario: null,
           usuario: null,
           clave: null,
+          perMatricular: null,
+          perActEstudiante: null,
+          perActDocente: null,
+          perActDatosCurso: null,
+          perActDirCurso: null,
+          perSecretaria: null,
+          perAsigCarga: null,
           editarAdministrativo: true
         },
         encabColumnas : [
@@ -143,6 +150,13 @@
         this.datosAdministrativo.idUsuario = item.idUsuario
         this.datosAdministrativo.usuario = item.usuario
         this.datosAdministrativo.clave = item.clave
+        this.datosAdministrativo.perMatricular = item.perMatricular
+        this.datosAdministrativo.perActEstudiante = item.perActEstudiante
+        this.datosAdministrativo.perActDocente = item.perActDocente
+        this.datosAdministrativo.perActDatosCurso = item.perActDatosCurso
+        this.datosAdministrativo.perActDirCurso = item.perActDirCurso
+        this.datosAdministrativo.perSecretaria = item.perSecretaria
+        this.datosAdministrativo.perAsigCarga = item.perAsigCarga
         this.datosAdministrativo.editarAdministrativo = true
         this.$refs['modalCrearEditarAdministrativo'].show()
       },

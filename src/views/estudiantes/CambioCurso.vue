@@ -11,12 +11,12 @@
           <b-card-text>
             <b-row>
               <b-col lg="6">
-                <b-form-group label="Sede*" label-for="sedes" class="etiqueta">
+                <b-form-group label="Seleccione la Sede:" label-for="sedes" class="etiqueta">
                   <b-form-select  id="sedes" ref="sedes" v-model="idSede" :options="comboSedes" @change="idCurso=null,ocuparComboCursosSede()"></b-form-select>
                 </b-form-group>
               </b-col>
               <b-col lg="6">
-                <b-form-group label="Curso*" label-for="cursos" class="etiqueta">
+                <b-form-group label="Seleccione el Curso:" label-for="cursos" class="etiqueta">
                   <b-form-select  id="cursos" ref="cursos" v-model="idCurso" :options="comboCursosSede" @change="consultarMatriculados()" :disabled="idSede!=null ? false : true"></b-form-select>
                 </b-form-group>
               </b-col>
@@ -78,7 +78,7 @@
         idCurso: null,
         listaMatriculados: [],
         encabColumnasMatriculados : [
-          { label: 'Estudiantes Matriculados 2025', field: 'estudiante', sortable: false },
+          { label: 'Apellidos y Nombres del Estudiante', field: 'estudiante', sortable: false },
           { label: 'Documento', field: 'documento', sortable: false },
           { label: 'Nuevo', field: 'id_nuevo', sortable: false },
           { label: 'Repitente', field: 'id_repitente', sortable: false },

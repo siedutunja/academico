@@ -298,6 +298,13 @@ function configRoutes () {
               name: 'Cambio de Curso',
               component: () => import('@/views/estudiantes/CambioCurso')
             },
+            // 2024-03-06
+            {
+              path: 'actualizardatoscurso',
+              beforeEnter: autenticar,
+              name: 'Actualizar Datos Curso',
+              component: () => import('@/views/estudiantes/ActualizarDatosCurso')
+            },
           ]
         },
         // 2025-01-19
@@ -348,6 +355,20 @@ function configRoutes () {
               name: 'Gestión Docentes',
               component: () => import('@/views/docentes/ListaDocentes')
             },
+            // 2025-02-04
+            {
+              path: 'directorescurso',
+              beforeEnter: autenticar,
+              name: 'Directores de Curso',
+              component: () => import('@/views/docentes/DirectoresCurso')
+            },
+            // 2025-02-07
+            {
+              path: 'asignacionacademica',
+              beforeEnter: autenticar,
+              name: 'Asignación Académica',
+              component: () => import('@/views/docentes/AsignacionAcademica')
+            },
             /*
             // 2024-03-05
             {
@@ -355,27 +376,6 @@ function configRoutes () {
               beforeEnter: autenticar,
               name: 'Directorio de Docentes',
               component: () => import('@/views/docentes/DirectorioDocentes')
-            },
-            // 2024-03-05
-            {
-              path: 'consultadocente',
-              beforeEnter: autenticar,
-              name: 'Consulta Docente',
-              component: () => import('@/views/docentes/ConsultaDocente')
-            },
-            // 2024-03-05
-            {
-              path: 'directorescurso',
-              beforeEnter: autenticar,
-              name: 'Directores de Curso',
-              component: () => import('@/views/docentes/DirectoresCurso')
-            },
-            // 2024-02-29
-            {
-              path: 'asignacioncurso',
-              beforeEnter: autenticar,
-              name: 'Asignación Académica',
-              component: () => import('@/views/docentes/AsignacionCurso')
             },
             */
           ]

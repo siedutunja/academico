@@ -9,12 +9,12 @@
           <b-card-text>
             <b-row>
               <b-col lg="6">
-                <b-form-group label="Seleccione la Sede*" label-for="sedes" class="etiqueta">
+                <b-form-group label="Seleccione la Sede:" label-for="sedes" class="etiqueta">
                   <b-form-select  id="sedes" ref="sedes" v-model="idSede" :options="comboSedes" @change="idGrado=null,ocuparComboGradosSede()"></b-form-select>
                 </b-form-group>
               </b-col>
               <b-col lg="6">
-                <b-form-group label="Seleccione el Grado*" label-for="grados" class="etiqueta">
+                <b-form-group label="Seleccione el Grado:" label-for="grados" class="etiqueta">
                   <b-form-select  id="grados" ref="grados" v-model="idGrado" :options="comboGrados" @change="verCursosGrado" :disabled="idSede!=null ? false : true"></b-form-select>
                 </b-form-group>
               </b-col>

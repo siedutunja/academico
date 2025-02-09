@@ -66,7 +66,7 @@
       return {
         listaPreinscritos: [],
         encabColumnas : [
-          { label: 'Nombre del Estudiante', field: 'estudiante' },
+          { label: 'Apellidos y Nombres del Estudiante', field: 'estudiante' },
           { label: 'Tipo', field: 'tipodoc', sortable: false },
           { label: 'Documento', field: 'documento', sortable: false },
           { label: 'Genero', field: 'genero', sortable: false },

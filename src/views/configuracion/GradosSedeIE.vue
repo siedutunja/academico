@@ -9,7 +9,7 @@
           <b-card-text>
             <b-row>
               <b-col lg="6">
-                <b-form-group label="Seleccione la Sede*" label-for="sedes" class="etiqueta">
+                <b-form-group label="Seleccione la Sede:" label-for="sedes" class="etiqueta">
                   <b-form-select  id="sedes" ref="sedes" v-model="idSede" :options="comboSedes" @change="verGradosSede"></b-form-select>
                 </b-form-group>
               </b-col>

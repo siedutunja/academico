@@ -16,7 +16,7 @@
               <b-col lg="6">
                 <b-card header-bg-variant="secondary">
                   <template #header>
-                    <b-button @click="verFichaEstudiante()" class="small float-right" variant="dark" v-if="$store.state.idRol==1 || $store.state.idRol==12 || $store.state.perMatricular == 1">Editar Datos</b-button>
+                    <b-button @click="verFichaEstudiante()" class="small float-right" variant="dark" v-if="$store.state.idRol==1 || $store.state.idRol==12 || $store.state.perActEstudiante == 1">Editar Datos</b-button>
                     <h5 class="mb-0"><b-icon icon="card-checklist" aria-hidden="true"></b-icon> Datos del Estudiante</h5>
                   </template>
                   <b-card-text>
@@ -59,7 +59,7 @@
               <b-col lg="6">
                 <b-card header-bg-variant="secondary">
                   <template #header>
-                    <b-button @click="verFichamatricula()" class="small float-right" variant="dark" v-if="$store.state.idRol==1 || $store.state.idRol==12 || $store.state.perMatricular == 1">Editar Datos</b-button>
+                    <b-button @click="verFichamatricula()" class="small float-right" variant="dark" v-if="$store.state.idRol==1 || $store.state.idRol==12 || $store.state.perActEstudiante == 1">Editar Datos</b-button>
                     <h5 class="mb-0"><b-icon icon="card-checklist" aria-hidden="true"></b-icon> Datos de la Matrícula</h5>
                   </template>
                   <b-card-text>
@@ -108,14 +108,14 @@
                                     <img :src="datosFichaE.foto" id="photo" alt="photo">
                                   </b-col>
                                   <b-col lg="12" class="mt-3 text-center">
-                                    <b-button class="small mx-3" variant="info" @click="cambiarFoto">Cambiar Foto</b-button>
-                                    <b-button class="small mx-3" variant="danger" @click="borrarFoto">Borrar Foto</b-button>
+                                    <b-button class="small mx-3" variant="info" @click="cambiarFoto" v-if="$store.state.idRol==1 || $store.state.idRol==12 || $store.state.perActEstudiante == 1">Cambiar Foto</b-button>
+                                    <b-button class="small mx-3" variant="danger" @click="borrarFoto" v-if="$store.state.idRol==1 || $store.state.idRol==12 || $store.state.perActEstudiante == 1">Borrar Foto</b-button>
                                   </b-col>
                                 </b-row>
                               </CCardBody>
                             </CCard>
                           </b-tab>
-                          <b-tab title="Firma Estudiante">
+                          <b-tab title="Firma Estudiante" v-if="$store.state.idRol==1 || $store.state.idRol==12 || $store.state.perActEstudiante == 1">
                             <CCard style="margin-top: -17">
                               <CCardBody>
                                 <b-row>
@@ -145,7 +145,7 @@
                               </CCardBody>
                             </CCard>
                           </b-tab>
-                          <b-tab title="Firma Acudiente">
+                          <b-tab title="Firma Acudiente" v-if="$store.state.idRol==1 || $store.state.idRol==12 || $store.state.perActEstudiante == 1">
                             <CCard style="margin-top: -17">
                               <CCardBody>
                                 <b-row>
@@ -196,7 +196,7 @@
                       <b-col lg="12">
                         <h5>{{ datosFichaE.acudiente != null ? datosFichaE.acudiente : 'SIN ASOCIAR' }}</h5>
                         <h6>{{ datosFichaE.telefonoA != null ? datosFichaE.telefonoA : '-'}}</h6>
-                        <b-button @click="verFichaAcudiente()" class="small" variant="dark" v-if="$store.state.idRol==1 || $store.state.idRol==12 || $store.state.perMatricular == 1">Editar Datos</b-button>
+                        <b-button @click="verFichaAcudiente()" class="small" variant="dark" v-if="$store.state.idRol==1 || $store.state.idRol==12 || $store.state.perActEstudiante == 1">Editar Datos</b-button>
                       </b-col>
                     </b-row>
                   </b-card-text>
@@ -218,7 +218,7 @@
                       <b-col lg="12">
                         <h5>{{ datosFichaE.padre != null ? datosFichaE.padre : 'SIN ASOCIAR' }}</h5>
                         <h6>{{ datosFichaE.telefonoP != null ? datosFichaE.telefonoP : '-' }}</h6>
-                        <b-button @click="verFichaPapa()" class="small" variant="dark" v-if="$store.state.idRol==1 || $store.state.idRol==12 || $store.state.perMatricular == 1">Editar Datos</b-button>
+                        <b-button @click="verFichaPapa()" class="small" variant="dark" v-if="$store.state.idRol==1 || $store.state.idRol==12 || $store.state.perActEstudiante == 1">Editar Datos</b-button>
                       </b-col>
                     </b-row>
                   </b-card-text>
@@ -240,7 +240,7 @@
                       <b-col lg="12">
                         <h5>{{ datosFichaE.madre != null ? datosFichaE.madre : 'SIN ASOCIAR' }}</h5>
                         <h6>{{ datosFichaE.telefonoM != null ? datosFichaE.telefonoM : '-' }}</h6>
-                        <b-button @click="verFichaMama()" class="small" variant="dark" v-if="$store.state.idRol==1 || $store.state.idRol==12 || $store.state.perMatricular == 1">Editar Datos</b-button>
+                        <b-button @click="verFichaMama()" class="small" variant="dark" v-if="$store.state.idRol==1 || $store.state.idRol==12 || $store.state.perActEstudiante == 1">Editar Datos</b-button>
                       </b-col>
                     </b-row>
                   </b-card-text>
@@ -674,13 +674,9 @@
       }
     },
     beforeMount() {
-      if((this.$store.state.idRol == 1 || this.$store.state.idRol == 12 || this.$store.state.perMatricular == 1)) {
-        this.idMatricula = this.$store.state.idMatricula
-        this.consultaFichaMatricula()
-        this.fotoA = CONFIG.FOTO
-      } else {
-        this.$router.push('/restringida')
-      }
+      this.idMatricula = this.$store.state.idMatricula
+      this.consultaFichaMatricula()
+      this.fotoA = CONFIG.FOTO
     }
   }
 </script>

@@ -4,12 +4,12 @@
       <b-col lg="12">
         <b-card>
           <template #header>
-            <h5 class="mb-0"><b-icon icon="card-checklist" aria-hidden="true"></b-icon> ASIGNATURAS DEL PEI</h5>
+            <h5 class="mb-0"><b-icon icon="card-checklist" aria-hidden="true"></b-icon> ASIGNATURAS DEL PLAN EDUCATIVO INSTITUCIONAL</h5>
           </template>
           <b-card-text>
             <b-row>
               <b-col lg="6">
-                <b-form-group label="Seleccione el Área*" label-for="areas" class="etiqueta">
+                <b-form-group label="Seleccione el Área:" label-for="areas" class="etiqueta">
                   <b-form-select  id="areas" ref="areas" v-model="idArea" :options="comboAreas" @change="verAsignaturasArea"></b-form-select>
                 </b-form-group>
               </b-col>
@@ -87,7 +87,7 @@
         },
         encabColumnas : [
           //{ label: 'Area', field: 'area' },
-          { label: 'Asignatura', field: 'asignatura' },
+          { label: 'Nombre de Asignatura', field: 'asignatura' },
           { label: 'Nemo', field: 'nemo', sortable: false },
           { label: 'Estado', field: 'estado', formatFn: this.formatFnE, tdClass: this.tdClassFuncE, sortable: false },
           { label: '', field: 'id', sortable: false }

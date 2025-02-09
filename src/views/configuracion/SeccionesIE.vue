@@ -59,7 +59,7 @@
       return {
         listaSecciones: [],
         encabColumnas : [
-          { label: 'Sección', field: 'seccion', sortable: false },
+          { label: 'Nombre de la Sección', field: 'seccion', sortable: false },
           { label: 'Estado', field: 'estado', formatFn: this.formatFnE, tdClass: this.tdClassFuncE, sortable: false },
           { label: '', field: 'id_seccion', sortable: false }
         ]

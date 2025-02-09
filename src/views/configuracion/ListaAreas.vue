@@ -4,7 +4,7 @@
       <b-col lg="12">
         <b-card>
           <template #header>
-            <h5 class="mb-0"><b-icon icon="card-checklist" aria-hidden="true"></b-icon> ÁREAS DEL PEI</h5>
+            <h5 class="mb-0"><b-icon icon="card-checklist" aria-hidden="true"></b-icon> ÁREAS DEL PLAN EDUCATIVO INSTITUCIONAL</h5>
           </template>
           <b-card-text>
             <b-row>

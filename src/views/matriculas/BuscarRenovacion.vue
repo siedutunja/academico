@@ -89,7 +89,7 @@
         },
         listaEstudiantes: [],
         encabColumnas : [
-          { label: 'Nombre del Estudiante', field: 'estudiante', sortable: true },
+          { label: 'Apellidos y Nombres del Estudiante', field: 'estudiante', sortable: true },
           { label: 'Documento', field: 'documento', sortable: false },
           { label: 'Grado', field: 'grado', sortable: true },
           //{ label: 'Repitente', field: 'id_repitente', formatFn: this.formatFnF, sortable: false }

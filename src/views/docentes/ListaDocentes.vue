@@ -11,14 +11,14 @@
               <b-col lg="12">
                 <b-card header-bg-variant="secondary">
                   <template #header>
-                    <b-button class="small float-right" variant="dark" @click="nuevoDocente" v-if="$store.state.idRol==1 || $store.state.idRol==12">Nuevo Docente</b-button>
+                    <b-button class="small float-right" variant="dark" @click="nuevoDocente" v-if="$store.state.idRol==1 || $store.state.idRol==12 || $store.state.perActDocente == 1">Nuevo Docente</b-button>
                     <h5 class="mb-0"><b-icon icon="card-checklist" aria-hidden="true"></b-icon> Lista de Docentes</h5>
                   </template>
                   <b-card-text>
                     <vue-good-table :columns="encabColumnas" :rows="listaDocentes" styleClass="vgt-table condensed bordered striped" :line-numbers="true" :search-options="{enabled: true,placeholder: 'Buscar docente...'}">
                       <template slot="table-row" slot-scope="props">
                         <span v-if="props.column.field == 'id'">
-                          <span style="font-weight: bold; color: blue; cursor: pointer" @click="seleccionarDocente(props.row)" title="Consultar/Actualizar Datos del Docente"><CIcon name="cilPencil"/></span>
+                          <span style="font-weight: bold; color: blue; cursor: pointer" @click="seleccionarDocente(props.row)" title="Consultar/Actualizar Datos del Docente"><CIcon name="cilZoom"/></span>
                         </span>
                       </template>
                       <div slot="emptystate">
@@ -31,7 +31,7 @@
             </b-row>
           </b-card-text>
           <template #footer>
-            <em>Consulte o actualice los datos de un docente haciendo clic en el lapiz.</em>
+            <em>Consulte o actualice los datos de un docente haciendo clic en la lupa.</em>
           </template>
         </b-card>
       </b-col>
@@ -179,11 +179,7 @@
       }
     },
     beforeMount() {
-      if(this.$store.state.idRol == 1 || this.$store.state.idRol == 12) {
-        this.consultarListaDocentes()
-      } else {
-        this.$router.push('/restringida')
-      }
+      this.consultarListaDocentes()
     }
   }
 </script>

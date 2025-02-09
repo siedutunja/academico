@@ -159,12 +159,23 @@
                   <b-form-invalid-feedback id="feedFechaV" >Campo requerido.</b-form-invalid-feedback>            
                 </b-form-group>
               </b-col>
+              <b-col lg="12"><hr></b-col>
+              <b-col lg="12">
+                <b-form-group>
+                  <h5>Seleccione los permisos a otorgar</h5>
+                  <b-form-checkbox class="ml-4 m-2" v-for="permiso in permisos" v-model="permisosSeleccionados" :key="permiso.value" :value="permiso.value" :disabled="permiso.disabled" size="">
+                    {{ permiso.text }}
+                  </b-form-checkbox>
+                </b-form-group>
+                <!--<div>ORDEN DE LOS CAMPOS SELECCIONADOS: <strong>{{ permisosSeleccionados }}</strong></div>-->
+              </b-col>
+              <b-col lg="12"><hr></b-col>
               <b-col lg="3" md="6">
                 <b-form-group label="Usuario" class="etiqueta">
                   <b-form-input v-model.trim="datosPersona.usuario" disabled></b-form-input>
                 </b-form-group>
               </b-col>
-              <b-col lg="3" md="6" v-if="$store.state.idRol==1">
+              <b-col lg="3" md="6">
                 <b-form-group label="Contraseña" class="etiqueta">
                   <b-form-input v-model.trim="datosPersona.clave" disabled></b-form-input>
                 </b-form-group>
@@ -254,8 +265,25 @@
           id_institucion: null,
           id_dependencia: null,
           vigencia: null,
+          perMatricular: null,
+          perActEstudiante: null,
+          perActDocente: null,
+          perActDatosCurso: null,
+          perActDirCurso: null,
+          perSecretaria: null,
+          perAsigCarga: null,
           editarAdministrativo: true
         },
+        permisosSeleccionados: [],
+        permisos: [
+          { value: 1, text: 'Matricular estudiante' },
+          { value: 2, text: 'Actualizar la carpeta de matricula de estudiante' },
+          { value: 3, text: 'Crear o actualizar datos del docente' },
+          { value: 4, text: 'Actualizar datos del estudiante por cursos' },
+          { value: 5, text: 'Actualizar directores de curso' },
+          { value: 6, text: 'Generar documentos secretaría' },
+          { value: 7, text: 'Asignar carga académica a docentes' },
+        ],
         comboZonas: [],
         comboEps: [],
         comboEstratos: [],
@@ -378,6 +406,13 @@
             this.datosPersona.id_institucion = this.$store.state.idInstitucion
             this.datosPersona.id_dependencia = 12
             this.datosPersona.vigencia = null
+            this.datosPersona.perMatricular = null
+            this.datosPersona.perActEstudiante = null
+            this.datosPersona.perActDocente = null
+            this.datosPersona.perActDatosCurso = null
+            this.datosPersona.perActDirCurso = null
+            this.datosPersona.perSecretaria = null
+            this.datosPersona.perAsigCarga = null
             this.documentoValido = true
           }
         })
@@ -437,6 +472,30 @@
         this.datosPersona.correo = this.datosPersona.correo.toLowerCase()
         this.datosPersona.barrio = this.datosPersona.barrio.toUpperCase()
 
+        this.datosPersona.perMatricular = 0
+        this.datosPersona.perActEstudiante = 0
+        this.datosPersona.perActDocente = 0
+        this.datosPersona.perActDatosCurso = 0
+        this.datosPersona.perActDirCurso = 0
+        this.datosPersona.perSecretaria = 0
+        this.datosPersona.perAsigCarga = 0
+        this.permisosSeleccionados.forEach(element => {
+          if (element == 1) {
+            this.datosPersona.perMatricular = 1
+          } else if (element == 2) {
+            this.datosPersona.perActEstudiante = 1
+          } else if (element == 3) {
+            this.datosPersona.perActDocente = 1
+          } else if (element == 4) {
+            this.datosPersona.perActDatosCurso = 1
+          } else if (element == 5) {
+            this.datosPersona.perActDirCurso = 1
+          } else if (element == 6) {
+            this.datosPersona.perSecretaria = 1
+          } else if (element == 7) {
+            this.datosPersona.perAsigCarga = 1
+          }
+        })
         if (this.datosPersona.editarAdministrativo) {
           await axios
           .put(CONFIG.ROOT_PATH + 'academico/administrativo', JSON.stringify(this.datosPersona), { headers: {"Content-Type": "application/json; charset=utf-8" }})
@@ -461,7 +520,7 @@
             if (response.data.error){
               this.mensajeEmergente('danger',CONFIG.TITULO_MSG,response.data.mensaje + ' - Crear Perfil Usuario')
             } else{
-              this.enviarCorreoNuevo()
+              //this.enviarCorreoNuevo()
               this.$emit("retorno", 1)
             }
           })
@@ -517,6 +576,13 @@
         if (this.datosPersona.editarAdministrativo) {
           this.documentoValido = true
         }
+        this.datosPersona.perMatricular == 1 ? this.permisosSeleccionados.push(1) : null
+        this.datosPersona.perActEstudiante == 1 ? this.permisosSeleccionados.push(2) : null
+        this.datosPersona.perActDocente == 1 ? this.permisosSeleccionados.push(3) : null
+        this.datosPersona.perActDatosCurso == 1 ? this.permisosSeleccionados.push(4) : null
+        this.datosPersona.perActDirCurso == 1 ? this.permisosSeleccionados.push(5) : null
+        this.datosPersona.perSecretaria == 1 ? this.permisosSeleccionados.push(6) : null
+        this.datosPersona.perAsigCarga == 1 ? this.permisosSeleccionados.push(7) : null
       },
       async enviarCorreoRetiro() {
         let datosCorreo = {}

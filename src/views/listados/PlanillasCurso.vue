@@ -9,7 +9,7 @@
           <b-card-text>
             <b-row>
               <b-col lg="6">
-                <b-form-group label="Seleccione la Sede" label-for="sedes" class="etiqueta">
+                <b-form-group label="Seleccione la Sede:" label-for="sedes" class="etiqueta">
                   <b-form-select id="sedes" ref="sedes" v-model="idSede" :options="comboSedes" @change="ocuparlistaCursosSede()"></b-form-select>
                 </b-form-group>
               </b-col>
@@ -21,7 +21,7 @@
               <b-row>
                 <b-col lg="6">
                   <b-form-group>
-                    <h4>Seleccione la planilla o formato que desea generar</h4>
+                    <h4>Seleccione la planilla o formato que desea generar:</h4>
                     <b-form-radio-group class="ml-4 m-3" v-model="planillaSeleccionada" :options="campos" size="lg" stacked></b-form-radio-group>
                   </b-form-group>
                   <div class="ml-4" v-if="planillaSeleccionada==0">
@@ -80,8 +80,10 @@
         planillaSeleccionada: '0',
         campos: [
           { value: 0, text: 'Lista de estudiantes con columnas' },
-          { value: 1, text: 'Registro de asistencia mensual'},
+          { value: 1, text: 'Planilla registro mensual'},
           { value: 2, text: 'Datos de contacto del acudiente'},
+          { value: 3, text: 'Planilla asistencia acudiente / padres de familia'},
+          { value: 4, text: 'Planilla control de asistencia semanal'},
         ],
         comboNumeroColumnas: [
           {'value': 5, 'text': '5 columnas'},
@@ -110,18 +112,26 @@
           let encoded = encodeURI(uri);
           //window.open("http://localhost/siedutunja/php/listas/planilla-00.php" + encoded,"_blank")
           window.open("https://siedutunja.gov.co/php/listas/planilla-00.php" + encoded,"_blank")
-        }
-        else if (this.planillaSeleccionada == 1) {
+        } else if (this.planillaSeleccionada == 1) {
           let uri = "?datos=" + JSON.stringify(this.cursosSeleccionados) + "&ie=" + this.$store.state.nombreInstitucion + "&vigencia=" + this.$store.state.aLectivo
           let encoded = encodeURI(uri);
           //window.open("http://localhost/siedutunja/php/listas/planilla-01.php" + encoded,"_blank")
           window.open("https://siedutunja.gov.co/php/listas/planilla-01.php" + encoded,"_blank")
-        }
-        else if (this.planillaSeleccionada == 2) {
+        } else if (this.planillaSeleccionada == 2) {
           let uri = "?datos=" + JSON.stringify(this.cursosSeleccionados) + "&ie=" + this.$store.state.nombreInstitucion + "&vigencia=" + this.$store.state.aLectivo
           let encoded = encodeURI(uri);
           //window.open("http://localhost/siedutunja/php/listas/planilla-02.php" + encoded,"_blank")
           window.open("https://siedutunja.gov.co/php/listas/planilla-02.php" + encoded,"_blank")
+        } else if (this.planillaSeleccionada == 3) {
+          let uri = "?datos=" + JSON.stringify(this.cursosSeleccionados) + "&ie=" + this.$store.state.nombreInstitucion + "&vigencia=" + this.$store.state.aLectivo
+          let encoded = encodeURI(uri);
+          //window.open("http://localhost/siedutunja/php/listas/planilla-03.php" + encoded,"_blank")
+          window.open("https://siedutunja.gov.co/php/listas/planilla-03.php" + encoded,"_blank")
+        } else if (this.planillaSeleccionada == 4) {
+          let uri = "?datos=" + JSON.stringify(this.cursosSeleccionados) + "&ie=" + this.$store.state.nombreInstitucion + "&vigencia=" + this.$store.state.aLectivo
+          let encoded = encodeURI(uri);
+          //window.open("http://localhost/siedutunja/php/listas/planilla-04.php" + encoded,"_blank")
+          window.open("https://siedutunja.gov.co/php/listas/planilla-04.php" + encoded,"_blank")
         }
         return true
       },

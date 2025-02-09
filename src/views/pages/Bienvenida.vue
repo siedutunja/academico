@@ -377,12 +377,16 @@
             this.$store.commit('set', ['idEntorno', this.tokenDecodificado.id_entorno])
             this.$store.commit('set', ['idInstitucion', this.tokenDecodificado.id_institucion])
             this.$store.commit('set', ['idSector', this.tokenDecodificado.id_sector])
+            //PERMISOS DEL USUARIO
             this.$store.commit('set', ['perMatricular', this.tokenDecodificado.permisos.perMatricular])
-            this.$store.commit('set', ['perOrgaListas', this.tokenDecodificado.permisos.perOrgaListas])
-            this.$store.commit('set', ['perProgPeriodos', this.tokenDecodificado.permisos.perProgPeriodos])
-            this.$store.commit('set', ['perActDocente', this.tokenDecodificado.permisos.perActDocente])
             this.$store.commit('set', ['perActEstudiante', this.tokenDecodificado.permisos.perActEstudiante])
+            this.$store.commit('set', ['perActDocente', this.tokenDecodificado.permisos.perActDocente])
+            this.$store.commit('set', ['perActDatosCurso', this.tokenDecodificado.permisos.perActDatosCurso])
+            this.$store.commit('set', ['perActDirCurso', this.tokenDecodificado.permisos.perActDirCurso])
+            this.$store.commit('set', ['perSecretaria', this.tokenDecodificado.permisos.perSecretaria])
             this.$store.commit('set', ['perAsigCarga', this.tokenDecodificado.permisos.perAsigCarga])
+            
+            this.$store.commit('set', ['perProgPeriodos', this.tokenDecodificado.permisos.perProgPeriodos])
             this.escudoI = CONFIG.ROOT_ESCUDOS
             this.cargarDatosSesionUsuario()
             this.cargarDatosTablas()
