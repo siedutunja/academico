@@ -87,9 +87,9 @@
       <div class="mx-3">
         <b-row>
           <b-col lg="12">
-            <b-form-group label="Destino de la Constancia*" label-for="destinito" class="etiqueta">
+            <b-form-group label="Destino de la Constancia:" label-for="destinito" class="etiqueta">
               <b-form-input id="destinito" ref="destinito" v-model.trim="destinoConstancia" aria-describedby="feedDest" maxlength="100"></b-form-input>
-              <b-form-invalid-feedback id="feedDest" >Campo requerido.</b-form-invalid-feedback>
+              <b-form-text id="destinito">Ingrese el destino para ser visualizado en el documento, de lo contrario deje el campo vacio.</b-form-text>
             </b-form-group>
 
             <!--
@@ -97,6 +97,12 @@
               <b-form-select  id="destinoC" ref="destinoC" v-model="idDestinoC" :options="comboDestinos" aria-describedby="feedDestinoC"></b-form-select>
             </b-form-group>
             -->
+          </b-col>
+          <b-col lg="12">
+            <b-form-group label="Consecutivo:" label-for="consecutivo" class="etiqueta">
+              <b-form-input id="consecutivo" ref="consecutivo" v-model.trim="consecutivoConstancia" autocomplete="off" maxlength="10"></b-form-input>
+              <b-form-text id="consecutivo">Ingrese el consecutivo para ser visualizado en el documento, de lo contrario deje el campo vacio.</b-form-text>
+            </b-form-group>
           </b-col>
         </b-row>
         <b-row>
@@ -125,6 +131,7 @@
         datosFichaE: {},
         idDestinoC: 1,
         destinoConstancia: null,
+        consecutivoConstancia: null,
         comboDestinos: [],
       }
     },
@@ -142,6 +149,7 @@
           'token': this.$store.state.idInstitucion,
           //'destino': destino,
           'destino': this.destinoConstancia,
+          'consecutivo': this.consecutivoConstancia,
           'esc' : this.$store.state.escudoInstitucion,
           'ieo': this.$store.state.nombreInstitucion, 
           'nit': this.$store.state.nitInstitucion, 

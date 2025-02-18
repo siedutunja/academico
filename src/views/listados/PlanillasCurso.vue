@@ -30,6 +30,25 @@
                       <b-form-select id="numCol" ref="numCol" v-model="numeroColumnas" :options="comboNumeroColumnas"></b-form-select>
                     </b-form-group>
                   </div>
+                  <div class="ml-4" v-if="planillaSeleccionada==0 || planillaSeleccionada==3">
+                    <hr>
+                    <b-row>
+                      <b-col lg="12">
+                        <b-form-group label="Titulo del Tema o Actividad:" label-for="tema" class="etiqueta">
+                          <b-form-input id="tema" ref="tema" v-model.trim="tema" autocomplete="off" maxlength="50"></b-form-input>
+                          <b-form-text id="tema">Ingrese el titulo del tema o actividad para ser visualizado en la planilla, de lo contrario deje el campo vacio.</b-form-text>
+                        </b-form-group>
+                      </b-col>
+                    </b-row>
+                    <b-row>
+                      <b-col lg="12">
+                        <b-form-group label="Objetivo del Tema o Actividad:" label-for="objetivo" class="etiqueta">
+                          <b-form-input id="objetivo" ref="objetivo" v-model.trim="objetivo" autocomplete="off" maxlength="100"></b-form-input>
+                          <b-form-text id="objetivo">Ingrese el objetivo del tema o actividad para ser visualizado en la planilla, de lo contrario deje el campo vacio.</b-form-text>
+                        </b-form-group>
+                      </b-col>
+                    </b-row>
+                  </div>
                 </b-col>
                 <b-col lg="6" class="mb-5">
                   <vue-good-table ref="cursitos" :columns="encabColumnas" :rows="listaCursos" styleClass="vgt-table condensed bordered striped" :line-numbers="true" :search-options="{enabled: true,placeholder: 'Filtrar cursos...'}"
@@ -80,12 +99,16 @@
         planillaSeleccionada: '0',
         campos: [
           { value: 0, text: 'Lista de estudiantes con columnas' },
-          { value: 1, text: 'Planilla registro mensual'},
+          { value: 1, text: 'Planilla control mensual de actividades'},
           { value: 2, text: 'Datos de contacto del acudiente'},
           { value: 3, text: 'Planilla asistencia acudiente / padres de familia'},
           { value: 4, text: 'Planilla control de asistencia semanal'},
         ],
         comboNumeroColumnas: [
+          {'value': 1, 'text': '1 columna'},
+          {'value': 2, 'text': '2 columnas'},
+          {'value': 3, 'text': '3 columnas'},
+          {'value': 4, 'text': '4 columnas'},
           {'value': 5, 'text': '5 columnas'},
           {'value': 6, 'text': '6 columnas'},
           {'value': 7, 'text': '7 columnas'},
@@ -98,7 +121,9 @@
           {'value': 14, 'text': '14 columnas'},
           {'value': 15, 'text': '15 columnas'},
         ],
-        numeroColumnas: 5,
+        tema: '',
+        objetivo: '',
+        numeroColumnas: 1,
       }
     },
     methods: {
@@ -108,27 +133,27 @@
           this.cursosSeleccionados.push({ 'id': element.id, 'cu': element.nomenclatura, 'se': element.sede, 'jo': element.jornada })
         });
         if (this.planillaSeleccionada == 0) {
-          let uri = "?datos=" + JSON.stringify(this.cursosSeleccionados) + "&ie=" + this.$store.state.nombreInstitucion + "&vigencia=" + this.$store.state.aLectivo + '&numeroColumnas=' + this.numeroColumnas
+          let uri = "?datos=" + JSON.stringify(this.cursosSeleccionados) + "&ie=" + this.$store.state.nombreInstitucion + "&vigencia=" + this.$store.state.aLectivo + "&numeroColumnas=" + this.numeroColumnas + "&escudo=" + this.$store.state.escudoInstitucion + "&tema=" + this.tema + "&objetivo=" + this.objetivo
           let encoded = encodeURI(uri);
           //window.open("http://localhost/siedutunja/php/listas/planilla-00.php" + encoded,"_blank")
           window.open("https://siedutunja.gov.co/php/listas/planilla-00.php" + encoded,"_blank")
         } else if (this.planillaSeleccionada == 1) {
-          let uri = "?datos=" + JSON.stringify(this.cursosSeleccionados) + "&ie=" + this.$store.state.nombreInstitucion + "&vigencia=" + this.$store.state.aLectivo
+          let uri = "?datos=" + JSON.stringify(this.cursosSeleccionados) + "&ie=" + this.$store.state.nombreInstitucion + "&vigencia=" + this.$store.state.aLectivo + "&escudo=" + this.$store.state.escudoInstitucion
           let encoded = encodeURI(uri);
           //window.open("http://localhost/siedutunja/php/listas/planilla-01.php" + encoded,"_blank")
           window.open("https://siedutunja.gov.co/php/listas/planilla-01.php" + encoded,"_blank")
         } else if (this.planillaSeleccionada == 2) {
-          let uri = "?datos=" + JSON.stringify(this.cursosSeleccionados) + "&ie=" + this.$store.state.nombreInstitucion + "&vigencia=" + this.$store.state.aLectivo
+          let uri = "?datos=" + JSON.stringify(this.cursosSeleccionados) + "&ie=" + this.$store.state.nombreInstitucion + "&vigencia=" + this.$store.state.aLectivo + "&escudo=" + this.$store.state.escudoInstitucion
           let encoded = encodeURI(uri);
           //window.open("http://localhost/siedutunja/php/listas/planilla-02.php" + encoded,"_blank")
           window.open("https://siedutunja.gov.co/php/listas/planilla-02.php" + encoded,"_blank")
         } else if (this.planillaSeleccionada == 3) {
-          let uri = "?datos=" + JSON.stringify(this.cursosSeleccionados) + "&ie=" + this.$store.state.nombreInstitucion + "&vigencia=" + this.$store.state.aLectivo
+          let uri = "?datos=" + JSON.stringify(this.cursosSeleccionados) + "&ie=" + this.$store.state.nombreInstitucion + "&vigencia=" + this.$store.state.aLectivo + "&escudo=" + this.$store.state.escudoInstitucion + "&tema=" + this.tema + "&objetivo=" + this.objetivo
           let encoded = encodeURI(uri);
           //window.open("http://localhost/siedutunja/php/listas/planilla-03.php" + encoded,"_blank")
           window.open("https://siedutunja.gov.co/php/listas/planilla-03.php" + encoded,"_blank")
         } else if (this.planillaSeleccionada == 4) {
-          let uri = "?datos=" + JSON.stringify(this.cursosSeleccionados) + "&ie=" + this.$store.state.nombreInstitucion + "&vigencia=" + this.$store.state.aLectivo
+          let uri = "?datos=" + JSON.stringify(this.cursosSeleccionados) + "&ie=" + this.$store.state.nombreInstitucion + "&vigencia=" + this.$store.state.aLectivo + "&escudo=" + this.$store.state.escudoInstitucion
           let encoded = encodeURI(uri);
           //window.open("http://localhost/siedutunja/php/listas/planilla-04.php" + encoded,"_blank")
           window.open("https://siedutunja.gov.co/php/listas/planilla-04.php" + encoded,"_blank")

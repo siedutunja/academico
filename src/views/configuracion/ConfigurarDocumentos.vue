@@ -86,20 +86,6 @@
                       <b-card-text>
                         <b-row>
                           <b-col lg="4" md="4">
-                            <b-form-group label="Mostar Consecutivo*" label-for="ver" class="etiqueta">
-                              <b-form-select  id="ver" ref="ver" v-model="$v.infoConstancia.cons_vconsec.$model" :options="comboVer" :state="validateStateC('cons_vconsec')" aria-describedby="feedVer"></b-form-select>
-                              <b-form-invalid-feedback id="feedVer">Campo requerido.</b-form-invalid-feedback>
-                            </b-form-group>
-                          </b-col>
-                          <b-col lg="4" md="4">
-                            <b-form-group label="Consecutivo*" label-for="numero" class="etiqueta">
-                              <b-form-input id="numero" ref="numero" v-model.trim="$v.infoConstancia.cons_numero.$model" :state="validateStateC('cons_numero')" aria-describedby="feedNumero" autocomplete="off" maxlength="5" @keydown="soloNumeros"></b-form-input>
-                              <b-form-invalid-feedback id="feedNumero" >Campo requerido.</b-form-invalid-feedback>
-                            </b-form-group>
-                          </b-col>
-                        </b-row>
-                        <b-row>
-                          <b-col lg="4" md="4">
                             <b-form-group label="Tipo de Papel*" label-for="papel" class="etiqueta">
                               <b-form-select  id="papel" ref="papel" v-model="$v.infoConstancia.cons_papel.$model" :options="comboPapeles" :state="validateStateC('cons_papel')" aria-describedby="feedPapel"></b-form-select>
                               <b-form-invalid-feedback id="feedPapel">Campo requerido.</b-form-invalid-feedback>
@@ -193,8 +179,6 @@
           cons_firma_rector: null,
           cons_firma_secre: null,
           cons_margen: null,
-          cons_numero: null,
-          cons_vconsec: null
         },
         firmas: [
           { value: 1, text: 'Rector(a)'},
@@ -212,8 +196,6 @@
         cons_bloque1: { required, minLength: minLength(1) },
         cons_papel: { required },
         cons_margen: { required },
-        cons_numero: { required },
-        cons_vconsec: { required },
       },
       infoGeneral: {
         rector: { required, minLength: minLength(1) },
@@ -291,8 +273,6 @@
               this.infoConstancia.cons_bloque1 = response.data.datos.cons_bloque1
               this.infoConstancia.cons_papel = response.data.datos.cons_papel
               this.infoConstancia.cons_margen = response.data.datos.cons_margen
-              this.infoConstancia.cons_numero = response.data.datos.cons_numero
-              this.infoConstancia.cons_vconsec = response.data.datos.cons_vconsec
               this.infoConstancia.cons_firma_rector = response.data.datos.cons_firma_rector
               this.infoConstancia.cons_firma_secre = response.data.datos.cons_firma_secre
               this.infoConstancia.cons_firma_rector == 1 ? this.firmasSeleccionadas.push(1) : null

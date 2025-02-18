@@ -11,7 +11,7 @@
               <b-col lg="12">
                 <b-card header-bg-variant="secondary">
                   <template #header>
-                    <b-button class="small float-right" variant="dark" @click="nuevaArea" v-if="$store.state.idRol==1 && hayAreas">Nueva Área</b-button>
+                    <b-button class="small float-right" variant="dark" @click="nuevaArea" v-if="hayAreas">Nueva Área</b-button>
                     <b-button class="small float-right" variant="dark" @click="validarCrearAreas" v-if="$store.state.idRol==1 && !hayAreas">Crear Áreas en Bloque</b-button>
                     <h5 class="mb-0"><b-icon icon="card-checklist" aria-hidden="true"></b-icon> Lista de Áreas</h5>
                   </template>
