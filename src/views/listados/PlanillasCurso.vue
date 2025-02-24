@@ -54,7 +54,7 @@
                   <vue-good-table ref="cursitos" :columns="encabColumnas" :rows="listaCursos" styleClass="vgt-table condensed bordered striped" :line-numbers="true" :search-options="{enabled: true,placeholder: 'Filtrar cursos...'}"
                     :select-options="{enabled: true,selectionText: 'cursos seleccionados',clearSelectionText: 'Limpiar',}">
                     <template #selected-row-actions>
-                      <button @click="imprimirListas()">Imprimir Listas</button>
+                      <button class="small btn btn-primary" @click="imprimirListas()">Imprimir Listas</button>
                     </template>
                     <div slot="emptystate">
                       <h5 class="text-danger ml-5">No existen Cursos en la Sede</h5>

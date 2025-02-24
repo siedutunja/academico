@@ -91,11 +91,9 @@ jwt.verify(token, CONFIG.SECRET_KEY, (err, data) => {
       menu[0]._children[indice].items.push({ name: 'Gestión de Docentes', to: '/docentes/listadocentes'})
     }
     menu[0]._children[indice].items.push({ name: 'Directores de Curso', to: '/docentes/directorescurso'})
-    menu[0]._children[indice].items.push({ name: 'Asignar Carga Académica', to: '/docentes/asignacionacademica'})
-    /*
-    menu[0]._children[indice].items.push({ name: 'Consultar Carga Docente', to: '/docentes/asignacionacademica'})
-    menu[0]._children[indice].items.push({ name: 'Directorio Docentes', to: '/docentes/directoriodocentes'})
-    */
+    menu[0]._children[indice].items.push({ name: 'Asignación Académica', to: '/docentes/asignacionacademica'})
+    menu[0]._children[indice].items.push({ name: 'Consultar Asignación', to: '/docentes/asignacionacademica'})
+    menu[0]._children[indice].items.push({ name: 'Directorio', to: '/docentes/directoriodocentes'})
     menu[0]._children.push(
       {
         _name: 'CSidebarNavDropdown',
@@ -112,12 +110,13 @@ jwt.verify(token, CONFIG.SECRET_KEY, (err, data) => {
     menu[0]._children.push(
       {
         _name: 'CSidebarNavDropdown',
-        name: 'Informes',
+        name: 'Informes y Estadísticas',
         icon: 'cilBarChart',
         items: []
       }
     )
     indice++
+    menu[0]._children[indice].items.push({ name: 'Informes por Agrupación', to: '/informes/informesagrupacion'})
     menu[0]._children[indice].items.push({ name: 'Consolidado Matricula', to: '/informes/consolidadomatricula'})
 
   }

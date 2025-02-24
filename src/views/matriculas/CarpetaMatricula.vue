@@ -67,7 +67,7 @@
                       <b-col lg="12">
                         <b-table-simple striped hover responsive bordered fixed>
                           <b-tbody>
-                            <b-tr><b-th>Estado Matrícula</b-th><b-td>{{datosFichaE.estado}}</b-td></b-tr>
+                            <b-tr><b-th>Fecha Matrícula</b-th><b-td>{{ datosFichaE.creado}}</b-td></b-tr>
                             <b-tr><b-th>Vigencia</b-th><b-td>{{datosFichaE.vigencia}}</b-td></b-tr>
                             <b-tr><b-th>Sede</b-th><b-td>{{datosFichaE.sede}}</b-td></b-tr>
                             <b-tr><b-th>Grado</b-th><b-td>{{datosFichaE.grado}}</b-td></b-tr>
@@ -87,7 +87,8 @@
                       <b-col lg="12"><hr></b-col>
                       <b-col lg="12">
                         <b-button class="small mx-1 mt-2" variant="primary" @click="imprimirFormulario">Imprimir Ficha Matricula del Estudiante</b-button>
-                        <b-button class="small mx-1 mt-2 float-right" variant="danger" @click="desvincularMatricula" v-if="$store.state.idRol==1 || $store.state.idRol==12">Desvincular Matricula del Estudiante</b-button>
+                        <b-button class="small mx-1 mt-2 float-right" variant="danger" @click="confirmarRetirarMatricula" v-if="datosFichaE.id_estado_actual==1 && ($store.state.idRol==1 || $store.state.idRol==12)">Retirar Estudiante</b-button>
+                        <b-button class="small mx-1 mt-2 float-right" variant="danger" @click="desvincularMatricula" v-if="$store.state.idRol==1">Desvincular Matricula del Estudiante</b-button>
                       </b-col>
                     </b-row>
                   </b-card-text>
@@ -296,12 +297,40 @@
         </div>
       </div>
     </b-modal>
+    <b-modal ref="modalRetirarEstudiante" size="xl" scrollable hide-footer title="Retirar Estudiante" ok-only>
+      <div class="mx-3">
+        <div>
+          <b-row>
+            <b-col lg="12" md="12">
+              <b-form-group label="Motivo del Retiro*" label-for="motivo" class="etiqueta">
+                <b-form-select  id="motivo" ref="motivo" v-model="$v.retiro.id_motivo.$model" :options="comboMotivosRetiro" :state="validateStateR('id_motivo')" aria-describedby="feedMotivo"></b-form-select>
+                <b-form-invalid-feedback id="feedMotivo">Campo requerido.</b-form-invalid-feedback>
+              </b-form-group>
+            </b-col>
+            <b-col lg="12" md="12">
+              <b-form-group label="Observaciones del Retiro*" label-for="observaciones" class="etiqueta">
+                <b-form-textarea v-model.trim="$v.retiro.observaciones.$model" :state="validateStateR('observaciones')" aria-describedby="feedObservRetiro" autocomplete="off" rows="5"></b-form-textarea>
+                <b-form-invalid-feedback id="feedObservRetiro">Campo requerido.</b-form-invalid-feedback>
+              </b-form-group>
+            </b-col>
+            <b-col lg="12" md="12"><hr></b-col>
+            <b-col lg="12" md="12">
+              <div class="float-right small text-medium-emphasis">* Campo requerido</div>
+              <b-button class="small mt-1 mr-3" variant="primary" @click="retirarEstudiante()">Retirar Estudiante</b-button>
+              <b-button class="small mt-1 mr-3" variant="secondary" @click="cancelarVentana">Cancelar</b-button>
+            </b-col>
+          </b-row>
+        </div>
+      </div>
+    </b-modal>
   </div>
 </template>
 
 <script>
   import axios from "axios"
   import * as CONFIG from '@/assets/config.js'
+  import { validationMixin } from "vuelidate"
+  import { required } from "vuelidate/lib/validators"
   import EditarFoto from '@/views/matriculas/EditarFoto'
   import FichaAcudiente from '@/views/matriculas/FichaAcudiente'
   import FichaPapa from '@/views/matriculas/FichaPapa'
@@ -311,6 +340,7 @@
 
   export default {
     name: 'carpetamatricula',
+    mixins: [validationMixin],
     components: {
       EditarFoto,
       FichaAcudiente,
@@ -340,9 +370,79 @@
         fotoA: CONFIG.FOTO,
         fotoP: CONFIG.FOTO,
         fotoM: CONFIG.FOTO,
+        comboMotivosRetiro: [],
+        retiroEstudiante: {},
+        retiro: {
+          id_motivo: null,
+          observaciones: null
+        },
       }
     },
+    validations: {
+      retiro: {
+        id_motivo: { required },
+        observaciones: { required }
+      },
+    },
     methods: {
+      confirmarRetirarMatricula() {
+        let titulo = 'Retirar Estudiante'
+        let pregunta = 'Al retirar el Estudiante de la Institución Educativa se mantendrá el registro de la matrícula para el actual Año Lectivo y el Estudiante quedará disponible para ser matriculado en otra Institución Educativa. ¿Esta seguro de Retirar el Estudiante?'
+        this.$bvModal.msgBoxConfirm(pregunta, {
+          headerBgVariant: 'primary',
+          headerTextVariant: 'light',
+          bodyBgVariant: 'light',
+          bodyBgClass: 'text-center',
+          title: titulo,
+          size: '',
+          buttonSize: 'sm',
+          okVariant: 'primary',
+          okTitle: 'Si, ' + titulo,
+          cancelVariant: 'danger',
+          cancelTitle: 'Cancelar',
+          footerClass: 'p-2',
+          bodyClass: 'p-5',
+          hideHeaderClose: false,
+          centered: true
+        })
+        .then(value => {
+          if (value) {
+            this.retiro.id_motivo = null       
+            this.retiro.observaciones = null
+            this.$refs['modalRetirarEstudiante'].show()
+          }
+        })
+      },
+      async retirarEstudiante() {
+        this.$v.retiro.$touch()
+        if (this.$v.retiro.$anyError) {
+          this.mensajeEmergente('danger',CONFIG.TITULO_MSG,'Algunos campos están incompletos.')
+          return false
+        } else {
+          this.retiroEstudiante.idMatricula = this.idMatricula
+          this.retiroEstudiante.idEstudiante = this.datosFichaE.idEstudiante
+          this.retiroEstudiante.idInstitucion = this.$store.state.idInstitucion
+          this.retiroEstudiante.vigencia = this.$store.state.aLectivo
+          this.retiroEstudiante.curso = this.datosFichaE.nomenclatura
+          this.retiroEstudiante.usuario = this.$store.state.nombreUsuario + ' ' + this.$store.state.apellidoUsuario
+          this.retiroEstudiante.id_motivo = this.retiro.id_motivo
+          this.retiroEstudiante.observaciones = this.retiro.observaciones
+          await axios
+          .put(CONFIG.ROOT_PATH + 'academico/matriculas/retirarestudiante', JSON.stringify(this.retiroEstudiante), { headers: {"Content-Type": "application/json; charset=utf-8" }})
+          .then(response => {
+            if (response.data.error){
+              this.mensajeEmergente('danger',CONFIG.TITULO_MSG,response.data.mensaje + ' - Retirar Estudiante')
+            } else{
+              this.$refs['modalRetirarEstudiante'].hide()
+              this.mensajeEmergente('success',CONFIG.TITULO_MSG,'El estudiante se ha retirado correctamente.')
+              this.consultaFichaMatricula()
+            }
+          })
+          .catch(err => {
+            this.mensajeEmergente('danger',CONFIG.TITULO_MSG,'Algo salio mal y no se pudo realizar: Retirar Estudiante. Intente más tarde. ' + err)
+          })
+        }
+      },
       desvincularMatricula() {
         let titulo = 'Desvincular Estudiante'
         let pregunta = 'Al desvincular el Estudiante de la Institución Educativa se eliminará el registro de la matrícula para el actual Año Lectivo y el Estudiante quedará disponible para ser matriculado en otra Institución Educativa. ¿Esta seguro de desvincular el estudiante?'
@@ -663,8 +763,21 @@
         window.open("https://siedutunja.gov.co/" + this.$store.state.FichaMatricula + "?token=" + this.idMatricula,"_blank")
         return true
       },
+      validateStateR(name) {
+        const { $dirty, $error } = this.$v.retiro[name]
+        return $dirty ? !$error : null
+      },
       nuevoFormulario() {
         this.$router.push('/matriculas/ficharenovacionmatricula')
+      },
+      async ocuparCombos() {
+        this.comboMotivosRetiro = []
+        this.$store.state.datosTablas.motivosretiro.forEach(element => {
+          this.comboMotivosRetiro.push({ 'value': element.id, 'text': element.motivo.toUpperCase() })
+        })
+      },
+      cancelarVentana() {
+        this.$refs['modalRetirarEstudiante'].hide()
       },
       cancelarFormulario() {
         this.$router.push('/')
@@ -676,6 +789,7 @@
     beforeMount() {
       this.idMatricula = this.$store.state.idMatricula
       this.consultaFichaMatricula()
+      this.ocuparCombos()
       this.fotoA = CONFIG.FOTO
     }
   }

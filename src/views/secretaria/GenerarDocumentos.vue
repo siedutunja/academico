@@ -21,8 +21,14 @@
                             <img :src="datosFichaE.foto" id="photoA" alt="photo" width="30%">
                           </b-col>
                           <b-col lg="12" class="mt-3">
-                            <h5>{{ datosFichaE.estudiante }}</h5>
-                            <h6>{{ datosFichaE.estado }}</h6>
+                            <div v-if="datosFichaE.estado=='RETIRADO'">
+                              <h4 class="text-danger">{{ datosFichaE.estudiante }}</h4>
+                              <h5 class="text-danger">{{ datosFichaE.estado }}</h5>
+                            </div>
+                            <div v-else>
+                              <h4 class="text-success">{{ datosFichaE.estudiante }}</h4>
+                              <h5 class="text-success">{{ datosFichaE.estado }}</h5>
+                            </div>
                           </b-col>
                         </b-row>
                       </b-card-text>

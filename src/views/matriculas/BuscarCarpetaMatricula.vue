@@ -45,7 +45,8 @@
                   }">
                   <template slot="table-row" slot-scope="props">
                     <span v-if="props.column.field == 'estudiante'">
-                      <span style="font-weight: bold; color: blue; cursor: pointer" @click="verCarpetaMatricula(props.row)">{{props.row.estudiante}}</span> 
+                      <span v-if="props.row.estado=='RETIRADO'" style="font-weight: bold; color: white; cursor: pointer" @click="verCarpetaMatricula(props.row)">{{props.row.estudiante}}</span> 
+                      <span v-else style="font-weight: bold; color: blue; cursor: pointer" @click="verCarpetaMatricula(props.row)">{{props.row.estudiante}}</span> 
                     </span>
                   </template>
                   <div slot="emptystate">
@@ -88,13 +89,13 @@
         },
         listaEstudiantes: [],
         encabColumnas : [
-          { label: 'Nombre del Estudiante', field: 'estudiante', sortable: true },
-          { label: 'Documento', field: 'documento', sortable: false },
-          { label: 'Sede', field: 'sede', sortable: true },
-          { label: 'Grado', field: 'grado', sortable: true },
-          { label: 'Curso', field: 'nomenclatura', sortable: true },
-          { label: 'Jornada', field: 'jornada', sortable: true },
-          { label: 'Estado', field: 'estado', sortable: true },
+          { label: 'Nombre del Estudiante', field: 'estudiante', tdClass: this.tdClassFunc, sortable: true },
+          { label: 'Documento', field: 'documento', tdClass: this.tdClassFunc, sortable: false },
+          { label: 'Sede', field: 'sede', tdClass: this.tdClassFunc, sortable: true },
+          { label: 'Grado', field: 'grado', tdClass: this.tdClassFunc, sortable: true },
+          { label: 'Curso', field: 'nomenclatura', tdClass: this.tdClassFunc, sortable: true },
+          { label: 'Jornada', field: 'jornada', tdClass: this.tdClassFunc, sortable: true },
+          { label: 'Estado', field: 'estado', tdClass: this.tdClassFunc, sortable: true },
           //{ label: '', field: 'idMatricula', sortable: false }
         ]
       }
@@ -141,6 +142,11 @@
       validateStateT(name) {
         const { $dirty, $error } = this.$v.buscarTexto[name]
         return $dirty ? !$error : null
+      },
+      tdClassFunc(row) {
+        if (row.estado == 'RETIRADO') { 
+          return 'text-white bg-danger' 
+        }
       },
       cancelarFormulario() {
         this.$router.push('/')

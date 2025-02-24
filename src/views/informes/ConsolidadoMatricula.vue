@@ -69,11 +69,9 @@
           <b-row>
             <b-col>
               <b-button class="small mx-1 mt-2" variant="primary" @click="imprimirFormulario">Imprimir Consolidado</b-button>
-              <span class="float-right mx-2 mt-2">
-                <vue-excel-xlsx variant="primary" :data="listaExportar" :columns="encabColumnasExcel" :file-name="'ConsolidadoMatricula-' + this.$store.state.aLectivo" :file-type="'xlsx'" :sheet-name="'Matriculados-' + this.$store.state.aLectivo">
-                  Exportar a Excel
-                </vue-excel-xlsx>
-              </span>
+              <vue-excel-xlsx class="mx-1 mt-2 small btn btn-outline-primary" variant="primary" :data="listaExportar" :columns="encabColumnasExcel" :file-name="'ConsolidadoMatricula-' + this.$store.state.aLectivo" :file-type="'xlsx'" :sheet-name="'Matriculados-' + this.$store.state.aLectivo">
+                Exportar a Excel
+              </vue-excel-xlsx>
             </b-col>
           </b-row>
           <template #footer>

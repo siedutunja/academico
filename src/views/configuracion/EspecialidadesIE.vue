@@ -66,11 +66,13 @@
           id: null,
           especialidad: null,
           id_institucion: null,
+          id_tipo: null,
           estado: null,
           editarEspecialidad: true
         },
         encabColumnas : [
           { label: 'Nombre de la Especialidad o Técnica', field: 'especialidad' },
+          { label: 'Tipo', field: 'id_tipo', formatFn: this.formatFnT, sortable: false },
           { label: 'Estado', field: 'estado', formatFn: this.formatFnE, tdClass: this.tdClassFuncE, sortable: false },
           { label: '', field: 'id', sortable: false }
         ]
@@ -81,6 +83,7 @@
         this.datosEspecialidad.id = null
         this.datosEspecialidad.especialidad = null
         this.datosEspecialidad.id_institucion = this.$store.state.idInstitucion
+        this.datosEspecialidad.id_tipo = null
         this.datosEspecialidad.estado = 1
         this.datosEspecialidad.editarEspecialidad = false
         this.$refs['modalCrearEditarEspecialidad'].show()
@@ -89,6 +92,7 @@
         this.datosEspecialidad.id = item.id
         this.datosEspecialidad.especialidad = item.especialidad
         this.datosEspecialidad.id_institucion = item.id_institucion
+        this.datosEspecialidad.id_tipo = item.id_tipo
         this.datosEspecialidad.estado = item.estado
         this.datosEspecialidad.editarEspecialidad = true
         this.$refs['modalCrearEditarEspecialidad'].show()
@@ -126,6 +130,15 @@
           return 'INACTIVO'
         }
         return 'ACTIVO'
+      },
+      formatFnT: function(value) {
+        if (value == 1) {
+          return 'ACADÉMICA'
+        } else if (value == 2) {
+          return 'TÉCNICA'
+        } else {
+          return ''
+        }
       },
       tdClassFuncE(row) {
         if (row.estado == 0) { 

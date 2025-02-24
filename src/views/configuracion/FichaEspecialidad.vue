@@ -8,14 +8,20 @@
           </template>
           <b-card-text>
             <b-row>
-              <b-col lg="9" md="12">
+              <b-col lg="6" md="12">
                 <b-form-group label="Nombre de la Especialidad*" label-for="especialidad" class="etiqueta">
                   <b-form-input id="especialidad" ref="especialidad" v-model.trim="$v.infoEspecialidad.especialidad.$model" :state="validateStateS('especialidad')" aria-describedby="feedEspecialidad" autocomplete="off" maxlength="255"></b-form-input>
                   <b-form-invalid-feedback id="feedEspecialidad" >Campo requerido.</b-form-invalid-feedback>
                 </b-form-group>
               </b-col>
               <b-col lg="3" md="6">
-                <b-form-group label="Estado de la Especialidad*" label-for="estado" class="etiqueta">
+                <b-form-group label="Tipo*" label-for="tipo" class="etiqueta">
+                  <b-form-select  id="tipo" ref="tipo" v-model="$v.infoEspecialidad.id_tipo.$model" :options="comboTipos" :state="validateStateS('id_tipo')" aria-describedby="feedTipo"></b-form-select>
+                  <b-form-invalid-feedback id="feedTipo">Campo requerido.</b-form-invalid-feedback>
+                </b-form-group>
+              </b-col>
+              <b-col lg="3" md="6">
+                <b-form-group label="Estado*" label-for="estado" class="etiqueta">
                   <b-form-select  id="estado" ref="estado" v-model="$v.infoEspecialidad.estado.$model" :options="comboEstados" :state="validateStateS('estado')" aria-describedby="feedEstado"></b-form-select>
                   <b-form-invalid-feedback id="feedEstado">Campo requerido.</b-form-invalid-feedback>
                 </b-form-group>
@@ -55,15 +61,21 @@
           id: null,
           id_institucion: null,
           especialidad: null,
+          id_tipo: null,
           estado: null,
           editarEspecialidad: true
         },
-        comboEstados: []
+        comboEstados: [],
+        comboTipos: [
+          { 'value': 1, 'text': 'ACADÉMICA'},
+          { 'value': 2, 'text': 'TÉCNICA'}
+        ]
       }
     },
     validations: {
       infoEspecialidad: {
         especialidad: { required, minLength: minLength(4) },
+        id_tipo: { required },
         estado: { required }
       }
     },

@@ -97,7 +97,7 @@
         this.$router.push('/matriculas/buscarcarpetamatricula')
       },
       irAsignacionAcademica() {
-        this.$router.push('/docentes/asignacioncurso')
+        this.$router.push('/docentes/asignacionacademica')
       },
       irManuales() {
         this.$router.push('/manuales')

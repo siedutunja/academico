@@ -222,17 +222,38 @@ function configRoutes () {
         {
           path: 'informes',
           redirect: '/informes/consolidadomatricula',  
-          name: 'Informes',
+          name: 'Informes y Estadísticas',
           component: {
             render (c) { return c('router-view') }
           },
           children: [
-            // 2024-12-12
+            // 2025-02-22
             {
               path: 'consolidadomatricula',
               beforeEnter: autenticar,
               name: 'Consolidado Matricula',
               component: () => import('@/views/informes/ConsolidadoMatricula')
+            },
+            // 2025-02-22
+            {
+              path: 'informesagrupacion',
+              beforeEnter: autenticar,
+              name: 'Informes por Agrupación',
+              component: () => import('@/views/informes/InformesAgrupacion')
+            },
+            // 2025-02-22
+            {
+              path: 'infoespecialidades',
+              beforeEnter: autenticar,
+              name: 'Informe por Especialidades',
+              component: () => import('@/views/informes/InfoEspecialidades')
+            },
+            // 2025-02-22
+            {
+              path: 'inforetirados',
+              beforeEnter: autenticar,
+              name: 'Informe Retirados',
+              component: () => import('@/views/informes/InfoRetirados')
             },
           ]
         },
