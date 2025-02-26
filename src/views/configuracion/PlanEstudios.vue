@@ -82,7 +82,7 @@
                       <b-form-input v-model="props.row.ih" @blur="actualizarItem(props.row)" autocomplete="off" maxlength="2" @keydown="soloNumeros" :style="(colorArea(props.row.orden))"></b-form-input>
                     </span>
                     <span v-if="props.column.field == 'porcentaje'">
-                      <b-form-input v-model="props.row.porcentaje" @blur="actualizarItem(props.row)" autocomplete="off" maxlength="3" @keydown="soloNumeros" :style="(colorArea(props.row.orden))"></b-form-input>
+                      <b-form-input type="number" v-model="props.row.porcentaje" @blur="actualizarItem(props.row)" autocomplete="off" maxlength="4" :style="(colorArea(props.row.orden))"></b-form-input>
                     </span>
                   </template>
                   <div slot="emptystate">

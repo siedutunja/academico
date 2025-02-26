@@ -96,6 +96,7 @@
           id: null,
           id_institucion: null,
           id_seccion: null,
+          vigencia: null,
           codigo_anterior: null,
           consecutivo_sede: null,
           sede: null,
@@ -158,7 +159,6 @@
         return true
       },
       async guardarDatosSede() {
-        this.infoSede.id_seccion = this.$store.state.idSeccion
         this.infoSede.sede = this.infoSede.sede.toUpperCase()
         this.infoSede.barrio = this.infoSede.barrio.toUpperCase()
         if (this.infoSede.editarSede) {

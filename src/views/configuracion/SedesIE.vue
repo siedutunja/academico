@@ -66,6 +66,7 @@
           id: null,
           id_institucion: null,
           id_seccion: null,
+          vigencia: null,
           codigo_anterior: null,
           consecutivo_sede: null,
           sede: null,
@@ -94,7 +95,8 @@
       nuevaSede() {
         this.datosSede.id = null
         this.datosSede.id_institucion = this.$store.state.idInstitucion
-        this.datosSede.id_seccion = null
+        this.datosSede.id_seccion = this.$store.state.idSeccion
+        this.datosSede.vigencia = this.$store.state.aLectivo
         this.datosSede.codigo_anterior = null
         this.datosSede.consecutivo_sede = null
         this.datosSede.sede = null
@@ -111,6 +113,7 @@
         this.datosSede.id = item.id
         this.datosSede.id_institucion = item.id_institucion
         this.datosSede.id_seccion = item.id_seccion
+        this.datosSede.vigencia = item.vigencia
         this.datosSede.codigo_anterior = item.codigo_anterior
         this.datosSede.consecutivo_sede = item.consecutivo_sede
         this.datosSede.sede = item.sede

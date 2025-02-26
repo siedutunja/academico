@@ -49,6 +49,12 @@
                       </b-col>
                     </b-row>
                   </div>
+                  <div class="ml-4" v-if="planillaSeleccionada==4">
+                    <hr>
+                    <b-form-group label="Número de Horas Diarias:" label-for="numHoras" class="etiqueta">
+                      <b-form-select id="numHoras" ref="numHoras" v-model="numeroHoras" :options="comboNumeroHoras"></b-form-select>
+                    </b-form-group>
+                  </div>
                 </b-col>
                 <b-col lg="6" class="mb-5">
                   <vue-good-table ref="cursitos" :columns="encabColumnas" :rows="listaCursos" styleClass="vgt-table condensed bordered striped" :line-numbers="true" :search-options="{enabled: true,placeholder: 'Filtrar cursos...'}"
@@ -124,6 +130,19 @@
         tema: '',
         objetivo: '',
         numeroColumnas: 1,
+        numeroHoras: 1,
+        comboNumeroHoras: [
+          {'value': 1, 'text': '1 hora'},
+          {'value': 2, 'text': '2 horas'},
+          {'value': 3, 'text': '3 horas'},
+          {'value': 4, 'text': '4 horas'},
+          {'value': 5, 'text': '5 horas'},
+          {'value': 6, 'text': '6 horas'},
+          {'value': 7, 'text': '7 horas'},
+          {'value': 8, 'text': '8 horas'},
+          {'value': 9, 'text': '9 horas'},
+          {'value': 10, 'text': '10 horas'},
+        ]
       }
     },
     methods: {
@@ -153,7 +172,7 @@
           //window.open("http://localhost/siedutunja/php/listas/planilla-03.php" + encoded,"_blank")
           window.open("https://siedutunja.gov.co/php/listas/planilla-03.php" + encoded,"_blank")
         } else if (this.planillaSeleccionada == 4) {
-          let uri = "?datos=" + JSON.stringify(this.cursosSeleccionados) + "&ie=" + this.$store.state.nombreInstitucion + "&vigencia=" + this.$store.state.aLectivo + "&escudo=" + this.$store.state.escudoInstitucion
+          let uri = "?datos=" + JSON.stringify(this.cursosSeleccionados) + "&ie=" + this.$store.state.nombreInstitucion + "&vigencia=" + this.$store.state.aLectivo + "&escudo=" + this.$store.state.escudoInstitucion + "&numeroHoras=" + this.numeroHoras
           let encoded = encodeURI(uri);
           //window.open("http://localhost/siedutunja/php/listas/planilla-04.php" + encoded,"_blank")
           window.open("https://siedutunja.gov.co/php/listas/planilla-04.php" + encoded,"_blank")

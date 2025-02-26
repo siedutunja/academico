@@ -390,6 +390,13 @@ function configRoutes () {
               name: 'Asignación Académica',
               component: () => import('@/views/docentes/AsignacionAcademica')
             },
+            // 2025-02-07
+            {
+              path: 'consultaasignacion',
+              beforeEnter: autenticar,
+              name: 'Consulta Asignación Académica',
+              component: () => import('@/views/docentes/ConsultaAsignacion')
+            },
             /*
             // 2024-03-05
             {

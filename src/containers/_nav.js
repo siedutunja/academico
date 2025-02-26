@@ -92,7 +92,7 @@ jwt.verify(token, CONFIG.SECRET_KEY, (err, data) => {
     }
     menu[0]._children[indice].items.push({ name: 'Directores de Curso', to: '/docentes/directorescurso'})
     menu[0]._children[indice].items.push({ name: 'Asignación Académica', to: '/docentes/asignacionacademica'})
-    menu[0]._children[indice].items.push({ name: 'Consultar Asignación', to: '/docentes/asignacionacademica'})
+    menu[0]._children[indice].items.push({ name: 'Consulta Asig. Académica', to: '/docentes/consultaasignacion'})
     menu[0]._children[indice].items.push({ name: 'Directorio', to: '/docentes/directoriodocentes'})
     menu[0]._children.push(
       {
