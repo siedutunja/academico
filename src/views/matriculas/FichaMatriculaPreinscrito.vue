@@ -138,20 +138,26 @@
                           <b-form-invalid-feedback id="feedDiscapacidad">Campo requerido.</b-form-invalid-feedback>
                         </b-form-group>
                       </b-col>
-                      <b-col lg="3" md="6">
-                        <b-form-group label="Educación Inclusiva*" label-for="diversa" class="etiqueta">
-                          <b-form-select  id="diversa" ref="diversa" v-model="$v.infoEstudiante.id_diversa.$model" :options="comboDiversa" :state="validateStateD('id_diversa')" aria-describedby="feedDiversa" :disabled="infoEstudiante.id_discapacidad!=='99' ? false : true"></b-form-select>
-                          <b-form-invalid-feedback id="feedDiversa">Campo requerido.</b-form-invalid-feedback>
-                        </b-form-group>
-                      </b-col>
-                      <b-col lg="3" md="6">
-                        <b-form-group label="Capacidades Excepcionales*" label-for="capacidades" class="etiqueta">
+                      <b-col lg="6" md="6">
+                        <b-form-group label="Capacidades o Talentos Excepcionales*" label-for="capacidades" class="etiqueta">
                           <b-form-select  id="capacidades" ref="capacidades" v-model="$v.infoEstudiante.id_capacidades.$model" :options="comboCapacidades" :state="validateStateD('id_capacidades')" aria-describedby="feedCapacidad"></b-form-select>
                           <b-form-invalid-feedback id="feedCapacidad">Campo requerido.</b-form-invalid-feedback>
                         </b-form-group>
                       </b-col>
                       <b-col lg="6" md="6">
-                        <b-form-group label="Victima Conflicto*" label-for="victima" class="etiqueta">
+                        <b-form-group label="Trastornos en el Aprendizaje Escolar*" label-for="trastorno" class="etiqueta">
+                          <b-form-select  id="trastorno" ref="trastorno" v-model="$v.infoEstudiante.id_trastorno.$model" :options="comboTrastornos" :state="validateStateD('id_trastorno')" aria-describedby="feedTrastorno"></b-form-select>
+                          <b-form-invalid-feedback id="feedTrastorno">Campo requerido.</b-form-invalid-feedback>
+                        </b-form-group>
+                      </b-col>
+                      <b-col lg="6" md="6">
+                        <b-form-group label="Apoyo Académico Especial*" label-for="apoyo" class="etiqueta">
+                          <b-form-select  id="apoyo" ref="apoyo" v-model="$v.infoEstudiante.id_apoyo.$model" :options="comboApoyos" :state="validateStateD('id_apoyo')" aria-describedby="feedApoyo"></b-form-select>
+                          <b-form-invalid-feedback id="feedApoyo">Campo requerido.</b-form-invalid-feedback>
+                        </b-form-group>
+                      </b-col>
+                      <b-col lg="6" md="6">
+                        <b-form-group label="Victima del Conflicto*" label-for="victima" class="etiqueta">
                           <b-form-select  id="victima" ref="victima" v-model="$v.infoEstudiante.id_victima.$model" :options="comboVictimas" :state="validateStateD('id_victima')" aria-describedby="feedVictima" @change="habilitaMunicipioExpulsor"></b-form-select>
                           <b-form-invalid-feedback id="feedVictima">Campo requerido.</b-form-invalid-feedback>
                         </b-form-group>
@@ -162,7 +168,13 @@
                           <b-form-invalid-feedback id="feedMuniExpulsor">Campo requerido.</b-form-invalid-feedback>
                         </b-form-group>
                       </b-col>
-                      <b-col lg="6" md="6">
+                      <b-col lg="4" md="6">
+                        <b-form-group label="Educación Diversa/Inclusión*" label-for="diversa" class="etiqueta">
+                          <b-form-select  id="diversa" ref="diversa" v-model="$v.infoEstudiante.id_diversa.$model" :options="comboDiversa" :state="validateStateD('id_diversa')" aria-describedby="feedDiversa" :disabled="infoEstudiante.id_discapacidad!=='99' ? false : true"></b-form-select>
+                          <b-form-invalid-feedback id="feedDiversa">Campo requerido.</b-form-invalid-feedback>
+                        </b-form-group>
+                      </b-col>
+                      <b-col lg="8" md="6">
                         <b-form-group label="Eps*" label-for="eps" class="etiqueta">
                           <b-form-select  id="eps" ref="eps" v-model="$v.infoEstudiante.id_eps.$model" :options="comboEps" :state="validateStateD('id_eps')" aria-describedby="feedEps"></b-form-select>
                           <b-form-invalid-feedback id="feedEps">Campo requerido.</b-form-invalid-feedback>
@@ -553,6 +565,8 @@
           id_sisben: null,//
           id_discapacidad: null,//
           id_capacidades: null,//
+          id_trastorno: null,//
+          id_apoyo: null,//
           id_etnia: null,//
           id_victima: null,//
           id_municipio_expulsor: null,//
@@ -617,6 +631,8 @@
         comboSisben: [],
         comboDiscapacidades: [],
         comboCapacidades: [],
+        comboTrastornos: [],
+        comboApoyos: [],
         comboVictimas: [],
         comboEtnias: [],
         comboEps: [],
@@ -659,6 +675,8 @@
         id_sisben: { required },
         id_discapacidad: { required },
         id_capacidades: { required },
+        id_trastorno: { required },
+        id_apoyo: { required },
         id_etnia: { required },
         id_victima: { required },
         id_municipio_expulsor: { required },
@@ -1054,6 +1072,8 @@
           this.infoEstudiante.id_discapacidad = this.$store.state.datosPreinscrito.id_discapacidad
         }
         this.infoEstudiante.id_capacidades = 9
+        this.infoEstudiante.id_trastorno = 9
+        this.infoEstudiante.id_apoyo = 9
         this.infoEstudiante.id_etnia = 0
         this.infoEstudiante.id_victima = 99
         this.infoEstudiante.enfermedades = null
@@ -1161,6 +1181,14 @@
         this.comboDiscapacidades = []
         this.$store.state.datosTablas.discapacidades.forEach(element => {
           this.comboDiscapacidades.push({ 'value': element.id, 'text': element.discapacidad.toUpperCase() })
+        })
+        this.comboTrastornos = []
+        this.$store.state.datosTablas.trastornos.forEach(element => {
+          this.comboTrastornos.push({ 'value': element.id, 'text': element.trastorno.toUpperCase() })
+        })
+        this.comboApoyos = []
+        this.$store.state.datosTablas.apoyos.forEach(element => {
+          this.comboApoyos.push({ 'value': element.id, 'text': element.apoyo.toUpperCase() })
         })
         this.comboEstratos = []
         this.$store.state.datosTablas.estratos.forEach(element => {

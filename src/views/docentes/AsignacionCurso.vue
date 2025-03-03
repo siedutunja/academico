@@ -77,7 +77,7 @@
   import { VueGoodTable } from 'vue-good-table'
 
   export default {
-    name: 'asignacionacademica',
+    name: 'asignacioncurso',
     components: {
       VueGoodTable,
     },

@@ -385,10 +385,17 @@ function configRoutes () {
             },
             // 2025-02-07
             {
-              path: 'asignacionacademica',
+              path: 'asignacioncurso',
               beforeEnter: autenticar,
-              name: 'Asignación Académica',
-              component: () => import('@/views/docentes/AsignacionAcademica')
+              name: 'Asignación Académica por Curso',
+              component: () => import('@/views/docentes/AsignacionCurso')
+            },
+            // 2025-02-07
+            {
+              path: 'asignaciondocente',
+              beforeEnter: autenticar,
+              name: 'Asignación Académica por Docente',
+              component: () => import('@/views/docentes/AsignacionDocente')
             },
             // 2025-02-07
             {
@@ -397,15 +404,13 @@ function configRoutes () {
               name: 'Consulta Asignación Académica',
               component: () => import('@/views/docentes/ConsultaAsignacion')
             },
-            /*
-            // 2024-03-05
+            // 2025-02-28
             {
               path: 'directoriodocentes',
               beforeEnter: autenticar,
               name: 'Directorio de Docentes',
               component: () => import('@/views/docentes/DirectorioDocentes')
             },
-            */
           ]
         },
         // 2024-02-18

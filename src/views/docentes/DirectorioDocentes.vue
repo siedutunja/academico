@@ -1,36 +1,38 @@
 <template>
   <div>
-    <b-row>
-      <b-col lg="12">
-        <h3 class="ml-2"><b-icon icon="person-square" aria-hidden="true"></b-icon> DIRECTORIO DE DOCENTES</h3>
-      </b-col>
-    </b-row>
     <b-row class="mt-2">
       <b-col lg="12">
         <b-card>
           <template #header>
-            <div class="card-header-actions float-right">
-              <b-button class="mx-2" size="sm" variant="primary" title="Descargar Excel">
-                <vue-excel-xlsx style="border: none; padding: 0px; background: none; color: white" :data="listaDocentes" :columns="encabColumnas" :file-name="'ListaDocentes'" :file-type="'xlsx'" :sheet-name="'Docentes'">
-                  <b-icon icon="file-earmark-excel"></b-icon>
-                </vue-excel-xlsx>
-              </b-button>
-            </div>
-            <h5 class="mb-0"><b-icon icon="card-checklist" aria-hidden="true"></b-icon> LISTA DE DOCENTES</h5>
+            <h5 class="mb-0"><b-icon icon="person-square" aria-hidden="true"></b-icon> DIRECTORIO DE DOCENTES</h5>
           </template>
           <b-card-text>
             <b-row>
               <b-col lg="12">
-                <vue-good-table :columns="encabColumnas" :rows="listaDocentes" styleClass="vgt-table condensed bordered striped" :line-numbers="true">
-                  <div slot="emptystate">
-                    <h5 class="text-danger ml-5">No se encontraron docentes</h5>
-                  </div>
-                </vue-good-table>
+                <b-card header-bg-variant="secondary">
+                  <template #header>
+                    <h5 class="mb-0"><b-icon icon="card-checklist" aria-hidden="true"></b-icon> Lista de Docentes</h5>
+                  </template>
+                  <b-card-text>
+                    <vue-good-table :columns="encabColumnas" :rows="listaDocentes" styleClass="vgt-table condensed bordered striped" :line-numbers="true" :search-options="{enabled: true,placeholder: 'Buscar docente...'}">
+                      <div slot="emptystate">
+                        <h5 class="text-danger ml-5">No existen Docentes creados</h5>
+                      </div>
+                    </vue-good-table>
+                    <b-row>
+                      <b-col lg="12" class="mt-5">
+                        <vue-excel-xlsx class="small mx-1 mt-2 btn btn-outline-primary" :data="listaDocentes" :columns="encabColumnas" :file-name="'Docentes- ' + new Date().toLocaleDateString()" :file-type="'xlsx'" :sheet-name="'Docentes ' + $store.state.aLectivo">
+                          Exportar Directorio a Excel
+                        </vue-excel-xlsx>
+                      </b-col>
+                    </b-row>
+                  </b-card-text>
+                </b-card>
               </b-col>
             </b-row>
           </b-card-text>
           <template #footer>
-            <em>Exporte el directorio a Excel haciendo clic en el botón con el icono de Excel.</em>
+            <em>Directorio de Docentes.</em>
           </template>
         </b-card>
       </b-col>
@@ -52,10 +54,38 @@
     data () {
       return {
         listaDocentes: [],
+        datosDocente: {
+          id: null,
+          documento: null,
+          id_tipo_documento: null,
+          id_municipio_documento: null,
+          nombre1: null,
+          nombre2: null,
+          apellido1: null,
+          apellido2: null,
+          id_genero: null,
+          fecha_nacimiento: null,
+          id_rh: null,
+          direccion: null,
+          id_municipio_direccion: null,
+          telefono1: null,
+          telefono2: null,
+          correo: null,
+          idDocente: null,
+          id_escalafon: null,
+          titulo: null,
+          estado: null,
+          idUsuario: null,
+          usuario: null,
+          clave: null,
+          editarDocente: true
+        },
         encabColumnas : [
-          { label: 'Docente', field: 'docente', sortable: false },
-          { label: 'Tipo', field: 'nemo', sortable: false },
+          { label: 'Docente', field: 'docente' },
           { label: 'Documento', field: 'documento', sortable: false },
+          { label: 'Tipo', field: 'nomenclatura', sortable: false },
+          { label: 'Genero', field: 'id_genero', sortable: false },
+          { label: 'Fecha_Nace', field: 'fechaNace', sortable: false },
           { label: 'Dirección', field: 'direccion', sortable: false },
           { label: 'Municipio', field: 'munDireccion', sortable: false },
           { label: 'Teléfono', field: 'telefono1', sortable: false },
@@ -65,9 +95,6 @@
       }
     },
     methods: {
-      cancelarFormulario() {
-        this.$refs['modalConsultaDocente'].hide()
-      },
       async consultarListaDocentes() {
         this.listaDocentes = []
         await axios

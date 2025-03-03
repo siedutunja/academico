@@ -25,6 +25,13 @@
                         <h5 class="text-danger ml-5">No existen Docentes creados</h5>
                       </div>
                     </vue-good-table>
+                    <b-row>
+                      <b-col lg="12" class="mt-5">
+                        <vue-excel-xlsx class="small mx-1 mt-2 btn btn-outline-primary" :data="listaDocentes" :columns="encabColumnas" :file-name="'Docentes- ' + new Date().toLocaleDateString()" :file-type="'xlsx'" :sheet-name="'Docentes ' + $store.state.aLectivo">
+                          Exportar Directorio a Excel
+                        </vue-excel-xlsx>
+                      </b-col>
+                    </b-row>
                   </b-card-text>
                 </b-card>
               </b-col>

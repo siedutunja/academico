@@ -408,6 +408,7 @@
             if (response.data.error){
               this.mensajeEmergente('danger',CONFIG.TITULO_MSG,response.data.mensaje + ' - Actualizar Docente')
             } else{
+              this.cargarDatosDocentes()
               this.$emit("retorno", 2)
             }
           })
@@ -425,7 +426,7 @@
             if (response.data.error){
               this.mensajeEmergente('danger',CONFIG.TITULO_MSG,response.data.mensaje + ' - Crear Docente')
             } else{
-              //this.enviarCorreoNuevo()
+              this.cargarDatosDocentes()
               this.$emit("retorno", 1)
             }
           })
@@ -520,6 +521,26 @@
         })
         .catch(err => {
           this.mensajeEmergente('danger',CONFIG.TITULO_MSG,'Algo salio mal y no se pudo realizar: Correo Nuevo docente. Intente más tarde. ' + err)
+        })
+      },
+      async cargarDatosDocentes() {
+        await axios
+        .get(CONFIG.ROOT_PATH + 'academico/carguedocentes', {params: {idInstitucion: this.$store.state.idInstitucion}})
+        .then(response => {
+          if (response.data.error){
+            alert(response.data.mensaje + ' - Consulta datos Docentes Activos')
+            location.replace(CONFIG.ROOT_MODULO_LOGIN)
+          } else {
+            if(response.data.datos != 0) {
+              this.$store.commit('set', ['datosDocentes', response.data.datos])
+            } else {
+              this.$store.commit('set', ['datosDocentes', []])
+            }
+          }
+        })
+        .catch(err => {
+          alert('Algo salio mal y no se pudo realizar: Consulta datos Docentes Activos. Intente más tarde. ' + err)
+          location.replace(CONFIG.ROOT_WEBSITE)
         })
       },
       soloLetras(e) {

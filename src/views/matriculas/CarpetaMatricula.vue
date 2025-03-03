@@ -36,10 +36,13 @@
                             <b-tr><b-th>Estrato</b-th><b-td>{{datosFichaE.estrato}}</b-td></b-tr>
                             <b-tr><b-th>Etnia</b-th><b-td>{{datosFichaE.etnia}}</b-td></b-tr>
                             <b-tr><b-th>Discapacidad</b-th><b-td>{{datosFichaE.discapacidad}}</b-td></b-tr>
-                            <b-tr><b-th>Capacidades</b-th><b-td>{{datosFichaE.capacidad}}</b-td></b-tr>
-                            <b-tr><b-th>Victima</b-th><b-td>{{datosFichaE.victima}}</b-td></b-tr>
+                            <b-tr><b-th>Capacidad Excepcional</b-th><b-td>{{datosFichaE.capacidad}}</b-td></b-tr>
+                            <b-tr><b-th>Trastorno del Aprendizaje</b-th><b-td>{{datosFichaE.trastorno}}</b-td></b-tr>
+                            <b-tr><b-th>Apoyo Académico Especial</b-th><b-td>{{datosFichaE.apoyo}}</b-td></b-tr>
+                            <b-tr><b-th>Victima del Conflicto</b-th><b-td>{{datosFichaE.victima}}</b-td></b-tr>
                             <b-tr><b-th>Municipio Expulsor</b-th><b-td>{{datosFichaE.municipioExp != null ? datosFichaE.municipioExp.toUpperCase() : '-'}}</b-td></b-tr>
                             <b-tr><b-th>EPS</b-th><b-td>{{datosFichaE.eps}}</b-td></b-tr>
+                            <b-tr><b-th>Enfermedades/Tratamiento</b-th><b-td>{{datosFichaE.enfermedades}}</b-td></b-tr>
                             <b-tr><b-th>Aseguradora</b-th><b-td>{{datosFichaE.aseguradora}}</b-td></b-tr>
                             <b-tr><b-th>Dirección</b-th><b-td>{{datosFichaE.direccion}}</b-td></b-tr>
                             <b-tr><b-th>Municipio</b-th><b-td>{{datosFichaE.municipioDir != null ? datosFichaE.municipioDir.toUpperCase() : '-'}}</b-td></b-tr>
@@ -77,6 +80,7 @@
                             <b-tr><b-th>Nuevo</b-th><b-td>{{datosFichaE.id_nuevo}}</b-td></b-tr>
                             <b-tr><b-th>Procedencia</b-th><b-td>{{datosFichaE.procedencia}}</b-td></b-tr>
                             <b-tr><b-th>Repitente</b-th><b-td>{{datosFichaE.id_repitente}}</b-td></b-tr>
+                            <b-tr><b-th>Educación Diversa/Inclusión</b-th><b-td>{{datosFichaE.id_diversa}}</b-td></b-tr>
                             <b-tr><b-th>Observaciones</b-th><b-td>{{datosFichaE.obs_matricula}}</b-td></b-tr>
                             <b-tr><b-th>ID</b-th><b-td>{{idMatricula}}</b-td></b-tr>
                           </b-tbody>

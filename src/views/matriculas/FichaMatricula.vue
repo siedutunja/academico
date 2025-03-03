@@ -50,6 +50,12 @@
                   <b-form-invalid-feedback id="feedObserv">Campo requerido.</b-form-invalid-feedback>
                 </b-form-group>
               </b-col>
+              <b-col lg="3" md="6">
+                <b-form-group label="Educación Diversa/Inclusión*" label-for="diversa" class="etiqueta">
+                  <b-form-select  id="diversa" ref="diversa" v-model="$v.infoMatricula.id_diversa.$model" :options="comboDiversa" :state="validateStateD('id_diversa')"></b-form-select>
+                  <b-form-invalid-feedback id="feedDiversa">Campo requerido.</b-form-invalid-feedback>
+                </b-form-group>
+              </b-col>
             </b-row>
           </b-card-text>
           <template #footer>
@@ -88,6 +94,7 @@
           id_especialidad: null,
           id_nuevo: null,
           id_repitente: null,
+          id_diversa: null,
           obs_matricula: null
         },
         comboSedes: [],
@@ -96,6 +103,7 @@
         comboEspecialidades: [],
         comboRepitente: [],
         comboNuevo: [],
+        comboDiversa: [],
       }
     },
     validations: {
@@ -106,6 +114,7 @@
         id_especialidad: { required },
         id_nuevo: { required },
         id_repitente: { required },
+        id_diversa: { required },
       }
     },
     methods: {
@@ -182,6 +191,10 @@
         })
       },
       ocuparCombos() {
+        this.comboDiversa = []
+        this.$store.state.datosTablas.sino.forEach(element => {
+          this.comboDiversa.push({ 'value': element.id, 'text': element.sino.toUpperCase() })
+        })
         this.comboEspecialidades = []
         this.$store.state.datosEspecialidades.forEach(element => {
           this.comboEspecialidades.push({ 'value': element.id, 'text': element.especialidad.toUpperCase() })
@@ -233,8 +246,6 @@
       this.consultaDatosMatriculaId()
       this.ocuparCombos()
       this.ocuparComboSedes()
-      
-      
     }
   }
 </script>

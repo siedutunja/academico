@@ -90,8 +90,9 @@ jwt.verify(token, CONFIG.SECRET_KEY, (err, data) => {
     if (tokenDecodificado.id_rol == 1 || tokenDecodificado.id_rol == 12 || tokenPermisos.perActDocente == 1) {
       menu[0]._children[indice].items.push({ name: 'Gestión de Docentes', to: '/docentes/listadocentes'})
     }
+    menu[0]._children[indice].items.push({ name: 'Asig. Académica por Docente', to: '/docentes/asignaciondocente'})
+    menu[0]._children[indice].items.push({ name: 'Asig. Académica por Curso', to: '/docentes/asignacioncurso'})
     menu[0]._children[indice].items.push({ name: 'Directores de Curso', to: '/docentes/directorescurso'})
-    menu[0]._children[indice].items.push({ name: 'Asignación Académica', to: '/docentes/asignacionacademica'})
     menu[0]._children[indice].items.push({ name: 'Consulta Asig. Académica', to: '/docentes/consultaasignacion'})
     menu[0]._children[indice].items.push({ name: 'Directorio', to: '/docentes/directoriodocentes'})
     menu[0]._children.push(
