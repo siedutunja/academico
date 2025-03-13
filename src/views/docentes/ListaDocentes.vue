@@ -93,6 +93,7 @@
           idUsuario: null,
           usuario: null,
           clave: null,
+          vigencia: null,
           editarDocente: true
         },
         encabColumnas : [
@@ -101,6 +102,7 @@
           { label: 'Teléfono', field: 'telefono1', sortable: false },
           { label: 'Correo', field: 'correo', sortable: false, },
           { label: 'Usuario', field: 'usuario', sortable: false, },
+          { label: 'Vigencia', field: 'vigencia', formatFn: this.formatFnV, sortable: false, },
           { label: 'Estado', field: 'estado', formatFn: this.formatFnE, tdClass: this.tdClassFuncE, sortable: false },
           { label: '', field: 'id', sortable: false }
         ]
@@ -137,6 +139,11 @@
         this.datosDocente.idUsuario = item.idUsuario
         this.datosDocente.usuario = item.usuario
         this.datosDocente.clave = item.clave
+        if (item.vigencia != null && item.vigencia != '') {
+          this.datosDocente.vigencia = item.vigencia.substr(0,10)
+        } else {
+          this.datosDocente.vigencia = null
+        }
         this.datosDocente.editarDocente = true
         this.$refs['modalCrearEditarDocente'].show()
       },
@@ -167,6 +174,12 @@
         .catch(err => {
           this.mensajeEmergente('danger',CONFIG.TITULO_MSG,'Algo salio mal y no se pudo realizar: Lista Docentes. Intente más tarde.' + err)
         })
+      },
+      formatFnV: function(value) {
+        if (value != null && value != '') {
+          return value.substr(0,10)
+        }
+        return ''
       },
       formatFnE: function(value) {
         if (value == 0) {

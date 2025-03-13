@@ -392,7 +392,7 @@
             this.cargarDatosTablas()
             setTimeout(()=>{
               this.btnHabilitado = true
-            },1500)
+            },500)
           }
         })
       }

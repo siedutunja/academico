@@ -118,20 +118,27 @@
                   <b-form-invalid-feedback id="feedTitulo">Campo requerido.</b-form-invalid-feedback>
                 </b-form-group>
               </b-col>
-              <b-col lg="3" md="6">
-                <b-form-group label="Estado del Docente*" label-for="estado" class="etiqueta">
-                  <b-form-select  id="estado" ref="estado" v-model="$v.datosPersona.estado.$model" :options="comboEstados" :state="validateStateD('estado')" aria-describedby="feedEstado" :disabled="!habilitarCampo"></b-form-select>
-                  <b-form-invalid-feedback id="feedEstado">Campo requerido.</b-form-invalid-feedback>
-                </b-form-group>
-              </b-col>
-              <b-col lg="3" md="6" v-if="$store.state.idRol==1">
+              <b-col lg="12"><hr></b-col>
+              <b-col lg="3" md="6" v-if="$store.state.idRol==1 || $store.state.idRol==12">
                 <b-form-group label="Usuario" class="etiqueta">
                   <b-form-input v-model.trim="datosPersona.usuario" disabled></b-form-input>
                 </b-form-group>
               </b-col>
-              <b-col lg="3" md="6" v-if="$store.state.idRol==1">
+              <b-col lg="3" md="6" v-if="$store.state.idRol==1 || $store.state.idRol==12">
                 <b-form-group label="Contraseña" class="etiqueta">
                   <b-form-input v-model.trim="datosPersona.clave" disabled></b-form-input>
+                </b-form-group>
+              </b-col>
+              <b-col lg="3" md="6" v-if="$store.state.idRol==1 || $store.state.idRol==12">
+                <b-form-group label="Fecha Vigencia*" label-for="fechaV" class="etiqueta">
+                  <b-form-input id="fechaV" ref="fechaV" type="date" v-model.trim="$v.datosPersona.vigencia.$model" :state="validateStateD('vigencia')" aria-describedby="feedFechaV" :disabled="!habilitarCampo"></b-form-input>
+                  <b-form-invalid-feedback id="feedFechaV" >Campo requerido.</b-form-invalid-feedback>            
+                </b-form-group>
+              </b-col>
+              <b-col lg="3" md="6">
+                <b-form-group label="Estado del Docente*" label-for="estado" class="etiqueta">
+                  <b-form-select  id="estado" ref="estado" v-model="$v.datosPersona.estado.$model" :options="comboEstados" :state="validateStateD('estado')" aria-describedby="feedEstado" :disabled="!habilitarCampo"></b-form-select>
+                  <b-form-invalid-feedback id="feedEstado">Campo requerido.</b-form-invalid-feedback>
                 </b-form-group>
               </b-col>
             </b-row>
@@ -215,6 +222,7 @@
           id_entorno: null,
           id_institucion: null,
           id_dependencia: null,
+          vigencia: null,
           editarDocente: true
         },
         comboTiposDoc: [],
@@ -249,6 +257,7 @@
         correo: { required, minLength: minLength(5) },
         id_escalafon: { required },
         titulo: { required },
+        vigencia: { required },
         estado: { required }
       }
     },
@@ -335,6 +344,7 @@
             this.datosPersona.idUsuario = uuid.v1()
             this.datosPersona.usuario = this.nuevoDocumento
             this.datosPersona.clave = this.nuevoDocumento
+            this.datosPersona.vigencia = null
             this.datosPersona.id_rol = 8
             this.datosPersona.id_entorno = 4
             this.datosPersona.id_institucion = this.$store.state.idInstitucion
@@ -349,7 +359,7 @@
         })
       },
       validarDatosFormulario() {
-        console.log(JSON.stringify(this.datosPersona))
+        //console.log(JSON.stringify(this.datosPersona))
         this.$v.datosPersona.$touch()
         if (this.$v.datosPersona.$anyError) {
           this.mensajeEmergente('danger',CONFIG.TITULO_MSG,'Algunos campos están incompletos.')
@@ -400,7 +410,9 @@
         }
         this.datosPersona.correo = this.datosPersona.correo.toLowerCase()
         this.datosPersona.titulo = this.datosPersona.titulo.toUpperCase()
-
+        if (this.datosPersona.vigencia != null && this.datosPersona.vigencia != '') {
+          this.datosPersona.vigencia = this.datosPersona.vigencia.substr(0,10)
+        }
         if (this.datosPersona.editarDocente) {
           await axios
           .put(CONFIG.ROOT_PATH + 'academico/docente', JSON.stringify(this.datosPersona), { headers: {"Content-Type": "application/json; charset=utf-8" }})

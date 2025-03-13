@@ -4,15 +4,15 @@
       <b-col lg="12">
         <b-card>
           <template #header>
-            <h5 class="mb-0"><b-icon icon="person-square" aria-hidden="true"></b-icon> ADMINISTRATIVOS DE LA INSTITUCIÓN EDUCATIVA</h5>
+            <h5 class="mb-0"><b-icon icon="person-square" aria-hidden="true"></b-icon> ADMINISTRADORES DE LA INSTITUCIÓN EDUCATIVA</h5>
           </template>
           <b-card-text>
             <b-row>
               <b-col lg="12">
                 <b-card header-bg-variant="secondary">
                   <template #header>
-                    <b-button class="small float-right" variant="dark" @click="nuevoAdministrativo" v-if="$store.state.idRol==1 || $store.state.idRol==12">Nuevo Administrativo</b-button>
-                    <h5 class="mb-0"><b-icon icon="card-checklist" aria-hidden="true"></b-icon> Lista de Administrativos</h5>
+                    <b-button class="small float-right" variant="dark" @click="nuevoAdministrativo" v-if="$store.state.idRol==1 || $store.state.idRol==12">Nuevo Administrador</b-button>
+                    <h5 class="mb-0"><b-icon icon="card-checklist" aria-hidden="true"></b-icon> Lista de Administradores</h5>
                   </template>
                   <b-card-text>
                     <vue-good-table :columns="encabColumnas" :rows="listaAdministrativos" styleClass="vgt-table condensed bordered striped" :line-numbers="true">

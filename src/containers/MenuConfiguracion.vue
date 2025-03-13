@@ -29,8 +29,11 @@
     <CDropdownItem to="/administrativos/listaadministrativos">
       <CIcon name="cilGroup" />Gestión de Personal Administrativo
     </CDropdownItem>
-    <!--
     <CDropdownDivider/>
+    <CDropdownItem to="/configuracion/criteriosevaluacion">
+      <CIcon name="cilGroup" />Criterios de Evaluación
+    </CDropdownItem>
+    <!--
     <CDropdownItem to="infoinstitucional">
       <CIcon name="cilBuilding" />Datos Generales de la IE
     </CDropdownItem>

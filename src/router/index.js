@@ -207,6 +207,13 @@ function configRoutes () {
               name: 'Configurar Documentos',
               component: () => import('@/views/configuracion/ConfigurarDocumentos')
             },
+            // 2025-01-28
+            {
+              path: 'criteriosevaluacion',
+              beforeEnter: autenticar,
+              name: 'Criterios de Evaluación',
+              component: () => import('@/views/configuracion/CriteriosEvaluacion')
+            },
 
 
             // 2024-10-26 ????????????????????

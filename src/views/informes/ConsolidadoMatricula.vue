@@ -122,6 +122,85 @@
         encabColumnasExcel : [
           { label: 'Estudiante', field: 'estudiante' },
           { label: 'Documento', field: 'documento' },
+          { label: 'Tipo', field: 'nomenclatura' },
+          { label: 'Expedido', field: 'mundoce' },
+          { label: 'Genero', field: 'id_genero' },
+          { label: 'FechaNace', field: 'fechanace' },
+          { label: 'MunicNace', field: 'munnace' },
+          { label: 'Pais', field: 'pais' },
+          { label: 'Rh', field: 'rh' },
+          { label: 'Estrato', field: 'id_estrato' },
+          { label: 'Discapacidad', field: 'discapacidad' },
+          { label: 'Capacidades', field: 'capacidad' },
+          { label: 'Trastorno', field: 'trastorno' },
+          { label: 'Apoyo', field: 'apoyo' },
+          { label: 'Etnia', field: 'etnia' },
+          { label: 'Victima', field: 'victima' },
+          { label: 'MunExpulsor', field: 'munex' },
+          { label: 'Eps', field: 'eps' },
+          { label: 'Seguro', field: 'id_seguro' },
+          { label: 'Aseguradora', field: 'aseguradora' },
+          { label: 'Tratamiento', field: 'enfermedades' },
+          { label: 'Dirección', field: 'direccion' },
+          { label: 'MunicDirección', field: 'mundire' },
+          { label: 'Barrio', field: 'barrio' },
+          { label: 'Zona', field: 'zona' },
+          { label: 'Teléfono1', field: 'telefono1' },
+          { label: 'Teléfono2', field: 'telefono2' },
+          { label: 'Correo', field: 'correo' },
+          { label: 'Código', field: 'codigo' },
+          { label: 'Papá', field: 'papa' },
+          { label: 'DocPapá', field: 'docpapa' },
+          { label: 'TipoDocPapá', field: 'tipodocpa' },
+          { label: 'ExpedidoPapá', field: 'mundocpa' },
+          { label: 'GeneroPapá', field: 'generopa' },
+          { label: 'FechaNacePapá', field: 'fechanacepa' },
+          { label: 'MunicNacePapá', field: 'munnacepa' },
+          { label: 'PaísPapá', field: 'paispa' },
+          { label: 'RhPapá', field: 'rhpa' },
+          { label: 'EstratoPapá', field: 'estratopa' },
+          { label: 'DirecciónPapá', field: 'dirpa' },
+          { label: 'MunicDirecciónPapá', field: 'mundirpa' },
+          { label: 'BarrioPapá', field: 'barriopa' },
+          { label: 'MunicDirecciónPapá', field: 'mundirpa' },
+          { label: 'TelPapá1', field: 'tel1pa' },
+          { label: 'TelPapá2', field: 'tel2pa' },
+          { label: 'CorreoPapá', field: 'correopa' },
+          { label: 'Mamá', field: 'mama' },
+          { label: 'DocMamá', field: 'docmama' },
+          { label: 'TipoDocMamá', field: 'tipodocma' },
+          { label: 'ExpedidoMamá', field: 'mundocma' },
+          { label: 'GeneroMamá', field: 'generoma' },
+          { label: 'FechaNaceMamá', field: 'fechanacema' },
+          { label: 'MunicNaceMamá', field: 'munnacema' },
+          { label: 'PaísMamá', field: 'paisma' },
+          { label: 'RhMamá', field: 'rhma' },
+          { label: 'EstratoMamá', field: 'estratoma' },
+          { label: 'DirecciónMamá', field: 'dirma' },
+          { label: 'MunicDirecciónMamá', field: 'mundirma' },
+          { label: 'BarrioMamá', field: 'barrioma' },
+          { label: 'MunicDirecciónMamá', field: 'mundirma' },
+          { label: 'TelMamá1', field: 'tel1ma' },
+          { label: 'TelMamá2', field: 'tel2ma' },
+          { label: 'CorreoMamá', field: 'correoma' },
+          { label: 'Acudiente', field: 'acudiente' },
+          { label: 'DocAcudiente', field: 'docac' },
+          { label: 'TipoDocAcudiente', field: 'tipodocac' },
+          { label: 'ExpedidoAcudiente', field: 'mundocac' },
+          { label: 'GeneroAcudiente', field: 'generoac' },
+          { label: 'FechaNaceAcudiente', field: 'fechanaceac' },
+          { label: 'MunicNaceAcudiente', field: 'munnaceac' },
+          { label: 'PaísAcudiente', field: 'paisac' },
+          { label: 'RhAcudiente', field: 'rhac' },
+          { label: 'EstratoAcudiente', field: 'estratoac' },
+          { label: 'DirecciónAcudiente', field: 'dirac' },
+          { label: 'MunicDirecciónAcudiente', field: 'mundirac' },
+          { label: 'BarrioAcudiente', field: 'barrioac' },
+          { label: 'MunicDirecciónAcudiente', field: 'mundirac' },
+          { label: 'TelAcudiente1', field: 'tel1ac' },
+          { label: 'TelAcudiente2', field: 'tel2ac' },
+          { label: 'CorreoAcudiente', field: 'correoac' },
+          { label: 'Parentesco', field: 'parentesco' },
           { label: 'Sede', field: 'sede' },
           { label: 'Grado', field: 'grado' },
           { label: 'Curso', field: 'curso' },
@@ -142,11 +221,11 @@
         .get(CONFIG.ROOT_PATH + 'academico/informes/consolidadomatricula/excel', {params: {idInstitucion: this.$store.state.idInstitucion, vigencia: this.$store.state.aLectivo}})
         .then(response => {
           if (response.data.error){
-            this.mensajeEmergente('danger',CONFIG.TITULO_MSG,response.data.mensaje + ' - Consulta datos matricula Excel Sedes Activas')
+            this.mensajeEmergente('danger',CONFIG.TITULO_MSG,response.data.mensaje + ' - Consulta datos matricula Excel Sedes Activas++++')
           } else {
             if(response.data.datos != 0) {
               this.listaExportar = response.data.datos
-              //console.log(JSON.stringify(this.listaExportar))
+              console.log(JSON.stringify(this.listaExportar))
             }
           }
         })
@@ -177,7 +256,7 @@
         .get(CONFIG.ROOT_PATH + 'academico/informes/consolidadomatricula', {params: {idInstitucion: this.$store.state.idInstitucion, vigencia: this.$store.state.aLectivo}})
         .then(response => {
           if (response.data.error){
-            this.mensajeEmergente('danger',CONFIG.TITULO_MSG,response.data.mensaje + ' - Consulta datos matricula Sedes Activas')
+            this.mensajeEmergente('danger',CONFIG.TITULO_MSG,response.data.mensaje + ' - Consulta datos matricula Sedes Activas****')
           } else {
             if(response.data.datos != 0) {
               this.listaSedes = response.data.datos
@@ -209,7 +288,7 @@
           this.exportarExcel()
         })
         .catch(err => {
-          this.mensajeEmergente('danger',CONFIG.TITULO_MSG,'Algo salio mal y no se pudo realizar: Consulta datos matricula Sedes Activas. Intente más tarde. ' + err)
+          this.mensajeEmergente('danger',CONFIG.TITULO_MSG,'Algo salio mal y no se pudo realizar: Consulta datos matricula Sedes Activas****. Intente más tarde. ' + err)
         })
       },
       datosRecibidos() {
