@@ -45,8 +45,8 @@
                   }">
                   <template slot="table-row" slot-scope="props">
                     <span v-if="props.column.field == 'estudiante'">
-                      <span v-if="props.row.grado == null" style="font-weight: bold; color: blue; cursor: pointer" @click="renovarMatricula(props.row)">{{props.row.estudiante}}</span> 
-                      <span v-else>{{props.row.estudiante}}</span> 
+                      <span v-if="props.row.idInstitucion != $store.state.idInstitucion && (props.row.estado == 2 || props.row.estado == null)" style="font-weight: bold; color: blue; cursor: pointer" @click="renovarMatricula(props.row)">{{props.row.estudiante}}</span> 
+                      <span v-else>{{props.row.estudiante}}</span>
                     </span>
                   </template>
                   <div slot="emptystate">
@@ -91,7 +91,9 @@
         encabColumnas : [
           { label: 'Apellidos y Nombres del Estudiante', field: 'estudiante', sortable: true },
           { label: 'Documento', field: 'documento', sortable: false },
-          { label: 'Grado', field: 'grado', sortable: true },
+          { label: 'Estado', field: 'estado', formatFn: this.formatFnE, sortable: true },
+          { label: 'Institución', field: 'institucion', sortable: true },
+          //{ label: 'IdIE', field: 'idInstitucion', sortable: true },
           //{ label: 'Repitente', field: 'id_repitente', formatFn: this.formatFnF, sortable: false }
         ]
       }
@@ -133,6 +135,14 @@
           })
         }
         return true
+      },
+      formatFnE: function(value) {
+        if (value == 1) {
+          return 'MATRICULADO'
+        } else if (value == 2) {
+          return 'RETIRADO'
+        }
+        return 'SIN MATRICULAR'
       },
       validateStateT(name) {
         const { $dirty, $error } = this.$v.buscarTexto[name]

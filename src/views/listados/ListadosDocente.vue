@@ -4,22 +4,17 @@
       <b-col lg="12">
         <b-card>
           <template #header>
-            <h5 class="mb-0"><b-icon icon="card-checklist" aria-hidden="true"></b-icon> LISTAS DE ESTUDIANTES POR GRADO O CURSO</h5>
+            <h5 class="mb-0"><b-icon icon="card-checklist" aria-hidden="true"></b-icon> LISTAS DE ESTUDIANTES POR DOCENTE</h5>
           </template>
           <b-card-text>
             <b-row>
               <b-col lg="6">
-                <b-form-group label="Seleccione la Sede:" label-for="sedes" class="etiqueta">
-                  <b-form-select id="sedes" ref="sedes" v-model="idSede" :options="comboSedes" @change="idTipo=null"></b-form-select>
-                </b-form-group>
-              </b-col>
-              <b-col lg="6">
-                <b-form-group label="Tipo de Listado:" label-for="tipolista" class="etiqueta">
-                  <b-form-select id="tipolista" ref="tipolista" v-model="idTipo" :options="comboTipos" @change="ocuparlistaCursosSede()" :disabled="idSede!=null ? false : true"></b-form-select>
+                <b-form-group label="Seleccione el Docente:" label-for="docentes" class="etiqueta">
+                  <b-form-select id="docentes" ref="docentes" v-model="idDocente" :options="comboDocentes" @change="consultaListaAsignacion()"></b-form-select>
                 </b-form-group>
               </b-col>
             </b-row>
-            <div v-if="idTipo!=null">
+            <div v-if="idDocente!=null">
               <b-row>
                 <b-col lg="12"><hr></b-col>
               </b-row>
@@ -102,38 +97,20 @@
                       </b-form-group>
                     </b-col>
                   </b-row>
-                  <div v-if="idTipo == 1">
-                    <vue-good-table ref="cursitos" :columns="encabColumnas" :rows="listaCursos" styleClass="vgt-table condensed bordered striped" :line-numbers="true" :search-options="{enabled: true,placeholder: 'Filtrar cursos...'}"
-                      :select-options="{enabled: true,selectionText: 'cursos seleccionados',clearSelectionText: 'Limpiar',}">
-                      <template #selected-row-actions>
-                        <button class="small btn btn-primary" @click="imprimirListas()">Imprimir Cursos</button>
-                      </template>
-                      <template slot="table-row" slot-scope="props">
-                        <span v-if="props.column.field == 'id'">
-                          <span style="font-weight: bold; color: blue; cursor: pointer" @click="consultaListaCurso(props.row)" title="Vista Curso"><CIcon name="cilZoom"/></span>
-                        </span>
-                      </template>
-                      <div slot="emptystate">
-                        <h5 class="text-danger ml-5">No existen Cursos en la Sede</h5>
-                      </div>
-                    </vue-good-table>
-                  </div>
-                  <div v-else>
-                    <vue-good-table ref="graditos" :columns="encabColumnasGrados" :rows="listaGrados" styleClass="vgt-table condensed bordered striped" :line-numbers="true" :search-options="{enabled: true,placeholder: 'Filtrar grados...'}"
-                      :select-options="{enabled: true,selectionText: 'grados seleccionados',clearSelectionText: 'Limpiar',}">
-                      <template #selected-row-actions>
-                        <button class="small btn btn-primary" @click="imprimirListasGrados()">Imprimir Grados</button>
-                      </template>
-                      <template slot="table-row" slot-scope="props">
-                        <span v-if="props.column.field == 'id'">
-                          <span style="font-weight: bold; color: blue; cursor: pointer" @click="consultaListaGrado(props.row)" title="Vista Grado"><CIcon name="cilZoom"/></span>
-                        </span>
-                      </template>
-                      <div slot="emptystate">
-                        <h5 class="text-danger ml-5">No existen Grados en la Sede</h5>
-                      </div>
-                    </vue-good-table>
-                  </div>
+                  <vue-good-table ref="cursitos" :columns="encabColumnas" :rows="listaAsignacion" styleClass="vgt-table condensed bordered striped" :line-numbers="true" :search-options="{enabled: true,placeholder: 'Filtrar cursos...'}"
+                    :select-options="{enabled: true,selectionText: 'cursos seleccionados',clearSelectionText: 'Limpiar',}">
+                    <template #selected-row-actions>
+                      <button class="small btn btn-primary" @click="imprimirListas()">Imprimir Cursos</button>
+                    </template>
+                    <template slot="table-row" slot-scope="props">
+                      <span v-if="props.column.field == 'id'">
+                        <span style="font-weight: bold; color: blue; cursor: pointer" @click="consultaListaCurso(props.row)" title="Vista Curso"><CIcon name="cilZoom"/></span>
+                      </span>
+                    </template>
+                    <div slot="emptystate">
+                      <h5 class="text-danger ml-5">No existen Cursos en la Sede</h5>
+                    </div>
+                  </vue-good-table>
                 </b-col>
               </b-row>
             </div>
@@ -144,13 +121,6 @@
         </b-card>
       </b-col>
     </b-row>
-    <b-modal ref="modalConsultaListaGrado" size="xl" scrollable hide-footer title="Consulta Lista de Estudiantes por Grado" ok-only>
-      <div class="mx-3">
-        <div>
-          <ConsultaListaGrado :datosGrado="datosGrado"  @retorno="datosRecibidosConsultaGrado"/>
-        </div>
-      </div>
-    </b-modal>
     <b-modal ref="modalConsultaListaCurso" size="xl" scrollable hide-footer title="Consulta Lista de Estudiantes por Curso" ok-only>
       <div class="mx-3">
         <div>
@@ -166,36 +136,28 @@
   import * as CONFIG from '@/assets/config.js'
   import 'vue-good-table/dist/vue-good-table.css'
   import { VueGoodTable } from 'vue-good-table'
-  import ConsultaListaGrado from '@/views/listados/ConsultaListaGrado'
   import ConsultaListaCurso from '@/views/listados/ConsultaListaCurso'
 
   export default {
-    name: 'listadoscurso',
+    name: 'listadosdocente',
     components: {
       VueGoodTable,
-      ConsultaListaGrado,
       ConsultaListaCurso
     },
     data () {
       return {
-        idSede: null,
+        idDocente: null,
         idCurso: null,
-        comboSedes: [],
-        listaCursos: [],
-        listaGrados: [],
+        comboDocentes: [],
+        listaAsignacion: [],
         listaEstudiantes: [],
         encabColumnas : [
-          { label: 'Curso', field: 'nomenclatura' },
-          { label: 'Jornada', field: 'jornada', sortable: false },
-          { label: '', field: 'id', sortable: false }
-        ],
-        encabColumnasGrados : [
-          { label: 'Grado', field: 'grado' },
-          { label: 'Nivel', field: 'nivel', sortable: false },
+          { label: 'Grado-Curso', field: 'nomenclatura' },
+          { label: 'Asignatura', field: 'asignatura' },
+          { label: 'IH', field: 'ih' },
           { label: '', field: 'id', sortable: false }
         ],
         cursosSeleccionados: [],
-        gradosSeleccionados: [],
         camposSeleccionados: [], // Must be an array reference!
         campos: [
           { value: 0, text: 'Apellidos y Nombres', disabled: true },
@@ -224,7 +186,6 @@
           { value: 23, text: 'Acudiente (Nombre,Dirección,Teléfono,Correo)'}
         ],
         datosCurso: [],
-        datosGrado: [],
         comboNumeroColumnas: [
           {'value': 1, 'text': '1 columna'},
           {'value': 2, 'text': '2 columnas'},
@@ -251,24 +212,10 @@
         tema: '',
         objetivo: '',
         director: true,
-        idTipo: null,
-        comboTipos: [
-          {'value': 1, 'text': 'LISTAS POR CURSO'},
-          {'value': 2, 'text': 'LISTAS POR GRADO'},
-        ],
         retirados: false,
       }
     },
     methods: {
-      consultaListaGrado(item) {
-        this.datosGrado = item
-        this.datosGrado.campos = this.camposSeleccionados
-        this.datosGrado.retirados = this.retirados
-        this.$refs['modalConsultaListaGrado'].show()
-      },
-      datosRecibidosConsultaGrado(retorno) {
-        this.$refs['modalConsultaListaGrado'].hide()
-      },
       consultaListaCurso(item) {
         this.datosCurso = item
         this.datosCurso.campos = this.camposSeleccionados
@@ -281,49 +228,39 @@
       imprimirListas() {
         this.cursosSeleccionados = []
         this.$refs.cursitos.selectedRows.forEach(element => {
-          this.cursosSeleccionados.push({ 'id': element.id, 'cu': element.nomenclatura, 'se': element.sede, 'jo': element.jornada, 'di': element.docente })
-        });
-        let uri = "?datos=" + JSON.stringify(this.cursosSeleccionados) + "&ie=" + this.$store.state.nombreInstitucion + "&vigencia=" + this.$store.state.aLectivo + '&campos=' + JSON.stringify(this.camposSeleccionados) + '&director=' + this.director + "&escudo=" + this.$store.state.escudoInstitucion + "&numeroColumnas=" + this.numeroColumnas + "&orientacion=" + this.orientacion + "&tema=" + this.tema + "&objetivo=" + this.objetivo + "&retirados=" + this.retirados
-        let encoded = encodeURI(uri);
-        //window.open("http://localhost/siedutunja/php/listas/listas-01.php" + encoded,"_blank")
-        window.open("https://siedutunja.gov.co/php/listas/listas-01.php" + encoded,"_blank")
-        return true
-      },
-      imprimirListasGrados() {
-        this.gradosSeleccionados = []
-        this.$refs.graditos.selectedRows.forEach(element => {
-          this.gradosSeleccionados.push({ 'id': element.id, 'gr': element.grado, 'se': element.sede })
-        });
-        let uri = "?datos=" + JSON.stringify(this.gradosSeleccionados) + "&ie=" + this.$store.state.nombreInstitucion + "&vigencia=" + this.$store.state.aLectivo + '&campos=' + JSON.stringify(this.camposSeleccionados) + '&director=' + this.director + "&escudo=" + this.$store.state.escudoInstitucion + "&numeroColumnas=" + this.numeroColumnas + "&orientacion=" + this.orientacion + "&tema=" + this.tema + "&objetivo=" + this.objetivo + "&retirados=" + this.retirados
-        let encoded = encodeURI(uri);
-        //window.open("http://localhost/siedutunja/php/listas/listas-03.php" + encoded,"_blank")
-        window.open("https://siedutunja.gov.co/php/listas/listas-03.php" + encoded,"_blank")
-        return true
-      },
-      async ocuparlistaCursosSede() {
-        if (this.idTipo == 1) {
-          this.listaCursos = []
-          this.$store.state.datosCursos.forEach(element => {
-            if (element.id_sede == this.idSede) {
-              this.listaCursos.push(element)
-            }
-          })
-          console.log(JSON.stringify(this.$store.state.datosCursos))
-        } else {
-          this.listaGrados = []
-          this.$store.state.datosGrados.forEach(element => {
-            if (element.id_sede == this.idSede) {
-              this.listaGrados.push(element)
-            }
-          })
-          //console.log(JSON.stringify(this.listaGrados))
-        }
-      },
-      async ocuparComboSedes() {
-        this.comboSedes = []
-        this.$store.state.datosSedes.forEach(element => {
-          this.comboSedes.push({ 'value': element.id, 'text': element.sede.toUpperCase() })
+          this.cursosSeleccionados.push({ 'id': element.id, 'cu': element.nomenclatura, 'se': element.sede, 'jo': element.jornada, 'di': element.docente, 'as': element.asignatura })
         })
+        let docenteTitular = document.getElementById('docentes')[document.getElementById('docentes').selectedIndex].text
+        let uri = "?datos=" + JSON.stringify(this.cursosSeleccionados) + "&ie=" + this.$store.state.nombreInstitucion + "&vigencia=" + this.$store.state.aLectivo + '&campos=' + JSON.stringify(this.camposSeleccionados) + '&director=' + this.director + "&escudo=" + this.$store.state.escudoInstitucion + "&numeroColumnas=" + this.numeroColumnas + "&orientacion=" + this.orientacion + "&tema=" + this.tema + "&objetivo=" + this.objetivo + "&retirados=" + this.retirados + "&titular=" + docenteTitular
+        let encoded = encodeURI(uri);
+        //window.open("http://localhost/siedutunja/php/listas/listas-04.php" + encoded,"_blank")
+        window.open("https://siedutunja.gov.co/php/listas/listas-04.php" + encoded,"_blank")
+        return true
+      },
+      async consultaListaAsignacion() {
+        this.listaAsignacion = []
+        await axios
+        .get(CONFIG.ROOT_PATH + 'academico/cargaacademica/docente', { params: { idInstitucion: this.$store.state.idInstitucion, vigencia: this.$store.state.aLectivo, idDocente: this.idDocente }})
+        .then(response => {
+          if (response.data.error){
+            this.mensajeEmergente('danger',CONFIG.TITULO_MSG,response.data.mensaje + ' - Consulta Asignación Docente')
+          } else{
+            if (response.data.datos != 0) {
+              this.listaAsignacion = response.data.datos
+            }
+          }
+          //console.log(JSON.stringify(this.listaAsignacion))
+        })
+        .catch(err => {
+          this.mensajeEmergente('danger',CONFIG.TITULO_MSG,'Algo salio mal y no se pudo realizar: Consulta Asignación Docente. Intente más tarde.' + err)
+        })
+      },
+      async ocuparComboDocentes() {
+        this.comboDocentes = []
+        this.$store.state.datosDocentes.forEach(element => {
+          this.comboDocentes.push({ 'value': element.id, 'text': element.docente.toUpperCase() })
+        })
+        //console.log(JSON.stringify(this.$store.state.datosDocentes))
       },
       mensajeEmergente(variante, titulo, contenido) {
         this.$bvToast.toast(contenido, { title: titulo, variant: variante, toaster: "b-toaster-top-center", solid: true, autoHideDelay: 4000, appendToast: false })
@@ -332,7 +269,7 @@
     computed: {
     },
     beforeMount() {
-      this.ocuparComboSedes()
+      this.ocuparComboDocentes()
     }
   }
 </script>

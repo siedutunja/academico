@@ -91,6 +91,7 @@
                       <b-col lg="12"><hr></b-col>
                       <b-col lg="12">
                         <b-button class="small mx-1 mt-2" variant="primary" @click="imprimirFormulario">Imprimir Ficha Matricula del Estudiante</b-button>
+                        <b-button class="small mx-1 mt-2 float-right" variant="success" @click="confirmarReintegrarMatricula" v-if="datosFichaE.id_estado_actual==2 && ($store.state.idRol==1 || $store.state.idRol==12)">Reintegrar Estudiante</b-button>
                         <b-button class="small mx-1 mt-2 float-right" variant="danger" @click="confirmarRetirarMatricula" v-if="datosFichaE.id_estado_actual==1 && ($store.state.idRol==1 || $store.state.idRol==12)">Retirar Estudiante</b-button>
                         <b-button class="small mx-1 mt-2 float-right" variant="danger" @click="desvincularMatricula" v-if="$store.state.idRol==1">Desvincular Matricula del Estudiante</b-button>
                       </b-col>
@@ -376,6 +377,7 @@
         fotoM: CONFIG.FOTO,
         comboMotivosRetiro: [],
         retiroEstudiante: {},
+        reintegroEstudiante: {},
         retiro: {
           id_motivo: null,
           observaciones: null
@@ -389,6 +391,54 @@
       },
     },
     methods: {
+      confirmarReintegrarMatricula() {
+        let titulo = 'Reintegrar Estudiante'
+        let pregunta = 'Al reintegrar el Estudiante a la Institución Educativa se recuperará el registro de la matrícula para el actual Año Lectivo. ¿Esta seguro de Reintegrar el Estudiante?'
+        this.$bvModal.msgBoxConfirm(pregunta, {
+          headerBgVariant: 'primary',
+          headerTextVariant: 'light',
+          bodyBgVariant: 'light',
+          bodyBgClass: 'text-center',
+          title: titulo,
+          size: '',
+          buttonSize: 'sm',
+          okVariant: 'primary',
+          okTitle: 'Si, ' + titulo,
+          cancelVariant: 'danger',
+          cancelTitle: 'Cancelar',
+          footerClass: 'p-2',
+          bodyClass: 'p-5',
+          hideHeaderClose: false,
+          centered: true
+        })
+        .then(value => {
+          if (value) {
+            this.reintegrarEstudiante()
+          }
+        })
+      },
+      async reintegrarEstudiante() {
+        this.reintegroEstudiante.idMatricula = this.idMatricula
+        this.reintegroEstudiante.idEstudiante = this.datosFichaE.idEstudiante
+        this.reintegroEstudiante.idInstitucion = this.$store.state.idInstitucion
+        this.reintegroEstudiante.vigencia = this.$store.state.aLectivo
+        this.reintegroEstudiante.curso = this.datosFichaE.nomenclatura
+        this.reintegroEstudiante.usuario = this.$store.state.nombreUsuario + ' ' + this.$store.state.apellidoUsuario
+        this.reintegroEstudiante.observaciones = 'Reintegro de estudiante'
+        await axios
+        .put(CONFIG.ROOT_PATH + 'academico/matriculas/reintegrarestudiante', JSON.stringify(this.reintegroEstudiante), { headers: {"Content-Type": "application/json; charset=utf-8" }})
+        .then(response => {
+          if (response.data.error){
+            this.mensajeEmergente('danger',CONFIG.TITULO_MSG,response.data.mensaje + ' - Reintegrar Estudiante')
+          } else{
+            this.mensajeEmergente('success',CONFIG.TITULO_MSG,'El estudiante se ha reintegrado correctamente.')
+            this.consultaFichaMatricula()
+          }
+        })
+        .catch(err => {
+          this.mensajeEmergente('danger',CONFIG.TITULO_MSG,'Algo salio mal y no se pudo realizar: Reintegrar Estudiante. Intente más tarde. ' + err)
+        })
+      },
       confirmarRetirarMatricula() {
         let titulo = 'Retirar Estudiante'
         let pregunta = 'Al retirar el Estudiante de la Institución Educativa se mantendrá el registro de la matrícula para el actual Año Lectivo y el Estudiante quedará disponible para ser matriculado en otra Institución Educativa. ¿Esta seguro de Retirar el Estudiante?'

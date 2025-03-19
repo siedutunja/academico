@@ -225,7 +225,7 @@
           } else {
             if(response.data.datos != 0) {
               this.listaExportar = response.data.datos
-              console.log(JSON.stringify(this.listaExportar))
+              //console.log(JSON.stringify(this.listaExportar))
             }
           }
         })

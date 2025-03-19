@@ -280,6 +280,13 @@ function configRoutes () {
               name: 'Listas por Curso',
               component: () => import('@/views/listados/ListadosCurso')
             },
+            // 2025-03-16
+            {
+              path: 'listadosdocente',
+              beforeEnter: autenticar,
+              name: 'Listas por Docente',
+              component: () => import('@/views/listados/ListadosDocente')
+            },
             // 2025-01-22
             {
               path: 'listadossincurso',

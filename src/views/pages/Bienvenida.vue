@@ -17,7 +17,7 @@
                 </div>
                 <h4>{{ $store.state.nemoInstitucion }}</h4>
                 <h6>INSTITUCIÓN EDUCATIVA {{ $store.state.sectorInstitucion }}</h6>
-                <h5 class="text-muted">{{ $store.state.generoUsuario==1 ? 'BIENVENIDO' : 'BIENVENIDA' }} {{ $store.state.nombreUsuario }}</h5>
+                <h5 class="text-muted">{{ $store.state.generoUsuario=='M' ? 'BIENVENIDO' : 'BIENVENIDA' }} {{ $store.state.nombreUsuario }}</h5>
                 <b-button type="submit" class="btn mb-2 mt-4" variant="primary" @click="continuar">Continuar</b-button>
               </div>
             </b-card>

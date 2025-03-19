@@ -4,17 +4,17 @@
       <b-col lg="12">
         <b-card>
           <template #header>
-            <h5 class="mb-0"><b-icon icon="card-checklist" aria-hidden="true"></b-icon> LISTA DE ESTUDIANTES DEL CURSO {{ datosCurso.nomenclatura }}</h5>
+            <h5 class="mb-0"><b-icon icon="card-checklist" aria-hidden="true"></b-icon> LISTA DE ESTUDIANTES DEL GRADO {{ datosGrado.grado }}</h5>
           </template>
           <b-card-text>
-            <vue-good-table :columns="encabColumnas" :rows="listaEstudiantesCurso" styleClass="vgt-table condensed bordered striped" :line-numbers="true">
+            <vue-good-table :columns="encabColumnas" :rows="listaEstudiantesGrado" styleClass="vgt-table condensed bordered striped" :line-numbers="true">
               <div slot="emptystate">
-                <h5 class="text-danger ml-5">No existen Estudiantes matriculados en el Curso.</h5>
+                <h5 class="text-danger ml-5">No existen Estudiantes matriculados en el Grado.</h5>
               </div>
             </vue-good-table>
           </b-card-text>
           <template #footer>
-            <vue-excel-xlsx class="small mx-1 mt-2 btn btn-outline-primary" :data="listaEstudiantesCurso" :columns="encabColumnasExcel" :file-name="'Lista-' + datosCurso.nomenclatura + ' ' + new Date().toLocaleDateString()" :file-type="'xlsx'" :sheet-name="'Lista-' + datosCurso.nomenclatura + ' ' + $store.state.aLectivo">
+            <vue-excel-xlsx class="small mx-1 mt-2 btn btn-outline-primary" :data="listaEstudiantesGrado" :columns="encabColumnasExcel" :file-name="'Lista-' + datosGrado.grado + ' ' + new Date().toLocaleDateString()" :file-type="'xlsx'" :sheet-name="'Lista-' + datosGrado.grado + ' ' + $store.state.aLectivo">
               Exportar a Excel
             </vue-excel-xlsx>
             <b-button class="small mx-1 mt-2" variant="secondary" @click="cancelarFormulario">Cancelar</b-button>
@@ -32,44 +32,45 @@
   import { VueGoodTable } from 'vue-good-table'
 
   export default {
-    name: 'consultalistacurso',
+    name: 'consultalistagrado',
     props: {
-      datosCurso: Object
+      datosGrado: Object
     },
     components: {
       VueGoodTable
     },
     data () {
       return {
-        listaEstudiantesCurso: [],
+        listaEstudiantesGrado: [],
         encabColumnas: [
           { label: 'Apellidos y Nombres del Estudiante', field: 'estudiante', tdClass: this.tdClassFuncE },
           { label: 'Documento', field: 'documento', tdClass: this.tdClassFuncE },
+          { label: 'Curso', field: 'nomCurso', tdClass: this.tdClassFuncE },
           { label: 'Estado', field: 'estado', tdClass: this.tdClassFuncE },
         ],
         encabColumnasExcel: []
       }
     },
     methods: {
-      async consultaListaCurso() {
+      async consultaListaGrado() {
         await axios
-        .get(CONFIG.ROOT_PATH + 'academico/listas/general', { params: { idCurso: this.datosCurso.id, retirados: this.datosCurso.retirados }})
+        .get(CONFIG.ROOT_PATH + 'academico/listas/general/grado', { params: { idGrado: this.datosGrado.id, retirados: this.datosGrado.retirados }})
         .then(response => {
           if (response.data.error){
-            this.mensajeEmergente('danger',CONFIG.TITULO_MSG,response.data.mensaje + ' - Consulta Lista Curso')
+            this.mensajeEmergente('danger',CONFIG.TITULO_MSG,response.data.mensaje + ' - Consulta Lista Grado')
           } else{
             if (response.data.datos != 0) {
-              this.listaEstudiantesCurso = []
+              this.listaEstudiantesGrado = []
               response.data.datos.forEach(element => {
                 element.edad = this.calcularEdad(element.fecha_nacimiento.substr(0,10)) + " Años"
               })
-              this.listaEstudiantesCurso = response.data.datos
-              //console.log(JSON.stringify(this.listaEstudiantesCurso))
+              this.listaEstudiantesGrado = response.data.datos
+              //console.log(JSON.stringify(this.listaEstudiantesGrado))
             }
           }
         })
         .catch(err => {
-          this.mensajeEmergente('danger',CONFIG.TITULO_MSG,'Algo salio mal y no se pudo realizar: Consulta Lista Curso. Intente más tarde.' + err)
+          this.mensajeEmergente('danger',CONFIG.TITULO_MSG,'Algo salio mal y no se pudo realizar: Consulta Lista Grado. Intente más tarde.' + err)
         })
       },
       calcularEdad(fecha) {
@@ -98,7 +99,8 @@
     beforeMount() {
       this.encabColumnasExcel.push({ label: 'Apellidos y Nombres del Estudiante', field: 'estudiante' })
       this.encabColumnasExcel.push({ label: 'Estado', field: 'estado' })
-      this.datosCurso.campos.forEach(element => {
+      this.encabColumnasExcel.push({ label: 'Curso', field: 'nomCurso' })
+      this.datosGrado.campos.forEach(element => {
         if (element == 1) {
           this.encabColumnasExcel.push({ label: 'Documento', field: 'documento' })
           this.encabColumnasExcel.push({ label: 'Tipo', field: 'nomenclatura' })
@@ -122,11 +124,11 @@
         if (element == 18) this.encabColumnasExcel.push({ label: 'Eps', field: 'eps' })
         if (element == 19) this.encabColumnasExcel.push({ label: 'Enfermedades', field: 'enfermedades' })
         if (element == 20) {
-          this.encabColumnasExcel.push({ label: 'Dir Estudiante', field: 'dire' })
-          this.encabColumnasExcel.push({ label: 'Mun Estudiante', field: 'munidire' })
-          this.encabColumnasExcel.push({ label: 'Barrio Estudiante', field: 'barrio' })
-          this.encabColumnasExcel.push({ label: 'Tel1 Estudiante', field: 'tel1e' })
-          this.encabColumnasExcel.push({ label: 'Tel2 Estudiante', field: 'tel2e' })
+          this.encabColumnasExcel.push({ label: 'Dir  Estudiante', field: 'dire' })
+          this.encabColumnasExcel.push({ label: 'Mun  Estudiante', field: 'munidire' })
+          this.encabColumnasExcel.push({ label: 'Barrio  Estudiante', field: 'barrio' })
+          this.encabColumnasExcel.push({ label: 'Tel1  Estudiante', field: 'tel1e' })
+          this.encabColumnasExcel.push({ label: 'Tel2  Estudiante', field: 'tel2e' })
         }
         if (element == 21) this.encabColumnasExcel.push({ label: 'Observaciones', field: 'obs_matricula' })
         if (element == 22) this.encabColumnasExcel.push({ label: 'Ruta', field: 'ruta' })
@@ -139,7 +141,7 @@
           this.encabColumnasExcel.push({ label: 'Parentesco', field: 'parentesco' })
         }
       })
-      this.consultaListaCurso()
+      this.consultaListaGrado()
     }
   }
 </script>
