@@ -22,7 +22,7 @@
               </b-col>
               <b-col lg="3" md="6">
                 <b-form-group label="Orden*" label-for="orden" class="etiqueta">
-                  <b-form-input id="orden" ref="orden" v-model.trim="$v.infoArea.orden.$model" :state="validateStateA('orden')" aria-describedby="feedOrden" autocomplete="off" maxlength="3" @keydown="soloNumeros"></b-form-input>
+                  <b-form-input id="orden" ref="orden" v-model.trim="$v.infoArea.orden.$model" :state="validateStateA('orden')" aria-describedby="feedOrden" autocomplete="off" maxlength="3" @keydown="soloNumeros" :disabled="infoArea.orden == 99 ? true : false"></b-form-input>
                   <b-form-invalid-feedback id="feedOrden" >Campo requerido.</b-form-invalid-feedback>
                 </b-form-group>
               </b-col>
