@@ -91,8 +91,8 @@
                       <b-col lg="12"><hr></b-col>
                       <b-col lg="12">
                         <b-button class="small mx-1 mt-2" variant="primary" @click="imprimirFormulario">Imprimir Ficha Matricula del Estudiante</b-button>
-                        <b-button class="small mx-1 mt-2 float-right" variant="success" @click="confirmarReintegrarMatricula" v-if="datosFichaE.id_estado_actual==2 && ($store.state.idRol==1 || $store.state.idRol==12)">Reintegrar Estudiante</b-button>
-                        <b-button class="small mx-1 mt-2 float-right" variant="danger" @click="confirmarRetirarMatricula" v-if="datosFichaE.id_estado_actual==1 && ($store.state.idRol==1 || $store.state.idRol==12)">Retirar Estudiante</b-button>
+                        <b-button class="small mx-1 mt-2 float-right" variant="success" @click="confirmarReintegrarMatricula" v-if="datosFichaE.id_estado_actual==2 && ($store.state.idRol==1 || $store.state.idRol==12 || $store.state.perActEstudiante == 1)">Reintegrar Estudiante</b-button>
+                        <b-button class="small mx-1 mt-2 float-right" variant="danger" @click="confirmarRetirarMatricula" v-if="datosFichaE.id_estado_actual==1 && ($store.state.idRol==1 || $store.state.idRol==12 || $store.state.perActEstudiante == 1)">Retirar Estudiante</b-button>
                         <b-button class="small mx-1 mt-2 float-right" variant="danger" @click="desvincularMatricula" v-if="$store.state.idRol==1">Desvincular Matricula del Estudiante</b-button>
                       </b-col>
                     </b-row>
