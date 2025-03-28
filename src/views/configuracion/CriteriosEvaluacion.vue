@@ -389,6 +389,14 @@
                                 </b-alert>
                               </b-col>
                             </b-row>
+                            <b-row class="mt-3">
+                              <b-col lg="6">
+                                <b-form-group label="Método de Valoración:" label-for="metodopree" class="etiqueta">
+                                  <b-form-select  id="metodopree" ref="metodopree" v-model="criteriosSeccion.metoValPree" :options="comboMetodoValoracion" aria-describedby="feedMetodoPree"></b-form-select>
+                                  <b-form-invalid-feedback id="feedMetodoPree">Campo requerido.</b-form-invalid-feedback>
+                                </b-form-group>
+                              </b-col>
+                            </b-row>
                           </b-card-text>
                         </b-card>
                       </b-col>
@@ -410,6 +418,14 @@
                           <b-card-text>
                             <hr>
                             <b-row>
+                              <b-col lg="6">
+                                <b-form-group label="Tipo Valoración:" label-for="tipocompor" class="etiqueta">
+                                  <b-form-select  id="tipocompor" ref="tipocompor" v-model="criteriosSeccion.tipoValComp" :options="comboTipoValoracion" aria-describedby="feedTipoCompor"></b-form-select>
+                                  <b-form-invalid-feedback id="feedTipoCompor">Campo requerido.</b-form-invalid-feedback>
+                                </b-form-group>
+                              </b-col>
+                            </b-row>
+                            <b-row class="mt-3">
                               <b-col lg="3">
                                 <b-alert variant="danger" show>
                                   <b-row>
@@ -424,6 +440,9 @@
                                         <b-form-input id="compL1" ref="compL1" v-model.trim="criteriosSeccion.compL1" aria-describedby="feedcompL1" autocomplete="off" maxlength="1"></b-form-input>
                                         <b-form-invalid-feedback id="feedcompL1" >Campo requerido.</b-form-invalid-feedback>
                                       </b-form-group>
+                                    </b-col>
+                                    <b-col>
+                                      <strong>De: {{criteriosSeccion.minBaj}} a {{criteriosSeccion.maxBaj}}</strong>
                                     </b-col>
                                   </b-row>  
                                 </b-alert>
@@ -443,6 +462,9 @@
                                         <b-form-invalid-feedback id="feedcompL2" >Campo requerido.</b-form-invalid-feedback>
                                       </b-form-group>
                                     </b-col>
+                                    <b-col>
+                                      <strong>De: {{criteriosSeccion.minBas}} a {{criteriosSeccion.maxBas}}</strong>
+                                    </b-col>
                                   </b-row>  
                                 </b-alert>
                               </b-col>
@@ -461,6 +483,9 @@
                                         <b-form-invalid-feedback id="feedcompL3" >Campo requerido.</b-form-invalid-feedback>
                                       </b-form-group>
                                     </b-col>
+                                    <b-col>
+                                      <strong>De: {{criteriosSeccion.minAlt}} a {{criteriosSeccion.maxAlt}}</strong>
+                                    </b-col>
                                   </b-row>  
                                 </b-alert>
                               </b-col>
@@ -478,6 +503,9 @@
                                         <b-form-input id="compL4" ref="compL4" v-model.trim="criteriosSeccion.compL4" aria-describedby="feedcompL4" autocomplete="off" maxlength="1"></b-form-input>
                                         <b-form-invalid-feedback id="feedcompL4" >Campo requerido.</b-form-invalid-feedback>
                                       </b-form-group>
+                                    </b-col>
+                                    <b-col>
+                                      <strong>De: {{criteriosSeccion.minSup}} a {{criteriosSeccion.maxSup}}</strong>
                                     </b-col>
                                   </b-row>  
                                 </b-alert>
@@ -530,12 +558,22 @@
           minBaj: null,maxBaj: null,minBas: null,maxBas: null,minAlt: null,maxAlt: null,minSup: null,maxSup: null,
           minBajT: null,maxBajT: null,minBasT: null,maxBasT: null,minAltT: null,maxAltT: null,minSupT: null,maxSupT: null,
           preeC1: null,preeL1: null,preeC2: null,preeL2: null,preeC3: null,preeL3: null,preeC4: null,preeL4: null,
-          compC1: null,compL1: null,compC2: null,compL2: null,compC3: null,compL3: null,compC4: null,compL4: null
+          compC1: null,compL1: null,compC2: null,compL2: null,compC3: null,compL3: null,compC4: null,compL4: null,
+          tipoValComp: 0,
+          metoValPree: 0,
         },
         comboEstados: [
           { 'value': 0, 'text': 'INACTIVO'},
           { 'value': 1, 'text': 'ACTIVO'}
         ],
+        comboTipoValoracion: [
+          { 'value': 0, 'text': 'CUALITATIVO (Letras)'},
+          { 'value': 1, 'text': 'CUANTITATIVO (Números)'}
+        ],
+        comboMetodoValoracion: [
+          { 'value': 0, 'text': 'EVALUACIÓN POR COMPENTENCIA'},
+          { 'value': 1, 'text': 'EVALUACIÓN POR DESCRIPTOR'}
+        ]
       }
     },
     methods: {
