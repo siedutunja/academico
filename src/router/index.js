@@ -262,6 +262,13 @@ function configRoutes () {
               name: 'Informe Retirados',
               component: () => import('@/views/informes/InfoRetirados')
             },
+            // 2025-04-02
+            {
+              path: 'consolidadoscurso',
+              beforeEnter: autenticar,
+              name: 'Consolidados Curso',
+              component: () => import('@/views/informes/ConsolidadosCurso')
+            },
           ]
         },
         // 2024-12-10
