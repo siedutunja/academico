@@ -108,7 +108,6 @@ jwt.verify(token, CONFIG.SECRET_KEY, (err, data) => {
     menu[0]._children[indice].items.push({ name: 'Listas por Docente', to: '/listados/listadosdocente'})
     menu[0]._children[indice].items.push({ name: 'Listas Sin Curso', to: '/listados/listadossincurso'})
     menu[0]._children[indice].items.push({ name: 'Planillas/Formatos por Curso', to: '/listados/planillascurso'})
-
     menu[0]._children.push(
       {
         _name: 'CSidebarNavDropdown',
@@ -118,10 +117,23 @@ jwt.verify(token, CONFIG.SECRET_KEY, (err, data) => {
       }
     )
     indice++
-    menu[0]._children[indice].items.push({ name: 'Consolidados por Curso', to: '/informes/consolidadoscurso'})
+    if (tokenDecodificado.id_rol == 1 || tokenDecodificado.id_rol == 12 || tokenDecodificado.id_rol == 14) {
+      menu[0]._children[indice].items.push({ name: 'Consolidados por Curso', to: '/informes/consolidadoscurso'})
+    }
     menu[0]._children[indice].items.push({ name: 'Informes por Agrupación', to: '/informes/informesagrupacion'})
     menu[0]._children[indice].items.push({ name: 'Consolidado Matricula', to: '/informes/consolidadomatricula'})
-
+    menu[0]._children.push(
+      {
+        _name: 'CSidebarNavDropdown',
+        name: 'Programar Periodos',
+        icon: 'cilCalendar',
+        items: []
+      }
+    )
+    indice++
+    if (tokenDecodificado.id_rol == 1 || tokenDecodificado.id_rol == 12) {
+      menu[0]._children[indice].items.push({ name: 'Evaluaciones por Periodo', to: '/periodos/evaluacionesperiodo'})
+    }
   }
 })
 

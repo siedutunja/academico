@@ -477,6 +477,24 @@ function configRoutes () {
             },
           ]
         },
+        // 2024-04-03
+        {
+          path: 'periodos',
+          redirect: '/periodos/evaluacionesperiodo',  
+          name: 'Periodos',
+          component: {
+            render (c) { return c('router-view') }
+          },
+          children: [
+            // 2024-02-17
+            {
+              path: 'evaluacionesperiodo',
+              beforeEnter: autenticar,
+              name: 'Evaluaciones por Periodo',
+              component: () => import('@/views/periodos/EvaluacionesPeriodo')
+            },
+          ]
+        },
 
 
 
