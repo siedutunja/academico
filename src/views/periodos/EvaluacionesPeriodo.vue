@@ -75,7 +75,6 @@
               <b-button class="small mt-1 mr-3" variant="primary" @click="asignarFechas()">Asignar Fechas a los Docentes</b-button>
               <b-button class="small mt-1 mr-3" variant="secondary" @click="cancelarVentana">Cancelar</b-button>
             </b-col>
-            {{this.profesSeleccionados}}
           </b-row>
         </div>
       </div>

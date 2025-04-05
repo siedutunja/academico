@@ -4,7 +4,7 @@
       <b-col lg="12">
         <b-card>
           <template #header>
-            <h5 class="mb-0"><b-icon icon="card-checklist" aria-hidden="true"></b-icon> INFORME CONSOLIDADO POR PERIODO</h5>
+            <h5 class="mb-0"><b-icon icon="card-checklist" aria-hidden="true"></b-icon> INFORMES CONSOLIDADOS POR CURSO</h5>
           </template>
           <b-card-text>
             <b-row>
@@ -53,8 +53,37 @@
                       <vue-excel-xlsx class="small mx-1 mt-3 btn btn-outline-primary" :data="listaMatriculados" :columns="encabColumnas" :file-name="'ConsolidadoNotas-' + new Date().toLocaleDateString()" :file-type="'xlsx'" :sheet-name="'Consolidado'">
                         Exportar Consolidado Evaluaciones a Excel
                       </vue-excel-xlsx>
+                      <!--
+                      <vue-excel-xlsx class="small mx-1 mt-3 btn btn-outline-primary" :data="listaTotalesAsignaturas" :columns="encabColumnas2" :file-name="'ConsolidadoResumen-' + new Date().toLocaleDateString()" :file-type="'xlsx'" :sheet-name="'ConsolidadoResumen'">
+                        Exportar Resumen a Excel
+                      </vue-excel-xlsx>
+                      -->
                     </b-col>
                   </b-row>
+                  <!--
+                  <b-row class="mt-4"><b-col lg="12"><hr></b-col></b-row>
+                  <b-row>
+                    <b-col lg="12">
+                      <h4>Resumen Consolidado por Criterio</h4>
+                    </b-col>
+                  </b-row>
+                  <vue-good-table ref="table2" :columns="encabColumnas2" :rows="listaTotalesAsignaturas" styleClass="vgt-table condensed bordered striped" :line-numbers="true">
+                    <div slot="emptystate">
+                      <h5 class="text-danger ml-5">-</h5>
+                    </div>
+                  </vue-good-table>
+                  <b-row>
+                    <b-col lg="12">
+                      <b-button class="small mx-1 mt-3" variant="primary" @click="imprimirConsolidado">Imprimir Consolidado</b-button>
+                      <vue-excel-xlsx class="small mx-1 mt-3 btn btn-outline-primary" :data="listaMatriculados" :columns="encabColumnas" :file-name="'ConsolidadoNotas-' + new Date().toLocaleDateString()" :file-type="'xlsx'" :sheet-name="'Consolidado'">
+                        Exportar Consolidado Evaluaciones a Excel
+                      </vue-excel-xlsx>
+                      <vue-excel-xlsx class="small mx-1 mt-3 btn btn-outline-primary" :data="listaTotalesAsignaturas" :columns="encabColumnas2" :file-name="'ConsolidadoResumen-' + new Date().toLocaleDateString()" :file-type="'xlsx'" :sheet-name="'ConsolidadoResumen'">
+                        Exportar Resumen a Excel
+                      </vue-excel-xlsx>
+                    </b-col>
+                  </b-row>
+                  -->
                 </div>
               </b-col>
             </b-row>
@@ -83,7 +112,7 @@
       return {
         idInforme: null,
         comboInformes: [
-          { 'value': 1, 'text': 'INFORME CONSOLIDADO DE EVALUACIÓN POR PERIODO Y ASIGNATURA'},
+          { 'value': 1, 'text': 'CONSOLIDADO DE CALIFICACIONES POR ASIGNATURA Y POR CURSO'},
         ],
         comboSedes: [],
         idSede: null,
@@ -98,6 +127,7 @@
         nombreCurso: null,
         btnCargando: true,
         idNivel: null,
+        encabColumnas2: [],
         listaTotalesAsignaturas: []
       }
     },
@@ -108,6 +138,7 @@
 
         // Obtener el contenido HTML de la tabla
         const tableHtml = this.$refs.table.$el.querySelector("table").outerHTML;
+        //const tableHtml2 = this.$refs.table2.$el.querySelector("table").outerHTML;
 
         // Estilos básicos para la impresión
         const style = `
@@ -150,8 +181,11 @@
               ${style}
             </head>
             <body>
-              <p style="text-align: center;">${this.$store.state.nombreInstitucion}<br><b>INFORME CONSOLIDADO DE EVALUACIÓN POR PERIODO - AÑO LECTIVO ${this.$store.state.aLectivo}</b><br>Sede: ${this.nombreSede} | Curso: ${this.nombreCurso} | Periodo: ${this.idPeriodo}</p>
+              <p style="text-align: center;">${this.$store.state.nombreInstitucion}<br>INFORMES CONSOLIDADOS POR CURSO - AÑO LECTIVO ${this.$store.state.aLectivo}<br>Sede: ${this.nombreSede} | Curso: ${this.nombreCurso}</p>
               ${tableHtml}
+              <div class="saltopagina"></div>
+              <p style="text-align: center;">${this.$store.state.nombreInstitucion}<br>INFORMES CONSOLIDADOS POR CURSO - AÑO LECTIVO ${this.$store.state.aLectivo}<br>Sede: ${this.nombreSede} | Curso: ${this.nombreCurso}</p>
+              ${tableHtml2}
             </body>
           </html>
         `);
@@ -323,7 +357,7 @@
                     }
                     this.listaMatriculados.push(JSON.parse(JSON.stringify(datosEstudiante)))
                     listaPuestos.push({'id': element.id, 'promedio': datosEstudiante.promedioAsignatura})
-                    //console.log(JSON.stringify(datosEstudiante))
+                    console.log(JSON.stringify(datosEstudiante))
                   })
                   listaPuestos.sort(((a, b) => b.promedio - a.promedio));
                   //console.log(JSON.stringify(listaPuestos))
@@ -340,6 +374,46 @@
 
                   bajosAsignatura.bajE = totalBajos
                   this.listaMatriculados.push(JSON.parse(JSON.stringify(bajosAsignatura)))
+
+                  let datosAsignatura = {}
+                  this.listaTotalesAsignaturas = []
+                  this.listaAsignaturasCurso.forEach(element => {
+                    if (element.orden != 99) {
+                      datosAsignatura.asignatura = element.asignatura + " (" + element.nemo + ")"
+                      datosAsignatura.bajA = 0
+                      datosAsignatura.basA = 0
+                      datosAsignatura.altA = 0
+                      datosAsignatura.supA = 0
+                      datosAsignatura.porcBajA = 0
+                      datosAsignatura.porcBasA = 0
+                      datosAsignatura.porcAltA = 0
+                      datosAsignatura.porcSupA = 0
+                      datosAsignatura.totalA = 0
+                      response.data.datos.forEach(element2 => {
+                        element2.notas.forEach(element3 => {
+                          if (element3.id_asignatura_curso == element.idAsignaturaCurso) {
+                            if (!isNaN(element3.definitiva) && element3.definitiva !== null) {
+                              if (element3.definitiva >= 0 && element3.definitiva < this.$store.state.datosSecciones[0].minBas) {
+                                datosAsignatura.bajA++
+                              } else if (element3.definitiva >= this.$store.state.datosSecciones[0].minBas && element3.definitiva < this.$store.state.datosSecciones[0].minAlt) {
+                                datosAsignatura.basA++
+                              } else if (element3.definitiva >= this.$store.state.datosSecciones[0].minAlt && element3.definitiva < this.$store.state.datosSecciones[0].minSup) {
+                                datosAsignatura.altA++
+                              } else if (element3.definitiva >= this.$store.state.datosSecciones[0].minSup && element3.definitiva <= this.$store.state.datosSecciones[0].maxSup) {
+                                datosAsignatura.supA++
+                              }
+                            }                         
+                          }
+                        })
+                      })
+                      datosAsignatura.totalA = datosAsignatura.bajA + datosAsignatura.basA + datosAsignatura.altA + datosAsignatura.supA
+                      datosAsignatura.porcBajA = Number(datosAsignatura.bajA / datosAsignatura.totalA * 100).toFixed(1) > 0 ? Number(datosAsignatura.bajA / datosAsignatura.totalA * 100).toFixed(1) : ''
+                      datosAsignatura.porcBasA = Number(datosAsignatura.basA / datosAsignatura.totalA * 100).toFixed(1) > 0 ? Number(datosAsignatura.basA / datosAsignatura.totalA * 100).toFixed(1) : ''
+                      datosAsignatura.porcAltA = Number(datosAsignatura.altA / datosAsignatura.totalA * 100).toFixed(1) > 0 ? Number(datosAsignatura.altA / datosAsignatura.totalA * 100).toFixed(1) : ''
+                      datosAsignatura.porcSupA = Number(datosAsignatura.supA / datosAsignatura.totalA * 100).toFixed(1) > 0 ? Number(datosAsignatura.supA / datosAsignatura.totalA * 100).toFixed(1) : ''
+                      this.listaTotalesAsignaturas.push(JSON.parse(JSON.stringify(datosAsignatura)))
+                    }
+                  })
                 }
                 setTimeout(()=>{
                   this.btnCargando = false
@@ -350,6 +424,17 @@
             .catch(err => {
               this.mensajeEmergente('danger',CONFIG.TITULO_MSG,'Algo salio mal y no se pudo realizar: consolidado asignaturas curso. Intente más tarde.' + err)
             })
+            this.encabColumnas2 = []
+            this.encabColumnas2.push({label: 'Asignatura', field: 'asignatura', sortable: false})
+            this.encabColumnas2.push({label: 'Bajo', field: 'bajA', sortable: false})
+            this.encabColumnas2.push({label: '%', field: 'porcBajA', sortable: false})
+            this.encabColumnas2.push({label: 'Basico', field: 'basA', sortable: false})
+            this.encabColumnas2.push({label: '%', field: 'porcBasA', sortable: false})
+            this.encabColumnas2.push({label: 'Alto', field: 'altA', sortable: false})
+            this.encabColumnas2.push({label: '%', field: 'porcAltA', sortable: false})
+            this.encabColumnas2.push({label: 'Superior', field: 'supA', sortable: false})
+            this.encabColumnas2.push({label: '%', field: 'porcSupA', sortable: false})
+            this.encabColumnas2.push({label: 'Total', field: 'totalA', sortable: false})
           }
         }
       },
