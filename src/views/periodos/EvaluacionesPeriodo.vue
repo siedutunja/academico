@@ -195,6 +195,9 @@
     },
     beforeMount() {
       if(this.$store.state.idRol == 1 || this.$store.state.idRol == 12) {
+        let fechaHoy = new Date()
+        this.fechaIniPer = fechaHoy.toJSON().slice(0,10)
+        this.fechaFinPer = fechaHoy.toJSON().slice(0,10)
         this.ocuparComboPeriodos()
       } else {
         this.$router.push('/restringida')

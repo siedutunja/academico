@@ -347,6 +347,20 @@ function configRoutes () {
               name: 'Actualizar Datos Curso',
               component: () => import('@/views/estudiantes/ActualizarDatosCurso')
             },
+            // 2024-04-06
+            {
+              path: 'listaobservadores',
+              beforeEnter: autenticar,
+              name: 'Observador',
+              component: () => import('@/views/estudiantes/ListaObservadores')
+            },
+            // 2025-04-06
+            {
+              path: 'observador',
+              beforeEnter: autenticar,
+              name: 'Observador del Estudiante',
+              component: () => import('@/views/estudiantes/Observador')
+            },
           ]
         },
         // 2025-01-19
@@ -492,6 +506,24 @@ function configRoutes () {
               beforeEnter: autenticar,
               name: 'Evaluaciones por Periodo',
               component: () => import('@/views/periodos/EvaluacionesPeriodo')
+            },
+          ]
+        },
+        // 2024-04-06
+        {
+          path: 'calificaciones',
+          redirect: '/calificaciones/notasperiodo',
+          name: 'Calificaciones',
+          component: {
+            render (c) { return c('router-view') }
+          },
+          children: [
+            // 2024-02-17
+            {
+              path: 'notasperiodo',
+              beforeEnter: autenticar,
+              name: 'Notas por Periodo',
+              component: () => import('@/views/calificaciones/NotasPeriodo')
             },
           ]
         },

@@ -306,6 +306,7 @@
             } else {
               this.$store.commit('set', ['nombreUsuario', response.data.datos.usuario.nombre1])
               this.$store.commit('set', ['apellidoUsuario', response.data.datos.usuario.apellido1])
+              this.$store.commit('set', ['Persona', response.data.datos.usuario.persona])
               this.$store.commit('set', ['generoUsuario', response.data.datos.usuario.id_genero])
               this.$store.commit('set', ['rol', response.data.datos.usuario.rol])
               this.$store.commit('set', ['nemoRol', response.data.datos.usuario.nemo])

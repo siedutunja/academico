@@ -308,7 +308,7 @@
               this.listaCursos.push(element)
             }
           })
-          console.log(JSON.stringify(this.$store.state.datosCursos))
+          //console.log(JSON.stringify(this.$store.state.datosCursos))
         } else {
           this.listaGrados = []
           this.$store.state.datosGrados.forEach(element => {
