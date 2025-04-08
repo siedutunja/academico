@@ -286,11 +286,11 @@
                         }
                       } else {
                         //if (element2.definitiva === 0 || element2.definitiva === null || element2.definitiva === '' || Number(element2.definitiva).toFixed(1) == 0) {
-                        if (isNaN(element2.definitiva) || element2.definitiva === null) {
+                        if (isNaN(element2.definitiva) || element2.definitiva === null || element2.definitiva < this.$store.state.datosSecciones[0].minBaj) {
                           datosEstudiante[element2.nemo] = null
                         } else {
                           datosEstudiante[element2.nemo] = Number(element2.definitiva).toFixed(1)
-                          if (element2.definitiva >= 0 && element2.definitiva < this.$store.state.datosSecciones[0].minBas) {
+                          if (element2.definitiva >= this.$store.state.datosSecciones[0].minBaj && element2.definitiva < this.$store.state.datosSecciones[0].minBas) {
                             bajE++
                             bajosAsignatura[element2.nemo]++
                             totalBajos++

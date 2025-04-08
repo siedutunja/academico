@@ -106,6 +106,7 @@ jwt.verify(token, CONFIG.SECRET_KEY, (err, data) => {
         }
       )
       indice++   
+      //menu[0]._children[indice].items.push({ name: 'Reportes por Periodo', to: '/reportes/reportesperiodos'})
       menu[0]._children[indice].items.push({ name: 'Calificaciones por Periodo', to: '/calificaciones/notasperiodo'})
     }
     menu[0]._children.push(
@@ -145,6 +146,7 @@ jwt.verify(token, CONFIG.SECRET_KEY, (err, data) => {
       )
       indice++   
       menu[0]._children[indice].items.push({ name: 'Evaluaciones por Periodo', to: '/periodos/evaluacionesperiodo'})
+      menu[0]._children[indice].items.push({ name: 'Recuperaciones por Periodo', to: '/periodos/recuperacionesperiodo'})
     }
   }
 })

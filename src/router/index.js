@@ -491,7 +491,7 @@ function configRoutes () {
             },
           ]
         },
-        // 2024-04-03
+        // 2025-04-08
         {
           path: 'periodos',
           redirect: '/periodos/evaluacionesperiodo',  
@@ -500,16 +500,23 @@ function configRoutes () {
             render (c) { return c('router-view') }
           },
           children: [
-            // 2024-02-17
+            // 2025-04-08
             {
               path: 'evaluacionesperiodo',
               beforeEnter: autenticar,
               name: 'Evaluaciones por Periodo',
               component: () => import('@/views/periodos/EvaluacionesPeriodo')
             },
+            // 2025-04-08
+            {
+              path: 'recuperacionesperiodo',
+              beforeEnter: autenticar,
+              name: 'Recuperaciones por Periodo',
+              component: () => import('@/views/periodos/RecuperacionesPeriodo')
+            },
           ]
         },
-        // 2024-04-06
+        // 2025-04-06
         {
           path: 'calificaciones',
           redirect: '/calificaciones/notasperiodo',
@@ -518,12 +525,30 @@ function configRoutes () {
             render (c) { return c('router-view') }
           },
           children: [
-            // 2024-02-17
+            // 2025-04-07
             {
               path: 'notasperiodo',
               beforeEnter: autenticar,
               name: 'Notas por Periodo',
               component: () => import('@/views/calificaciones/NotasPeriodo')
+            },
+          ]
+        },
+        // 2024-04-06
+        {
+          path: 'reportes',
+          redirect: '/reportes/reportesperiodos',
+          name: 'Reportes',
+          component: {
+            render (c) { return c('router-view') }
+          },
+          children: [
+            // 2025-04-07
+            {
+              path: 'reportesperiodos',
+              beforeEnter: autenticar,
+              name: 'Reportes por Periodo',
+              component: () => import('@/views/reportes/ReportesPeriodos')
             },
           ]
         },
