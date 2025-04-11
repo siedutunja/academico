@@ -85,32 +85,41 @@
           { label: 'Estado', field: 'estado', sortable: false, tdClass: this.tdClassFuncE },
         ],
         btnCargando: false,
-
-
-
-
         listaReportes: [],
         nombreSede: null,
         nombreCurso: null,
+        jornada: null,
+        director: null,
+        idNivel: null,
+        puesto: ''
       }
     },
     methods: {
       async imprimirReportes() {
         this.listaReportes = []
         this.$refs.estudiantes.selectedRows.forEach(element => {
-          this.listaReportes.push({ 'id': element.id })
+          this.listaReportes.push({ 'id': element.id, 'estudiante': element.estudiante })
         })
         let sede = document.getElementById('sedes')[document.getElementById('sedes').selectedIndex].text
+        let curso = document.getElementById('cursos')[document.getElementById('cursos').selectedIndex].text
         let periodo = document.getElementById('periodo')[document.getElementById('periodo').selectedIndex].text
-        let uri = "?datos=" + JSON.stringify(this.listaReportes) + "&ie=" + this.$store.state.nombreInstitucion + "&vigencia=" + this.$store.state.aLectivo + "&escudo=" + this.$store.state.escudoInstitucion + "&sede=" + sede + "&periodo=" + periodo
+        let uri = "?datos=" + JSON.stringify(this.listaReportes) + "&ie=" + this.$store.state.nombreInstitucion + "&vigencia=" + this.$store.state.aLectivo + "&escudo=" + this.$store.state.escudoInstitucion + "&sede=" + sede + "&idCurso=" + this.idCurso + "&curso=" + curso + "&jornada=" + this.jornada + "&director=" + this.director + "&periodo=" + periodo + "&idPeriodo=" + this.idPeriodo + "&idIe=" + this.$store.state.idInstitucion + "&idNivel=" + this.idNivel + "&puesto=" + this.puesto
         let encoded = encodeURI(uri);
-        window.open("http://localhost/siedutunja/php/reportes/" + this.$store.state.daneInstitucion + ".php" + encoded,"_blank")
-        //window.open("https://siedutunja.gov.co/php/reportes/" + this.$store.state.daneInstitucion + ".php" + encoded,"_blank")
-        console.log(JSON.stringify(this.listaReportes))
+        //window.open("http://localhost/siedutunja/php/reportes/" + this.$store.state.daneInstitucion + ".php" + encoded,"_blank")
+        window.open("https://siedutunja.gov.co/php/reportes/" + this.$store.state.daneInstitucion + ".php" + encoded,"_blank")
+        //console.log(JSON.stringify(this.listaReportes))
         return true
       },
       async consultaListaCurso() {
         this.btnCargando = true
+        this.$store.state.datosCursos.forEach(element => {
+          if (element.id == this.idCurso) {
+            this.jornada = element.jornada
+            this.director = element.docente
+            this.idNivel = element.id_nivel
+            //console.log(element)
+          }
+        })
         this.listaEstudiantesCurso = []
         await axios
         .get(CONFIG.ROOT_PATH + 'academico/listacurso/reportes', { params: { idCurso: this.idCurso }})
@@ -121,7 +130,7 @@
           } else{
             if (response.data.datos != 0) {
               this.listaEstudiantesCurso = response.data.datos
-              console.log(JSON.stringify(this.listaEstudiantesCurso))
+              //console.log(JSON.stringify(this.listaEstudiantesCurso))
             }
             this.btnCargando = false
           }

@@ -337,7 +337,6 @@
                       }
                     })
                   })
-
                   bajosAsignatura.bajE = totalBajos
                   this.listaMatriculados.push(JSON.parse(JSON.stringify(bajosAsignatura)))
                 }
