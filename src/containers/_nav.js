@@ -96,21 +96,6 @@ jwt.verify(token, CONFIG.SECRET_KEY, (err, data) => {
     menu[0]._children[indice].items.push({ name: 'Directores de Curso', to: '/docentes/directorescurso'})
     menu[0]._children[indice].items.push({ name: 'Consulta Asig. Académica', to: '/docentes/consultaasignacion'})
     menu[0]._children[indice].items.push({ name: 'Directorio', to: '/docentes/directoriodocentes'})
-    if (tokenDecodificado.id_rol == 1 || tokenDecodificado.id_rol == 12 || tokenDecodificado.id_rol == 14) {
-      menu[0]._children.push(
-        {
-          _name: 'CSidebarNavDropdown',
-          name: 'Calificaciones',
-          icon: 'cilCalendar',
-          items: []
-        }
-      )
-      indice++
-      menu[0]._children[indice].items.push({ name: 'Reportes por Periodo', to: '/reportes/reportesperiodos'})
-      if (tokenDecodificado.id_rol == 1 || tokenDecodificado.id_rol == 12) {
-      menu[0]._children[indice].items.push({ name: 'Calificaciones por Periodo', to: '/calificaciones/notasperiodo'})
-      }
-    }
     menu[0]._children.push(
       {
         _name: 'CSidebarNavDropdown',
@@ -133,10 +118,24 @@ jwt.verify(token, CONFIG.SECRET_KEY, (err, data) => {
       }
     )
     indice++
+    menu[0]._children[indice].items.push({ name: 'Boletines por Periodo', to: '/reportes/reportesperiodos'})
     menu[0]._children[indice].items.push({ name: 'Consolidados por Periodo', to: '/informes/consolidadoscurso'})
     menu[0]._children[indice].items.push({ name: 'Informes por Agrupación', to: '/informes/informesagrupacion'})
     menu[0]._children[indice].items.push({ name: 'Consolidado Matricula', to: '/informes/consolidadomatricula'})
-
+    if (tokenDecodificado.id_rol == 1 || tokenDecodificado.id_rol == 12 || tokenDecodificado.id_rol == 14) {
+      menu[0]._children.push(
+        {
+          _name: 'CSidebarNavDropdown',
+          name: 'Calificaciones',
+          icon: 'cilCalendar',
+          items: []
+        }
+      )
+      indice++
+      if (tokenDecodificado.id_rol == 1 || tokenDecodificado.id_rol == 12) {
+      menu[0]._children[indice].items.push({ name: 'Calificaciones por Periodo', to: '/calificaciones/notasperiodo'})
+      }
+    }
     if (tokenDecodificado.id_rol == 1 || tokenDecodificado.id_rol == 12) {
       menu[0]._children.push(
         {
