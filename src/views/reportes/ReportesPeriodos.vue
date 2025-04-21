@@ -153,30 +153,9 @@
           this.btnCargando = false
         })
         if (this.idNivel == 1) {
-          this.listaAsignaturasCurso = []
-          await axios
-          .get(CONFIG.ROOT_PATH + 'academico/asignacioncurso', {params: {idCurso: this.idCurso, idInstitucion: this.$store.state.idInstitucion}})
-          .then(response => {
-            if (response.data.error){
-              this.mensajeEmergente('danger',CONFIG.TITULO_MSG,response.data.mensaje + ' - Lista asignaturas curso')
-              this.btnCargando = false
-            } else{
-              if (response.data.datos != 0) {
-                this.listaAsignaturasCurso = response.data.datos
-              }
-            }
-            //console.log(JSON.stringify(this.listaAsignaturasCurso))
-          })
-          .catch(err => {
-            this.mensajeEmergente('danger',CONFIG.TITULO_MSG,'Algo salio mal y no se pudo realizar: Lista asignación docentes curso. Intente más tarde.' + err)
-            this.btnCargando = false
-          })
-          this.encabColumnasAreasRecup = []
-          this.encabColumnasAreasRecup.push({label: 'Estudiante', field: 'estudiante', sortable: false})
-          this.listaAsignaturasCurso.forEach(element => {
-            this.encabColumnasAreasRecup.push({label: element.nemo, field: element.nemo, sortable: false, tdClass: 'text-center'})
-          })
           this.listaMatriculados = []
+          this.listaPuestos = []
+          let numOrden = 1
           await axios
           .get(CONFIG.ROOT_PATH + 'academico/estudiantes/curso/consolidadoasignaturas', {params: {idCurso: this.idCurso, periodo: this.idPeriodo}})
           .then(response => {
@@ -185,33 +164,86 @@
               this.btnCargando = false
             } else{
               if (response.data.datos != 0) {
-                //console.log(JSON.stringify(response.data.datos))
-                let datosEstudiante = {}
                 response.data.datos.forEach(element => {         
+                  let contAsignaturas = 0
+                  let sumaAsignaturas = 0
+                  let datosEstudiante = {}
                   datosEstudiante.estudiante = element.estudiante
-                  element.notas.forEach(element2 => {
-                    if (element2.orden == 99) {
-                      if ( this.$store.state.datosSecciones[0].tipoValComp == 0) {
-                        datosEstudiante[element2.nemo] = element2.definitivacompor
-                      } else {
-                        datosEstudiante[element2.nemo] = Number(element2.definitiva).toFixed(1) == 0 ? '' : Number(element2.definitiva).toFixed(1)
-                      }
+                  datosEstudiante.orden = numOrden
+                  datosEstudiante.id = element.id
+                  this.listaAreasAsignaturasCurso.forEach(elementAr => {
+                    if ((elementAr.asignaturas).length > 1) {
+                      let sumaPromArea = 0
+                      elementAr.asignaturas.forEach(elementAs => {
+                        let indice = element.notas.findIndex(nota => nota.id_asignatura_curso === elementAs.idAsignaturaCurso)
+                        if (indice >= 0) {
+                          if (isNaN(element.notas[indice].definitiva) || element.notas[indice].definitiva === null || element.notas[indice].definitiva < 0 || element.notas[indice].definitiva > this.$store.state.datosSecciones[0].maxSup) {
+                            datosEstudiante[elementAs.nemo] = ''
+                          } else {
+                            if (element.notas[indice].recuperacion > element.notas[indice].definitiva) {
+                              element.notas[indice].definitiva = element.notas[indice].recuperacion
+                              datosEstudiante[elementAs.nemo] = '[' + Number(element.notas[indice].recuperacion).toFixed(1) + ']'
+                            } else {
+                              datosEstudiante[elementAs.nemo] = Number(element.notas[indice].definitiva).toFixed(1)
+                            }
+                            sumaPromArea += (element.notas[indice].definitiva * elementAs.porcentaje) / 100
+                            sumaAsignaturas += element.notas[indice].definitiva
+                            contAsignaturas++
+                          }
+                        }
+                      })
+                      datosEstudiante[elementAr.nemoArea] = this.redondear(sumaPromArea).toFixed(1)
                     } else {
-                      datosEstudiante[element2.nemo] = element2.definitivapree
+                      let indice = element.notas.findIndex(nota => nota.id_area === elementAr.idArea)
+                      if (indice >= 0) {
+                        if (element.notas[indice].orden == 99) {
+                          if ( this.$store.state.datosSecciones[0].tipoValComp == 0) {
+                            datosEstudiante[elementAr.nemoArea] = element.notas[indice].definitivacompor
+                          } else {
+                            if (isNaN(element.notas[indice].definitiva) || element.notas[indice].definitiva === null || element.notas[indice].definitiva < 0 || element.notas[indice].definitiva > this.$store.state.datosSecciones[0].maxSup) {
+                              datosEstudiante[elementAr.nemoArea] = ''
+                            } else {
+                              datosEstudiante[elementAr.nemoArea] = Number(element.notas[indice].definitiva).toFixed(1)
+                            }
+                          }
+                        } else {
+                          if (isNaN(element.notas[indice].definitiva) || element.notas[indice].definitiva === null || element.notas[indice].definitiva < 0 || element.notas[indice].definitiva > this.$store.state.datosSecciones[0].maxSup) {
+                            datosEstudiante[elementAr.nemoArea] = ''
+                          } else {
+                            if (element.notas[indice].recuperacion > element.notas[indice].definitiva) {
+                              element.notas[indice].definitiva = element.notas[indice].recuperacion
+                            }
+                            sumaAsignaturas += element.notas[indice].definitiva
+                            contAsignaturas++
+                          }
+                        }
+                      }
                     }
                   })
+                  /*
+                  if (contAsignaturas > 0) {
+                    datosEstudiante.promedioAsignatura = Number(sumaAsignaturas / contAsignaturas).toFixed(1)
+                    this.listaPuestos.push({'id': element.id, 'promedio': sumaAsignaturas / contAsignaturas})
+                  } else {
+                    datosEstudiante.promedioAsignatura = Number(0).toFixed(1)
+                    this.listaPuestos.push({'id': element.id, 'promedio': 0})
+                  }
+                  */
+                 datosEstudiante.promedioAsignatura = ''
                   this.listaMatriculados.push(JSON.parse(JSON.stringify(datosEstudiante)))
                   //console.log(JSON.stringify(datosEstudiante))
+                  numOrden++
                 })
-              }
-              setTimeout(()=>{
+                this.listaPuestos.sort(((a, b) => b.promedio - a.promedio));
+                //console.log(JSON.stringify(this.listaPuestos))
+                this.consultaListaCurso()
+              } else {
                 this.btnCargando = false
-              },100)
+              }
             }
-            //console.log(JSON.stringify(this.listaMatriculados))
           })
           .catch(err => {
-            this.mensajeEmergente('danger',CONFIG.TITULO_MSG,'Algo salio mal y no se pudo realizar: consolidado asignaturas curso. Intente más tarde.' + err)
+            this.mensajeEmergente('danger',CONFIG.TITULO_MSG,'Algo salio mal y no se pudo realizar: consolidado areas curso. Intente más tarde.' + err)
             this.btnCargando = false
           })
         } else {

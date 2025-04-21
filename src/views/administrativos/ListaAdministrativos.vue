@@ -183,7 +183,7 @@
               this.listaAdministrativos = response.data.datos
             }
           }
-          //console.log(JSON.stringify(this.listaAdministrativos))
+          console.log(JSON.stringify(this.listaAdministrativos))
         })
         .catch(err => {
           this.mensajeEmergente('danger',CONFIG.TITULO_MSG,'Algo salio mal y no se pudo realizar: Lista admnistrativos. Intente más tarde.' + err)
