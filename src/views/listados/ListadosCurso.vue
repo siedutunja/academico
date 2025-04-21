@@ -221,7 +221,8 @@
           { value: 20, text: 'Ubicación (Dirección,Municipio,Barrio,Teléfono)'},
           { value: 21, text: 'Observaciones Matricula'},
           { value: 22, text: 'Ruta'},
-          { value: 23, text: 'Acudiente (Nombre,Dirección,Teléfono,Correo)'}
+          { value: 23, text: 'Acudiente (Nombre,Dirección,Teléfono,Correo)'},
+          { value: 24, text: 'Municipio de Nacimiento'}
         ],
         datosCurso: [],
         datosGrado: [],
