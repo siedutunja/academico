@@ -351,7 +351,7 @@
                 this.encabColumnasAreas.push({label: elementAs.nemo, field: elementAs.nemo, sortable: false, tdClass: 'text-center'})
                 bajosArea[elementAs.nemo] = 0
               })
-              bajosArea[elementAr.nemoArea] = '-'
+              bajosArea[elementAr.nemoArea] = 0
             } else {
               bajosArea[elementAr.nemoArea] = 0
             }
@@ -422,6 +422,9 @@
                         }
                       })
                       datosEstudiante[elementAr.nemoArea] = this.redondear(sumaPromArea).toFixed(1)
+                      if (datosEstudiante[elementAr.nemoArea] > 0 && datosEstudiante[elementAr.nemoArea] < this.$store.state.datosSecciones[0].minBas) {
+                        bajosArea[elementAr.nemoArea]++
+                      }
                     } else {
                       let indice = element.notas.findIndex(nota => nota.id_area === elementAr.idArea)
                       if (indice >= 0) {
@@ -606,7 +609,7 @@
                 this.encabColumnasAreasRecup.push({label: elementAs.nemo, field: elementAs.nemo, sortable: false, tdClass: 'text-center'})
                 bajosArea[elementAs.nemo] = 0
               })
-              bajosArea[elementAr.nemoArea] = '-'
+              bajosArea[elementAr.nemoArea] = 0
             } else {
               bajosArea[elementAr.nemoArea] = 0
             }
@@ -682,6 +685,9 @@
                         }
                       })
                       datosEstudiante[elementAr.nemoArea] = this.redondear(sumaPromArea).toFixed(1)
+                      if (datosEstudiante[elementAr.nemoArea] > 0 && datosEstudiante[elementAr.nemoArea] < this.$store.state.datosSecciones[0].minBas) {
+                        bajosArea[elementAr.nemoArea]++
+                      }
                     } else {
                       let indice = element.notas.findIndex(nota => nota.id_area === elementAr.idArea)
                       if (indice >= 0) {
@@ -756,6 +762,7 @@
                 })
                 bajosArea.bajE = totalBajos
                 this.listaMatriculados.push(JSON.parse(JSON.stringify(bajosArea)))
+                console.log(JSON.stringify(bajosArea))
                 setTimeout(()=>{
                   this.btnCargando = false
                 },100)

@@ -140,6 +140,7 @@
           this.encabColumnasExcel.push({ label: 'Correo Acudiente', field: 'correo' })
           this.encabColumnasExcel.push({ label: 'Parentesco', field: 'parentesco' })
         }
+        if (element == 24) this.encabColumnasExcel.push({ label: 'Municipio Nacimiento', field: 'muninace' })
       })
       this.consultaListaGrado()
     }
