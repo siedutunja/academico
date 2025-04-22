@@ -102,7 +102,7 @@
         idBoletin: 1,
         tiposBoletin: [
           { 'value': 1, 'text': 'Informes organizados por Areas' },
-          { 'value': 2, 'text': 'Informes organizados solo por Asignaturas', disabled: true },
+          { 'value': 2, 'text': 'Informes organizados solo por Asignaturas' },
         ],
         listaPuestos: []
       }
@@ -124,7 +124,7 @@
           window.open("https://siedutunja.gov.co/php/boletines/" + this.$store.state.daneInstitucion + "ar.php" + encoded,"_blank")
         } else {
           //window.open("http://localhost/siedutunja/php/boletines/" + this.$store.state.daneInstitucion + "as.php" + encoded,"_blank")
-          //window.open("https://siedutunja.gov.co/php/boletines/" + this.$store.state.daneInstitucion + "as.php" + encoded,"_blank")
+          window.open("https://siedutunja.gov.co/php/boletines/" + this.$store.state.daneInstitucion + "as.php" + encoded,"_blank")
         }
         return true
       },
