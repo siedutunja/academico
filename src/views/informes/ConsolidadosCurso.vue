@@ -432,7 +432,7 @@
                           if ( this.$store.state.datosSecciones[0].tipoValComp == 0) {
                             datosEstudiante[elementAr.nemoArea] = element.notas[indice].definitivacompor
                           } else {
-                            if (isNaN(element.notas[indice].definitiva) || element.notas[indice].definitiva === null || element.notas[indice].definitiva < 0 || element.notas[indice].definitiva > this.$store.state.datosSecciones[0].maxSup) {
+                            if (isNaN(element.notas[indice].definitiva) || element.notas[indice].definitiva === null || element.notas[indice].definitiva <= 0 || element.notas[indice].definitiva > this.$store.state.datosSecciones[0].maxSup) {
                               datosEstudiante[elementAr.nemoArea] = ''
                             } else {
                               datosEstudiante[elementAr.nemoArea] = Number(element.notas[indice].definitiva).toFixed(1)
@@ -702,7 +702,7 @@
                             }
                           }
                         } else {
-                          if (isNaN(element.notas[indice].definitiva) || element.notas[indice].definitiva === null || element.notas[indice].definitiva < 0 || element.notas[indice].definitiva > this.$store.state.datosSecciones[0].maxSup) {
+                          if (isNaN(element.notas[indice].definitiva) || element.notas[indice].definitiva === null || element.notas[indice].definitiva <= 0 || element.notas[indice].definitiva > this.$store.state.datosSecciones[0].maxSup) {
                             datosEstudiante[elementAr.nemoArea] = ''
                           } else {
                             if (element.notas[indice].recuperacion > element.notas[indice].definitiva) {
@@ -906,8 +906,7 @@
                           }
                         }
                       } else {
-                        //if (element2.definitiva === 0 || element2.definitiva === null || element2.definitiva === '' || Number(element2.definitiva).toFixed(1) == 0) {
-                        if (isNaN(element2.definitiva) || element2.definitiva === null || element2.definitiva < this.$store.state.datosSecciones[0].minBaj) {
+                        if (isNaN(element2.definitiva) || element2.definitiva === null || element2.definitiva <= 0 || element2.definitiva > this.$store.state.datosSecciones[0].maxSup) {
                           datosEstudiante[element2.nemo] = null
                         } else {
                           datosEstudiante[element2.nemo] = Number(element2.definitiva).toFixed(1)
@@ -1104,8 +1103,7 @@
                           }
                         }
                       } else {
-                        //if (element2.definitiva === 0 || element2.definitiva === null || element2.definitiva === '' || Number(element2.definitiva).toFixed(1) == 0) {
-                        if (isNaN(element2.definitiva) || element2.definitiva === null || element2.definitiva < this.$store.state.datosSecciones[0].minBaj) {
+                        if (isNaN(element2.definitiva) || element2.definitiva === null || element2.definitiva <= 0 || element2.definitiva > this.$store.state.datosSecciones[0].maxSup) {
                           datosEstudiante[element2.nemo] = null
                         } else {
                           if (element2.recuperacion > element2.definitiva) {

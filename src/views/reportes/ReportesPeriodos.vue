@@ -177,7 +177,7 @@
                       elementAr.asignaturas.forEach(elementAs => {
                         let indice = element.notas.findIndex(nota => nota.id_asignatura_curso === elementAs.idAsignaturaCurso)
                         if (indice >= 0) {
-                          if (isNaN(element.notas[indice].definitiva) || element.notas[indice].definitiva === null || element.notas[indice].definitiva < 0 || element.notas[indice].definitiva > this.$store.state.datosSecciones[0].maxSup) {
+                          if (isNaN(element.notas[indice].definitiva) || element.notas[indice].definitiva === null || element.notas[indice].definitiva <= 0 || element.notas[indice].definitiva > this.$store.state.datosSecciones[0].maxSup) {
                             datosEstudiante[elementAs.nemo] = ''
                           } else {
                             if (element.notas[indice].recuperacion > element.notas[indice].definitiva) {
@@ -200,14 +200,14 @@
                           if ( this.$store.state.datosSecciones[0].tipoValComp == 0) {
                             datosEstudiante[elementAr.nemoArea] = element.notas[indice].definitivacompor
                           } else {
-                            if (isNaN(element.notas[indice].definitiva) || element.notas[indice].definitiva === null || element.notas[indice].definitiva < 0 || element.notas[indice].definitiva > this.$store.state.datosSecciones[0].maxSup) {
+                            if (isNaN(element.notas[indice].definitiva) || element.notas[indice].definitiva === null || element.notas[indice].definitiva <= 0 || element.notas[indice].definitiva > this.$store.state.datosSecciones[0].maxSup) {
                               datosEstudiante[elementAr.nemoArea] = ''
                             } else {
                               datosEstudiante[elementAr.nemoArea] = Number(element.notas[indice].definitiva).toFixed(1)
                             }
                           }
                         } else {
-                          if (isNaN(element.notas[indice].definitiva) || element.notas[indice].definitiva === null || element.notas[indice].definitiva < 0 || element.notas[indice].definitiva > this.$store.state.datosSecciones[0].maxSup) {
+                          if (isNaN(element.notas[indice].definitiva) || element.notas[indice].definitiva === null || element.notas[indice].definitiva <= 0 || element.notas[indice].definitiva > this.$store.state.datosSecciones[0].maxSup) {
                             datosEstudiante[elementAr.nemoArea] = ''
                           } else {
                             if (element.notas[indice].recuperacion > element.notas[indice].definitiva) {
@@ -271,7 +271,7 @@
                       elementAr.asignaturas.forEach(elementAs => {
                         let indice = element.notas.findIndex(nota => nota.id_asignatura_curso === elementAs.idAsignaturaCurso)
                         if (indice >= 0) {
-                          if (isNaN(element.notas[indice].definitiva) || element.notas[indice].definitiva === null || element.notas[indice].definitiva < 0 || element.notas[indice].definitiva > this.$store.state.datosSecciones[0].maxSup) {
+                          if (isNaN(element.notas[indice].definitiva) || element.notas[indice].definitiva === null || element.notas[indice].definitiva <= 0 || element.notas[indice].definitiva > this.$store.state.datosSecciones[0].maxSup) {
                             datosEstudiante[elementAs.nemo] = ''
                           } else {
                             if (element.notas[indice].recuperacion > element.notas[indice].definitiva) {
@@ -294,14 +294,14 @@
                           if ( this.$store.state.datosSecciones[0].tipoValComp == 0) {
                             datosEstudiante[elementAr.nemoArea] = element.notas[indice].definitivacompor
                           } else {
-                            if (isNaN(element.notas[indice].definitiva) || element.notas[indice].definitiva === null || element.notas[indice].definitiva < 0 || element.notas[indice].definitiva > this.$store.state.datosSecciones[0].maxSup) {
+                            if (isNaN(element.notas[indice].definitiva) || element.notas[indice].definitiva === null || element.notas[indice].definitiva <= 0 || element.notas[indice].definitiva > this.$store.state.datosSecciones[0].maxSup) {
                               datosEstudiante[elementAr.nemoArea] = ''
                             } else {
                               datosEstudiante[elementAr.nemoArea] = Number(element.notas[indice].definitiva).toFixed(1)
                             }
                           }
                         } else {
-                          if (isNaN(element.notas[indice].definitiva) || element.notas[indice].definitiva === null || element.notas[indice].definitiva < 0 || element.notas[indice].definitiva > this.$store.state.datosSecciones[0].maxSup) {
+                          if (isNaN(element.notas[indice].definitiva) || element.notas[indice].definitiva === null || element.notas[indice].definitiva <= 0 || element.notas[indice].definitiva > this.$store.state.datosSecciones[0].maxSup) {
                             datosEstudiante[elementAr.nemoArea] = ''
                           } else {
                             if (element.notas[indice].recuperacion > element.notas[indice].definitiva) {

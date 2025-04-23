@@ -269,6 +269,20 @@ function configRoutes () {
               name: 'Consolidados Curso',
               component: () => import('@/views/informes/ConsolidadosCurso')
             },
+            // 2025-04-22
+            {
+              path: 'puestoscurso',
+              beforeEnter: autenticar,
+              name: 'Puestos Curso',
+              component: () => import('@/views/informes/PuestosCurso')
+            },
+            // 2025-04-22
+            {
+              path: 'rendimientoacademico',
+              beforeEnter: autenticar,
+              name: 'Rendimiento Academico',
+              component: () => import('@/views/informes/RendimientoAcademico')
+            },
           ]
         },
         // 2024-12-10
