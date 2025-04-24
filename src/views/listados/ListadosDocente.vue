@@ -111,6 +111,7 @@
                       <h5 class="text-danger ml-5">No existen Cursos en la Sede</h5>
                     </div>
                   </vue-good-table>
+                  {{JSON.stringify(listaAsignacion)}}
                 </b-col>
               </b-row>
             </div>

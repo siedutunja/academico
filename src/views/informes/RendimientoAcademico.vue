@@ -63,7 +63,7 @@
                     </b-col>
                   </b-row>
                   -->
-                  <vue-good-table ref="table2" :columns="encabColumnas2" :rows="listaTotalesAsignaturas" styleClass="vgt-table condensed bordered striped" :line-numbers="true">
+                  <vue-good-table ref="table" :columns="encabColumnas2" :rows="listaTotalesAsignaturas" styleClass="vgt-table condensed bordered striped" :line-numbers="true">
                     <div slot="emptystate">
                       <h5 class="text-danger ml-5">-</h5>
                     </div>
@@ -131,12 +131,10 @@
     methods: {
       imprimirConsolidado() {
         // Crear una nueva ventana para imprimir
-        const printWindow = window.open("Consolidado", "_blank");
-
+        const printWindow = window.open("consolidado", "_blank");
         // Obtener el contenido HTML de la tabla
-        //const tableHtml = this.$refs.table.$el.querySelector("table").outerHTML;
-        const tableHtml2 = this.$refs.table2.$el.querySelector("table2").outerHTML;
-
+        const tableHtml = this.$refs.table.$el.querySelector("table").outerHTML;
+        let fecha = 'Fecha: ' + new Date().toLocaleString()
         // Estilos básicos para la impresión
         const style = `
           <style>
@@ -178,11 +176,9 @@
               ${style}
             </head>
             <body>
-              <p style="text-align: center;">${this.$store.state.nombreInstitucion}<br>INFORMES CONSOLIDADOS POR CURSO - AÑO LECTIVO ${this.$store.state.aLectivo}<br>Sede: ${this.nombreSede} | Curso: ${this.nombreCurso}</p>
+              <p style="text-align: center;">${this.$store.state.nombreInstitucion}<br>INFORME RENDIMIENTO ACADÉMICO POR CURSO - AÑO LECTIVO ${this.$store.state.aLectivo}<br>Sede: ${this.nombreSede} | Curso: ${this.nombreCurso}</p>
               ${tableHtml}
-              <div class="saltopagina"></div>
-              <p style="text-align: center;">${this.$store.state.nombreInstitucion}<br>INFORMES CONSOLIDADOS POR CURSO - AÑO LECTIVO ${this.$store.state.aLectivo}<br>Sede: ${this.nombreSede} | Curso: ${this.nombreCurso}</p>
-              ${tableHtml2}
+              <div style="text-align: right;"><i>${fecha}</i></div>
             </body>
           </html>
         `);

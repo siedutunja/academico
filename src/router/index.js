@@ -280,7 +280,7 @@ function configRoutes () {
             {
               path: 'rendimientoacademico',
               beforeEnter: autenticar,
-              name: 'Rendimiento Academico',
+              name: 'Rendimiento Académico',
               component: () => import('@/views/informes/RendimientoAcademico')
             },
           ]
@@ -321,6 +321,13 @@ function configRoutes () {
               beforeEnter: autenticar,
               name: 'Planillas y Formatos por Curso',
               component: () => import('@/views/listados/PlanillasCurso')
+            },
+            // 2025-01-26
+            {
+              path: 'planillasnotas',
+              beforeEnter: autenticar,
+              name: 'Auxiliar con Notas',
+              component: () => import('@/views/listados/PlanillasNotas')
             },
           ]
         },
