@@ -119,6 +119,13 @@ function configRoutes () {
               name: 'Renovación Masiva Estudiantes Antiguos',
               component: () => import('@/views/matriculas/RenovacionMasiva2024')
             },
+            // 2025-05-05
+            {
+              path: 'promocionanticipada',
+              beforeEnter: autenticar,
+              name: 'Promoción Anticipada',
+              component: () => import('@/views/matriculas/PromocionAnticipada')
+            },
           ]
         },
         // 2024-10-26
@@ -525,14 +532,14 @@ function configRoutes () {
             {
               path: 'evaluacionesperiodo',
               beforeEnter: autenticar,
-              name: 'Evaluaciones por Periodo',
+              name: 'Evaluaciones Periodo',
               component: () => import('@/views/periodos/EvaluacionesPeriodo')
             },
             // 2025-04-08
             {
               path: 'recuperacionesperiodo',
               beforeEnter: autenticar,
-              name: 'Recuperaciones por Periodo',
+              name: 'Recuperaciones Periodo',
               component: () => import('@/views/periodos/RecuperacionesPeriodo')
             },
           ]
