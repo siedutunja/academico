@@ -4,7 +4,7 @@
       <b-col lg="12">
         <b-card>
           <template #header>
-            <h5 class="mb-0"><b-icon icon="card-checklist" aria-hidden="true"></b-icon> ACTUALIZACIÓN DE CALIFICACIONES POR PERIODO</h5>
+            <h5 class="mb-0"><b-icon icon="card-checklist" aria-hidden="true"></b-icon> PLANILLA DE CALIFICACIONES POR PERIODO</h5>
           </template>
           <b-card-text>
             <b-row>
@@ -135,7 +135,7 @@
             </div>
           </b-card-text>
           <template #footer>
-            <em>Actualización de Evaluaciones por Periodo.</em>
+            <em>Actualización de Calificaciones por Periodo.</em>
           </template>
         </b-card>
       </b-col>

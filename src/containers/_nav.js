@@ -137,6 +137,7 @@ jwt.verify(token, CONFIG.SECRET_KEY, (err, data) => {
       indice++
       if (tokenDecodificado.id_rol == 1 || tokenDecodificado.id_rol == 12) {
       menu[0]._children[indice].items.push({ name: 'Calificaciones por Periodo', to: '/calificaciones/notasperiodo'})
+      menu[0]._children[indice].items.push({ name: 'Recuperaciones por Periodo', to: '/calificaciones/recuperacionesperiodo'})
       }
     }
     if (tokenDecodificado.id_rol == 1 || tokenDecodificado.id_rol == 12) {

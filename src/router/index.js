@@ -553,6 +553,13 @@ function configRoutes () {
               name: 'Notas por Periodo',
               component: () => import('@/views/calificaciones/NotasPeriodo')
             },
+            // 2025-05-04
+            {
+              path: 'recuperacionesperiodo',
+              beforeEnter: autenticar,
+              name: 'Recuperaciones por Periodo',
+              component: () => import('@/views/calificaciones/RecuperacionesPeriodo')
+            },
           ]
         },
         // 2024-04-06
