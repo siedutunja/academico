@@ -77,6 +77,8 @@ jwt.verify(token, CONFIG.SECRET_KEY, (err, data) => {
     }
     if (tokenDecodificado.id_rol == 1 || tokenDecodificado.id_rol == 12) {
       menu[0]._children[indice].items.push({ name: 'Cambiar de Curso', to: '/estudiantes/cambiocurso'})
+    }
+    if (tokenDecodificado.id_rol == 1 || tokenDecodificado.id_rol == 12 || tokenPermisos.perMatricular == 1) {
       menu[0]._children[indice].items.push({ name: 'Cambiar Documento', to: '/estudiantes/buscarcambiodocumento'})
     }
     menu[0]._children[indice].items.push({ name: 'Observador', to: '/estudiantes/listaobservadores'})

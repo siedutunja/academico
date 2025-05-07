@@ -120,8 +120,8 @@
         "&minBaj=" + this.$store.state.datosSecciones[0].minBaj + "&maxBaj=" + this.$store.state.datosSecciones[0].maxBaj + "&minBas=" + this.$store.state.datosSecciones[0].minBas + "&maxBas=" + this.$store.state.datosSecciones[0].maxBas + "&minAlt=" + this.$store.state.datosSecciones[0].minAlt + "&maxAlt=" + this.$store.state.datosSecciones[0].maxAlt + "&minSup=" + this.$store.state.datosSecciones[0].minSup + "&maxSup=" + this.$store.state.datosSecciones[0].maxSup
         let encoded = encodeURI(uri);
         if ( this.idBoletin == 1) {
-          window.open("http://localhost/siedutunja/php/boletines/" + this.$store.state.daneInstitucion + "ar.php" + encoded,"_blank")
-          //window.open("https://siedutunja.gov.co/php/boletines/" + this.$store.state.daneInstitucion + "ar.php" + encoded,"_blank")
+          //window.open("http://localhost/siedutunja/php/boletines/" + this.$store.state.daneInstitucion + "ar.php" + encoded,"_blank")
+          window.open("https://siedutunja.gov.co/php/boletines/" + this.$store.state.daneInstitucion + "ar.php" + encoded,"_blank")
         } else {
           //window.open("http://localhost/siedutunja/php/boletines/" + this.$store.state.daneInstitucion + "as.php" + encoded,"_blank")
           window.open("https://siedutunja.gov.co/php/boletines/" + this.$store.state.daneInstitucion + "as.php" + encoded,"_blank")

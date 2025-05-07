@@ -239,7 +239,7 @@
       }
     },
     beforeMount() {
-      if(this.$store.state.idRol == 1 || this.$store.state.idRol == 12) {
+      if(this.$store.state.idRol == 1 || this.$store.state.idRol == 12 || this.$store.state.perMatricular == 1) {
         this.idMatricula = this.$store.state.idMatricula
         this.consultaFichaMatricula()
         this.ocuparCombos()

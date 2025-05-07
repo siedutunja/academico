@@ -70,7 +70,6 @@
                   <template #footer>
                     <b-button class="small mx-1 mt-2" variant="primary" @click="confirmarPromo">Promocionar Estudiante</b-button>
                     <b-button class="small mx-1 mt-2" variant="secondary" @click="cancelarFormulario">Cancelar</b-button>
-                    {{datosPromo}}
                   </template>
                 </b-card>
               </b-col>
@@ -193,6 +192,9 @@
         .catch(err => {
           this.mensajeEmergente('danger',CONFIG.TITULO_MSG,'Algo salio mal y no se pudo realizar: Promoción Anticipada. Intente más tarde. ' + err)
         })
+        this.idSede = null
+        this.idCurso = null
+        this.idMatricula = null
       },
       seleccionarGradoCurso() {
         let indice = this.$store.state.datosCursos.findIndex(curso => curso.id === this.datosPromo.id_curso)
