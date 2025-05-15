@@ -257,6 +257,7 @@
           { label: 'SRPA', field: 'srpa' },
           { label: 'TIPO DE SANGRE', field: 'rh' },
           { label: 'DISCAPACIDAD', field: 'discapacidad' },
+          { label: 'POB_VICT_CONF_RUV', field: 'victima' },
           { label: 'PAIS_ORIGEN', field: 'pais' },
           { label: 'CORREO', field: 'correo' },
         ],
@@ -423,6 +424,11 @@
                 registro.apoyo = element.apoyo
                 registro.srpa = 'NO APLICA'
                 registro.discapacidad = element.discapacidad
+                if (element.id_victima == 99) {
+                  registro.victima = 'NO'
+                } else {
+                  registro.victima = 'SI'
+                }
                 registro.pais = element.pais
                 registro.correo = element.correo
                 this.listaMatriculadosDetallado.push(registro)

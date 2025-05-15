@@ -82,6 +82,7 @@
     methods: {
       imprimirListas() {
         this.planillasSeleccionadas = []
+        console.log(JSON.stringify(this.$refs.planillita.selectedRows))
         this.$refs.planillita.selectedRows.forEach(element => {
           this.planillasSeleccionadas.push({ 'idAsignaturaCurso': element.idAsignaturaCurso, 'id': element.id, 'cu': element.nomenclatura, 'se': element.sede, 'jo': element.jornada, 'di': element.docente, 'as': element.asignatura })
         })
@@ -89,7 +90,7 @@
         let uri = "?datos=" + JSON.stringify(this.planillasSeleccionadas) + "&ie=" + this.$store.state.nombreInstitucion + "&vigencia=" + this.$store.state.aLectivo + "&escudo=" + this.$store.state.escudoInstitucion + "&titular=" + docenteTitular
         let encoded = encodeURI(uri);
         //window.open("http://localhost/siedutunja/php/listas/listas-05.php" + encoded,"_blank")
-        window.open("https://siedutunja.gov.co/php/listas/listas-05.php" + encoded,"_blank")
+        //window.open("https://siedutunja.gov.co/php/listas/listas-05.php" + encoded,"_blank")
         return true
       },
       async consultaListaAsignacion() {
@@ -104,7 +105,7 @@
               this.listaAsignacion = response.data.datos
             }
           }
-          //console.log(JSON.stringify(this.listaAsignacion))
+          console.log(this.idDocente,JSON.stringify(this.listaAsignacion))
         })
         .catch(err => {
           this.mensajeEmergente('danger',CONFIG.TITULO_MSG,'Algo salio mal y no se pudo realizar: Consulta Asignación Docente. Intente más tarde.' + err)
