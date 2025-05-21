@@ -241,6 +241,13 @@ function configRoutes () {
             render (c) { return c('router-view') }
           },
           children: [
+            // 2025-05-19
+            {
+              path: 'consolidadomatriculacursos',
+              beforeEnter: autenticar,
+              name: 'Consolidado Matricula Cursos',
+              component: () => import('@/views/informes/ConsolidadoMatriculaCursos')
+            },
             // 2025-02-22
             {
               path: 'consolidadomatricula',

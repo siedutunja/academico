@@ -76,7 +76,7 @@
         this.$store.commit('set', ['idEstudiante', item.idEstudiante])
         this.$store.commit('set', ['idMatricula', item.idMatricula])
         this.$router.push('/estudiantes/observador')
-      },
+      },      
       async consultaListaCurso() {
         await axios
         .get(CONFIG.ROOT_PATH + 'observador/listacurso', { params: { idCurso: this.idCurso }})

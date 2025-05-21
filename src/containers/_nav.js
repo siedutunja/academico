@@ -128,6 +128,7 @@ jwt.verify(token, CONFIG.SECRET_KEY, (err, data) => {
     menu[0]._children[indice].items.push({ name: 'Rendimiento Academico', to: '/informes/rendimientoacademico'})
     menu[0]._children[indice].items.push({ name: 'Informes por Agrupación', to: '/informes/informesagrupacion'})
     menu[0]._children[indice].items.push({ name: 'Consolidado Matricula', to: '/informes/consolidadomatricula'})
+    menu[0]._children[indice].items.push({ name: 'Consolidado Matricula Cursos', to: '/informes/consolidadomatriculacursos'})
     if (tokenDecodificado.id_rol == 1 || tokenDecodificado.id_rol == 12 || tokenDecodificado.id_rol == 14) {
       menu[0]._children.push(
         {
