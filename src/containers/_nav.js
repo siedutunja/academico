@@ -47,6 +47,7 @@ jwt.verify(token, CONFIG.SECRET_KEY, (err, data) => {
       menu[0]._children[indice].items.push({ name: 'Matricular Preinscrito', to: '/matriculas/preinscritos'})
       menu[0]._children[indice].items.push({ name: 'Renovar Matricula', to: '/matriculas/buscarrenovacion'})
       menu[0]._children[indice].items.push({ name: 'Promoción Anticipada', to: '/matriculas/promocionanticipada'})
+      menu[0]._children[indice].items.push({ name: 'Ubicación o Reubicación', to: '/matriculas/reubicacion'})
       menu[0]._children[indice].items.push({ name: 'Matriculados Sin Curso', to: '/matriculas/matriculadossincurso'})
       menu[0]._children[indice].items.push({ name: 'Renovación Masiva Antiguos', to: '/matriculas/renovacionmasiva2024'})
     }
@@ -82,6 +83,7 @@ jwt.verify(token, CONFIG.SECRET_KEY, (err, data) => {
       menu[0]._children[indice].items.push({ name: 'Cambiar Documento', to: '/estudiantes/buscarcambiodocumento'})
     }
     menu[0]._children[indice].items.push({ name: 'Observador', to: '/estudiantes/listaobservadores'})
+    //menu[0]._children[indice].items.push({ name: 'Entrevista Familiar', to: '/estudiantes/ListaEntrevistasFamiliares'})
     menu[0]._children.push(
       {
         _name: 'CSidebarNavDropdown',

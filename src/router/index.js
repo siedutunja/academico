@@ -126,6 +126,13 @@ function configRoutes () {
               name: 'Promoción Anticipada',
               component: () => import('@/views/matriculas/PromocionAnticipada')
             },
+            // 2025-05-29
+            {
+              path: 'reubicacion',
+              beforeEnter: autenticar,
+              name: 'Ubicación o Reubicación',
+              component: () => import('@/views/matriculas/Reubicacion')
+            },
           ]
         },
         // 2024-10-26
@@ -395,6 +402,13 @@ function configRoutes () {
               beforeEnter: autenticar,
               name: 'Observador del Estudiante',
               component: () => import('@/views/estudiantes/Observador')
+            },
+            // 2024-04-06
+            {
+              path: 'listaentrevistasfamiliares',
+              beforeEnter: autenticar,
+              name: 'Entrevista Familiar',
+              component: () => import('@/views/estudiantes/ListaEntrevistasFamiliares')
             },
           ]
         },

@@ -4,7 +4,7 @@
       <b-col lg="12">
         <b-card>
           <template #header>
-            <h5 class="mb-0"><b-icon icon="card-checklist" aria-hidden="true"></b-icon> PROMOCIÓN ANTICIPADA</h5>
+            <h5 class="mb-0"><b-icon icon="card-checklist" aria-hidden="true"></b-icon> UBICACIÓN/REUBICACIÓN</h5>
           </template>
           <b-card-text>
             <b-row>
@@ -46,6 +46,11 @@
                         </b-form-group>
                       </b-col>
                       <b-col lg="12">
+                        <b-form-group label="Justificación:" label-for="justificacion" class="etiqueta">
+                          <b-form-input id="justificacion" ref="justificacion" v-model.trim="datosPromo.justificacion" aria-describedby="feedJustifica" autocomplete="off"></b-form-input>
+                        </b-form-group>
+                      </b-col>
+                      <b-col lg="12">
                         <b-alert show>
                           <b-row>
                             <b-col lg="12"><h6>Sede y Curso al que se Promueve el Estudiante</h6></b-col>
@@ -68,7 +73,7 @@
                     </b-row>
                   </b-card-text>
                   <template #footer>
-                    <b-button class="small mx-1 mt-2" variant="primary" @click="confirmarPromo">Promocionar Estudiante</b-button>
+                    <b-button class="small mx-1 mt-2" variant="primary" @click="confirmarPromo">Ubicar o Reubicar Estudiante</b-button>
                     <b-button class="small mx-1 mt-2" variant="secondary" @click="cancelarFormulario">Cancelar</b-button>
                   </template>
                 </b-card>
@@ -93,7 +98,7 @@
   import { uuid } from 'vue-uuid'
 
   export default {
-    name: 'promocionanticipada',
+    name: 'reubicacion',
     mixins: [validationMixin],
     components: {
     },
@@ -133,6 +138,7 @@
           acta: null,
           fecha_acta: null,
           obs_final: null,
+          justificacion: null
         },
       }
     },
@@ -151,8 +157,8 @@
           this.mensajeEmergente('danger',CONFIG.TITULO_MSG,'Algunos campos están incompletos.')
           return false
         } else {
-          let titulo = 'Promocionar Anticipadamente'
-          let pregunta = '¿Esta seguro de promocionar al Estudiante?'
+          let titulo = 'Ubicar o Reubicar'
+          let pregunta = '¿Esta seguro de Ubicar o Reubicar al Estudiante?'
           this.$bvModal.msgBoxConfirm(pregunta, {
             headerBgVariant: 'primary',
             headerTextVariant: 'light',
@@ -179,18 +185,18 @@
         return true
       },
       async guardarPromo() {
-        this.datosPromo.obs_final = 'Promoción Anticipada: ' + this.datosPromo.acta + ' del ' + this.datosPromo.fecha_acta
+        this.datosPromo.obs_final = 'Ubicación/Reubicación: ' + this.datosPromo.acta + ' del ' + this.datosPromo.fecha_acta + ' ' + this.datosPromo.justificacion
         await axios
-        .put(CONFIG.ROOT_PATH + 'academico/matriculas/promocionanticipada', JSON.stringify(this.datosPromo), { headers: {"Content-Type": "application/json; charset=utf-8" }})
+        .put(CONFIG.ROOT_PATH + 'academico/matriculas/reubicacion', JSON.stringify(this.datosPromo), { headers: {"Content-Type": "application/json; charset=utf-8" }})
         .then(response => {
           if (response.data.error){
-            this.mensajeEmergente('danger',CONFIG.TITULO_MSG,response.data.mensaje + ' - Promoción Anticipada')
+            this.mensajeEmergente('danger',CONFIG.TITULO_MSG,response.data.mensaje + ' - Ubicación/Reubicación')
           } else{
-            this.mensajeEmergente('success',CONFIG.TITULO_MSG,'La Promoción Anticipada se han realizado correctamente.')
+            this.mensajeEmergente('success',CONFIG.TITULO_MSG,'La Ubicación o Reubicación se han realizado correctamente.')
           }
         })
         .catch(err => {
-          this.mensajeEmergente('danger',CONFIG.TITULO_MSG,'Algo salio mal y no se pudo realizar: Promoción Anticipada. Intente más tarde. ' + err)
+          this.mensajeEmergente('danger',CONFIG.TITULO_MSG,'Algo salio mal y no se pudo realizar: Ubicación/Reubicación. Intente más tarde. ' + err)
         })
         this.idSede = null
         this.idCurso = null
@@ -226,6 +232,7 @@
         this.datosPromo.acta = null
         this.datosPromo.fecha_acta = null
         this.datosPromo.obs_final = null
+        this.datosPromo.justificacion = null
       },
       async consultarMatriculados() {
         this.comboEstudiantes = []
@@ -234,7 +241,7 @@
         .get(CONFIG.ROOT_PATH + 'academico/matriculas/promo', {params: {idCurso: this.idCurso}})
         .then(response => {
           if (response.data.error){
-            this.mensajeEmergente('danger',CONFIG.TITULO_MSG,response.data.mensaje + ' - Promoción Anticipada')
+            this.mensajeEmergente('danger',CONFIG.TITULO_MSG,response.data.mensaje + ' - Ubicación/Reubicación')
           } else{
             if (response.data.datos != 0) {
               this.listaEstudiantes = response.data.datos
@@ -245,7 +252,7 @@
           }
         })
         .catch(err => {
-          this.mensajeEmergente('danger',CONFIG.TITULO_MSG,'Algo salio mal y no se pudo realizar: Promoción Anticipada. Intente más tarde.' + err)
+          this.mensajeEmergente('danger',CONFIG.TITULO_MSG,'Algo salio mal y no se pudo realizar: Ubicación/Reubicación. Intente más tarde.' + err)
         })
       },
       async ocuparComboCursosSede() {
