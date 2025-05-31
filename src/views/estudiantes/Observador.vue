@@ -244,6 +244,7 @@
             <b-row>
               <b-col lg="12">
                 <b-button class="small mx-1 mt-3" variant="primary" @click="imprimirObservador">Imprimir Observador</b-button>
+                <b-button class="small mx-1 mt-3" variant="secondary" @click="cerrarObservador">Cerrar</b-button>
               </b-col>
             </b-row>
           </b-card-text>
@@ -809,6 +810,9 @@
       },  
       cancelarFormulario() {
         this.$refs['modalRegistroObservador'].hide()
+      },
+      cerrarObservador() {
+        this.$emit("retorno", 0)
       },
       async consultaObservador() {
         this.datosFichaE = {}

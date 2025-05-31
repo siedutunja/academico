@@ -111,7 +111,6 @@
                       <h5 class="text-danger ml-5">No existen Cursos en la Sede</h5>
                     </div>
                   </vue-good-table>
-                  {{JSON.stringify(listaAsignacion)}}
                 </b-col>
               </b-row>
             </div>
@@ -163,7 +162,9 @@
         campos: [
           { value: 0, text: 'Apellidos y Nombres', disabled: true },
           { value: 1, text: 'Documento' },
+          { value: 25, text: 'Municipio de Expedición'},
           { value: 2, text: 'Fecha de Nacimiento' },
+          { value: 24, text: 'Municipio de Nacimiento'},
           { value: 3, text: 'Edad'},
           { value: 4, text: 'Genero'},
           { value: 5, text: 'Repitencia'},

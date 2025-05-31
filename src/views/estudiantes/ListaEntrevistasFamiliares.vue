@@ -70,11 +70,12 @@
         comboCursosSede: [],
         listaEstudiantesCurso: [],
         encabColumnas: [
-          { label: 'Apellidos y Nombres del Estudiante', field: 'estudiante' },
-          { label: 'Documento', field: 'documento' },
-          { label: 'Gen', field: 'id_genero' },
-          { label: 'FechaNace', field: 'fechaNace' },
-          { label: 'Edad', field: 'edad' },
+          { label: 'Apellidos y Nombres del Estudiante', field: 'estudiante', tdClass: this.tdClassFuncE },
+          { label: 'Documento', field: 'documento', tdClass: this.tdClassFuncE },
+          { label: 'Gen', field: 'id_genero', tdClass: this.tdClassFuncE },
+          { label: 'FechaNace', field: 'fechaNace', tdClass: this.tdClassFuncE },
+          { label: 'Edad', field: 'edad', tdClass: this.tdClassFuncE },
+          { label: 'Estado', field: 'estado', tdClass: this.tdClassFuncE },
           { label: '', field: 'idEstudiante', sortable: false },
         ],
         datosFicha: {
@@ -136,6 +137,11 @@
         this.$store.state.datosSedes.forEach(element => {
           this.comboSedes.push({ 'value': element.id, 'text': element.sede.toUpperCase() })
         })
+      },
+      tdClassFuncE(row) {
+        if (row.id_estado_actual == 2) { 
+          return 'text-danger' 
+        }
       },
       mensajeEmergente(variante, titulo, contenido) {
         this.$bvToast.toast(contenido, { title: titulo, variant: variante, toaster: "b-toaster-top-center", solid: true, autoHideDelay: 4000, appendToast: false })

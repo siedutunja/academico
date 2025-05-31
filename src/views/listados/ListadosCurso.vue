@@ -200,7 +200,9 @@
         campos: [
           { value: 0, text: 'Apellidos y Nombres', disabled: true },
           { value: 1, text: 'Documento' },
+          { value: 25, text: 'Municipio de Expedición'},
           { value: 2, text: 'Fecha de Nacimiento' },
+          { value: 24, text: 'Municipio de Nacimiento'},
           { value: 3, text: 'Edad'},
           { value: 4, text: 'Genero'},
           { value: 5, text: 'Repitencia'},
@@ -222,7 +224,6 @@
           { value: 21, text: 'Observaciones Matricula'},
           { value: 22, text: 'Ruta'},
           { value: 23, text: 'Acudiente (Nombre,Dirección,Teléfono,Correo)'},
-          { value: 24, text: 'Municipio de Nacimiento'}
         ],
         datosCurso: [],
         datosGrado: [],

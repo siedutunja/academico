@@ -196,32 +196,209 @@
             </b-row>
             <b-row>
               <b-col lg="12">
-                <b-card border-variant="secondary">
-                  <b-card-text>
-                    <b-row>
-                      <b-col lg="12">
-                        <h5 class="mb-0"><b-icon icon="stickies" aria-hidden="true"></b-icon> Información General del Estudiante</h5>
-                        <hr>
-                      </b-col>
-                    </b-row>
-                    <b-row>
-                      <b-col>
-                        {{datosEntrevista}}
-                      </b-col>
-                    </b-row>
-                  </b-card-text>
-                </b-card>
+                <table class="table table-striped table-bordered table-hover table-sm">
+                  <tbody>
+                    <tr>
+                      <th colspan="2" style="text-align: left"> INFORMACIÓN DE LA ENTREVISTA</th>
+                    </tr>
+                    <tr>
+                      <td>Fecha de la entrevista</td>
+                      <td>
+                        <b-form-input type="date" id="fecha" ref="fecha" v-model="$v.datosEntrevista.fecha.$model" :state="validateStateE('fecha')" aria-describedby="feedFecha"></b-form-input>
+                        <b-form-invalid-feedback id="feedFecha">Campo requerido.</b-form-invalid-feedback>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="col-5">Quién reliza la entrevista</td>
+                      <td>
+                        <b-form-input v-model.trim="$v.datosEntrevista.aplico.$model" :state="validateStateE('aplico')" autocomplete="off" maxlength="60" aria-describedby="feedAplico"></b-form-input>
+                        <b-form-invalid-feedback id="feedAplico">Campo requerido.</b-form-invalid-feedback>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>Entrevista respondida por</td>
+                      <td>
+                        <b-form-input v-model.trim="$v.datosEntrevista.respondio.$model" :state="validateStateE('respondio')" autocomplete="off" maxlength="60" aria-describedby="feedRespondio"></b-form-input>
+                        <b-form-invalid-feedback id="feedRespondio">Campo requerido.</b-form-invalid-feedback>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th colspan="2" style="text-align: left"> INFORMACIÓN GENERAL DEL ESTUDIANTE</th>
+                    </tr>
+                    <tr>
+                      <td>¿Está en Centro de Protección?¿Dónde?</td>
+                      <td><b-form-input v-model.trim="datosEntrevista.centro_proteccion" autocomplete="off" maxlength="255"></b-form-input></td>
+                    </tr>
+                    <tr>
+                      <td>¿Se reconoce como víctima de conflicto armado?</td>
+                      <td><b-form-input v-model.trim="datosEntrevista.victima" autocomplete="off" maxlength="255"></b-form-input></td>
+                    </tr>
+                    <tr>
+                      <td>El estudiante es</td>
+                      <td><b-form-input v-model.trim="datosEntrevista.cualidades" autocomplete="off" maxlength="255"></b-form-input></td>
+                    </tr>
+                    <tr>
+                      <td>Calidad del sueño</td>
+                      <td><b-form-input v-model.trim="datosEntrevista.calidad_sueno" autocomplete="off" maxlength="255"></b-form-input></td>
+                    </tr>
+                    <tr>
+                      <td>¿Qué aptitudes tiene?</td>
+                      <td><b-form-input v-model.trim="datosEntrevista.aptitudes" autocomplete="off" maxlength="255"></b-form-input></td>
+                    </tr>
+                    <tr>
+                      <td>¿Tiene desórdenes alimenticios?</td>
+                      <td><b-form-input v-model.trim="datosEntrevista.desorden_alimenticio" autocomplete="off" maxlength="255"></b-form-input></td>
+                    </tr>
+                    <tr>
+                      <td>¿A que alimento es alérgico?</td>
+                      <td><b-form-input v-model.trim="datosEntrevista.alergias" autocomplete="off" maxlength="255"></b-form-input></td>
+                    </tr>
+                    <tr>
+                      <th colspan="2" style="text-align: left"> SALUD Y BIENESTAR</th>
+                    </tr>
+                    <tr>
+                      <td>EPS, lugar de atención en caso de emergencia</td>
+                      <td><b-form-input v-model.trim="datosEntrevista.eps" autocomplete="off" maxlength="255"></b-form-input></td>
+                    </tr>
+                    <tr>
+                      <td>¿Tiene algún diagnóstico médico?¿Cuál?</td>
+                      <td><b-form-input v-model.trim="datosEntrevista.diagnostico" autocomplete="off" maxlength="255"></b-form-input></td>
+                    </tr>
+                    <tr>
+                      <td>¿Actualmente se encuentra en tratamiento médico?</td>
+                      <td><b-form-input v-model.trim="datosEntrevista.tratamiento" autocomplete="off" maxlength="255"></b-form-input></td>
+                    </tr>
+                    <tr>
+                      <td>¿Asiste a terapias?</td>
+                      <td><b-form-input v-model.trim="datosEntrevista.terapias" autocomplete="off" maxlength="255"></b-form-input></td>
+                    </tr>
+                    <tr>
+                      <td>Presenta dificultades</td>
+                      <td><b-form-input v-model.trim="datosEntrevista.dificultades" autocomplete="off" maxlength="255"></b-form-input></td>
+                    </tr>
+                    <tr>
+                      <td>¿Requiere cuidados especiales en salud?¿Cuál(es)?</td>
+                      <td><b-form-input v-model.trim="datosEntrevista.cuidados" autocomplete="off" maxlength="255"></b-form-input></td>
+                    </tr>
+                    <tr>
+                      <td>Enfermedades padecidas</td>
+                      <td><b-form-input v-model.trim="datosEntrevista.enfermedades" autocomplete="off" maxlength="255"></b-form-input></td>
+                    </tr>
+                    <tr>
+                      <td>¿Cirugías?¿Cuál (es)?</td>
+                      <td><b-form-input v-model.trim="datosEntrevista.cirugias" autocomplete="off" maxlength="255"></b-form-input></td>
+                    </tr>
+                    <tr>
+                      <td>¿Tiene el esquema de vacunación completo?</td>
+                      <td><b-form-input v-model.trim="datosEntrevista.vacunacion" autocomplete="off" maxlength="255"></b-form-input></td>
+                    </tr>
+                    <tr>
+                      <td>¿En qué emplea el tiempo libre?</td>
+                      <td><b-form-input v-model.trim="datosEntrevista.tiempo_libre" autocomplete="off" maxlength="255"></b-form-input></td>
+                    </tr>
+                    <tr>
+                      <th colspan="2" style="text-align: left"> ENTORNO FAMILIAR</th>
+                    </tr>
+                    <tr>
+                      <td>Número de Hermanos</td>
+                      <td><b-form-input type="number" v-model.trim="datosEntrevista.hermanos" autocomplete="off" maxlength="2"></b-form-input></td>
+                    </tr>
+                    <tr>
+                      <td>Lugar que ocupa</td>
+                      <td><b-form-input type="number" v-model.trim="datosEntrevista.lugar" autocomplete="off" maxlength="2"></b-form-input></td>
+                    </tr>
+                    <tr>
+                      <th colspan="2" style="text-align: left"> PERSONAS CON QUIENES CONVIVE</th>
+                    </tr>
+                    <tr>
+                      <td>Nombre (Parentesco)</td>
+                      <td><b-form-input v-model.trim="datosEntrevista.convive" autocomplete="off" maxlength="500"></b-form-input></td>
+                    </tr>
+                    <tr>
+                      <td>¿La familia recibe subsidio de alguna Entidad o Institución?¿Cuál?</td>
+                      <td><b-form-input v-model.trim="datosEntrevista.subsidio" autocomplete="off" maxlength="255"></b-form-input></td>
+                    </tr>
+                    <tr>
+                      <td>En las relaciones familiares hay</td>
+                      <td><b-form-input v-model.trim="datosEntrevista.relacion_familiar" autocomplete="off" maxlength="255"></b-form-input></td>
+                    </tr>
+                    <tr>
+                      <td>¿Qué actividades comparten en familia?</td>
+                      <td><b-form-input v-model.trim="datosEntrevista.actividades_familiares" autocomplete="off" maxlength="255"></b-form-input></td>
+                    </tr>
+                    <tr>
+                      <td>¿En qué momentos?</td>
+                      <td><b-form-input v-model.trim="datosEntrevista.momentos" autocomplete="off" maxlength="255"></b-form-input></td>
+                    </tr>
+                    <tr>
+                      <td>¿Con quién(es) se lleva bien?</td>
+                      <td><b-form-input v-model.trim="datosEntrevista.se_lleva_bien" autocomplete="off" maxlength="255"></b-form-input></td>
+                    </tr>
+                    <tr>
+                      <td>¿Con quién(es) no se lleva bien?</td>
+                      <td><b-form-input v-model.trim="datosEntrevista.no_se_lleva_bien" autocomplete="off" maxlength="255"></b-form-input></td>
+                    </tr>
+                    <tr>
+                      <th colspan="2" style="text-align: left"> RELACIONES SOCIALES</th>
+                    </tr>
+                    <tr>
+                      <td>Maneja buenas relaciones con</td>
+                      <td><b-form-input v-model.trim="datosEntrevista.buenas_relaciones" autocomplete="off" maxlength="255"></b-form-input></td>
+                    </tr>
+                    <tr>
+                      <th colspan="2" style="text-align: left"> HISTORIA ESCOLAR</th>
+                    </tr>
+                    <tr>
+                      <td>¿De qué Institución viene?</td>
+                      <td><b-form-input v-model.trim="datosEntrevista.ie_viene" autocomplete="off" maxlength="255"></b-form-input></td>
+                    </tr>
+                    <tr>
+                      <td>¿Reinicia el grado actual?</td>
+                      <td><b-form-input v-model.trim="datosEntrevista.reinicia_grado" autocomplete="off" maxlength="255"></b-form-input></td>
+                    </tr>
+                    <tr>
+                      <td>¿Qué años ha reiniciado?</td>
+                      <td><b-form-input v-model.trim="datosEntrevista.anos_reinicio" autocomplete="off" maxlength="255"></b-form-input></td>
+                    </tr>
+                    <tr>
+                      <td>En general, el desempeño académico en el año anterior fue</td>
+                      <td><b-form-input v-model.trim="datosEntrevista.desempeno_anterior" autocomplete="off" maxlength="255"></b-form-input></td>
+                    </tr>
+                    <tr>
+                      <td>Áreas que se le facilitan</td>
+                      <td><b-form-input v-model.trim="datosEntrevista.areas_facilita" autocomplete="off" maxlength="255"></b-form-input></td>
+                    </tr>
+                    <tr>
+                      <td>Áreas que más se le dificultan</td>
+                      <td><b-form-input v-model.trim="datosEntrevista.areas_dificulta" autocomplete="off" maxlength="255"></b-form-input></td>
+                    </tr>
+                    <tr>
+                      <td>¿Por qué?</td>
+                      <td><b-form-input v-model.trim="datosEntrevista.porque_dificulta" autocomplete="off" maxlength="255"></b-form-input></td>
+                    </tr>
+                    <tr>
+                      <td>¿En el año anterior recibió algún(os) reconocimiento(s)?¿Cuál (es)?</td>
+                      <td><b-form-input v-model.trim="datosEntrevista.reconocimieto" autocomplete="off" maxlength="255"></b-form-input></td>
+                    </tr>
+                    <tr>
+                      <td>Observaciones generales</td>
+                      <td><b-form-input v-model.trim="datosEntrevista.observaciones" autocomplete="off" maxlength="255"></b-form-input></td>
+                    </tr>
+                  </tbody>
+                </table>
               </b-col>
             </b-row>
+            <b-row><b-col lg="12"><hr></b-col></b-row>
             <b-row>
               <b-col lg="12">
-                <b-button class="small mx-1 mt-3" variant="primary" @click="imprimirEntrevista">Imprimir Entrevista</b-button>
+                <b-button class="small mx-1 mt-3" variant="primary" @click="validarDatosFormulario">Guardar Entrevista Familiar</b-button>
+                <b-button class="small mx-1 mt-3" variant="outline-primary" @click="imprimirEntrevista">Imprimir Entrevista</b-button>
                 <b-button class="small mx-1 mt-3" variant="secondary" @click="cancelarFormulario">Cerrar</b-button>
               </b-col>
             </b-row>
           </b-card-text>
           <template #footer>
-            <em>Actualice los datos de la encuesta haciendo clic en el botón Guardar Encuesta.</em>
+            <em>Actualice los datos de la entrevista familiar haciendo clic en el botón Guardar Encuesta.</em>
           </template>
         </b-card>
       </b-col>
@@ -302,20 +479,144 @@
         </tbody>
       </table>
       <table class="table">
-        <thead>
-          <tr>
-            <th colspan="8" style="text-align: center">Entrevista Familiar</th>
-          </tr>
-        </thead>
         <tbody>
           <tr>
-            <th>Fecha</th>
-            <th>Tipo</th>
-            <th>Observación</th>
-            <th>Versión del Estudiante</th>
-            <th>Compromisos</th>
-            <th>Seguimiento</th>
-            <th>Firmas</th>
+            <th colspan="2" style="text-align: left"> INFORMACIÓN DE LA ENTREVISTA</th>
+          </tr>
+          <tr>
+            <td>Fecha de la entrevista</td><td>{{datosEntrevista.fecha}}</td>
+          </tr>
+          <tr>
+            <td class="col-5">Quién reliza la entrevista</td><td>{{datosEntrevista.aplico}}</td>
+          </tr>
+          <tr>
+            <td>Entrevista respondida por</td><td>{{datosEntrevista.respondio}}</td>
+          </tr>
+          <tr>
+            <th colspan="2" style="text-align: left"> INFORMACIÓN GENERAL DEL ESTUDIANTE</th>
+          </tr>
+          <tr>
+            <td>¿Está en Centro de Protección?¿Dónde?</td><td>{{datosEntrevista.centro_proteccion}}</td>
+          </tr>
+          <tr>
+            <td>¿Se reconoce como víctima de conflicto armado?</td><td>{{datosEntrevista.victima}}</td>
+          </tr>
+          <tr>
+            <td>El estudiante es</td><td>{{datosEntrevista.cualidades}}</td>
+          </tr>
+          <tr>
+            <td>Calidad del sueño</td><td>{{datosEntrevista.calidad_sueno}}</td>
+          </tr>
+          <tr>
+            <td>¿Qué aptitudes tiene?</td><td>{{datosEntrevista.aptitudes}}</td>
+          </tr>
+          <tr>
+            <td>¿Tiene desórdenes alimenticios?</td><td>{{datosEntrevista.desorden_alimenticio}}</td>
+          </tr>
+          <tr>
+            <td>¿A que alimento es alérgico?</td><td>{{datosEntrevista.alergias}}</td>
+          </tr>
+          <tr>
+            <th colspan="2" style="text-align: left"> SALUD Y BIENESTAR</th>
+          </tr>
+          <tr>
+            <td>EPS, lugar de atención en caso de emergencia</td><td>{{datosEntrevista.eps}}</td>
+          </tr>
+          <tr>
+            <td>¿Tiene algún diagnóstico médico?¿Cuál?</td><td>{{datosEntrevista.diagnostico}}</td>
+          </tr>
+          <tr>
+            <td>¿Actualmente se encuentra en tratamiento médico?</td><td>{{datosEntrevista.tratamiento}}</td>
+          </tr>
+          <tr>
+            <td>¿Asiste a terapias?</td><td>{{datosEntrevista.terapias}}</td>
+          </tr>
+          <tr>
+            <td>Presenta dificultades</td><td>{{datosEntrevista.dificultades}}</td>
+          </tr>
+          <tr>
+            <td>¿Requiere cuidados especiales en salud?¿Cuál(es)?</td><td>{{datosEntrevista.cuidados}}</td>
+          </tr>
+          <tr>
+            <td>Enfermedades padecidas</td><td>{{datosEntrevista.enfermedades}}</td>
+          </tr>
+          <tr>
+            <td>¿Cirugías?¿Cuál (es)?</td><td>{{datosEntrevista.cirugias}}</td>
+          </tr>
+          <tr>
+            <td>¿Tiene el esquema de vacunación completo?</td><td>{{datosEntrevista.vacunacion}}</td>
+          </tr>
+          <tr>
+            <td>¿En qué emplea el tiempo libre?</td><td>{{datosEntrevista.tiempo_libre}}</td>
+          </tr>
+          <tr>
+            <th colspan="2" style="text-align: left"> ENTORNO FAMILIAR</th>
+          </tr>
+          <tr>
+            <td>Número de Hermanos</td><td>{{datosEntrevista.hermanos}}</td>
+          </tr>
+          <tr>
+            <td>Lugar que ocupa</td><td>{{datosEntrevista.lugar}}</td>
+          </tr>
+          <tr>
+            <th colspan="2" style="text-align: left"> PERSONAS CON QUIENES CONVIVE</th>
+          </tr>
+          <tr>
+            <td>Nombre (Parentesco)</td><td>{{datosEntrevista.convive}}</td>
+          </tr>
+          <tr>
+            <td>¿La familia recibe subsidio de alguna Entidad o Institución?¿Cuál?</td><td>{{datosEntrevista.subsidio}}</td>
+          </tr>
+          <tr>
+            <td>En las relaciones familiares hay</td><td>{{datosEntrevista.relacion_familiar}}</td>
+          </tr>
+          <tr>
+            <td>¿Qué actividades comparten en familia?</td><td>{{datosEntrevista.actividades_familiares}}</td>
+          </tr>
+          <tr>
+            <td>¿En qué momentos?</td><td>{{datosEntrevista.momentos}}</td>
+          </tr>
+          <tr>
+            <td>¿Con quién(es) se lleva bien?</td><td>{{datosEntrevista.se_lleva_bien}}</td>
+          </tr>
+          <tr>
+            <td>¿Con quién(es) no se lleva bien?</td><td>{{datosEntrevista.no_se_lleva_bien}}</td>
+          </tr>
+          <tr>
+            <th colspan="2" style="text-align: left"> RELACIONES SOCIALES</th>
+          </tr>
+          <tr>
+            <td>Maneja buenas relaciones con</td><td>{{datosEntrevista.buenas_relaciones}}</td>
+          </tr>
+          <tr>
+            <th colspan="2" style="text-align: left"> HISTORIA ESCOLAR</th>
+          </tr>
+          <tr>
+            <td>¿De qué Institución viene?</td><td>{{datosEntrevista.ie_viene}}</td>
+          </tr>
+          <tr>
+            <td>¿Reinicia el grado actual?</td><td>{{datosEntrevista.reinicia_grado}}</td>
+          </tr>
+          <tr>
+            <td>¿Qué años ha reiniciado?</td><td>{{datosEntrevista.anos_reinicio}}</td>
+          </tr>
+          <tr>
+            <td>En general, el desempeño académico en el año anterior fue</td><td>{{datosEntrevista.desempeno_anterior}}</td>
+          </tr>
+          <tr>
+            <td>Áreas que se le facilitan</td><td>{{datosEntrevista.areas_facilita}}</td>
+          </tr>
+          <tr>
+            <td>Áreas que más se le dificultan</td><td>{{datosEntrevista.areas_dificulta}}</td>
+          </tr>
+          <tr>
+            <td>¿Por qué?</td><td>{{datosEntrevista.porque_dificulta}}</td>
+          </tr>
+          <tr>
+            <td>¿En el año anterior recibió algún(os) reconocimiento(s)?¿Cuál (es)?</td><td>{{datosEntrevista.reconocimieto}}</td>
+          </tr>
+          <tr>
+            <td>Observaciones generales</td><td>{{datosEntrevista.observaciones}}</td>
           </tr>
         </tbody>
       </table>
@@ -325,7 +626,10 @@
             <p style="text-align: center;"><br><br>_______________________________________<br>Director(a) de Curso</p>
           </td>
           <td style="border: hidden">
-            <p style="text-align: center;"><br><br>_______________________________________<br>Coordinador(a) / Rector(a)</p>
+            <p style="text-align: center;"><br><br>_______________________________________<br>Estudiante</p>
+          </td>
+          <td style="border: hidden">
+            <p style="text-align: center;"><br><br>_______________________________________<br>Padre/Madre/Acudiente</p>
           </td>
         </tr>
       </table>
@@ -356,7 +660,7 @@
           id: null,
           id_estudiante: null,
           fecha: null,
-          aplico: null,
+          aplico: this.$store.state.Persona,
           respondio: null,
           centro_proteccion: null,
           victima: null,
@@ -403,11 +707,9 @@
     },
     validations: {
       datosEntrevista: {
-        fecha_observacion: { required },
-        situacion: { required, minLength: minLength(10) },
-        id_tipo_observacion: { required },
-        id_subtipo: { required },
-        id_estado_seguimiento: { required },
+        fecha: { required },
+        aplico: { required, minLength: minLength(5) },
+        respondio: { required, minLength: minLength(5) },
       }
     },
     methods: {
@@ -511,6 +813,7 @@
         return true
       },
       async guardarEntrevista() {
+        this.datosEntrevista.id_estudiante = this.idEstudiante
         await axios
         .put(CONFIG.ROOT_PATH + 'academico/entrevistafamiliar', JSON.stringify(this.datosEntrevista), { headers: {"Content-Type": "application/json; charset=utf-8" }})
         .then(response => {
@@ -530,7 +833,6 @@
       },
       async consultaEntrevista() {
         this.datosFichaE = {}
-        this.datosEntrevista = {}
         await axios
         .get(CONFIG.ROOT_PATH + 'academico/entrevistafamiliar', { params: { idEstudiante: this.idEstudiante, idMatricula: this.idMatricula }})
         .then(response => {
@@ -541,8 +843,10 @@
               this.datosFichaE = response.data.datos
               if (this.datosFichaE.entrevista.length) {
                 this.datosEntrevista = this.datosFichaE.entrevista[0]
+                if (this.datosEntrevista.fecha != null) {
+                  this.datosEntrevista.fecha = this.datosEntrevista.fecha.substr(0,10)
+                }
               }
-              //console.log(JSON.stringify(this.datosFichaE.entrevista))
               /*
               if (this.datosFichaE.foto == null || this.datosFichaE.foto == '') {
                 this.datosFichaE.foto = CONFIG.FOTO
@@ -578,7 +882,7 @@
           this.comboEstadosSeguimiento.push({ 'value': element.id, 'text': element.estadoseguimiento.toUpperCase() })
         })
       },
-      validateStateO(name) {
+      validateStateE(name) {
         const { $dirty, $error } = this.$v.datosEntrevista[name]
         return $dirty ? !$error : null
       },

@@ -53,16 +53,16 @@
                       <b-col lg="12">
                         <b-alert show>
                           <b-row>
-                            <b-col lg="12"><h6>Sede y Curso al que se Promueve el Estudiante</h6></b-col>
+                            <b-col lg="12"><h6>Sede y Curso al que se Ubica o Reubica el Estudiante</h6></b-col>
                             <b-col lg="12"><hr></b-col>
                             <b-col lg="6">
-                              <b-form-group label="Sede Promoción:" label-for="sedesP" class="etiqueta">
+                              <b-form-group label="Sede de Ubicación o Reubicación:" label-for="sedesP" class="etiqueta">
                                 <b-form-select  id="sedesP" ref="sedesP" v-model="$v.datosPromo.id_sede.$model" :options="comboSedesPromo" @change="datosPromo.id_curso=null,ocuparComboCursosSedePromo()" :state="validateStateP('id_sede')" aria-describedby="feedsedesP"></b-form-select>
                                 <b-form-invalid-feedback id="feedsedesP">Campo requerido.</b-form-invalid-feedback>
                               </b-form-group>
                             </b-col>
                             <b-col lg="4">
-                              <b-form-group label="Curso Promoción:" label-for="cursosP" class="etiqueta">
+                              <b-form-group label="Curso de Ubicación o Reubicación:" label-for="cursosP" class="etiqueta">
                                 <b-form-select  id="cursosP" ref="cursosP" v-model="$v.datosPromo.id_curso.$model" :options="comboCursosSedePromo" @change="seleccionarGradoCurso()" :state="validateStateP('id_curso')" aria-describedby="feedcursosP" :disabled="datosPromo.id_sede!=null ? false : true"></b-form-select>
                                 <b-form-invalid-feedback id="feedcursosP">Campo requerido.</b-form-invalid-feedback>
                               </b-form-group>
@@ -81,7 +81,7 @@
             </b-row>
           </b-card-text>
           <template #footer>
-            <em>Seleccione el Curso y el Estudiante al que desea promover anticipadamente.</em>
+            <em>Seleccione el Curso y el Estudiante al que desea ubicar o reubicar.</em>
           </template>
         </b-card>
       </b-col>

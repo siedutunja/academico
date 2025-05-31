@@ -103,7 +103,9 @@
           this.encabColumnasExcel.push({ label: 'Documento', field: 'documento' })
           this.encabColumnasExcel.push({ label: 'Tipo', field: 'nomenclatura' })
         }
-        if (element == 2) this.encabColumnasExcel.push({ label: 'Fecha Nace', field: 'fecha_nacimiento' })
+        if (element == 25) this.encabColumnasExcel.push({ label: 'Municipio Documento', field: 'munidoc' })
+        if (element == 2) this.encabColumnasExcel.push({ label: 'Fecha Nacimiento', field: 'fecha_nacimiento' })
+        if (element == 24) this.encabColumnasExcel.push({ label: 'Municipio Nacimiento', field: 'muninace' })
         if (element == 3) this.encabColumnasExcel.push({ label: 'Edad', field: 'edad' })
         if (element == 4) this.encabColumnasExcel.push({ label: 'Genero', field: 'id_genero' })
         if (element == 5) this.encabColumnasExcel.push({ label: 'Repitente', field: 'id_repitente' })
@@ -138,7 +140,6 @@
           this.encabColumnasExcel.push({ label: 'Correo Acudiente', field: 'correo' })
           this.encabColumnasExcel.push({ label: 'Parentesco', field: 'parentesco' })
         }
-        if (element == 24) this.encabColumnasExcel.push({ label: 'Municipio Nacimiento', field: 'muninace' })
       })
       this.consultaListaCurso()
     }

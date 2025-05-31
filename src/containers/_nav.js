@@ -83,7 +83,7 @@ jwt.verify(token, CONFIG.SECRET_KEY, (err, data) => {
       menu[0]._children[indice].items.push({ name: 'Cambiar Documento', to: '/estudiantes/buscarcambiodocumento'})
     }
     menu[0]._children[indice].items.push({ name: 'Observador', to: '/estudiantes/listaobservadores'})
-    //menu[0]._children[indice].items.push({ name: 'Entrevista Familiar', to: '/estudiantes/ListaEntrevistasFamiliares'})
+    menu[0]._children[indice].items.push({ name: 'Entrevista Familiar', to: '/estudiantes/listaentrevistasfamiliares'})
     menu[0]._children.push(
       {
         _name: 'CSidebarNavDropdown',
