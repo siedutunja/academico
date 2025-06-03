@@ -386,6 +386,7 @@
             this.$store.commit('set', ['perActDirCurso', this.tokenDecodificado.permisos.perActDirCurso])
             this.$store.commit('set', ['perSecretaria', this.tokenDecodificado.permisos.perSecretaria])
             this.$store.commit('set', ['perAsigCarga', this.tokenDecodificado.permisos.perAsigCarga])
+            this.$store.commit('set', ['perActNotas', this.tokenDecodificado.permisos.perActNotas])
             
             this.$store.commit('set', ['perProgPeriodos', this.tokenDecodificado.permisos.perProgPeriodos])
             this.escudoI = CONFIG.ROOT_ESCUDOS

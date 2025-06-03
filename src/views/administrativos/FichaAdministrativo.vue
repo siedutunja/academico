@@ -272,6 +272,7 @@
           perActDirCurso: null,
           perSecretaria: null,
           perAsigCarga: null,
+          perActNotas: null,
           editarAdministrativo: true
         },
         permisosSeleccionados: [],
@@ -283,6 +284,7 @@
           { value: 5, text: 'Actualizar directores de curso' },
           { value: 6, text: 'Generar documentos secretaría' },
           { value: 7, text: 'Asignar carga académica a docentes' },
+          { value: 8, text: 'Actualizar Calificaciones/Evaluaciones' },
         ],
         comboZonas: [],
         comboEps: [],
@@ -413,6 +415,7 @@
             this.datosPersona.perActDirCurso = null
             this.datosPersona.perSecretaria = null
             this.datosPersona.perAsigCarga = null
+            this.datosPersona.perActNotas = null
             this.documentoValido = true
           }
         })
@@ -479,6 +482,7 @@
         this.datosPersona.perActDirCurso = 0
         this.datosPersona.perSecretaria = 0
         this.datosPersona.perAsigCarga = 0
+        this.datosPersona.perActNotas = 0
         this.permisosSeleccionados.forEach(element => {
           if (element == 1) {
             this.datosPersona.perMatricular = 1
@@ -494,6 +498,8 @@
             this.datosPersona.perSecretaria = 1
           } else if (element == 7) {
             this.datosPersona.perAsigCarga = 1
+          } else if (element == 8) {
+            this.datosPersona.perActNotas = 1
           }
         })
         if (this.datosPersona.editarAdministrativo) {
@@ -583,6 +589,7 @@
         this.datosPersona.perActDirCurso == 1 ? this.permisosSeleccionados.push(5) : null
         this.datosPersona.perSecretaria == 1 ? this.permisosSeleccionados.push(6) : null
         this.datosPersona.perAsigCarga == 1 ? this.permisosSeleccionados.push(7) : null
+        this.datosPersona.perActNotas == 1 ? this.permisosSeleccionados.push(8) : null
       },
       async enviarCorreoRetiro() {
         let datosCorreo = {}

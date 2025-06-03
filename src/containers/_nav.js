@@ -100,6 +100,7 @@ jwt.verify(token, CONFIG.SECRET_KEY, (err, data) => {
     menu[0]._children[indice].items.push({ name: 'Asig. Académica por Curso', to: '/docentes/asignacioncurso'})
     menu[0]._children[indice].items.push({ name: 'Directores de Curso', to: '/docentes/directorescurso'})
     menu[0]._children[indice].items.push({ name: 'Consulta Asig. Académica', to: '/docentes/consultaasignacion'})
+    menu[0]._children[indice].items.push({ name: 'Consulta Descriptores', to: '/docentes/descriptores'})
     menu[0]._children[indice].items.push({ name: 'Directorio', to: '/docentes/directoriodocentes'})
     menu[0]._children.push(
       {
@@ -126,12 +127,14 @@ jwt.verify(token, CONFIG.SECRET_KEY, (err, data) => {
     indice++
     menu[0]._children[indice].items.push({ name: 'Boletines por Periodo', to: '/reportes/reportesperiodos'})
     menu[0]._children[indice].items.push({ name: 'Consolidados por Periodo', to: '/informes/consolidadoscurso'})
+    menu[0]._children[indice].items.push({ name: 'Consolidados Ausencias', to: '/informes/consolidadosausencias'})
     menu[0]._children[indice].items.push({ name: 'Puestos Estudiantes', to: '/informes/puestoscurso'})
     menu[0]._children[indice].items.push({ name: 'Rendimiento Academico', to: '/informes/rendimientoacademico'})
     menu[0]._children[indice].items.push({ name: 'Informes por Agrupación', to: '/informes/informesagrupacion'})
     menu[0]._children[indice].items.push({ name: 'Consolidado Matricula', to: '/informes/consolidadomatricula'})
     menu[0]._children[indice].items.push({ name: 'Consolidado Matricula Cursos', to: '/informes/consolidadomatriculacursos'})
-    if (tokenDecodificado.id_rol == 1 || tokenDecodificado.id_rol == 12 || tokenDecodificado.id_rol == 14) {
+    //menu[0]._children[indice].items.push({ name: 'Resúmenes', to: '/informes/resumenes'})
+    if (tokenDecodificado.id_rol == 1 || tokenDecodificado.id_rol == 12 || tokenPermisos.perActNotas == 1) {
       menu[0]._children.push(
         {
           _name: 'CSidebarNavDropdown',
@@ -141,9 +144,9 @@ jwt.verify(token, CONFIG.SECRET_KEY, (err, data) => {
         }
       )
       indice++
-      if (tokenDecodificado.id_rol == 1 || tokenDecodificado.id_rol == 12) {
-      menu[0]._children[indice].items.push({ name: 'Calificaciones por Periodo', to: '/calificaciones/notasperiodo'})
-      menu[0]._children[indice].items.push({ name: 'Recuperaciones por Periodo', to: '/calificaciones/recuperacionesperiodo'})
+      if (tokenDecodificado.id_rol == 1 || tokenDecodificado.id_rol == 12 || tokenPermisos.perActNotas == 1) {
+        menu[0]._children[indice].items.push({ name: 'Calificaciones por Periodo', to: '/calificaciones/notasperiodo'})
+        menu[0]._children[indice].items.push({ name: 'Recuperaciones por Periodo', to: '/calificaciones/recuperacionesperiodo'})
       }
     }
     if (tokenDecodificado.id_rol == 1 || tokenDecodificado.id_rol == 12) {

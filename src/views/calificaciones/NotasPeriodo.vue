@@ -40,7 +40,7 @@
                     </div>
                   </div>
                   <div v-else>
-                    <b-row v-if="planillita == 1" class="mt-2">
+                    <b-row v-if="planillita==1 && colEncabezados==1" class="mt-2">
                       <b-col>
                         <vue-good-table ref="table" :columns="encabColumnas" :rows="notasPlanilla" styleClass="vgt-table condensed bordered striped" :line-numbers="true">
                           <template slot="table-row" slot-scope="props">
@@ -50,8 +50,11 @@
                             <span v-if="props.column.field == 'diversa'">
                               <span>{{props.row.diversa}}</span>
                             </span>
+                            <span v-if="props.column.field == 'defC1'">
+                              <b-form-input v-model="props.row.defC1" @blur="actualizarItemNota(props.row)" @change="cambioPlanilla" autocomplete="off" maxlength="3" @keydown="handleKeyNavigation($event, props.row.originalIndex, 'defC1'),soloDecimales($event)" :ref="'defC1-' + props.row.originalIndex"></b-form-input>
+                            </span>
                             <span v-if="props.column.field == 'definitiva'">
-                              <b-form-input v-model="props.row.definitiva" @blur="actualizarItemNota(props.row)" @change="cambioPlanilla" autocomplete="off" maxlength="3" @keydown="handleKeyNavigation($event, props.row.originalIndex, 'definitiva'),soloDecimales($event)" :ref="'definitiva-' + props.row.originalIndex"></b-form-input>
+                              <span><strong>{{props.row.definitiva}}</strong></span>
                             </span>
                             <span v-if="props.column.field == 'concepto'">
                               <span><strong>{{props.row.concepto}}</strong></span>
@@ -81,6 +84,105 @@
                         </b-button>
                       </b-col>
                     </b-row>
+                    <b-row v-if="planillita==1 && colEncabezados==2" class="mt-2">
+                      <b-col>
+                        <vue-good-table ref="table" :columns="encabColumnas" :rows="notasPlanilla" styleClass="vgt-table condensed bordered striped" :line-numbers="true">
+                          <template slot="table-row" slot-scope="props">
+                            <span v-if="props.column.field == 'estudiante'">
+                              <span>{{props.row.estudiante}}</span>
+                            </span>
+                            <span v-if="props.column.field == 'diversa'">
+                              <span>{{props.row.diversa}}</span>
+                            </span>
+                            <span v-if="props.column.field == 'defC1'">
+                              <b-form-input v-model="props.row.defC1" @blur="actualizarItemNota(props.row)" @change="cambioPlanilla" autocomplete="off" maxlength="3" @keydown="handleKeyNavigation($event, props.row.originalIndex, 'defC1'),soloDecimales($event)" :ref="'defC1-' + props.row.originalIndex"></b-form-input>
+                            </span>
+                            <span v-if="props.column.field == 'defC2'">
+                              <b-form-input v-model="props.row.defC2" @blur="actualizarItemNota(props.row)" @change="cambioPlanilla" autocomplete="off" maxlength="3" @keydown="handleKeyNavigation($event, props.row.originalIndex, 'defC2'),soloDecimales($event)" :ref="'defC2-' + props.row.originalIndex"></b-form-input>
+                            </span>
+                            <span v-if="props.column.field == 'definitiva'">
+                              <span><strong>{{props.row.definitiva}}</strong></span>
+                            </span>
+                            <span v-if="props.column.field == 'concepto'">
+                              <span><strong>{{props.row.concepto}}</strong></span>
+                            </span>
+                            <span v-if="props.column.field == 'ausJ'">
+                              <b-form-input v-model="props.row.ausJ" @blur="actualizarFallas(props.row)" @change="cambioPlanilla" autocomplete="off" maxlength="3" @keydown="handleKeyNavigation($event, props.row.originalIndex, 'ausJ'),soloNumeros($event)" :ref="'ausJ-' + props.row.originalIndex"></b-form-input>
+                            </span>
+                            <span v-if="props.column.field == 'ausS'">
+                              <b-form-input v-model="props.row.ausS" @blur="actualizarFallas(props.row)" @change="cambioPlanilla" autocomplete="off" maxlength="3" @keydown="handleKeyNavigation($event, props.row.originalIndex, 'ausS'),soloNumeros($event)" :ref="'ausS-' + props.row.originalIndex"></b-form-input>
+                            </span>
+                          </template>
+                          <div slot="emptystate">
+                            <h5 class="text-danger ml-5">No existen estudiantes en la planilla</h5>
+                          </div>
+                        </vue-good-table>
+                      </b-col>
+                      <b-col lg="12">
+                        <b-alert v-if="cambioActivo==true" variant="danger" show><b>Advertencia: </b>La planilla se ha modificado, se recomienda guradar la planilla.</b-alert>
+                      </b-col>
+                      <b-col v-if="!botonGuardando">
+                        <b-button class="small mx-1 mt-4" variant="success" @click="botonGuardando=true,guardarPlanilla()" :disabled="!cambioActivo">Guardar Planilla de Calificaciones</b-button>
+                      </b-col>
+                      <b-col v-else>
+                        <b-button class="mx-1 mt-4" variant="primary" disabled>
+                          <b-spinner small type="grow"></b-spinner>
+                          Guardando la planilla...
+                        </b-button>
+                      </b-col>
+                    </b-row>
+                    <b-row v-if="planillita==1 && colEncabezados==3" class="mt-2">
+                      <b-col>
+                        <vue-good-table ref="table" :columns="encabColumnas" :rows="notasPlanilla" styleClass="vgt-table condensed bordered striped" :line-numbers="true">
+                          <template slot="table-row" slot-scope="props">
+                            <span v-if="props.column.field == 'estudiante'">
+                              <span>{{props.row.estudiante}}</span>
+                            </span>
+                            <span v-if="props.column.field == 'diversa'">
+                              <span>{{props.row.diversa}}</span>
+                            </span>
+                            <span v-if="props.column.field == 'defC1'">
+                              <b-form-input v-model="props.row.defC1" @blur="actualizarItemNota(props.row)" @change="cambioPlanilla" autocomplete="off" maxlength="3" @keydown="handleKeyNavigation($event, props.row.originalIndex, 'defC1'),soloDecimales($event)" :ref="'defC1-' + props.row.originalIndex"></b-form-input>
+                            </span>
+                            <span v-if="props.column.field == 'defC2'">
+                              <b-form-input v-model="props.row.defC2" @blur="actualizarItemNota(props.row)" @change="cambioPlanilla" autocomplete="off" maxlength="3" @keydown="handleKeyNavigation($event, props.row.originalIndex, 'defC2'),soloDecimales($event)" :ref="'defC2-' + props.row.originalIndex"></b-form-input>
+                            </span>
+                            <span v-if="props.column.field == 'defC3'">
+                              <b-form-input v-model="props.row.defC3" @blur="actualizarItemNota(props.row)" @change="cambioPlanilla" autocomplete="off" maxlength="3" @keydown="handleKeyNavigation($event, props.row.originalIndex, 'defC3'),soloDecimales($event)" :ref="'defC3-' + props.row.originalIndex"></b-form-input>
+                            </span>
+                            <span v-if="props.column.field == 'definitiva'">
+                              <span><strong>{{props.row.definitiva}}</strong></span>
+                            </span>
+                            <span v-if="props.column.field == 'concepto'">
+                              <span><strong>{{props.row.concepto}}</strong></span>
+                            </span>
+                            <span v-if="props.column.field == 'ausJ'">
+                              <b-form-input v-model="props.row.ausJ" @blur="actualizarFallas(props.row)" @change="cambioPlanilla" autocomplete="off" maxlength="3" @keydown="handleKeyNavigation($event, props.row.originalIndex, 'ausJ'),soloNumeros($event)" :ref="'ausJ-' + props.row.originalIndex"></b-form-input>
+                            </span>
+                            <span v-if="props.column.field == 'ausS'">
+                              <b-form-input v-model="props.row.ausS" @blur="actualizarFallas(props.row)" @change="cambioPlanilla" autocomplete="off" maxlength="3" @keydown="handleKeyNavigation($event, props.row.originalIndex, 'ausS'),soloNumeros($event)" :ref="'ausS-' + props.row.originalIndex"></b-form-input>
+                            </span>
+                          </template>
+                          <div slot="emptystate">
+                            <h5 class="text-danger ml-5">No existen estudiantes en la planilla</h5>
+                          </div>
+                        </vue-good-table>
+                      </b-col>
+                      <b-col lg="12">
+                        <b-alert v-if="cambioActivo==true" variant="danger" show><b>Advertencia: </b>La planilla se ha modificado, se recomienda guradar la planilla.</b-alert>
+                      </b-col>
+                      <b-col v-if="!botonGuardando">
+                        <b-button class="small mx-1 mt-4" variant="success" @click="botonGuardando=true,guardarPlanilla()" :disabled="!cambioActivo">Guardar Planilla de Calificaciones</b-button>
+                      </b-col>
+                      <b-col v-else>
+                        <b-button class="mx-1 mt-4" variant="primary" disabled>
+                          <b-spinner small type="grow"></b-spinner>
+                          Guardando la planilla...
+                        </b-button>
+                      </b-col>
+                    </b-row>
+
+
                     <b-row v-if="planillita == 5" class="mt-2">
                       <b-col lg="12">
                         <vue-good-table ref="table" :columns="encabColumnas" :rows="notasPlanillaCompor" styleClass="vgt-table condensed bordered striped" :line-numbers="true">
@@ -172,6 +274,7 @@
         notasPlanilla: [],
         notasPlanillaCompor: [],
         botonGuardando: false,
+        colEncabezados: null,
       }
     },
     methods: {
@@ -218,17 +321,50 @@
           notaMaxima = this.configuracionPlanilla.maxSupT
         }
         let indice = this.notasPlanilla.findIndex(asigna => asigna.idMatricula === item.idMatricula)
-        if (item.definitiva == '' || item.definitiva == null || item.definitiva == 0) {
-          this.notasPlanilla[indice].definitiva = null
-          item.definitiva = null
+        if (item.defC1 == '' || item.defC1 == null || item.defC1 == 0) {
+          this.notasPlanilla[indice].defC1 = null
+          item.defC1 = null
         } else  {
-          if (item.definitiva >= notaMinima && item.definitiva <= notaMaxima) {
-            this.notasPlanilla[indice].definitiva = item.definitiva
+          if (item.defC1 >= notaMinima && item.defC1 <= notaMaxima) {
+            this.notasPlanilla[indice].defC1 = item.defC1
           } else {
-            this.notasPlanilla[indice].definitiva = null
-            this.mensajeEmergente('danger',CONFIG.TITULO_MSG,'La evaluación (nota): ' + item.definitiva  + ' no es válida.')
-            item.definitiva = null
+            this.notasPlanilla[indice].defC1 = null
+            this.mensajeEmergente('danger',CONFIG.TITULO_MSG,'La evaluación (nota): ' + item.defC1  + ' no es válida.')
+            item.defC1 = null
           }
+        }
+        if (item.defC2 == '' || item.defC2 == null || item.defC2 == 0) {
+          this.notasPlanilla[indice].defC2 = null
+          item.defC2 = null
+        } else  {
+          if (item.defC2 >= notaMinima && item.defC2 <= notaMaxima) {
+            this.notasPlanilla[indice].defC2 = item.defC2
+          } else {
+            this.notasPlanilla[indice].defC2 = null
+            this.mensajeEmergente('danger',CONFIG.TITULO_MSG,'La evaluación (nota): ' + item.defC2  + ' no es válida.')
+            item.defC2 = null
+          }
+        }
+        if (item.defC3 == '' || item.defC3 == null || item.defC3 == 0) {
+          this.notasPlanilla[indice].defC3 = null
+          item.defC3 = null
+        } else  {
+          if (item.defC3 >= notaMinima && item.defC3 <= notaMaxima) {
+            this.notasPlanilla[indice].defC3 = item.defC3
+          } else {
+            this.notasPlanilla[indice].defC3 = null
+            this.mensajeEmergente('danger',CONFIG.TITULO_MSG,'La evaluación (nota): ' + item.defC3  + ' no es válida.')
+            item.defC3 = null
+          }
+        }
+        if (this.colEncabezados == 1) {
+          this.notasPlanilla[indice].definitiva = item.defC1
+        }
+        if (this.colEncabezados == 2) {
+          this.notasPlanilla[indice].definitiva = this.redondear(Number(Number(this.notasPlanilla[indice].defC1) * this.configuracionPlanilla.porcentajeC1 / 100) + Number(Number(this.notasPlanilla[indice].defC2) * this.configuracionPlanilla.porcentajeC2 / 100))
+        }
+        if (this.colEncabezados == 3) {
+          this.notasPlanilla[indice].definitiva = this.redondear(Number(Number(this.notasPlanilla[indice].defC1) * this.configuracionPlanilla.porcentajeC1 / 100) + Number(Number(this.notasPlanilla[indice].defC2) * this.configuracionPlanilla.porcentajeC2 / 100) + Number(Number(this.notasPlanilla[indice].defC3) * this.configuracionPlanilla.porcentajeC3 / 100))
         }
         if (this.configuracionPlanilla.id_tipo == 1) {
           if (this.notasPlanilla[indice].definitiva >= this.configuracionPlanilla.minBaj && this.notasPlanilla[indice].definitiva < this.configuracionPlanilla.minBas) {
@@ -255,6 +391,10 @@
             this.notasPlanilla[indice].concepto = null
           }
         }
+      },
+      redondear(num) {
+        var m = Number((Math.abs(num) * 10).toPrecision(15))
+        return Math.round(m) / 10 * Math.sign(num);
       },
       tdClassFuncConcepto(fila) {
         if (this.configuracionPlanilla.id_tipo == 1) {
@@ -400,14 +540,43 @@
       },
       async construirPlanillaNotas() {
         if (this.planillita == 1) {
-          this.encabColumnas = [
-            { label: 'Apellidos y Nombres Estudiante', width: '30%', field: 'estudiante', sortable: false },
-            { label: '', field: 'diversa', sortable: false, tdClass: this.tdClassFuncDiversa },
-            { label: 'Definitiva', field: 'definitiva', sortable: false },
-            { label: 'Concepto', field: 'concepto', sortable: false, tdClass: this.tdClassFuncConcepto },
-            { label: 'AJ', field: 'ausJ', sortable: false, tooltip: 'Ausencias Justificadas' },
-            { label: 'AS', field: 'ausS', sortable: false, tooltip: 'Ausencias Sin Justificar' },
-          ]
+          if (this.configuracionPlanilla.estadoC1 == 1 && this.configuracionPlanilla.estadoC2 == 0 && this.configuracionPlanilla.estadoC3 == 0) {
+            this.colEncabezados = 1
+            this.encabColumnas = [
+              { label: 'Apellidos y Nombres Estudiante', width: '30%', field: 'estudiante', sortable: false, tdClass: this.tdClassFuncE },
+              { label: '', field: 'diversa', sortable: false, tdClass: this.tdClassFuncDiversa },
+              { label: this.configuracionPlanilla.nombreC1+'\n'+this.configuracionPlanilla.porcentajeC1+'%', field: 'defC1', sortable: false },
+              { label: 'Definitiva', field: 'definitiva', sortable: false },
+              { label: 'Concepto', field: 'concepto', sortable: false, tdClass: this.tdClassFuncConcepto },
+              { label: 'AJ', field: 'ausJ', sortable: false, tooltip: 'Ausencias Justificadas' },
+              { label: 'AS', field: 'ausS', sortable: false, tooltip: 'Ausencias Sin Justificar' },
+            ]
+          } else if (this.configuracionPlanilla.estadoC1 == 1 && this.configuracionPlanilla.estadoC2 == 1 && this.configuracionPlanilla.estadoC3 == 0) {
+            this.colEncabezados = 2
+            this.encabColumnas = [
+              { label: 'Apellidos y Nombres Estudiante', width: '30%', field: 'estudiante', sortable: false, tdClass: this.tdClassFuncE },
+              { label: '', field: 'diversa', sortable: false, tdClass: this.tdClassFuncDiversa },
+              { label: this.configuracionPlanilla.nombreC1+'\n'+this.configuracionPlanilla.porcentajeC1+'%', field: 'defC1', sortable: false },
+              { label: this.configuracionPlanilla.nombreC2+'\n'+this.configuracionPlanilla.porcentajeC2+'%', field: 'defC2', sortable: false },
+              { label: 'Definitiva', field: 'definitiva', sortable: false },
+              { label: 'Concepto', field: 'concepto', sortable: false, tdClass: this.tdClassFuncConcepto },
+              { label: 'AJ', field: 'ausJ', sortable: false, tooltip: 'Ausencias Justificadas' },
+              { label: 'AS', field: 'ausS', sortable: false, tooltip: 'Ausencias Sin Justificar' },
+            ]
+          } else if (this.configuracionPlanilla.estadoC1 == 1 && this.configuracionPlanilla.estadoC2 == 1 && this.configuracionPlanilla.estadoC3 == 1) {
+            this.colEncabezados = 3
+            this.encabColumnas = [
+              { label: 'Apellidos y Nombres Estudiante', width: '30%', field: 'estudiante', sortable: false, tdClass: this.tdClassFuncE },
+              { label: '', field: 'diversa', sortable: false, tdClass: this.tdClassFuncDiversa },
+              { label: this.configuracionPlanilla.nombreC1+'\n'+this.configuracionPlanilla.porcentajeC1+'%', field: 'defC1', sortable: false },
+              { label: this.configuracionPlanilla.nombreC2+'\n'+this.configuracionPlanilla.porcentajeC2+'%', field: 'defC2', sortable: false },
+              { label: this.configuracionPlanilla.nombreC3+'\n'+this.configuracionPlanilla.porcentajeC3+'%', field: 'defC3', sortable: false },
+              { label: 'Definitiva', field: 'definitiva', sortable: false },
+              { label: 'Concepto', field: 'concepto', sortable: false, tdClass: this.tdClassFuncConcepto },
+              { label: 'AJ', field: 'ausJ', sortable: false, tooltip: 'Ausencias Justificadas' },
+              { label: 'AS', field: 'ausS', sortable: false, tooltip: 'Ausencias Sin Justificar' },
+            ]
+          }
         } else if (this.planillita == 5) {
           this.encabColumnas = [
             { label: 'Apellidos y Nombres Estudiante', width: '30%', field: 'estudiante', sortable: false },
@@ -558,6 +727,11 @@
           this.comboPeriodos.push({ 'value': element.id, 'text': element.periodo.toUpperCase() })
         })
       },
+      tdClassFuncE(row) {
+        if (row.id_estado_actual == 2) { 
+          return 'text-danger' 
+        }
+      },
       handleKeyNavigation(event, i, col) {
         if (event.key === "ArrowDown") {
           const nextInput = this.$refs[`${col}-${i + 1}`]
@@ -592,7 +766,7 @@
       }
     },
     beforeMount() {
-      if(this.$store.state.idRol == 1 || this.$store.state.idRol == 12) {
+      if(this.$store.state.idRol == 1 || this.$store.state.idRol == 12 || this.$store.state.perActNotas == 1) {
         this.ocuparComboPeriodos()
         this.ocuparComboSedes()
       } else {

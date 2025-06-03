@@ -290,6 +290,13 @@ function configRoutes () {
               name: 'Consolidados Curso',
               component: () => import('@/views/informes/ConsolidadosCurso')
             },
+            // 2025-06-02
+            {
+              path: 'consolidadosausencias',
+              beforeEnter: autenticar,
+              name: 'Consolidados Ausencias',
+              component: () => import('@/views/informes/ConsolidadosAusencias')
+            },
             // 2025-04-22
             {
               path: 'puestoscurso',
@@ -303,6 +310,13 @@ function configRoutes () {
               beforeEnter: autenticar,
               name: 'Rendimiento Académico',
               component: () => import('@/views/informes/RendimientoAcademico')
+            },
+            // 2025-06-02
+            {
+              path: 'resumenes',
+              beforeEnter: autenticar,
+              name: 'Resúmenes',
+              component: () => import('@/views/informes/Resumenes')
             },
           ]
         },
@@ -494,6 +508,13 @@ function configRoutes () {
               beforeEnter: autenticar,
               name: 'Directorio de Docentes',
               component: () => import('@/views/docentes/DirectorioDocentes')
+            },
+            // 2025-05-31
+            {
+              path: 'descriptores',
+              beforeEnter: autenticar,
+              name: 'Descriptores',
+              component: () => import('@/views/docentes/Descriptores')
             },
           ]
         },

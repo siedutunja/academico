@@ -168,6 +168,35 @@
             item.recuperacion = null
           }
         }
+        let definitivaFinal = this.notasPlanilla[indice].definitiva
+        if (this.notasPlanilla[indice].recuperacion > this.notasPlanilla[indice].definitiva) {
+          definitivaFinal = this.notasPlanilla[indice].recuperacion
+        }
+        if (this.configuracionPlanilla.id_tipo == 1) {
+          if (definitivaFinal >= this.configuracionPlanilla.minBaj && definitivaFinal < this.configuracionPlanilla.minBas) {
+            this.notasPlanilla[indice].concepto = 'BAJO'
+          } else if (definitivaFinal >= this.configuracionPlanilla.minBas && definitivaFinal < this.configuracionPlanilla.minAlt) {
+            this.notasPlanilla[indice].concepto = 'BASICO'
+          } else if (definitivaFinal >= this.configuracionPlanilla.minAlt && definitivaFinal < this.configuracionPlanilla.minSup) {
+            this.notasPlanilla[indice].concepto = 'ALTO'
+          } else if (definitivaFinal >= this.configuracionPlanilla.minSup && definitivaFinal <= this.configuracionPlanilla.maxSup) {
+            this.notasPlanilla[indice].concepto = 'SUPERIOR'
+          } else {
+            this.notasPlanilla[indice].concepto = null
+          }
+        } else if (this.configuracionPlanilla.id_tipo == 2) {
+          if (definitivaFinal >= this.configuracionPlanilla.minBajT && definitivaFinal < this.configuracionPlanilla.minBasT) {
+            this.notasPlanilla[indice].concepto = 'BAJO'
+          } else if (definitivaFinal >= this.configuracionPlanilla.minBasT && definitivaFinal < this.configuracionPlanilla.minAltT) {
+            this.notasPlanilla[indice].concepto = 'BASICO'
+          } else if (definitivaFinal >= this.configuracionPlanilla.minAltT && definitivaFinal < this.configuracionPlanilla.minSupT) {
+            this.notasPlanilla[indice].concepto = 'ALTO'
+          } else if (definitivaFinal >= this.configuracionPlanilla.minSupT && definitivaFinal <= this.configuracionPlanilla.maxSupT) {
+            this.notasPlanilla[indice].concepto = 'SUPERIOR'
+          } else {
+            this.notasPlanilla[indice].concepto = null
+          }
+        }
       },
       actualizarItemFecha(item) {
         let indice = this.notasPlanilla.findIndex(asigna => asigna.idMatricula === item.idMatricula)
@@ -222,6 +251,7 @@
               response.data.datos.forEach(element => {
                 element.id_asignatura_curso = this.idAsignatura
                 element.periodo = this.idPeriodo
+                element.concepto = null
               })
               this.notasPlanilla = response.data.datos
               //console.log(JSON.stringify(this.notasPlanilla))
@@ -326,7 +356,7 @@
       }
     },
     beforeMount() {
-      if(this.$store.state.idRol == 1 || this.$store.state.idRol == 12) {
+      if(this.$store.state.idRol == 1 || this.$store.state.idRol == 12 || this.$store.state.perActNotas == 1) {
         this.ocuparComboPeriodos()
         this.ocuparComboSedes()
       } else {

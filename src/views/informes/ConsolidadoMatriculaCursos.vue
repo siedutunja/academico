@@ -15,58 +15,56 @@
               </div>
             </div>
             <div v-else>
-              <div id="contenedor">
-                <b-row >
-                  <b-col lg="12">
-                    <div v-for="(sede, idSede) in agrupado" :key="idSede">
-                      <h2>{{ sede.sede }}</h2>
-                      <div v-for="(grado, idGrado) in sede.grados" :key="idGrado">
-                        <table class="table table-bordered">
-                          <thead>
-                            <tr>
-                              <th colspan="4">Grado: {{ grado.grado }}</th>
-                            </tr>
-                            <tr>
-                              <th>Curso</th>
-                              <th>Total Activos</th>
-                              <th>Total Retiros</th>
-                              <th>Total Curso</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            <tr v-for="curso in grado.cursos" :key="curso.idCurso">
-                              <td>{{ curso.nomenclatura }}</td>
-                              <td>{{ curso.totalActivos }}</td>
-                              <td>{{ curso.totalRetiros }}</td>
-                              <td>{{ curso.totalActivos + curso.totalRetiros }}</td>
-                            </tr>
-                            <tr>
-                              <th>Subtotales del Grado {{ grado.grado }}:</th>
-                              <th>{{ grado.totalActivos }}</th>
-                              <th>{{ grado.totalRetiros }}</th>
-                              <th>{{ grado.totalActivos + grado.totalRetiros }}</th>
-                            </tr>
-                          </tbody>
-                        </table>
-                        <table class="table table-bordered">
-                        </table>
-                      </div>
-                      <b-row ><b-col lg="12"><hr></b-col></b-row>
-                      <h3>{{ sede.sede }}: Activos {{ sede.totalActivos }}, Retiros {{ sede.totalRetiros }}, Total Sede {{ sede.totalActivos + sede.totalRetiros }}</h3>
-                      <b-row ><b-col lg="12"><hr></b-col></b-row>
+              <b-row id="contenedor">
+                <b-col lg="12">
+                  <div v-for="(sede, idSede) in agrupado" :key="idSede">
+                    <h2>{{ sede.sede }}</h2>
+                    <div v-for="(grado, idGrado) in sede.grados" :key="idGrado">
+                      <table class="table table-bordered">
+                        <thead>
+                          <tr>
+                            <th colspan="4">Grado: {{ grado.grado }}</th>
+                          </tr>
+                          <tr>
+                            <th>Curso</th>
+                            <th>Total Activos</th>
+                            <th>Total Retiros</th>
+                            <th>Total Curso</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr v-for="curso in grado.cursos" :key="curso.idCurso">
+                            <td>{{ curso.nomenclatura }}</td>
+                            <td>{{ curso.totalActivos }}</td>
+                            <td>{{ curso.totalRetiros }}</td>
+                            <td>{{ curso.totalActivos + curso.totalRetiros }}</td>
+                          </tr>
+                          <tr>
+                            <th>Subtotales del Grado {{ grado.grado }}:</th>
+                            <th>{{ grado.totalActivos }}</th>
+                            <th>{{ grado.totalRetiros }}</th>
+                            <th>{{ grado.totalActivos + grado.totalRetiros }}</th>
+                          </tr>
+                        </tbody>
+                      </table>
+                      <table class="table table-bordered">
+                      </table>
                     </div>
-                    <h2>Total General: {{ totalGeneral.totalActivos + totalGeneral.totalRetiros }}</h2>
-                    <h4>Activos {{ totalGeneral.totalActivos }}<br>Retiros {{ totalGeneral.totalRetiros }}</h4>
-                  </b-col>
-                </b-row>
-                <b-row ><b-col lg="12"><hr></b-col></b-row>
-                <b-row >
-                  <b-col lg="12">
-                    <b-button class="small mx-1 mt-2" variant="primary" @click="imprimirConsolidadoCursos">Imprimir Consolidado</b-button>
-                    <b-button class="small mx-1 mt-2" variant="primary" @click="exportarConsolidadoCursosExcel">Exportar Consolidado a Excel</b-button>
-                  </b-col>
-                </b-row>
-              </div>
+                    <b-row ><b-col lg="12"><hr></b-col></b-row>
+                    <h3>{{ sede.sede }}: Activos {{ sede.totalActivos }}, Retiros {{ sede.totalRetiros }}, Total Sede {{ sede.totalActivos + sede.totalRetiros }}</h3>
+                    <b-row ><b-col lg="12"><hr></b-col></b-row>
+                  </div>
+                  <h2>Total General: {{ totalGeneral.totalActivos + totalGeneral.totalRetiros }}</h2>
+                  <h4>Activos {{ totalGeneral.totalActivos }}<br>Retiros {{ totalGeneral.totalRetiros }}</h4>
+                </b-col>
+              </b-row>
+              <b-row ><b-col lg="12"><hr></b-col></b-row>
+              <b-row >
+                <b-col lg="12">
+                  <b-button class="small mx-1 mt-2" variant="primary" @click="imprimirConsolidadoCursos">Imprimir Consolidado</b-button>
+                  <b-button class="small mx-1 mt-2" variant="primary" @click="exportarConsolidadoCursosExcel">Exportar Consolidado a Excel</b-button>
+                </b-col>
+              </b-row>
             </div>
           </b-card-text>
           <template #footer>
