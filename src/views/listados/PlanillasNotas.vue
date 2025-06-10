@@ -10,12 +10,19 @@
             <b-row>
               <b-col lg="6">
                 <b-form-group label="Seleccione Planillas:" label-for="datos" class="etiqueta">
-                  <b-form-select  id="datos" ref="datos" v-model="idPlanillas" :options="comboPlanillas" @change="idDocente=null"></b-form-select>
+                  <b-form-select  id="datos" ref="datos" v-model="idPlanillas" :options="comboPlanillas" @change="idPeriodo=null,idDocente=null"></b-form-select>
+                </b-form-group>
+              </b-col>
+            </b-row>
+            <b-row v-if="idPlanillas == 1">
+              <b-col lg="2">
+                <b-form-group label="Periodos:" label-for="periodo" class="etiqueta">
+                  <b-form-select id="periodo" ref="periodo" v-model="idPeriodo" :options="comboPeriodos" @change="idDocente=null"></b-form-select>
                 </b-form-group>
               </b-col>
               <b-col lg="6" v-if="idPlanillas==1">
-                <b-form-group label="Seleccione el Docente:" label-for="docentes" class="etiqueta">
-                  <b-form-select id="docentes" ref="docentes" v-model="idDocente" :options="comboDocentes" @change="consultaListaAsignacion()"></b-form-select>
+                <b-form-group label="Docentes:" label-for="docentes" class="etiqueta">
+                  <b-form-select id="docentes" ref="docentes" v-model="idDocente" :options="comboDocentes" @change="consultaListaAsignacion()" :disabled="idPeriodo!=null ? false : true"></b-form-select>
                 </b-form-group>
               </b-col>
             </b-row>
@@ -60,6 +67,8 @@
     },
     data () {
       return {
+        idPeriodo: null,
+        comboPeriodos: [],
         idDocente: null,
         comboDocentes: [],
         idPlanillas: null,
@@ -70,11 +79,8 @@
           { label: 'Grado-Curso', field: 'nomenclatura' },
           { label: 'Asignatura', field: 'asignatura' },
           { label: 'IH', field: 'ih' },
-          { label: '', field: 'idAsignaturaCurso', sortable: false },
-          { label: '', field: 'id', sortable: false }
         ],
         planillasSeleccionadas: [],
-
         listaAsignacion: [],
         datosCurso: [],
       }
@@ -87,7 +93,7 @@
           this.planillasSeleccionadas.push({ 'idAsignaturaCurso': element.idAsignaturaCurso, 'id': element.id, 'cu': element.nomenclatura, 'se': element.sede, 'jo': element.jornada, 'di': element.docente, 'as': element.asignatura })
         })
         let docenteTitular = document.getElementById('docentes')[document.getElementById('docentes').selectedIndex].text
-        let uri = "?datos=" + JSON.stringify(this.planillasSeleccionadas) + "&ie=" + this.$store.state.nombreInstitucion + "&vigencia=" + this.$store.state.aLectivo + "&escudo=" + this.$store.state.escudoInstitucion + "&titular=" + docenteTitular
+        let uri = "?datos=" + JSON.stringify(this.planillasSeleccionadas) + "&ie=" + this.$store.state.nombreInstitucion + "&vigencia=" + this.$store.state.aLectivo + "&escudo=" + this.$store.state.escudoInstitucion + "&titular=" + docenteTitular + "&idPeriodo=" + this.idPeriodo
         let encoded = encodeURI(uri);
         //window.open("http://localhost/siedutunja/php/listas/listas-05.php" + encoded,"_blank")
         window.open("https://siedutunja.gov.co/php/listas/listas-05.php" + encoded,"_blank")
@@ -105,7 +111,7 @@
               this.listaAsignacion = response.data.datos
             }
           }
-          console.log(this.idDocente,JSON.stringify(this.listaAsignacion))
+          //console.log(this.idDocente,JSON.stringify(this.listaAsignacion))
         })
         .catch(err => {
           this.mensajeEmergente('danger',CONFIG.TITULO_MSG,'Algo salio mal y no se pudo realizar: Consulta Asignación Docente. Intente más tarde.' + err)
@@ -118,6 +124,12 @@
         })
         //console.log(JSON.stringify(this.$store.state.datosDocentes))
       },
+      async ocuparComboPeriodos() {
+        this.comboPeriodos = []
+        this.$store.state.datosTablas.periodos.forEach(element => {
+          this.comboPeriodos.push({ 'value': element.id, 'text': element.periodo.toUpperCase() })
+        })
+      },
       mensajeEmergente(variante, titulo, contenido) {
         this.$bvToast.toast(contenido, { title: titulo, variant: variante, toaster: "b-toaster-top-center", solid: true, autoHideDelay: 4000, appendToast: false })
       }
@@ -125,6 +137,7 @@
     computed: {
     },
     beforeMount() {
+      this.ocuparComboPeriodos()
       this.ocuparComboDocentes()
     }
   }

@@ -75,6 +75,13 @@
                             </b-card-text>
                             <b-card-text>Ficha de Matricula del Estudiante</b-card-text>
                           </b-card>
+                          <b-card border-variant="light" class="text-center linkini" @click="irPazySalvo">
+                            <b-card-text>
+                              <span><b-icon icon="filter-square" font-scale="3"></b-icon></span>
+                              <h5 class="mt-2">Paz y Salvo</h5>
+                            </b-card-text>
+                            <b-card-text>Paz y Salvo del Estudiante</b-card-text>
+                          </b-card>
                         </b-card-group>
                       </b-card-text>
                     </b-card>
@@ -115,11 +122,52 @@
           <b-col lg="12"><hr></b-col>
           <b-col lg="12">
             <b-button class="small ml-3" variant="primary" @click="generarConstancia">Generar Constancia</b-button>
-            <b-button class="small ml-3" variant="secondary" @click="cancelarFormulario">Cancelar</b-button>
+            <b-button class="small ml-3" variant="secondary" @click="cancelarFormularioConstancia">Cancelar</b-button>
           </b-col>
         </b-row>
       </div>
     </b-modal>
+    <b-modal ref="modalSeleccionarPazySalvo" size="" scrollable hide-footer title="Seleccionar Firmas" ok-only>
+      <div class="mx-3">
+        <b-row>
+          <b-col lg="12">
+            <b-form-group>
+              <h5>Firmas:</h5>
+              <b-form-checkbox class="ml-4 m-2" v-for="firma in firmas" v-model="firmasSeleccionadas" :key="firma.value" :value="firma.value">
+                {{ firma.text }}
+              </b-form-checkbox>
+            </b-form-group>
+          </b-col>
+        </b-row>
+        <b-row>
+          <b-col lg="12"><hr></b-col>
+          <b-col lg="12">
+            <b-button class="small ml-3" variant="primary" @click="generarPazySalvo">Generar Paz y Salvo</b-button>
+            <b-button class="small ml-3" variant="secondary" @click="cancelarFormularioPazySalvo">Cancelar</b-button>
+          </b-col>
+        </b-row>
+      </div>
+    </b-modal>
+    <b-row id="contenedor">
+      <b-col lg="12">
+        <table class="table table-bordered">
+          <thead>
+            <tr>
+              <th>Estudiante</th><th>{{ datosFichaE.estudiante }}</th>
+              <th>Documento</th><th>{{ datosFichaE.documento }}</th>
+              <th>Jornada</th><th>{{ datosFichaE.jornada }}</th>
+            </tr>
+            <tr>
+              <th>Sede</th><th>{{ datosFichaE.sede }}</th>
+              <th>Curso</th><th>{{ datosFichaE.grado }}</th>
+              <th>Año</th><th>{{ $store.state.aLectivo }}</th>
+            </tr>
+          </thead>
+          <tbody>
+          </tbody>
+        </table>
+      </b-col>
+    </b-row>
   </div>
 </template>
 
@@ -139,13 +187,60 @@
         destinoConstancia: null,
         consecutivoConstancia: null,
         comboDestinos: [],
+        firmasSeleccionadas: [],
+        firmas: [
+          { value: 1, text: 'Rectoría' },
+          { value: 2, text: 'Coordinación'},
+          { value: 3, text: 'Secretaría' },
+          { value: 4, text: 'Almacén'},
+          { value: 5, text: 'Pagaduría'},
+          { value: 6, text: 'Biblioteca'},
+          { value: 7, text: 'Director de Curso'},
+          { value: 8, text: 'Coordinador de Sede'},
+          { value: 9, text: 'Director de Modalidad'},
+        ],
       }
     },
     methods: {
+      irPazySalvo() {
+        this.$refs['modalSeleccionarPazySalvo'].show()
+      },
       irConstancia() {
         this.$refs['modalSeleccionarDestinoConstancia'].show()
       },
-      generarConstancia() {
+      generarPazySalvo() {
+        const printWindow = window.open("", "");
+        const content = document.getElementById("contenedor").innerHTML;
+        printWindow.document.write(`
+          <html>
+            <head>
+              <title>Paz y Salvo</title>
+              <style>
+                body { font-family: Arial, sans-serif; font-size: 12px }
+                h2, h3 { margin-bottom: 5px; }
+                table { width: 100%; border-collapse: collapse; margin-bottom: 3px; }
+                th, td { border: 1px solid #000; padding: 8px; text-align: left; font-size: 12px  }
+                th { background: #f0f0f0; }
+                strong { display: block; margin-top: 0px; }
+              </style>
+            </head>
+            <body>
+              <div style="text-align: center">
+                  <div>REPUBLICA DE COLOMBIA</div>
+                  <div>SECRETARÍA DE EDUCACIÓN TERRITORIAL DE TUNJA</div>
+                  <div><strong>${this.$store.state.nombreInstitucion}</strong></div>
+                  <div>TUNJA - BOYACÁ</div>
+                  <div>PAZ Y SALVO ESTUDIANTIL</div>
+              </div>
+              ${content}
+            </body>
+          </html>
+        `);
+        printWindow.document.close();
+        //printWindow.print();
+        this.cancelarFormularioPazySalvo()
+      },
+     generarConstancia() {
         let campos = []
         if (this.destinoConstancia != null || this.destinoConstancia != '') {
           this.destinoConstancia = this.destinoConstancia.toUpperCase()
@@ -173,7 +268,6 @@
         let encoded = encodeURI(uri);
         //window.open("http://localhost/siedutunja/php/documentos/constancia_01.php" + encoded,"_blank")
         window.open("https://siedutunja.gov.co/php/documentos/constancia_01.php" + encoded,"_blank")
-        this.cancelarFormulario()
         return true
       },
       irFichaMatricula() {
@@ -207,8 +301,11 @@
           this.comboDestinos.push({ 'value': element.id, 'text': element.destino.toUpperCase() })
         })
       },
-      cancelarFormulario() {
+      cancelarFormularioConstancia() {
         this.$refs['modalSeleccionarDestinoConstancia'].hide()
+      },
+      cancelarFormularioPazySalvo() {
+        this.$refs['modalSeleccionarPazySalvo'].hide()
       },
       mensajeEmergente(variante, titulo, contenido) {
         this.$bvToast.toast(contenido, { title: titulo, variant: variante, toaster: "b-toaster-top-center", solid: true, autoHideDelay: 4000, appendToast: false })
