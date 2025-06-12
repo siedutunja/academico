@@ -456,6 +456,13 @@ function configRoutes () {
               name: 'Constancias',
               component: () => import('@/views/secretaria/Constancia')
             },
+            // 2025-06-12
+            {
+              path: 'pazysalvos',
+              beforeEnter: autenticar,
+              name: 'Paz y Salvos',
+              component: () => import('@/views/secretaria/PazySalvos')
+            },
           ]
         },
         // 2025-01-16
