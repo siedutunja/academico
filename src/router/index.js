@@ -290,6 +290,13 @@ function configRoutes () {
               name: 'Consolidados Curso',
               component: () => import('@/views/informes/ConsolidadosCurso')
             },
+            // 2025-04-02
+            {
+              path: 'consolidadosnotas',
+              beforeEnter: autenticar,
+              name: 'Consolidados Notas',
+              component: () => import('@/views/informes/ConsolidadosNotas')
+            },
             // 2025-06-02
             {
               path: 'consolidadosausencias',
@@ -463,6 +470,13 @@ function configRoutes () {
               name: 'Paz y Salvos',
               component: () => import('@/views/secretaria/PazySalvos')
             },
+            // 2025-06-16
+            {
+              path: 'certificados',
+              beforeEnter: autenticar,
+              name: 'Certificados',
+              component: () => import('@/views/secretaria/Certificados')
+            },
           ]
         },
         // 2025-01-16
@@ -616,6 +630,13 @@ function configRoutes () {
               name: 'Recuperaciones por Periodo',
               component: () => import('@/views/calificaciones/RecuperacionesPeriodo')
             },
+            // 2025-06-16
+            {
+              path: 'consultaplanillas',
+              beforeEnter: autenticar,
+              name: 'Consulta Planillas',
+              component: () => import('@/views/calificaciones/ConsultaPlanillas')
+            },
           ]
         },
         // 2024-04-06
@@ -633,6 +654,13 @@ function configRoutes () {
               beforeEnter: autenticar,
               name: 'Reportes por Periodo',
               component: () => import('@/views/reportes/ReportesPeriodos')
+            },
+            // 2025-06-16
+            {
+              path: 'reportesparciales',
+              beforeEnter: autenticar,
+              name: 'Informes Parciales',
+              component: () => import('@/views/reportes/ReportesParciales')
             },
           ]
         },

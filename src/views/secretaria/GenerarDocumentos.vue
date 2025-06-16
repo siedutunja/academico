@@ -75,6 +75,7 @@
                             </b-card-text>
                             <b-card-text>Ficha de Matricula del Estudiante</b-card-text>
                           </b-card>
+                          <!--
                           <b-card border-variant="light" class="text-center linkini" @click="irPazySalvo">
                             <b-card-text>
                               <span><b-icon icon="filter-square" font-scale="3"></b-icon></span>
@@ -82,6 +83,7 @@
                             </b-card-text>
                             <b-card-text>Paz y Salvo del Estudiante</b-card-text>
                           </b-card>
+                          -->
                         </b-card-group>
                       </b-card-text>
                     </b-card>
@@ -127,6 +129,7 @@
         </b-row>
       </div>
     </b-modal>
+    <!--
     <b-modal ref="modalSeleccionarPazySalvo" size="" scrollable hide-footer title="Seleccionar Firmas" ok-only>
       <div class="mx-3">
         <b-row>
@@ -168,6 +171,7 @@
         </table>
       </b-col>
     </b-row>
+    -->
   </div>
 </template>
 

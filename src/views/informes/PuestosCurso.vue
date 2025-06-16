@@ -10,14 +10,14 @@
             <b-row>
               <b-col lg="6">
                 <b-form-group label="Seleccione Informe:" label-for="datos" class="etiqueta">
-                  <b-form-select  id="datos" ref="datos" v-model="idInforme" :options="comboInformes" @change="idPeriodo=null,idSede=null,idCurso=null"></b-form-select>
+                  <b-form-select  id="datos" ref="datos" v-model="idInforme" :options="comboInformes" @change="idPeriodo=null,idSede=null,idCurso=null,idGrado=null"></b-form-select>
                 </b-form-group>
               </b-col>
             </b-row>
             <b-row v-if="idInforme == 1">
               <b-col lg="2">
                 <b-form-group label="Periodo:" label-for="periodo" class="etiqueta">
-                  <b-form-select id="periodo" ref="periodo" v-model="idPeriodo" :options="comboPeriodos" @change="idCurso=null,idSede=null"></b-form-select>
+                  <b-form-select id="periodo" ref="periodo" v-model="idPeriodo" :options="comboPeriodos" @change="idSede=null,idCurso=null"></b-form-select>
                 </b-form-group>
               </b-col>
               <b-col lg="6">
@@ -34,7 +34,7 @@
             <b-row v-if="idInforme == 2">
               <b-col lg="2">
                 <b-form-group label="Periodo:" label-for="periodo" class="etiqueta">
-                  <b-form-select id="periodo" ref="periodo" v-model="idPeriodo" :options="comboPeriodos" @change="idSede=null"></b-form-select>
+                  <b-form-select id="periodo" ref="periodo" v-model="idPeriodo" :options="comboPeriodos" @change="idSede=null,idGrado=null"></b-form-select>
                 </b-form-group>
               </b-col>
               <b-col lg="6">
@@ -48,10 +48,10 @@
                 </b-form-group>
               </b-col>
             </b-row>
-            <b-row class="mt-2" v-if="idCurso!=null || idGrado!=null">
+            <!-- **************** LISTA CURSO ************** -->
+            <b-row class="mt-2" v-if="idCurso!=null">
               <b-col lg="12"><hr></b-col>
-              <!-- **************** LISTA CURSO ************** -->
-              <b-col lg="12" v-if="idInforme == 1 || idInforme == 2">
+              <b-col lg="12">
                 <div v-if="btnCargando">
                   <div class="text-center m-5 text-primary">
                     <b-spinner style="width: 3rem; height: 3rem;" label="Spinner"></b-spinner>
@@ -66,8 +66,35 @@
                   </vue-good-table>
                   <b-row>
                     <b-col lg="12">
-                      <b-button class="small mx-1 mt-3" variant="primary" @click="idInforme == 1 ? imprimirConsolidadoCurso() : imprimirConsolidadoGrado()">Imprimir Consolidado</b-button>
-                      <vue-excel-xlsx class="small mx-1 mt-3 btn btn-outline-primary" :data="ordenadoPorPromedio" :columns="encabColumnas" :file-name="idInforme == 1 ? 'PuestosCurso-' + nombreCurso + '-' + new Date().toLocaleDateString() : 'PuestosGrado-' + nombreGrado + '-' + new Date().toLocaleDateString()" :file-type="'xlsx'" :sheet-name="'Puestos'">
+                      <b-button class="small mx-1 mt-3" variant="primary" @click="imprimirConsolidadoCurso()">Imprimir Consolidado</b-button>
+                      <vue-excel-xlsx class="small mx-1 mt-3 btn btn-outline-primary" :data="ordenadoPorPromedio" :columns="encabColumnas" :file-name="'PuestosCurso-' + nombreCurso + '-' + new Date().toLocaleDateString()" :file-type="'xlsx'" :sheet-name="'PuestosCurso'">
+                        Exportar Resumen a Excel
+                      </vue-excel-xlsx>
+                    </b-col>
+                  </b-row>
+                </div>
+              </b-col>
+            </b-row>
+            <!-- **************** LISTA GRADO ************** -->
+            <b-row class="mt-2" v-if="idGrado!=null">
+              <b-col lg="12"><hr></b-col>
+              <b-col lg="12">
+                <div v-if="btnCargando">
+                  <div class="text-center m-5 text-primary">
+                    <b-spinner style="width: 3rem; height: 3rem;" label="Spinner"></b-spinner>
+                    <br><strong>Cargando planilla...</strong>
+                  </div>
+                </div>
+                <div v-else>
+                  <vue-good-table ref="table" :columns="encabColumnas" :rows="ordenadoPorPromedio" styleClass="vgt-table condensed bordered striped">
+                    <div slot="emptystate">
+                      <h5 class="text-danger ml-5">No existen estudiantes matriculados</h5>
+                    </div>
+                  </vue-good-table>
+                  <b-row>
+                    <b-col lg="12">
+                      <b-button class="small mx-1 mt-3" variant="primary" @click="imprimirConsolidadoGrado()">Imprimir Consolidado</b-button>
+                      <vue-excel-xlsx class="small mx-1 mt-3 btn btn-outline-primary" :data="ordenadoPorPromedio" :columns="encabColumnas" :file-name="'PuestosGrado-' + nombreGrado + '-' + new Date().toLocaleDateString()" :file-type="'xlsx'" :sheet-name="'PuestosGrado'">
                         Exportar Resumen a Excel
                       </vue-excel-xlsx>
                     </b-col>
@@ -134,17 +161,13 @@
     methods: {
       consultarMatriculados() {
         this.btnCargando = true
-        if (this.idInforme == 1) {
+        if (this.idInforme == 1 && this.idCurso != null) {
           this.consultarPuestosCurso()
-        }
-        if (this.idInforme == 2) {
+        } else if (this.idInforme == 2 && this.idGrado != null) {
           this.consultarPuestosGrado()
         }
       },
       imprimirConsolidadoGrado() {
-        this.nombreSede = document.getElementById('sedes')[document.getElementById('sedes').selectedIndex].text
-        this.nombreGrado = document.getElementById('grados')[document.getElementById('grados').selectedIndex].text
-        this.nombrePeriodo = document.getElementById('periodo')[document.getElementById('periodo').selectedIndex].text
         // Crear una nueva ventana para imprimir
         const printWindow = window.open("Puestos", "_blank");
         // Obtener el contenido HTML de la tabla
@@ -182,7 +205,6 @@
             }
           </style>
         `;
-
         // Insertar el contenido HTML y los estilos en la nueva ventana
         printWindow.document.write(`
           <html>
@@ -191,21 +213,17 @@
               ${style}
             </head>
             <body>
-              <p style="text-align: center; font-size: 12px;">SECRETARÍA DE EDUCACIÓN TERRITORIAL DE TUNJA<br><b>${this.$store.state.nombreInstitucion}</b><br>TUNJA - BOYACÁ<br>PUESTOS DE ESTUDIANTES POR GRADO Y PERIODO - AÑO LECTIVO ${this.$store.state.aLectivo}<br>Sede: ${this.nombreSede} | Grado: ${this.nombreGrado} | Periodo: ${this.nombrePeriodo}</p>
+              <p style="text-align: center; font-size: 12px;">SECRETARÍA DE EDUCACIÓN TERRITORIAL DE TUNJA<br><b>${this.$store.state.nombreInstitucion}</b><br>TUNJA - BOYACÁ<br>PUESTOS DE ESTUDIANTES POR GRADO - AÑO LECTIVO ${this.$store.state.aLectivo}<br>Sede: ${this.nombreSede} | Grado: ${this.nombreGrado} | Periodo: ${this.nombrePeriodo}</p>
               ${tableHtml}
               <div style="text-align: right;"><i>${fecha}</i></div>
             </body>
           </html>
         `);
-
         // Iniciar la impresión y cerrar la ventana
         //printWindow.document.close();
         printWindow.print();
       },
       imprimirConsolidadoCurso() {
-        this.nombreSede = document.getElementById('sedes')[document.getElementById('sedes').selectedIndex].text
-        this.nombreCurso = document.getElementById('cursos')[document.getElementById('cursos').selectedIndex].text
-        this.nombrePeriodo = document.getElementById('periodo')[document.getElementById('periodo').selectedIndex].text
         // Crear una nueva ventana para imprimir
         const printWindow = window.open("Puestos", "_blank");
         // Obtener el contenido HTML de la tabla
@@ -243,7 +261,6 @@
             }
           </style>
         `;
-
         // Insertar el contenido HTML y los estilos en la nueva ventana
         printWindow.document.write(`
           <html>
@@ -252,19 +269,21 @@
               ${style}
             </head>
             <body>
-              <p style="text-align: center; font-size: 12px;">SECRETARÍA DE EDUCACIÓN TERRITORIAL DE TUNJA<br><b>${this.$store.state.nombreInstitucion}</b><br>TUNJA - BOYACÁ<br>PUESTOS DE ESTUDIANTES POR CURSO Y PERIODO - AÑO LECTIVO ${this.$store.state.aLectivo}<br>Sede: ${this.nombreSede} | Curso: ${this.nombreCurso} | Periodo: ${this.nombrePeriodo}</p>
+              <p style="text-align: center; font-size: 12px;">SECRETARÍA DE EDUCACIÓN TERRITORIAL DE TUNJA<br><b>${this.$store.state.nombreInstitucion}</b><br>TUNJA - BOYACÁ<br>PUESTOS DE ESTUDIANTES POR CURSO - AÑO LECTIVO ${this.$store.state.aLectivo}<br>Sede: ${this.nombreSede} | Curso: ${this.nombreCurso} | Periodo: ${this.nombrePeriodo}</p>
               ${tableHtml}
               <div style="text-align: right;"><i>${fecha}</i></div>
             </body>
           </html>
         `);
-
         // Iniciar la impresión y cerrar la ventana
         //printWindow.document.close();
         printWindow.print();
       },
       async consultarPuestosGrado() {
         this.btnCargando = true
+        this.nombreSede = document.getElementById('sedes')[document.getElementById('sedes').selectedIndex].text
+        this.nombreGrado = document.getElementById('grados')[document.getElementById('grados').selectedIndex].text
+        this.nombrePeriodo = document.getElementById('periodo')[document.getElementById('periodo').selectedIndex].text
         this.listaNotasGrado = []
         this.ordenadoPorPromedio = []
         this.idNivel = null
@@ -274,7 +293,7 @@
           }
         })
         await axios
-        .get(CONFIG.ROOT_PATH + 'resumenes/notasgrado', {params: {idGrado: this.idGrado,periodo: this.idPeriodo}})
+        .get(CONFIG.ROOT_PATH + 'resumenes/notasgrado/puestos', {params: {idGrado: this.idGrado,periodo: this.idPeriodo}})
         .then(response => {
           if (response.data.error){
             this.mensajeEmergente('danger',CONFIG.TITULO_MSG,response.data.mensaje + ' - Lista notas grado')
@@ -289,7 +308,6 @@
         })
         if (this.idNivel == 1) {
           this.mensajeEmergente('warning',CONFIG.TITULO_MSG,'Lo sentimos!. El informe no se encuentra disponible.')
-          this.btnCargando = false
         } else {
           // Ordenar por promedio de mayor a menor
           this.ordenadoPorPromedio = this.listaNotasGrado
@@ -302,21 +320,25 @@
               }
               estudiante.puesto = puesto; // Asignar puesto actual
           });
-          this.btnCargando = false
         }
+        this.btnCargando = false
       },
       async consultarPuestosCurso() {
         this.btnCargando = true
+        this.nombreSede = document.getElementById('sedes')[document.getElementById('sedes').selectedIndex].text
+        this.nombreCurso = document.getElementById('cursos')[document.getElementById('cursos').selectedIndex].text
+        this.nombrePeriodo = document.getElementById('periodo')[document.getElementById('periodo').selectedIndex].text
         this.listaNotasCurso = []
         this.ordenadoPorPromedio = []
         this.idNivel = null
-        this.$store.state.datosGrados.forEach(element => {
+        this.$store.state.datosCursos.forEach(element => {
           if (element.id == this.idCurso) {
             this.idNivel = element.id_nivel
+            console.log(element)
           }
         })
         await axios
-        .get(CONFIG.ROOT_PATH + 'resumenes/notascurso', {params: {idCurso: this.idCurso,periodo: this.idPeriodo}})
+        .get(CONFIG.ROOT_PATH + 'resumenes/notascurso/puestos', {params: {idCurso: this.idCurso,periodo: this.idPeriodo}})
         .then(response => {
           if (response.data.error){
             this.mensajeEmergente('danger',CONFIG.TITULO_MSG,response.data.mensaje + ' - Lista notas grado')
@@ -331,7 +353,6 @@
         })
         if (this.idNivel == 1) {
           this.mensajeEmergente('warning',CONFIG.TITULO_MSG,'Lo sentimos!. El informe no se encuentra disponible.')
-          this.btnCargando = false
         } else {
           // Ordenar por promedio de mayor a menor
           this.ordenadoPorPromedio = this.listaNotasCurso
@@ -344,8 +365,8 @@
               }
               estudiante.puesto = puesto // Asignar puesto actual
           })
-          this.btnCargando = false
         }
+        this.btnCargando = false
       },      
       async ocuparComboGradosSede() {
         this.comboGradosSede = []
@@ -353,48 +374,6 @@
           if (element.id_sede == this.idSede) {
             this.comboGradosSede.push({ 'value': element.id, 'text': element.grado.toUpperCase() })
           }
-        })
-      },
-      async consultaListaCurso() { // para eliminar esta función
-        this.btnCargando = true
-        this.$store.state.datosCursos.forEach(element => {
-          if (element.id == this.idCurso) {
-            this.jornada = element.jornada
-            this.director = element.docente
-            this.idNivel = element.id_nivel
-          }
-        })
-        this.listaEstudiantesCurso = []
-        await axios
-        .get(CONFIG.ROOT_PATH + 'academico/listacurso/reportes', { params: { idCurso: this.idCurso }})
-        .then(response => {
-          if (response.data.error){
-            this.mensajeEmergente('danger',CONFIG.TITULO_MSG,response.data.mensaje + ' - Consulta Lista Curso')
-            this.btnCargando = false
-          } else{
-            if (response.data.datos != 0) {
-              this.listaEstudiantesCurso = response.data.datos
-              let numPuesto = 1
-              this.listaPuestos.forEach(element2 => {
-                this.listaEstudiantesCurso.forEach(element => {
-                  if (element.idMatricula == element2.id) {
-                    element.puesto = numPuesto
-                    if (element2.promedio > 0)
-                      element.promedio = element2.promedio.toFixed(2)
-                    else
-                      element.promedio = 0
-                    numPuesto++
-                  }
-                })
-              })
-              this.listaEstudiantesCurso.sort(((a, b) => b.puesto - a.puesto))
-            }
-            this.btnCargando = false
-          }
-        })
-        .catch(err => {
-          this.mensajeEmergente('danger',CONFIG.TITULO_MSG,'Algo salio mal y no se pudo realizar: Consulta Lista Curso. Intente más tarde.' + err)
-          this.btnCargando = false
         })
       },
       tdClassFuncE(row) {

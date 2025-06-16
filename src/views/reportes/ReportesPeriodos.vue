@@ -4,7 +4,7 @@
       <b-col lg="12">
         <b-card>
           <template #header>
-            <h5 class="mb-0"><b-icon icon="card-checklist" aria-hidden="true"></b-icon> INFORMES DE EVALUACIÓN POR PERIODO</h5>
+            <h5 class="mb-0"><b-icon icon="card-checklist" aria-hidden="true"></b-icon> BOLETINES DE EVALUACIÓN POR PERIODO</h5>
           </template>
           <b-card-text>
             <b-row>
@@ -56,7 +56,7 @@
             </b-row>
           </b-card-text>
           <template #footer>
-            <em>Informes de evaluación por periodo.</em>
+            <em>Boletines de evaluación por periodo.</em>
           </template>
         </b-card>
       </b-col>
