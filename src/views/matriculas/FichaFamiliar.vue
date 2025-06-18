@@ -136,7 +136,7 @@
               </b-col>
               <b-col lg="6" md="6">
                 <b-form-group label="Correo Electrónico" label-for="correoA" class="etiqueta">
-                  <b-form-input id="correoA" ref="correoA" v-model.trim="infoFamiliar.correoA" :state="validateStateD('correoA')" aria-describedby="feedCorreoA" autocomplete="off" maxlength="50"></b-form-input>
+                  <b-form-input id="correoA" ref="correoA" v-model.trim="infoFamiliar.correoA" :state="validateStateD('correoA')" aria-describedby="feedCorreoA" autocomplete="off" maxlength="100"></b-form-input>
                   <b-form-invalid-feedback id="feedCorreoA" >Campo requerido.</b-form-invalid-feedback>
                 </b-form-group>
               </b-col>

@@ -117,44 +117,15 @@
               </b-col>
               <!-- **************** CONSOLIDADO ASIGNATURAS ACUMULADO ************** -->
               <b-col lg="12" v-if="idInforme == 3">
-                <div v-if="btnCargando">
-                  <div class="text-center m-5 text-primary">
-                    <b-spinner style="width: 3rem; height: 3rem;" label="Spinner"></b-spinner>
-                    <br><strong>Cargando planilla...</strong>
-                  </div>
-                </div>
-                <div v-else>
-                  <div v-if="idNivel == 1">
-                    <vue-good-table ref="table" :columns="encabColumnasAsigPree" :rows="listaMatriculados" styleClass="vgt-table condensed bordered striped" :lineNumbers="true">
-                      <div slot="emptystate">
-                        <h5 class="text-danger ml-5">No existen estudiantes matriculados</h5>
-                      </div>
-                    </vue-good-table>
-                    <b-row>
-                      <b-col lg="12">
-                        <b-button class="small mx-1 mt-3" variant="primary" @click="imprimirConsolidado">Imprimir Consolidado</b-button>
-                        <vue-excel-xlsx class="small mx-1 mt-3 btn btn-outline-primary" :data="listaMatriculados" :columns="encabColumnasAsigPree" :file-name="'ConsolidadoNotas-' + new Date().toLocaleDateString()" :file-type="'xlsx'" :sheet-name="'Consolidado'">
-                          Exportar Consolidado Evaluaciones a Excel
-                        </vue-excel-xlsx>
-                      </b-col>
-                    </b-row>
-                  </div>
-                  <div v-else>
-                    <vue-good-table ref="table" :columns="encabColumnasAsig" :rows="listaMatriculados" styleClass="vgt-table condensed bordered striped" :lineNumbers="true">
-                      <div slot="emptystate">
-                        <h5 class="text-danger ml-5">No existen estudiantes matriculados</h5>
-                      </div>
-                    </vue-good-table>
-                    <b-row>
-                      <b-col lg="12">
-                        <b-button class="small mx-1 mt-3" variant="primary" @click="imprimirConsolidado">Imprimir Consolidado</b-button>
-                        <vue-excel-xlsx class="small mx-1 mt-3 btn btn-outline-primary" :data="listaMatriculados" :columns="encabColumnasAsig" :file-name="'ConsolidadoNotas-' + new Date().toLocaleDateString()" :file-type="'xlsx'" :sheet-name="'Consolidado'">
-                          Exportar Consolidado Evaluaciones a Excel
-                        </vue-excel-xlsx>
-                      </b-col>
-                    </b-row>
-                  </div>
-                </div>
+
+    <button @click="imprimirTabla">Imprimir Tabla</button>
+    <vue-good-table
+      :columns="columns"
+      :rows="formattedData"
+      :pagination-options="{ enabled: false }"
+    />
+
+
               </b-col>
             </b-row>
           </b-card-text>
@@ -202,7 +173,9 @@
         nombreCurso: null,
         btnCargando: true,
         idNivel: null,
-        datosOriginales: []
+        datosOriginales: [],
+
+        datos: [],
       }
     },
     methods: {
@@ -412,9 +385,12 @@
                 this.mensajeEmergente('danger',CONFIG.TITULO_MSG,response.data.mensaje + ' - Consolidado Asignaturas Periodo Pree')
               } else{
                 if (response.data.datos != 0) {
+                  this.datos = response.data.datos
+                  /*
                   this.datosOriginales = response.data.datos
                   this.encabColumnasAsigPree = this.columnasAsigPree
                   this.listaMatriculados = this.pivotedRowsAsigPreeAcumulado
+                  */
                 }
               }
             })
@@ -430,9 +406,13 @@
                 this.mensajeEmergente('danger',CONFIG.TITULO_MSG,response.data.mensaje + ' - Consolidado Asignaturas Periodo')
               } else{
                 if (response.data.datos != 0) {
+                  //alert(response.data.datos.length)
+                  this.datos = response.data.datos
+                  /*
                   this.datosOriginales = response.data.datos
                   this.encabColumnasAsig = this.columnasAsig
                   this.listaMatriculados = this.pivotedRowsAsigAcumulado
+                  */
                 }
               }
             })
@@ -812,11 +792,51 @@
       cancelarFormulario() {
         this.$router.push('/')
       },
+      imprimirTabla() {
+        window.print();
+      },  
       mensajeEmergente(variante, titulo, contenido) {
         this.$bvToast.toast(contenido, { title: titulo, variant: variante, toaster: "b-toaster-top-center", solid: true, autoHideDelay: 4000, appendToast: false })
       }
     },
     computed: {
+    columns() {
+      const periodos = [1, 2]; 
+      const asignaturas = [...new Set(this.datos.map(d => d.asignatura))];
+
+      let cols = [{ label: "Estudiante", field: "estudiante" }];
+
+      asignaturas.forEach(asignatura => {
+        let asignaturaColumn = { label: asignatura, children: [] };
+
+        periodos.forEach(periodo => {
+          asignaturaColumn.children.push({
+            label: `Periodo ${periodo}`,
+            field: `${asignatura}-periodo-${periodo}`
+          });
+        });
+
+        cols.push(asignaturaColumn);
+      });
+
+      return cols;
+    },
+    formattedData() {
+      let estudiantesMap = {};
+
+      this.datos.forEach(({ estudiante }) => {
+        if (!estudiantesMap[estudiante]) {
+          estudiantesMap[estudiante] = { estudiante };
+        }
+      });
+
+      return Object.values(estudiantesMap);
+    }
+,
+
+
+
+
       pivotedRowsAsig() {
         return this.pivotPorEstudianteAsig(this.datosOriginales)
       },

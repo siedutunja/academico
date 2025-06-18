@@ -198,7 +198,7 @@
                       </b-col>
                       <b-col lg="6" md="6">
                         <b-form-group label="Correo Electrónico" label-for="correo" class="etiqueta">
-                          <b-form-input id="correo" ref="correo" v-model.trim="infoEstudiante.correo" aria-describedby="feedCorreo" autocomplete="off" maxlength="50"></b-form-input>
+                          <b-form-input id="correo" ref="correo" v-model.trim="infoEstudiante.correo" aria-describedby="feedCorreo" autocomplete="off" maxlength="100"></b-form-input>
                           <b-form-invalid-feedback id="feedCorreo" >Campo requerido.</b-form-invalid-feedback>
                         </b-form-group>
                       </b-col>
@@ -352,7 +352,7 @@
                       </b-col>
                       <b-col lg="6" md="6">
                         <b-form-group label="Correo Electrónico*" label-for="correoA" class="etiqueta">
-                          <b-form-input id="correoA" ref="correoA" v-model.trim="infoEstudiante.correoA" :state="validateStateD('correoA')" aria-describedby="feedCorreoA" autocomplete="off" maxlength="50" :disabled="!documentoBuscado"></b-form-input>
+                          <b-form-input id="correoA" ref="correoA" v-model.trim="infoEstudiante.correoA" :state="validateStateD('correoA')" aria-describedby="feedCorreoA" autocomplete="off" maxlength="100" :disabled="!documentoBuscado"></b-form-input>
                           <b-form-invalid-feedback id="feedCorreoA" >Campo requerido.</b-form-invalid-feedback>
                         </b-form-group>
                       </b-col>

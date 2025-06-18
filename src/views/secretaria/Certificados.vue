@@ -29,7 +29,7 @@
                     <vue-good-table ref="estudia" :columns="encabColumnas" :rows="listaEstudiantesCurso" styleClass="vgt-table condensed bordered striped" :line-numbers="true"
                       :select-options="{enabled: true,selectionText: 'estudiantes seleccionados',clearSelectionText: 'Limpiar',}">
                       <template #selected-row-actions>
-                        <button class="small btn btn-primary" @click="imprimirPazySalvos()">Imprimir Paz y Salvos</button>
+                        <button class="small btn btn-primary" @click="imprimirCertificados()">Imprimir Certificados</button>
                       </template>
                       <div slot="emptystate">
                         <h5 class="text-danger ml-5">No existen estudiantes en el curso</h5>
@@ -56,7 +56,7 @@
   import { VueGoodTable } from 'vue-good-table'
 
   export default {
-    name: 'pazysalvos',
+    name: 'certificados',
     components: {
       VueGoodTable,
     },
@@ -66,7 +66,6 @@
         comboSedes: [],
         idCurso: null,
         comboCursosSede: [],
-        camposSeleccionados: [],
         listaEstudiantesCurso: [],
         encabColumnas : [
           { label: 'Apellidos y Nombres del Estudiante', field: 'estudiante', tdClass: this.tdClassFuncE },
@@ -74,30 +73,21 @@
           { label: 'Estado', field: 'estado', tdClass: this.tdClassFuncE },
         ],
         estudSeleccionados: [],
-        campos: [
-          { value: 1, text: 'Coordinación' },
-          { value: 2, text: 'Secretaría' },
-          { value: 3, text: 'Almacén'},
-          { value: 4, text: 'Pagaduría'},
-          { value: 5, text: 'Biblioteca'},
-          { value: 6, text: 'Director de Curso'},
-          { value: 7, text: 'Coordinador de Sede'},
-          { value: 8, text: 'Rectoría' },
-        ],
       }
     },
     methods: {
-      imprimirPazySalvos() {
+      imprimirCertificados() {
         let sede = document.getElementById('sedes')[document.getElementById('sedes').selectedIndex].text
         let curso = document.getElementById('cursos')[document.getElementById('cursos').selectedIndex].text
         this.estudSeleccionados = []
         this.$refs.estudia.selectedRows.forEach(element => {
-          this.estudSeleccionados.push({ 'estudiante': element.estudiante, 'documento': element.documento, 'estado': element.estado })
+          this.estudSeleccionados.push({ 'id': element.idMatricula, 'estudiante': element.estudiante, 'documento': element.documento, 'estado': element.estado, 'tipoDoc': element.nomenclatura })
         });
-        let uri = "?estudiantes=" + JSON.stringify(this.estudSeleccionados) + "&ie=" + this.$store.state.nombreInstitucion + "&vigencia=" + this.$store.state.aLectivo + '&campos=' + JSON.stringify(this.camposSeleccionados) + "&escudo=" + this.$store.state.escudoInstitucion + "&sede=" + sede + "&curso=" + curso
+        let uri = "?estudiantes=" + JSON.stringify(this.estudSeleccionados) + "&ie=" + this.$store.state.nombreInstitucion + "&vigencia=" + this.$store.state.aLectivo + "&escudo=" + this.$store.state.escudoInstitucion + "&sede=" + sede + "&curso=" + curso + "&idNivel=" + this.idNivel + "&idCurso=" + this.idCurso + "&idIe=" + this.$store.state.idInstitucion +
+        "&minBaj=" + this.$store.state.datosSecciones[0].minBaj + "&maxBaj=" + this.$store.state.datosSecciones[0].maxBaj + "&minBas=" + this.$store.state.datosSecciones[0].minBas + "&maxBas=" + this.$store.state.datosSecciones[0].maxBas + "&minAlt=" + this.$store.state.datosSecciones[0].minAlt + "&maxAlt=" + this.$store.state.datosSecciones[0].maxAlt + "&minSup=" + this.$store.state.datosSecciones[0].minSup + "&maxSup=" + this.$store.state.datosSecciones[0].maxSup
         let encoded = encodeURI(uri);
-        //window.open("http://localhost/siedutunja/php/documentos/pazysalvos-01.php" + encoded,"_blank")
-        window.open("https://siedutunja.gov.co/php/documentos/pazysalvos-01.php" + encoded,"_blank")
+        //window.open("http://localhost/siedutunja/php/documentos/" + this.$store.state.daneInstitucion + "cert.php" + encoded,"_blank")
+        window.open("https://siedutunja.gov.co/php/documentos/" + this.$store.state.daneInstitucion + "cert.php" + encoded,"_blank")
         //console.log(JSON.stringify(this.estudSeleccionados))
         return true
       },
@@ -107,9 +97,14 @@
         }
       },
       async consultaListaCurso() {
+        this.$store.state.datosCursos.forEach(element => {
+          if (element.id == this.idCurso) {
+            this.idNivel = element.id_nivel
+          }
+        })
         this.listaEstudiantesCurso = []
         await axios
-        .get(CONFIG.ROOT_PATH + 'academico/listacurso/pazysalvo', { params: { idCurso: this.idCurso }})
+        .get(CONFIG.ROOT_PATH + 'academico/listacurso/certificados', { params: { idCurso: this.idCurso }})
         .then(response => {
           if (response.data.error){
             this.mensajeEmergente('danger',CONFIG.TITULO_MSG,response.data.mensaje + ' - Consulta Lista Curso')

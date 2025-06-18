@@ -62,7 +62,7 @@ jwt.verify(token, CONFIG.SECRET_KEY, (err, data) => {
       )
       indice++
       menu[0]._children[indice].items.push({ name: 'Documentos por Estudiante', to: '/secretaria/buscargenerardocumentos'})
-      //menu[0]._children[indice].items.push({ name: 'Certificados', to: '/secretaria/certificados'})
+      menu[0]._children[indice].items.push({ name: 'Certificados', to: '/secretaria/certificados'})
       menu[0]._children[indice].items.push({ name: 'Paz y Salvos', to: '/secretaria/pazysalvos'})
     }
     menu[0]._children.push(
@@ -129,8 +129,8 @@ jwt.verify(token, CONFIG.SECRET_KEY, (err, data) => {
     indice++
     menu[0]._children[indice].items.push({ name: 'Boletines por Periodo', to: '/reportes/reportesperiodos'})
     menu[0]._children[indice].items.push({ name: 'Informes Parciales', to: '/reportes/reportesparciales'})
-    //menu[0]._children[indice].items.push({ name: 'Consolidados por Periodo', to: '/informes/consolidadoscurso'})
-    menu[0]._children[indice].items.push({ name: 'Consolidados Notas', to: '/informes/consolidadosnotas'})
+    menu[0]._children[indice].items.push({ name: 'Consolidados por Periodo', to: '/informes/consolidadoscurso'})
+    //menu[0]._children[indice].items.push({ name: 'Consolidados Notas', to: '/informes/consolidadosnotas'})
     menu[0]._children[indice].items.push({ name: 'Consolidados Ausencias', to: '/informes/consolidadosausencias'})
     menu[0]._children[indice].items.push({ name: 'Puestos Estudiantes', to: '/informes/puestoscurso'})
     menu[0]._children[indice].items.push({ name: 'Rendimiento Academico', to: '/informes/rendimientoacademico'})
