@@ -50,8 +50,14 @@
                   <b-form-invalid-feedback id="feedObserv">Campo requerido.</b-form-invalid-feedback>
                 </b-form-group>
               </b-col>
+              <b-col lg="12" md="12">
+                <b-form-group label="Observaciones Finales" label-for="observF" class="etiqueta">
+                  <b-form-textarea id="observF" ref="observF" v-model.trim="infoMatricula.obs_final" aria-describedby="feedObservF" autocomplete="off" rows="2"></b-form-textarea>
+                  <b-form-invalid-feedback id="feedObservF">Campo requerido.</b-form-invalid-feedback>
+                </b-form-group>
+              </b-col>
               <b-col lg="3" md="6">
-                <b-form-group label="Educación Diversa/Inclusión*" label-for="diversa" class="etiqueta">
+                <b-form-group label="Educación de Inclusión - (PD)*" label-for="diversa" class="etiqueta">
                   <b-form-select  id="diversa" ref="diversa" v-model="$v.infoMatricula.id_diversa.$model" :options="comboDiversa" :state="validateStateD('id_diversa')"></b-form-select>
                   <b-form-invalid-feedback id="feedDiversa">Campo requerido.</b-form-invalid-feedback>
                 </b-form-group>
@@ -95,7 +101,8 @@
           id_nuevo: null,
           id_repitente: null,
           id_diversa: null,
-          obs_matricula: null
+          obs_matricula: null,
+          obs_final: null
         },
         comboSedes: [],
         comboGrados: [],
@@ -156,6 +163,11 @@
           this.infoMatricula.obs_matricula = null
         } else {
           this.infoMatricula.obs_matricula = this.infoMatricula.obs_matricula.toUpperCase()
+        }
+        if (this.infoMatricula.obs_final == '' || this.infoMatricula.obs_final == null) {
+          this.infoMatricula.obs_final = null
+        } else {
+          this.infoMatricula.obs_final = this.infoMatricula.obs_final.toUpperCase()
         }
         await axios
         .put(CONFIG.ROOT_PATH + 'academico/matriculas/datosmatricula/ficha', JSON.stringify(this.infoMatricula), { headers: {"Content-Type": "application/json; charset=utf-8" }})

@@ -9,14 +9,14 @@
           <b-card-text>
             <b-row>
               <b-col lg="12">
-                <b-alert class="text-center" :variant="datosFichaE.id_estado_actual==1 ? 'success' : 'danger'" show>ESTUDIANTE<br><h4 class="mb-0"><b>{{ datosFichaE.estudiante }}</b></h4><span><b>ESTADO: {{ datosFichaE.estado }}</b></span><span v-if="codigo!='' && codigo!=null"><br><strong>CODIGO: {{ codigo }}</strong></span></b-alert>
+                <b-alert class="text-center" :variant="datosFichaE.id_estado_actual==1 ? 'success' : datosFichaE.id_estado_actual==2 ? 'danger' : 'warning'" show>ESTUDIANTE<br><h4 class="mb-0"><b>{{ datosFichaE.estudiante }}</b></h4><span><b>ESTADO: {{ datosFichaE.estado }}</b></span><span v-if="codigo!='' && codigo!=null"><br><strong>CODIGO: {{ codigo }}</strong></span></b-alert>
               </b-col>
             </b-row>
             <b-row>
               <b-col lg="6">
                 <b-card header-bg-variant="secondary">
                   <template #header>
-                    <b-button @click="verFichaEstudiante()" class="small float-right" variant="dark" v-if="$store.state.idRol==1 || $store.state.idRol==12 || $store.state.perActEstudiante == 1">Editar Datos</b-button>
+                    <b-button @click="verFichaEstudiante()" class="small float-right" variant="dark" v-if="$store.state.idRol==1 || $store.state.idRol==12 || $store.state.perActEstudiante == 1">Editar Estudiante</b-button>
                     <h5 class="mb-0"><b-icon icon="card-checklist" aria-hidden="true"></b-icon> Datos del Estudiante</h5>
                   </template>
                   <b-card-text>
@@ -62,7 +62,7 @@
               <b-col lg="6">
                 <b-card header-bg-variant="secondary">
                   <template #header>
-                    <b-button @click="verFichamatricula()" class="small float-right" variant="dark" v-if="$store.state.idRol==1 || $store.state.idRol==12 || $store.state.perActEstudiante == 1">Editar Datos</b-button>
+                    <b-button @click="verFichamatricula()" class="small float-right" variant="dark" v-if="$store.state.idRol==1 || $store.state.idRol==12 || $store.state.perActEstudiante == 1">Editar Matricula</b-button>
                     <h5 class="mb-0"><b-icon icon="card-checklist" aria-hidden="true"></b-icon> Datos de la Matrícula</h5>
                   </template>
                   <b-card-text>
@@ -80,8 +80,9 @@
                             <b-tr><b-th>Nuevo</b-th><b-td>{{datosFichaE.id_nuevo}}</b-td></b-tr>
                             <b-tr><b-th>Procedencia</b-th><b-td>{{datosFichaE.procedencia}}</b-td></b-tr>
                             <b-tr><b-th>Repitente</b-th><b-td>{{datosFichaE.id_repitente}}</b-td></b-tr>
-                            <b-tr><b-th>Educación Diversa/Inclusión</b-th><b-td>{{datosFichaE.id_diversa}}</b-td></b-tr>
-                            <b-tr><b-th>Observaciones</b-th><b-td>{{datosFichaE.obs_matricula}}</b-td></b-tr>
+                            <b-tr><b-th>Educación de Inclusión (PD)</b-th><b-td>{{datosFichaE.id_diversa}}</b-td></b-tr>
+                            <b-tr><b-th>Observaciones de la Matricula</b-th><b-td>{{datosFichaE.obs_matricula}}</b-td></b-tr>
+                            <b-tr><b-th>Observaciones Finales</b-th><b-td>{{datosFichaE.obs_final}}</b-td></b-tr>
                             <b-tr><b-th>ID</b-th><b-td>{{idMatricula}}</b-td></b-tr>
                           </b-tbody>
                         </b-table-simple>

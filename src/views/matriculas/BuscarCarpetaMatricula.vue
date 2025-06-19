@@ -144,8 +144,11 @@
         return $dirty ? !$error : null
       },
       tdClassFunc(row) {
-        if (row.estado == 'RETIRADO') { 
-          return 'text-white bg-danger' 
+        if (row.id_estado_actual == 2) { 
+          return 'text-danger' 
+        }
+        if (row.id_estado_actual == 3 || row.id_estado_actual == 4) { 
+          return 'text-warning' 
         }
       },
       cancelarFormulario() {

@@ -37,11 +37,17 @@
                     </vue-good-table>
                   </div>
                 </b-col>
+                <b-col lg="5">
+                  <b-form-group label="Consecutivo Certificado:" label-for="consecutivo" class="etiqueta">
+                    <b-form-input id="consecutivo" ref="consecutivo" v-model.trim="consecutivo" autocomplete="off" maxlength="10"></b-form-input>
+                    <b-form-text id="consecutivo">Ingrese el consecutivo del certificado. Para varios certificados el consecutivo aumentara automáticamente.</b-form-text>
+                  </b-form-group>
+                </b-col>
               </b-row>
             </div>
           </b-card-text>
           <template #footer>
-            <em>Imprima Paz y Salvos seleccionando la Sede, el Cursos y luego los Estudiantes.</em>
+            <em>Imprima Certificados seleccionando la Sede, el Cursos y luego los Estudiantes.</em>
           </template>
         </b-card>
       </b-col>
@@ -73,6 +79,7 @@
           { label: 'Estado', field: 'estado', tdClass: this.tdClassFuncE },
         ],
         estudSeleccionados: [],
+        consecutivo: null,
       }
     },
     methods: {
@@ -82,12 +89,13 @@
         this.estudSeleccionados = []
         this.$refs.estudia.selectedRows.forEach(element => {
           this.estudSeleccionados.push({ 'id': element.idMatricula, 'estudiante': element.estudiante, 'documento': element.documento, 'estado': element.estado, 'tipoDoc': element.nomenclatura })
-        });
+        })
         let uri = "?estudiantes=" + JSON.stringify(this.estudSeleccionados) + "&ie=" + this.$store.state.nombreInstitucion + "&vigencia=" + this.$store.state.aLectivo + "&escudo=" + this.$store.state.escudoInstitucion + "&sede=" + sede + "&curso=" + curso + "&idNivel=" + this.idNivel + "&idCurso=" + this.idCurso + "&idIe=" + this.$store.state.idInstitucion +
-        "&minBaj=" + this.$store.state.datosSecciones[0].minBaj + "&maxBaj=" + this.$store.state.datosSecciones[0].maxBaj + "&minBas=" + this.$store.state.datosSecciones[0].minBas + "&maxBas=" + this.$store.state.datosSecciones[0].maxBas + "&minAlt=" + this.$store.state.datosSecciones[0].minAlt + "&maxAlt=" + this.$store.state.datosSecciones[0].maxAlt + "&minSup=" + this.$store.state.datosSecciones[0].minSup + "&maxSup=" + this.$store.state.datosSecciones[0].maxSup
+        "&minBaj=" + this.$store.state.datosSecciones[0].minBaj + "&maxBaj=" + this.$store.state.datosSecciones[0].maxBaj + "&minBas=" + this.$store.state.datosSecciones[0].minBas + "&maxBas=" + this.$store.state.datosSecciones[0].maxBas + "&minAlt=" + this.$store.state.datosSecciones[0].minAlt + "&maxAlt=" + this.$store.state.datosSecciones[0].maxAlt + "&minSup=" + 
+        this.$store.state.datosSecciones[0].minSup + "&maxSup=" + this.$store.state.datosSecciones[0].maxSup + "&consecutivo=" + this.consecutivo
         let encoded = encodeURI(uri);
-        //window.open("http://localhost/siedutunja/php/documentos/" + this.$store.state.daneInstitucion + "cert.php" + encoded,"_blank")
-        window.open("https://siedutunja.gov.co/php/documentos/" + this.$store.state.daneInstitucion + "cert.php" + encoded,"_blank")
+        window.open("http://localhost/siedutunja/php/documentos/" + this.$store.state.daneInstitucion + "cert.php" + encoded,"_blank")
+        //window.open("https://siedutunja.gov.co/php/documentos/" + this.$store.state.daneInstitucion + "cert.php" + encoded,"_blank")
         //console.log(JSON.stringify(this.estudSeleccionados))
         return true
       },

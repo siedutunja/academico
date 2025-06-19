@@ -360,6 +360,19 @@
           } else{
             if (response.data.datos != 0) {
               this.listaEstudiantesCurso = response.data.datos
+              this.listaEstudiantesCurso.forEach(element => {
+                if (element.id_estado_actual==1) {
+                  element.estado = 'ACTIVO'
+                } else if (element.id_estado_actual==2) {
+                  element.estado = 'RETIRADO'
+                } else if (element.id_estado_actual==3) {
+                  element.estado = 'PROMOCIÓN ANTICIPADA'
+                }else if (element.id_estado_actual==4) {
+                  element.estado = 'UBICACIÓN/REUBICACIÓN'
+                } else {
+                  element.estado = ''
+                }
+              })
               let numPuesto = 1
               //console.log(JSON.stringify(this.listaEstudiantesCurso))
               //console.log(JSON.stringify(this.listaPuestos))
@@ -388,6 +401,9 @@
       tdClassFuncE(row) {
         if (row.id_estado_actual == 2) { 
           return 'text-danger' 
+        }
+        if (row.id_estado_actual == 3 || row.id_estado_actual == 4) { 
+          return 'text-warning' 
         }
       },
       async ocuparComboSedes() {
