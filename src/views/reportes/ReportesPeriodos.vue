@@ -109,6 +109,7 @@
     },
     methods: {
       async imprimirReportes() {
+        console.log(JSON.stringify(this.$refs.estudiantes.selectedRows))
         this.listaReportes = []
         this.$refs.estudiantes.selectedRows.forEach(element => {
           this.listaReportes.push({ 'id': element.id, 'estudiante': element.estudiante, 'pue': element.puesto, 'pro': element.promedio })

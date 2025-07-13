@@ -527,6 +527,7 @@
           } else{
             if (response.data.datos != 0) {
               this.listaAreasAsignaturasCurso = response.data.datos
+              //console.log(JSON.stringify(this.listaAreasAsignaturasCurso))
             }
           }
         })
@@ -762,7 +763,7 @@
                 })
                 bajosArea.bajE = totalBajos
                 this.listaMatriculados.push(JSON.parse(JSON.stringify(bajosArea)))
-                console.log(JSON.stringify(bajosArea))
+                //console.log(JSON.stringify(bajosArea))
                 setTimeout(()=>{
                   this.btnCargando = false
                 },100)

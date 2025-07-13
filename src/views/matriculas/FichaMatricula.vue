@@ -10,19 +10,19 @@
             <b-row>
               <b-col lg="6" md="12">
                 <b-form-group label="Seleccione la Sede*" label-for="sedes" class="etiqueta">
-                  <b-form-select  id="sedes" ref="sedes" v-model="$v.infoMatricula.idSede.$model" :options="comboSedes" @change="infoMatricula.idGrado=null,infoMatricula.id_curso=null,ocuparComboGradosSede()" :state="validateStateD('idSede')" aria-describedby="feedSede"></b-form-select>
+                  <b-form-select  id="sedes" ref="sedes" v-model="$v.infoMatricula.idSede.$model" :options="comboSedes" @change="infoMatricula.idGrado=null,infoMatricula.id_curso=null,ocuparComboGradosSede()" :state="validateStateD('idSede')" aria-describedby="feedSede" disabled></b-form-select>
                   <b-form-invalid-feedback id="feedSede">Campo requerido.</b-form-invalid-feedback>
                 </b-form-group>
               </b-col>
               <b-col lg="3" md="6">
                 <b-form-group label="Seleccione el Grado*" label-for="grados" class="etiqueta">
-                  <b-form-select  id="grados" ref="grados" v-model="$v.infoMatricula.id_grado.$model" :options="comboGrados" @change="infoMatricula.id_curso=null,ocuparComboCursosGradosSede()" :state="validateStateD('id_grado')" aria-describedby="feedGrado"></b-form-select>
+                  <b-form-select  id="grados" ref="grados" v-model="$v.infoMatricula.id_grado.$model" :options="comboGrados" @change="infoMatricula.id_curso=null,ocuparComboCursosGradosSede()" :state="validateStateD('id_grado')" aria-describedby="feedGrado" disabled></b-form-select>
                   <b-form-invalid-feedback id="feedGrado">Campo requerido.</b-form-invalid-feedback>
                 </b-form-group>
               </b-col>
               <b-col lg="3" md="6">
                 <b-form-group label="Seleccione el Curso*" label-for="cursos" class="etiqueta">
-                  <b-form-select  id="cursos" ref="cursos" v-model="$v.infoMatricula.id_curso.$model" :options="comboCursos" :state="validateStateD('id_curso')" aria-describedby="feedCurso"></b-form-select>
+                  <b-form-select  id="cursos" ref="cursos" v-model="$v.infoMatricula.id_curso.$model" :options="comboCursos" :state="validateStateD('id_curso')" aria-describedby="feedCurso" disabled></b-form-select>
                   <b-form-invalid-feedback id="feedCurso">Campo requerido.</b-form-invalid-feedback>
                 </b-form-group>
               </b-col>

@@ -26,6 +26,12 @@
                   <b-form-invalid-feedback id="feedOrden" >Campo requerido.</b-form-invalid-feedback>
                 </b-form-group>
               </b-col>
+              <b-col lg="3">
+                <b-form-group label="Tipo Área:" label-for="tareas" class="etiqueta">
+                  <b-form-select  id="tareas" ref="tareas" v-model="$v.infoArea.id_tipo.$model" :options="comboTiposArea" :state="validateStateA('id_tipo')" aria-describedby="feedTipo"></b-form-select>
+                  <b-form-invalid-feedback id="feedTipo">Campo requerido.</b-form-invalid-feedback>
+                </b-form-group>
+              </b-col>
             </b-row>
           </b-card-text>
           <template #footer>
@@ -64,15 +70,21 @@
           vigencia: null,
           nemo: null,
           orden: null,
+          id_tipo: null,
           editarArea: null
-        }
+        },
+        comboTiposArea: [
+          { value: '1', text: 'ACADÉMICA'},
+          { value: '2', text: 'TÉCNICA'}
+        ]
       }
     },
     validations: {
       infoArea: {
         area: { required, minLength: minLength(4) },
         nemo: { required },
-        orden: { required }
+        orden: { required },
+        id_tipo: { required },
       }
     },
     methods: {

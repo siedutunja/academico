@@ -66,7 +66,7 @@
                         </vue-good-table>
                       </b-col>
                       <b-col lg="12">
-                        <b-alert v-if="cambioActivo==true" variant="danger" show><b>Advertencia: </b>La planilla se ha modificado, se recomienda guradar la planilla.</b-alert>
+                        <b-alert v-if="cambioActivo==true" variant="danger" show><b>Advertencia: </b>La planilla se ha modificado, se recomienda guardar la planilla.</b-alert>
                       </b-col>
                       <b-col v-if="!botonGuardando">
                         <b-button class="small mx-1 mt-4" variant="success" @click="botonGuardando=true,guardarPlanilla()" :disabled="!cambioActivo">Guardar Planilla de Recuperaciones</b-button>

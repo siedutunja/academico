@@ -320,10 +320,17 @@ function configRoutes () {
             },
             // 2025-06-02
             {
-              path: 'resumenes',
+              path: 'consolidados',
               beforeEnter: autenticar,
-              name: 'Resúmenes',
-              component: () => import('@/views/informes/Resumenes')
+              name: 'Consolidados',
+              component: () => import('@/views/informes/Consolidados')
+            },
+            // 2025-06-02
+            {
+              path: 'estadisticas',
+              beforeEnter: autenticar,
+              name: 'Estadisticas',
+              component: () => import('@/views/informes/Estadisticas')
             },
           ]
         },
@@ -637,6 +644,13 @@ function configRoutes () {
               name: 'Consulta Planillas',
               component: () => import('@/views/calificaciones/ConsultaPlanillas')
             },
+            // 2025-07-11
+            {
+              path: 'habilitaciones',
+              beforeEnter: autenticar,
+              name: 'Habilitaciones',
+              component: () => import('@/views/calificaciones/Habilitaciones')
+            },
           ]
         },
         // 2024-04-06
@@ -661,6 +675,13 @@ function configRoutes () {
               beforeEnter: autenticar,
               name: 'Informes Parciales',
               component: () => import('@/views/reportes/ReportesParciales')
+            },
+            // 2025-07-08
+            {
+              path: 'boletines',
+              beforeEnter: autenticar,
+              name: 'Boletines',
+              component: () => import('@/views/reportes/Boletines')
             },
           ]
         },

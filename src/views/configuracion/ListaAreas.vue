@@ -71,6 +71,7 @@
           vigencia: null,
           nemo: null,
           orden: null,
+          id_tipo: null,
           editarArea: true
         },
         encabColumnas : [
@@ -78,6 +79,7 @@
           { label: 'Vigencia', field: 'vigencia', sortable: false },
           { label: 'Nemo', field: 'nemo', sortable: false },
           { label: 'Orden', field: 'orden', sortable: false },
+          { label: 'Tipo', field: 'id_tipo', formatFn: this.formatFn, sortable: false },
           { label: '', field: 'id', sortable: false }
         ]
       }
@@ -134,6 +136,7 @@
         this.datosArea.vigencia = this.$store.state.aLectivo
         this.datosArea.nemo = null
         this.datosArea.orden = null
+        this.datosArea.id_tipo = null
         this.datosArea.editarArea = false
         this.$refs['modalCrearEditarArea'].show()
       },
@@ -142,6 +145,7 @@
         this.datosArea.area = item.area
         this.datosArea.nemo = item.nemo
         this.datosArea.orden = item.orden
+        this.datosArea.id_tipo = item.id_tipo
         this.datosArea.editarArea = true
         this.$refs['modalCrearEditarArea'].show()
       },
@@ -170,6 +174,12 @@
         .catch(err => {
           this.mensajeEmergente('danger',CONFIG.TITULO_MSG,'Algo salio mal y no se pudo realizar: Lista areas. Intente más tarde.' + err)
         })
+      },
+      formatFn: function(value) {
+        if (value == 1) {
+          return 'ACADÉMICA'
+        }
+        return 'TÉCNICA'
       },
       mensajeEmergente(variante, titulo, contenido) {
         this.$bvToast.toast(contenido, { title: titulo, variant: variante, toaster: "b-toaster-top-center", solid: true, autoHideDelay: 4000, appendToast: false })

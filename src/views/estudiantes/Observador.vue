@@ -346,6 +346,7 @@
         <b-row>
           <b-col lg="12" v-if="!botonGuardando">
             <b-button v-if="!cerrado" class="small ml-3" variant="primary" @click="validarDatosFormulario()">Guardar Observación</b-button>
+            <b-button v-if="!cerrado" class="small ml-3" variant="danger" @click="validarDatosFormularioEliminar()">Eliminar Observación</b-button>
             <b-button class="small ml-3" variant="secondary" @click="cancelarFormulario">Cerrar</b-button>
           </b-col>
           <b-col v-else>
@@ -531,12 +532,7 @@
           editar: null
         },
         comboTiposObservacion: [],
-        comboSubTipos: [
-          { 'value': '1', 'text': 'TIPO I - FALTAS LEVES' },
-          { 'value': '2', 'text': 'TIPO II - FALTAS GRAVES' },
-          { 'value': '3', 'text': 'TIPO III - FALTAS GRAVÍSIMAS' },
-          { 'value': '9', 'text': 'NO APLICA' },
-        ],
+        comboSubTipos: [],
         comboEstadosSeguimiento: [],
         listaSituaciones: [],
         idSituacion: null,
@@ -626,6 +622,52 @@
         //printWindow.document.close();
         //printWindow.print();
         document.getElementById("observador").style.display = "none";
+      },
+      validarDatosFormularioEliminar() {
+        let titulo = 'Eliminar el Registro'
+        let pregunta = '¿Esta seguro de eliminar los datos del Registro?'
+        this.$bvModal.msgBoxConfirm(pregunta, {
+          headerBgVariant: 'danger',
+          headerTextVariant: 'light',
+          bodyBgVariant: 'light',
+          bodyBgClass: 'text-center',
+          title: titulo,
+          size: '',
+          buttonSize: 'sm',
+          okVariant: 'danger',
+          okTitle: 'Si, ' + titulo,
+          cancelVariant: '',
+          cancelTitle: 'Cancelar',
+          footerClass: 'p-2',
+          bodyClass: 'p-5',
+          hideHeaderClose: false,
+          centered: true
+        })
+        .then(value => {
+          if (value) {
+            this.botonGuardando = true
+            this.eliminarRegistro()
+          }
+        })
+        return true
+      },
+      async eliminarRegistro() {
+        await axios
+        .delete(CONFIG.ROOT_PATH + 'observador/registroanotacion', {params: {id: this.registroObservador.id}})
+        .then(response => {
+          if (response.data.error){
+            this.mensajeEmergente('danger',CONFIG.TITULO_MSG,response.data.mensaje + ' - Eliminar Registro')
+          } else{
+            this.mensajeEmergente('success',CONFIG.TITULO_MSG,'El registro del Observador del Estudiante se ha eliminado satisfactoriamente.')
+            
+          }
+        })
+        .catch(err => {
+          this.mensajeEmergente('danger',CONFIG.TITULO_MSG,'Algo salio mal y no se pudo realizar: Eliminar Registro. Intente más tarde. ' + err)
+        })
+        this.botonGuardando = false
+        this.cancelarFormulario()
+        this.consultaObservador()
       },
       validarDatosFormulario() {
         this.$v.registroObservador.$touch()
@@ -745,14 +787,10 @@
         }
         this.registroObservador.firma_compromiso = item.firma_compromiso
         this.registroObservador.actualizado = item.actualizado
-        if (this.registroObservador.id_responsable == this.$store.state.idDocente) {
-          if ((this.registroObservador.id_estado_seguimiento == 3 || this.registroObservador.id_estado_seguimiento == 4)) {
-            this.cerrado = true
-          } else {
-            this.cerrado = false
-          }
-        } else {
+        if (this.$store.state.idRol == 1 || this.$store.state.idRol == 12 || this.$store.state.idRol == 14) {
           this.cerrado = false
+        } else {
+          this.cerrado = true
         }
         this.cargarSituaciones()
         this.cargarAccionesP()
@@ -875,6 +913,24 @@
       this.consultaObservador()
       this.ocuparCombos()
       this.fechaImprimir = new Date().toLocaleString()
+      if (this.$store.state.idInstitucion == 'eb58bf60-fc83-11ec-a1d1-1dc2835404e5') {
+        this.comboSubTipos = [
+          { 'value': '1', 'text': 'TIPO I - FALTAS LEVES' },
+          { 'value': '2', 'text': 'TIPO II - FALTAS GRAVES' },
+          { 'value': '3', 'text': 'TIPO III - FALTAS GRAVÍSIMAS' },
+          { 'value': '9', 'text': 'NO APLICA' },
+        ]
+      } else {
+        this.comboSubTipos = [
+          { 'value': '1', 'text': 'TIPO I' },
+          { 'value': '2', 'text': 'TIPO II' },
+          { 'value': '3', 'text': 'TIPO III' },
+          { 'value': '4', 'text': 'FALTA LEVE' },
+          { 'value': '5', 'text': 'FALTA GRAVE' },
+          { 'value': '6', 'text': 'FALTA GRAVÍSIMA' },
+          { 'value': '9', 'text': 'NO APLICA' },
+        ]
+      }
       this.listaSituaciones = [
         {'id': 1, nivel: '1', 'situacion': 'Evadir clases o actividades programadas por el plantel'},
         {'id': 2, nivel: '1', 'situacion': 'Inasistencia al colegio sin justificación'},

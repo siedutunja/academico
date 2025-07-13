@@ -45,8 +45,8 @@
                   }">
                   <template slot="table-row" slot-scope="props">
                     <span v-if="props.column.field == 'estudiante'">
-                      <span v-if="props.row.estado=='RETIRADO'" style="font-weight: bold; color: white; cursor: pointer" @click="verCarpetaMatricula(props.row)">{{props.row.estudiante}}</span> 
-                      <span v-else style="font-weight: bold; color: blue; cursor: pointer" @click="verCarpetaMatricula(props.row)">{{props.row.estudiante}}</span> 
+                      <span v-if="props.row.id_estado_actual==1" style="font-weight: bold; color: blue; cursor: pointer" @click="verCarpetaMatricula(props.row)">{{props.row.estudiante}}</span> 
+                      <span v-else style="font-weight: bold; cursor: pointer" @click="verCarpetaMatricula(props.row)">{{props.row.estudiante}}</span> 
                     </span>
                   </template>
                   <div slot="emptystate">

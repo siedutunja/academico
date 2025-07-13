@@ -94,8 +94,8 @@
         "&minBaj=" + this.$store.state.datosSecciones[0].minBaj + "&maxBaj=" + this.$store.state.datosSecciones[0].maxBaj + "&minBas=" + this.$store.state.datosSecciones[0].minBas + "&maxBas=" + this.$store.state.datosSecciones[0].maxBas + "&minAlt=" + this.$store.state.datosSecciones[0].minAlt + "&maxAlt=" + this.$store.state.datosSecciones[0].maxAlt + "&minSup=" + 
         this.$store.state.datosSecciones[0].minSup + "&maxSup=" + this.$store.state.datosSecciones[0].maxSup + "&consecutivo=" + this.consecutivo
         let encoded = encodeURI(uri);
-        window.open("http://localhost/siedutunja/php/documentos/" + this.$store.state.daneInstitucion + "cert.php" + encoded,"_blank")
-        //window.open("https://siedutunja.gov.co/php/documentos/" + this.$store.state.daneInstitucion + "cert.php" + encoded,"_blank")
+        //window.open("http://localhost/siedutunja/php/documentos/" + this.$store.state.daneInstitucion + "cert.php" + encoded,"_blank")
+        window.open("https://siedutunja.gov.co/php/documentos/" + this.$store.state.daneInstitucion + "cert.php" + encoded,"_blank")
         //console.log(JSON.stringify(this.estudSeleccionados))
         return true
       },
