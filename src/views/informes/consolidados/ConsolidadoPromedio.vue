@@ -241,8 +241,12 @@
         return { bajo, basico, alto, superior, ausJ, ausS }
       },
       esAreaValida(area) {
+        //const asigns = this.listaAreasAsignaturas.filter(a => a.area === area)
+        //return asigns.some(a => a.orden !== 99)
         const asigns = this.listaAreasAsignaturas.filter(a => a.area === area)
-        return asigns.some(a => a.orden !== 99)
+        if (asigns.some(a => a.orden !== 99 && a.orden !== 98)) return true
+        else if (asigns.some(a => a.orden === 99) && this.datosSeccion.promCompor == 1) return true
+        else return false
       },
       obtenerPromedioArea(est, area) {
         const areaData = est.areas && est.areas[area]
@@ -261,7 +265,7 @@
         const pesos = asig.pesos
         const periodos = asig.periodos
         const orden = asig.orden
-        if (orden === 99) return '-'
+        if (orden === 99 && this.datosSeccion.promCompor == 0) return '-'
         let total = 0
         for (let p = 1; p <= 4; p++) {
           const nota = periodos[p] ?? 0
@@ -276,7 +280,7 @@
         if (!asigns.length) return '0.00'
         let total = 0
         asigns.forEach(asig => {
-          if (asig.orden === 99) return '-'
+          if (asig.orden === 99 && this.datosSeccion.promCompor == 0) return '-'
           total += parseFloat((this.calcularPromedioAsignatura(asig) * asig.porcentaje) / 100)
         })
         return total > 0 ?  this.redondear(total).toFixed(1) : ''

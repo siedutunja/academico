@@ -235,12 +235,22 @@
         let total = 0
         let cantidad = 0
         areas.forEach(area => {
-          const asignsValidas = this.listaAreasAsignaturas.filter(a => a.area === area && a.orden !== 99 && a.orden !== 98)
-          if (!asignsValidas.length) return
-          const promedio = parseFloat(this.calcularPromedioArea(estAreas, area))
-          if (!isNaN(promedio)) {
-            total += promedio
-            cantidad++
+          if (this.datosSeccion.promCompor == 1) { // Promedia comportamiento
+            const asignsValidas = this.listaAreasAsignaturas.filter(a => a.area === area && a.orden !== 98)
+            if (!asignsValidas.length) return
+            const promedio = parseFloat(this.calcularPromedioArea(estAreas, area))
+            if (!isNaN(promedio)) {
+              total += promedio
+              cantidad++
+            }
+          } else {
+            const asignsValidas = this.listaAreasAsignaturas.filter(a => a.area === area && a.orden !== 99 && a.orden !== 98)
+            if (!asignsValidas.length) return
+            const promedio = parseFloat(this.calcularPromedioArea(estAreas, area))
+            if (!isNaN(promedio)) {
+              total += promedio
+              cantidad++
+            }
           }
         })
         return cantidad > 0 ? (total / cantidad).toFixed(3) : ''
@@ -305,9 +315,12 @@
         return 'desempeno-extra'
       },
       calcularPromedioArea(estAreas, areaNombre) {
-        const asigns = this.listaAreasAsignaturas.filter(a => a.area === areaNombre && a.orden !== 99)
+        let asigns = ''
+        if (this.datosSeccion.promCompor == 1)  // Promedia comportamiento
+          asigns = this.listaAreasAsignaturas.filter(a => a.area === areaNombre && a.orden !== 98)
+        else 
+          asigns = this.listaAreasAsignaturas.filter(a => a.area === areaNombre && a.orden !== 99 && a.orden !== 98)
         if (!asigns.length) return ''
-
         const tipoArea = asigns[0].idTipoArea
         let total = 0
         let pesoTotal = 0

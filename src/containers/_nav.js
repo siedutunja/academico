@@ -127,11 +127,11 @@ jwt.verify(token, CONFIG.SECRET_KEY, (err, data) => {
       }
     )
     indice++
-    menu[0]._children[indice].items.push({ name: 'Boletines por Periodo', to: '/reportes/reportesperiodos'})
+    //menu[0]._children[indice].items.push({ name: 'Boletines por Periodo', to: '/reportes/reportesperiodos'})
     menu[0]._children[indice].items.push({ name: 'Boletines', to: '/reportes/boletines'})
-    menu[0]._children[indice].items.push({ name: 'Informes Parciales', to: '/reportes/reportesparciales'})
     menu[0]._children[indice].items.push({ name: 'Consolidados', to: '/informes/consolidados'})
     menu[0]._children[indice].items.push({ name: 'Estadísticas', to: '/informes/estadisticas'})
+    menu[0]._children[indice].items.push({ name: 'Informes Parciales', to: '/reportes/reportesparciales'})
     //menu[0]._children[indice].items.push({ name: 'Consolidados por Periodo', to: '/informes/consolidadoscurso'})
     //menu[0]._children[indice].items.push({ name: 'Consolidados Notas', to: '/informes/consolidadosnotas'})
     //menu[0]._children[indice].items.push({ name: 'Consolidados Ausencias', to: '/informes/consolidadosausencias'})

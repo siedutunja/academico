@@ -16,6 +16,7 @@
                         <h6>Por Periodo</h6>
                         <b-form-group label="" v-slot="{ ariaDescribedby }">
                           <b-form-radio v-model="idBoletin" :aria-describedby="ariaDescribedby" name="some-radios" value="1">Boletines por periodo</b-form-radio>
+                          <b-form-radio v-model="idBoletin" :aria-describedby="ariaDescribedby" name="some-radios" value="2">Boletines estudiantes retirados</b-form-radio>
                         </b-form-group>
                       </b-col>
                       <!--
@@ -58,6 +59,35 @@
                     </b-row>
                   </b-card-text>
                 </b-card>
+                <div v-if="idNivel == 1">
+                  <BoletinPree
+                    v-if="mostrarBoletines"
+                    :estudiantesSeleccionados="estudiantesSeleccionados"
+                    :listaAreasAsignaturas="listaAreasAsignaturas"
+                    :listaDescriptores="listaDescriptores"
+                    :notas="notas"
+                    :datosEstudiantes="datosEstudiantes"
+                    :anio="Number($store.state.aLectivo)"
+                    :periodoActual="idPeriodo"
+                    :periodosVisibles="periodosVisibles"
+                    :nombreSede="nombreSede"
+                    :nombreCurso="nombreCurso"
+                    :nombrePeriodo="nombrePeriodo"
+                    :nombreJornada="nombreJornada"
+                    :nombreDirector="nombreDirector"
+                    :idNivel="idNivel"
+                    :umbralesA="umbralesA"
+                    :umbralesT="umbralesT"
+                    :pesosPeriodos="pesosPeriodos"
+                    :tipoValComp="tipoValComp"
+                    :directorCurso="nombreDirector"
+                    :coordinador="coordinador"
+                    :promCompor="promCompor"
+                    :escalaPreescolar="escalaPreescolar"
+                    :nuevaEscalaPreescolar="nuevaEscalaPreescolar"
+                  />
+                </div>
+                <div v-else>
                   <BoletinPeriodo
                     v-if="mostrarBoletines"
                     :estudiantesSeleccionados="estudiantesSeleccionados"
@@ -80,7 +110,93 @@
                     :tipoValComp="tipoValComp"
                     :directorCurso="nombreDirector"
                     :coordinador="coordinador"
+                    :promCompor="promCompor"
+                    :letrasCompor="letrasCompor"
                   />
+                </div>
+              </b-col>
+            </b-row>
+            <b-row v-if="idBoletin==2"> 
+              <b-col lg="12">
+                <b-card>
+                  <template #header>
+                    <h5 class="mb-0"><b-icon icon="card-checklist" aria-hidden="true"></b-icon> BOLETINES POR PERIODO</h5>
+                  </template>
+                  <b-card-text>
+                    <b-row>
+                      <b-col lg="2">
+                        <b-form-group label="Periodo:" label-for="periodo" class="etiqueta">
+                          <b-form-select id="periodo" ref="periodo" v-model="idPeriodo" :options="comboPeriodos" @change="idSede=null,idCurso=null,mostrarBoletines=null"></b-form-select>
+                        </b-form-group>
+                      </b-col>
+                      <b-col lg="6">
+                        <b-form-group label="Seleccione la Sede:" label-for="sedes" class="etiqueta">
+                          <b-form-select  id="sedes" ref="sedes" v-model="idSede" :options="comboSedes" @change="idCurso=null,ocuparComboCursosSede(),mostrarBoletines=null" :disabled="idPeriodo!=null ? false : true"></b-form-select>
+                        </b-form-group>
+                      </b-col>
+                      <b-col lg="4">
+                        <b-form-group label="Seleccione el Curso:" label-for="cursos" class="etiqueta">
+                          <b-form-select id="cursos" ref="cursos" v-model="idCurso" :options="comboCursosSede" @change="consultarEstudiantes(),mostrarBoletines=null" :disabled="idSede!=null ? false : true"></b-form-select>
+                        </b-form-group>
+                      </b-col>
+                    </b-row>
+                  </b-card-text>
+                </b-card>
+                <div v-if="idNivel == 1">
+                  <BoletinPreeRetirado
+                    v-if="mostrarBoletines"
+                    :estudiantesSeleccionados="estudiantesSeleccionados"
+                    :listaAreasAsignaturas="listaAreasAsignaturas"
+                    :listaDescriptores="listaDescriptores"
+                    :notas="notas"
+                    :datosEstudiantes="datosEstudiantes"
+                    :anio="Number($store.state.aLectivo)"
+                    :periodoActual="idPeriodo"
+                    :periodosVisibles="periodosVisibles"
+                    :nombreSede="nombreSede"
+                    :nombreCurso="nombreCurso"
+                    :nombrePeriodo="nombrePeriodo"
+                    :nombreJornada="nombreJornada"
+                    :nombreDirector="nombreDirector"
+                    :idNivel="idNivel"
+                    :umbralesA="umbralesA"
+                    :umbralesT="umbralesT"
+                    :pesosPeriodos="pesosPeriodos"
+                    :tipoValComp="tipoValComp"
+                    :directorCurso="nombreDirector"
+                    :coordinador="coordinador"
+                    :promCompor="promCompor"
+                    :escalaPreescolar="escalaPreescolar"
+                    :nuevaEscalaPreescolar="nuevaEscalaPreescolar"
+                  />
+                </div>
+                <div v-else>
+                  <BoletinPeriodoRetirado
+                    v-if="mostrarBoletines"
+                    :estudiantesSeleccionados="estudiantesSeleccionados"
+                    :listaAreasAsignaturas="listaAreasAsignaturas"
+                    :listaDescriptores="listaDescriptores"
+                    :notas="notas"
+                    :datosEstudiantes="datosEstudiantes"
+                    :anio="Number($store.state.aLectivo)"
+                    :periodoActual="idPeriodo"
+                    :periodosVisibles="periodosVisibles"
+                    :nombreSede="nombreSede"
+                    :nombreCurso="nombreCurso"
+                    :nombrePeriodo="nombrePeriodo"
+                    :nombreJornada="nombreJornada"
+                    :nombreDirector="nombreDirector"
+                    :idNivel="idNivel"
+                    :umbralesA="umbralesA"
+                    :umbralesT="umbralesT"
+                    :pesosPeriodos="pesosPeriodos"
+                    :tipoValComp="tipoValComp"
+                    :directorCurso="nombreDirector"
+                    :coordinador="coordinador"
+                    :promCompor="promCompor"
+                    :letrasCompor="letrasCompor"
+                  />
+                </div>
               </b-col>
             </b-row>
             <b-row class="mt-2" v-if="idCurso!=null">
@@ -96,7 +212,7 @@
                   <vue-good-table ref="estudiantes" :columns="encabColumnas" :rows="datosEstudiantes" @on-row-click="mostrarBoletines=false" styleClass="vgt-table condensed bordered striped" :line-numbers="true"
                   :select-options="{enabled: true,selectionText: 'estudiantes seleccionados',clearSelectionText: 'Limpiar',}">
                     <template #selected-row-actions>
-                      <button class="small btn btn-primary" @click="imprimirBoletines()">Procesar Boletines para Impresión</button>
+                      <button class="small btn btn-primary" @click="procesarBoletines()">Procesar Boletines para Impresión</button>
                     </template>
                     <div slot="emptystate">
                       <h5 class="text-danger ml-5">No existen estudiantes matriculados</h5>
@@ -117,13 +233,19 @@
   import * as CONFIG from '@/assets/config.js'
   import 'vue-good-table/dist/vue-good-table.css'
   import { VueGoodTable } from 'vue-good-table'
-  import BoletinPeriodo from '@/views/reportes/BoletinPeriodo'
+  import BoletinPeriodo from '@/views/reportes/boletines/BoletinPeriodo'
+  import BoletinPree from '@/views/reportes/boletines/BoletinPree'
+  import BoletinPeriodoRetirado from '@/views/reportes/boletines/BoletinPeriodoRetirado'
+  import BoletinPreeRetirado from '@/views/reportes/boletines/BoletinPreeRetirado'
 
   export default {
     name: 'boletines',
     components: {
       VueGoodTable,
       BoletinPeriodo,
+      BoletinPree,
+      BoletinPeriodoRetirado,
+      BoletinPreeRetirado,
     },
     data () {
       return {
@@ -158,21 +280,58 @@
         umbralesT: [],
         pesosPeriodos: [],
         tipoValComp: null,
+        promCompor: null,
+        firma2: null,
+        escalaPreescolar: {},
+        nuevaEscalaPreescolar: [],
+        letrasCompor: [],
+
+        listaReportes: [],
       }
     },
     methods: {
-      imprimirBoletines() {
-        this.mostrarBoletines = true
-        this.estudiantesSeleccionados = this.$refs.estudiantes.selectedRows
-        if (this.idPeriodo == 1) this.periodosVisibles = [1]
-        if (this.idPeriodo == 2) this.periodosVisibles = [1,2]
-        if (this.idPeriodo == 3) this.periodosVisibles = [1,2,3]
-        if (this.idPeriodo == 4) this.periodosVisibles = [1,2,3,4]
-        this.umbralesA = [this.datosSeccion.minBas,this.datosSeccion.minAlt,this.datosSeccion.minSup,this.datosSeccion.maxSup]
-        this.umbralesT = [this.datosSeccion.minBasT,this.datosSeccion.minAltT,this.datosSeccion.minSupT,this.datosSeccion.maxSupT]
-        this.pesosPeriodos = [this.datosSeccion.pesoP1,this.datosSeccion.pesoP2,this.datosSeccion.pesoP3,this.datosSeccion.pesoP4]
-        this.tipoValComp = this.datosSeccion.tipoValComp
-        //console.log(JSON.stringify(this.pesosPeriodos))
+      procesarBoletines() {
+        if (this.idNivel == 1 && (this.$store.state.idInstitucion == '17ee4f30-fc80-11ec-a1d1-1dc2835404e5' || this.$store.state.idInstitucion == '097b7b10-fcaa-11ec-8267-536b07c743c4')) {
+          this.listaReportes = []
+          this.$refs.estudiantes.selectedRows.forEach(element => {
+            this.listaReportes.push({ 'id': element.idMatricula, 'estudiante': element.nombre, 'pue': element.puesto, 'pro': element.promedio })
+          })
+          //console.log(JSON.stringify(this.listaReportes))
+          let sede = document.getElementById('sedes')[document.getElementById('sedes').selectedIndex].text
+          let curso = document.getElementById('cursos')[document.getElementById('cursos').selectedIndex].text
+          let periodo = document.getElementById('periodo')[document.getElementById('periodo').selectedIndex].text
+          let uri = "?datos=" + JSON.stringify(this.listaReportes) + "&ie=" + this.$store.state.nombreInstitucion + "&vigencia=" + this.$store.state.aLectivo + "&escudo=" + this.$store.state.escudoInstitucion + "&sede=" + sede + "&idCurso=" + this.idCurso + "&curso=" + curso + "&jornada=" + this.nombreJornada + "&director=" + this.nombreDirector + "&periodo=" + periodo + "&idPeriodo=" + this.idPeriodo + "&idIe=" + this.$store.state.idInstitucion + "&idNivel=" + this.idNivel + "&puesto=" + this.puesto +
+          "&minBaj=" + this.$store.state.datosSecciones[0].minBaj + "&maxBaj=" + this.$store.state.datosSecciones[0].maxBaj + "&minBas=" + this.$store.state.datosSecciones[0].minBas + "&maxBas=" + this.$store.state.datosSecciones[0].maxBas + "&minAlt=" + this.$store.state.datosSecciones[0].minAlt + "&maxAlt=" + this.$store.state.datosSecciones[0].maxAlt + "&minSup=" + this.$store.state.datosSecciones[0].minSup + "&maxSup=" + this.$store.state.datosSecciones[0].maxSup
+          let encoded = encodeURI(uri);
+          //window.open("http://localhost/siedutunja/php/boletines/" + this.$store.state.daneInstitucion + "as.php" + encoded,"_blank")
+          window.open("https://siedutunja.gov.co/php/boletines/" + this.$store.state.daneInstitucion + "as.php" + encoded,"_blank")
+        } else {
+          this.btnCargando = true
+          this.mostrarBoletines = true
+          this.estudiantesSeleccionados = this.$refs.estudiantes.selectedRows
+          if (this.idPeriodo == 1) this.periodosVisibles = [1]
+          if (this.idPeriodo == 2) this.periodosVisibles = [1,2]
+          if (this.idPeriodo == 3) this.periodosVisibles = [1,2,3]
+          if (this.idPeriodo == 4) this.periodosVisibles = [1,2,3,4]
+          this.umbralesA = [this.datosSeccion.minBas,this.datosSeccion.minAlt,this.datosSeccion.minSup,this.datosSeccion.maxSup]
+          this.umbralesT = [this.datosSeccion.minBasT,this.datosSeccion.minAltT,this.datosSeccion.minSupT,this.datosSeccion.maxSupT]
+          this.pesosPeriodos = [this.datosSeccion.pesoP1,this.datosSeccion.pesoP2,this.datosSeccion.pesoP3,this.datosSeccion.pesoP4]
+          this.tipoValComp = this.datosSeccion.tipoValComp
+          this.promCompor = this.datosSeccion.promCompor
+          this.escalaPreescolar = {I: this.datosSeccion.minBaj, B: this.datosSeccion.minBas, A: this.datosSeccion.minAlt, S: this.datosSeccion.maxSup}
+          this.nuevaEscalaPreescolar = [
+            {letra: this.datosSeccion.preeL1, umbral: this.datosSeccion.minBaj, desempeno: this.datosSeccion.preeC1},
+            {letra: this.datosSeccion.preeL2, umbral: this.datosSeccion.minBas, desempeno: this.datosSeccion.preeC2},
+            {letra: this.datosSeccion.preeL3, umbral: this.datosSeccion.minAlt, desempeno: this.datosSeccion.preeC3},
+            {letra: this.datosSeccion.preeL4, umbral: this.datosSeccion.maxSup, desempeno: this.datosSeccion.preeC4},
+          ]
+          this.letrasCompor = [this.datosSeccion.compL1,this.datosSeccion.compL2,this.datosSeccion.compL3,this.datosSeccion.compL4]
+          //console.log(JSON.stringify(this.nuevaEscalaPreescolar))
+          // this.firma2 =  Asignar la firma que va en el boletin
+          setTimeout(()=>{
+            this.btnCargando = false
+          },500)
+        }
       },
       async consultarNotas() {
         this.notas = []
@@ -248,8 +407,11 @@
           this.nombreCurso = document.getElementById('cursos')[document.getElementById('cursos').selectedIndex].text
           this.nombrePeriodo = document.getElementById('periodo')[document.getElementById('periodo').selectedIndex].text
           this.datosEstudiantes = []
+          let apiRuta = 0
+          if (this.idBoletin == 1) apiRuta = 'boletines/listacurso/boletines'
+          else if (this.idBoletin == 2) apiRuta = 'boletines/listacurso/boletines/retirados'
           await axios
-          .get(CONFIG.ROOT_PATH + 'boletines/listacurso/boletines', { params: { idCurso: this.idCurso }})
+          .get(CONFIG.ROOT_PATH + apiRuta, { params: { idCurso: this.idCurso }})
           .then(response => {
             if (response.data.error){
               this.mensajeEmergente('danger',CONFIG.TITULO_MSG,response.data.mensaje + ' - Consulta Lista Curso')
@@ -257,9 +419,14 @@
             } else{
               if (response.data.datos != 0) {
                 this.datosEstudiantes = response.data.datos
-                this.consultarNotas()
-                this.consultarAreasAsignaturas()
-                this.consultarDescriptores()
+                //console.log(JSON.stringify(this.datosEstudiantes))
+                if (this.idNivel == 1 && this.$store.state.idInstitucion == '17ee4f30-fc80-11ec-a1d1-1dc2835404e5') {
+
+                } else {
+                  this.consultarNotas()
+                  this.consultarAreasAsignaturas()
+                  this.consultarDescriptores()
+                }
               }
             }
           })
