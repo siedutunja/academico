@@ -47,9 +47,10 @@ jwt.verify(token, CONFIG.SECRET_KEY, (err, data) => {
       menu[0]._children[indice].items.push({ name: 'Matricular Preinscrito', to: '/matriculas/preinscritos'})
       menu[0]._children[indice].items.push({ name: 'Renovar Matricula', to: '/matriculas/buscarrenovacion'})
       menu[0]._children[indice].items.push({ name: 'Promoción Anticipada', to: '/matriculas/promocionanticipada'})
+      menu[0]._children[indice].items.push({ name: 'Promoción', to: '/matriculas/promocion'})
       menu[0]._children[indice].items.push({ name: 'Ubicación o Reubicación', to: '/matriculas/reubicacion'})
       menu[0]._children[indice].items.push({ name: 'Matriculados Sin Curso', to: '/matriculas/matriculadossincurso'})
-      menu[0]._children[indice].items.push({ name: 'Renovación Masiva Antiguos', to: '/matriculas/renovacionmasiva2024'})
+      menu[0]._children[indice].items.push({ name: 'Renovación Masiva', to: '/matriculas/renovacionmasiva'})
     }
     if (tokenDecodificado.id_rol == 1 || tokenDecodificado.id_rol == 12 || tokenPermisos.perSecretaria == 1) {
       menu[0]._children.push(
@@ -132,11 +133,6 @@ jwt.verify(token, CONFIG.SECRET_KEY, (err, data) => {
     menu[0]._children[indice].items.push({ name: 'Consolidados', to: '/informes/consolidados'})
     menu[0]._children[indice].items.push({ name: 'Estadísticas', to: '/informes/estadisticas'})
     menu[0]._children[indice].items.push({ name: 'Informes Parciales', to: '/reportes/reportesparciales'})
-    //menu[0]._children[indice].items.push({ name: 'Consolidados por Periodo', to: '/informes/consolidadoscurso'})
-    //menu[0]._children[indice].items.push({ name: 'Consolidados Notas', to: '/informes/consolidadosnotas'})
-    //menu[0]._children[indice].items.push({ name: 'Consolidados Ausencias', to: '/informes/consolidadosausencias'})
-    menu[0]._children[indice].items.push({ name: 'Puestos Estudiantes', to: '/informes/puestoscurso'})
-    //menu[0]._children[indice].items.push({ name: 'Rendimiento Academico', to: '/informes/rendimientoacademico'})
     menu[0]._children[indice].items.push({ name: 'Informes por Agrupación', to: '/informes/informesagrupacion'})
     menu[0]._children[indice].items.push({ name: 'Consolidado Matricula', to: '/informes/consolidadomatricula'})
     menu[0]._children[indice].items.push({ name: 'Consolidado Matricula Cursos', to: '/informes/consolidadomatriculacursos'})

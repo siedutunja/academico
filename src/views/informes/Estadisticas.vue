@@ -13,10 +13,11 @@
                   <b-card-text>
                     <b-row>
                       <b-col lg="4">
-                        <h6>Evaluaciones</h6>
+                        <h6>Desempeño</h6>
                         <b-form-group label="" v-slot="{ ariaDescribedby }">
-                          <b-form-radio v-model="idConsolidado" :aria-describedby="ariaDescribedby" name="some-radios" value="1">Rendimiento académico por Asignatura</b-form-radio>
-                          <b-form-radio v-model="idConsolidado" :aria-describedby="ariaDescribedby" name="some-radios" value="2">Rendimiento académico por Área</b-form-radio>
+                          <b-form-radio v-model="idEstadistica" :aria-describedby="ariaDescribedby" name="some-radios" value="1">Desempeño por Curso</b-form-radio>
+                          <b-form-radio v-model="idEstadistica" :aria-describedby="ariaDescribedby" name="some-radios" value="2">Desempeño por Grado</b-form-radio>
+                          <b-form-radio v-model="idEstadistica" :aria-describedby="ariaDescribedby" name="some-radios" value="3">Desempeño por Área</b-form-radio>
                         </b-form-group>
                       </b-col>
                     </b-row>
@@ -26,8 +27,11 @@
             </b-row>
             <b-row>
               <b-col lg="12">
-                <div v-if="idConsolidado==1">
-                  <EstadisticaAsignaturas/>
+                <div v-if="idEstadistica==1">
+                  <DesempenoCurso/>
+                </div>
+                <div v-if="idEstadistica==2">
+                  <DesempenoGrado/>
                 </div>
               </b-col>
             </b-row>
@@ -41,16 +45,18 @@
 <script>
   import axios from "axios"
   import * as CONFIG from '@/assets/config.js'
-  import EstadisticaAsignaturas from '@/views/informes/consolidados/EstadisticaAsignaturas'
+  import DesempenoCurso from '@/views/informes/estadisticas/DesempenoCurso'
+  import DesempenoGrado from '@/views/informes/estadisticas/DesempenoGrado'
 
   export default {
     name: 'estadisticas',
     components: {
-      EstadisticaAsignaturas,
+      DesempenoCurso,
+      DesempenoGrado,
     },
     data () {
       return {
-        idConsolidado: null,
+        idEstadistica: null,
       }
     },
     methods: {

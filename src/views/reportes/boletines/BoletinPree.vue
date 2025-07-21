@@ -26,11 +26,10 @@ export default {
     umbralesT: Array,
     pesosPeriodos: Array,
     tipoValComp: Number,
-    directorCurso: String,
-    coordinador: String,
     promCompor: Number,
     escalaPreescolar: Object,
     nuevaEscalaPreescolar: Array,
+    firmasBoletin: String,
   },
   data () {
     return {
@@ -58,7 +57,7 @@ export default {
     },
     renderBoletin(estudiante, data) {
       if (!data) return `<p>No hay datos para ${estudiante.nombre}</p>`
-      return `
+      const cuerpo = `
         <div class="boletin">
           <div class="text-center mt-2">
             <p style="text-align: center; font-size: 14px;">SECRETARÍA DE EDUCACIÓN TERRITORIAL DE TUNJA<br><b>${this.$store.state.nombreInstitucion}</b><br>TUNJA - BOYACÁ<br>BOLETIN DE EVALUACIONES POR PERIODO</p>
@@ -89,19 +88,8 @@ export default {
               </tr>
             </thead>
           </table>
-          <table class="firmas" style="width: 100%;">
-            <tr>
-              <td style="width: 50%;">
-                <p>________________________________________<br>${this.directorCurso}<br>Firma Director(a) de Curso</p>
-              </td>
-              <!--
-              <td style="width: 50%;">
-                <p>________________________________________<br>${this.coordinador}<br>Firma Coordinador(a)</p>
-              </td>
-              -->
-            </tr>
-          </table>
-      `
+        `
+      return cuerpo + this.firmasBoletin
     },
     generarHTMLBoletinPreescolar(est) {
       const periodos = this.periodosVisibles
@@ -201,7 +189,7 @@ export default {
           </thead>
         </table>
       `
-      return html
+      return html + this.firmasBoletin
     },
     valorNumericoDesdeLetra(letra) {
       const escala = this.nuevaEscalaPreescolar.find(e => e.letra === letra)

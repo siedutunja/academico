@@ -29,16 +29,12 @@ export default {
     promCompor: Number,
     letrasCompor: Array,
     firmasBoletin: String,
-    descC1: String,
-    descC2: String,
-    descC3: String,
   },
   data () {
     return {
       escudo: null,
       asignatur: null,
       orden: 0,
-      colDesem: 0
     }
   },
   methods: {
@@ -86,7 +82,7 @@ export default {
     },
     renderBoletin(estudiante, data) {
       if (!data) return `<p>No hay datos para ${estudiante.nombre}</p>`
-      let cuerpo = `
+      const cuerpo = `
         <div class="boletin">
           <div class="text-center mt-2">
             <p style="text-align: center; font-size: 14px;">SECRETARÍA DE EDUCACIÓN TERRITORIAL DE TUNJA<br><b>${this.$store.state.nombreInstitucion}</b><br>TUNJA - BOYACÁ<br>BOLETIN DE EVALUACIONES POR PERIODO</p>
@@ -115,33 +111,17 @@ export default {
                 <th rowspan="2">Área / Asignatura</th>
                 <th rowspan="2">IH</th>
                 <th colspan="${this.periodosVisibles.length + 1}">Historial</th>
-                <th colspan="${this.colDesem}">Desempeño en el Periodo</th>
+                <th colspan="6">Desempeño en el Periodo</th>
               </tr>
               <tr>
                 ${this.periodosVisibles.map(p => `<th>P${p}</th>`).join('')}
                 <th>PR</th>
-        `
-        if (this.colDesem == 7) {
-          cuerpo += `
-                  <th>${this.descC1}</th>
-                  <th>${this.descC2}</th>
-                  <th>${this.descC3}</th>
-                  <th>Def</th>
-                  <th>Desemp</th>
-                  <th>AJ</th>
-                  <th>AS</th>
-          `
-        } else {
-          cuerpo += `
-                  <th>EvP</th>
-                  <th>Rec</th>
-                  <th>Def</th>
-                  <th>Desemp</th>
-                  <th>AJ</th>
-                  <th>AS</th>
-          `
-        }
-        cuerpo += `
+                <th>EvP</th>
+                <th>Rec</th>
+                <th>Def</th>
+                <th>Desemp</th>
+                <th>AJ</th>
+                <th>AS</th>
               </tr>
             </thead>
             <tbody>
@@ -180,9 +160,6 @@ export default {
           const nombreAsignatura = asig.nombreAsignatura
           const ih = this.orden !== 98 ? asig.ih : ''
           const notas = this.periodosVisibles.map(p => `<td>${this.orden !== 98 ? this.notaPeriodo(data, area, a, p) : ''}</td>`).join('')
-          const c1 = this.orden == 98 ? '' : this.criterio1Periodo(data, area, a, this.periodoActual) > 0 ? this.criterio1Periodo(data, area, a, this.periodoActual) : ''
-          const c2 = this.orden == 98 ? '' : this.criterio2Periodo(data, area, a, this.periodoActual) > 0 ? this.criterio2Periodo(data, area, a, this.periodoActual) : ''
-          const c3 = this.orden == 98 ? '' : this.criterio3Periodo(data, area, a, this.periodoActual) > 0 ? this.criterio3Periodo(data, area, a, this.periodoActual) : ''
           const prom = this.orden !== 98 ? this.promedioAsignatura(data, area, a) : ''
           const def = this.orden !== 98 ? this.definitivaPeriodo(data, area, a, this.periodoActual) : ''
           const rec = this.orden !== 98 ? this.recuperacion(data, area, a, this.periodoActual) : ''
@@ -193,40 +170,22 @@ export default {
           const ausJAsig = this.orden == 98 ? '' : ausJ > 0 ? ausJ : ''
           const ausSAsig = this.orden == 98 ? '' : ausS > 0 ? ausS : ''
           const docente = asig.docente != null ? asig.docente : ''
-          if (this.colDesem == 7) {
-            return `
-              <tr>
-                <td style="text-align: left"><strong>${nombreAsignatura}</strong> <br> <i style="font-size: 10px;">${docente}</i></td>
-                <td>${ih}</td>
-                ${notas}
-                <td>${prom}</td>
-                <td>${c1}</td>
-                <td>${c2}</td>
-                <td>${c3}</td>
-                <td>${final > 0 ? final : final}</td>
-                <td>${des}</td>
-                <td>${ausJAsig}</td>
-                <td>${ausSAsig}</td>
-              </tr>
-              <tr><td colspan="11" class="descriptor" style="text-align: left">${this.descriptorAsignatura(data, area, a, this.periodoActual)}</td></tr>
-            `
-          } else {
-            return `
-              <tr>
-                <td style="text-align: left"><strong>${nombreAsignatura}</strong> <br> <i style="font-size: 10px;">${docente}</i></td>
-                <td>${ih}</td>
-                ${notas}
-                <td>${prom}</td>
-                <td>${def}</td>
-                <td>${rec}</td>
-                <td>${final > 0 ? final : final}</td>
-                <td>${des}</td>
-                <td>${ausJAsig}</td>
-                <td>${ausSAsig}</td>
-              </tr>
-              <tr><td colspan="${this.colDesem + 6}" class="descriptor" style="text-align: left">${this.descriptorAsignatura(data, area, a, this.periodoActual)}</td></tr>
-            `
-          }
+
+          return `
+            <tr>
+              <td style="text-align: left"><strong>${nombreAsignatura}</strong> <br> <i style="font-size: 10px;">${docente}</i></td>
+              <td>${ih}</td>
+              ${notas}
+              <td>${prom}</td>
+              <td>${def}</td>
+              <td>${rec}</td>
+              <td>${final > 0 ? final : final}</td>
+              <td>${des}</td>
+              <td>${ausJAsig}</td>
+              <td>${ausSAsig}</td>
+            </tr>
+            <tr><td colspan="11" class="descriptor" style="text-align: left">${this.descriptorAsignatura(data, area, a, this.periodoActual)}</td></tr>
+          `
         }).join('')
         const ausJ = this.ausenciasArea(data, area, 'ausJ')
         const ausS = this.ausenciasArea(data, area, 'ausS')
@@ -237,37 +196,21 @@ export default {
         const ausJArea = this.orden == 98 ? '' : ausJ > 0 ? ausJ : ''
         const ausSArea = this.orden == 98 ? '' : ausS > 0 ? ausS : ''
         const ihArea = this.orden !== 98 ? this.intensidadHorariaArea(data, area) : ''
-        if (this.colDesem == 7) {
-          return `
-            <tr class="fila-area">
-              <td style="text-align: left"><strong>${this.nombreDelArea(area)}</strong></td>
-              <td>${ihArea}</td>
-              ${notasArea}
-              <td>${promArea}</td>
-              <td></td><td></td><td></td>
-              <td>${finalArea > 0 ? finalArea : finalArea}</td>
-              <td>${desArea}</td>
-              <td>${ausJArea}</td>
-              <td>${ausSArea}</td>
-            </tr>
-            ${filasAsignaturas}
-          `
-        } else {
-          return `
-            <tr class="fila-area">
-              <td style="text-align: left"><strong>${this.nombreDelArea(area)}</strong></td>
-              <td>${ihArea}</td>
-              ${notasArea}
-              <td>${promArea}</td>
-              <td></td><td></td>
-              <td>${finalArea > 0 ? finalArea : finalArea}</td>
-              <td>${desArea}</td>
-              <td>${ausJArea}</td>
-              <td>${ausSArea}</td>
-            </tr>
-            ${filasAsignaturas}
-          `
-        }
+
+        return `
+          <tr class="fila-area">
+            <td style="text-align: left"><strong>${this.nombreDelArea(area)}</strong></td>
+            <td>${ihArea}</td>
+            ${notasArea}
+            <td>${promArea}</td>
+            <td></td><td></td>
+            <td>${finalArea > 0 ? finalArea : finalArea}</td>
+            <td>${desArea}</td>
+            <td>${ausJArea}</td>
+            <td>${ausSArea}</td>
+          </tr>
+          ${filasAsignaturas}
+        `
       }).join('')
     },
     estilosBoletin() {
@@ -541,21 +484,6 @@ export default {
       if (orden == 99 && this.tipoValComp == 0) return est.areas?.[area]?.asignaturas?.[asignatura]?.periodos?.[periodo] || ''
       return est.areas?.[area]?.asignaturas?.[asignatura]?.periodos?.[periodo]?.toFixed(1) || ''
     },
-    criterio1Periodo(est, area, asignatura, periodo) {
-      const orden = est.areas?.[area]?.asignaturas?.[asignatura]?.orden
-      if (orden == 99 && this.tipoValComp == 0) return est.areas?.[area]?.asignaturas?.[asignatura]?.c1?.[periodo] || ''
-      return est.areas?.[area]?.asignaturas?.[asignatura]?.c1?.[periodo]?.toFixed(1) || ''
-    },
-    criterio2Periodo(est, area, asignatura, periodo) {
-      const orden = est.areas?.[area]?.asignaturas?.[asignatura]?.orden
-      if (orden == 99 && this.tipoValComp == 0) return est.areas?.[area]?.asignaturas?.[asignatura]?.c2?.[periodo] || ''
-      return est.areas?.[area]?.asignaturas?.[asignatura]?.c2?.[periodo]?.toFixed(1) || ''
-    },
-    criterio3Periodo(est, area, asignatura, periodo) {
-      const orden = est.areas?.[area]?.asignaturas?.[asignatura]?.orden
-      if (orden == 99 && this.tipoValComp == 0) return est.areas?.[area]?.asignaturas?.[asignatura]?.c3?.[periodo] || ''
-      return est.areas?.[area]?.asignaturas?.[asignatura]?.c3?.[periodo]?.toFixed(1) || ''
-    },
     observacionComportamiento(est) {
       // Busca la asignatura de orden 99
       const compo = this.listaAreasAsignaturas.find(a => a.orden === 99)
@@ -575,9 +503,6 @@ export default {
           periodo,
           definitiva,
           recuperacion,
-          C1,
-          C2,
-          C3,
           definitivacompor,
           fechaR,
           inclusion,
@@ -608,14 +533,8 @@ export default {
             periodos: {},
             definitivas: {},
             recuperaciones: {},
-            c1: {},
-            c2: {},
-            c3: {},
             definitiva: null,
             recuperacion: null,
-            C1: null,
-            C2: null,
-            C3: null,
             definitivacompor: null,
             fechaR: null,
             inclusion: null,
@@ -630,9 +549,6 @@ export default {
           asig.periodos[periodo] = definitivacompor
           asig.definitivas[periodo] = definitivacompor
           asig.recuperaciones[periodo] = ''
-          asig.c1[periodo] = ''
-          asig.c2[periodo] = ''
-          asig.c3[periodo] = ''
           asig.definitiva = definitivacompor
           asig.recuperacion = ''
           asig.fechaR = fechaR
@@ -643,9 +559,6 @@ export default {
           asig.periodos[periodo] = recuperacion > definitiva ? recuperacion : definitiva
           asig.definitivas[periodo] = definitiva
           asig.recuperaciones[periodo] = recuperacion
-          asig.c1[periodo] = C1
-          asig.c2[periodo] = C2
-          asig.c3[periodo] = C3
           asig.definitiva = definitiva
           asig.recuperacion = recuperacion
           asig.fechaR = fechaR
@@ -674,8 +587,6 @@ export default {
   },
   beforeMount() {
     this.escudo = "https://siedutunja.gov.co/api/colegios/escudos/" + this.$store.state.escudoInstitucion
-    if (this.$store.state.daneInstitucion === '115001002807' || this.$store.state.daneInstitucion === '315001001893' || this.$store.state.daneInstitucion === '115001000430' || this.$store.state.daneInstitucion === '315001001613' || this.$store.state.daneInstitucion === '115001002751' || this.$store.state.daneInstitucion === '115001000367') this.colDesem = 7
-    else this.colDesem = 6
   }
 }
 </script>

@@ -523,7 +523,7 @@
                 element.periodo = this.idPeriodo
               })
               this.notasPlanilla = response.data.datos
-              //console.log(JSON.stringify(this.notasPlanilla))
+              console.log(JSON.stringify(this.notasPlanilla))
               setTimeout(()=>{
                 this.construirPlanillaNotas()
                 this.btnCargando = false

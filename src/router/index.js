@@ -114,10 +114,10 @@ function configRoutes () {
             },
             // 2025-01-19
             {
-              path: 'renovacionmasiva2024',
+              path: 'renovacionmasiva',
               beforeEnter: autenticar,
-              name: 'Renovación Masiva Estudiantes Antiguos',
-              component: () => import('@/views/matriculas/RenovacionMasiva2024')
+              name: 'Renovación Masiva Estudiantes',
+              component: () => import('@/views/matriculas/RenovacionMasiva')
             },
             // 2025-05-05
             {
@@ -125,6 +125,13 @@ function configRoutes () {
               beforeEnter: autenticar,
               name: 'Promoción Anticipada',
               component: () => import('@/views/matriculas/PromocionAnticipada')
+            },
+            // 2025-07-20
+            {
+              path: 'promocion',
+              beforeEnter: autenticar,
+              name: 'Promoción',
+              component: () => import('@/views/matriculas/Promocion')
             },
             // 2025-05-29
             {
@@ -282,41 +289,6 @@ function configRoutes () {
               beforeEnter: autenticar,
               name: 'Informe Retirados',
               component: () => import('@/views/informes/InfoRetirados')
-            },
-            // 2025-04-02
-            {
-              path: 'consolidadoscurso',
-              beforeEnter: autenticar,
-              name: 'Consolidados Curso',
-              component: () => import('@/views/informes/ConsolidadosCurso')
-            },
-            // 2025-04-02
-            {
-              path: 'consolidadosnotas',
-              beforeEnter: autenticar,
-              name: 'Consolidados Notas',
-              component: () => import('@/views/informes/ConsolidadosNotas')
-            },
-            // 2025-06-02
-            {
-              path: 'consolidadosausencias',
-              beforeEnter: autenticar,
-              name: 'Consolidados Ausencias',
-              component: () => import('@/views/informes/ConsolidadosAusencias')
-            },
-            // 2025-04-22
-            {
-              path: 'puestoscurso',
-              beforeEnter: autenticar,
-              name: 'Puestos Curso',
-              component: () => import('@/views/informes/PuestosCurso')
-            },
-            // 2025-04-22
-            {
-              path: 'rendimientoacademico',
-              beforeEnter: autenticar,
-              name: 'Rendimiento Académico',
-              component: () => import('@/views/informes/RendimientoAcademico')
             },
             // 2025-06-02
             {

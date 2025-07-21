@@ -80,11 +80,10 @@
                     :umbralesT="umbralesT"
                     :pesosPeriodos="pesosPeriodos"
                     :tipoValComp="tipoValComp"
-                    :directorCurso="nombreDirector"
-                    :coordinador="coordinador"
                     :promCompor="promCompor"
                     :escalaPreescolar="escalaPreescolar"
                     :nuevaEscalaPreescolar="nuevaEscalaPreescolar"
+                    :firmasBoletin="firmasBoletin"
                   />
                 </div>
                 <div v-else>
@@ -108,10 +107,12 @@
                     :umbralesT="umbralesT"
                     :pesosPeriodos="pesosPeriodos"
                     :tipoValComp="tipoValComp"
-                    :directorCurso="nombreDirector"
-                    :coordinador="coordinador"
                     :promCompor="promCompor"
                     :letrasCompor="letrasCompor"
+                    :firmasBoletin="firmasBoletin"
+                    :descC1="descC1"
+                    :descC2="descC2"
+                    :descC3="descC3"
                   />
                 </div>
               </b-col>
@@ -163,11 +164,10 @@
                     :umbralesT="umbralesT"
                     :pesosPeriodos="pesosPeriodos"
                     :tipoValComp="tipoValComp"
-                    :directorCurso="nombreDirector"
-                    :coordinador="coordinador"
                     :promCompor="promCompor"
                     :escalaPreescolar="escalaPreescolar"
                     :nuevaEscalaPreescolar="nuevaEscalaPreescolar"
+                    :firmasBoletin="firmasBoletin"
                   />
                 </div>
                 <div v-else>
@@ -191,10 +191,9 @@
                     :umbralesT="umbralesT"
                     :pesosPeriodos="pesosPeriodos"
                     :tipoValComp="tipoValComp"
-                    :directorCurso="nombreDirector"
-                    :coordinador="coordinador"
                     :promCompor="promCompor"
                     :letrasCompor="letrasCompor"
+                    :firmasBoletin="firmasBoletin"
                   />
                 </div>
               </b-col>
@@ -281,17 +280,19 @@
         pesosPeriodos: [],
         tipoValComp: null,
         promCompor: null,
-        firma2: null,
+        firmasBoletin: null,
         escalaPreescolar: {},
         nuevaEscalaPreescolar: [],
         letrasCompor: [],
-
+        descC1: null,
+        descC2: null,
+        descC3: null,
         listaReportes: [],
       }
     },
     methods: {
       procesarBoletines() {
-        if (this.idNivel == 1 && (this.$store.state.idInstitucion == '17ee4f30-fc80-11ec-a1d1-1dc2835404e5' || this.$store.state.idInstitucion == '097b7b10-fcaa-11ec-8267-536b07c743c4')) {
+        if (this.idNivel == 1 && (this.$store.state.idInstitucion == '17ee4f30-fc80-11ec-a1d1-1dc2835404e5' || this.$store.state.idInstitucion == '097b7b10-fcaa-11ec-8267-536b07c743c4' || this.$store.state.idInstitucion == '8a1bd1e0-fcb2-11ec-8267-536b07c743c4')) {
           this.listaReportes = []
           this.$refs.estudiantes.selectedRows.forEach(element => {
             this.listaReportes.push({ 'id': element.idMatricula, 'estudiante': element.nombre, 'pue': element.puesto, 'pro': element.promedio })
@@ -325,9 +326,182 @@
             {letra: this.datosSeccion.preeL3, umbral: this.datosSeccion.minAlt, desempeno: this.datosSeccion.preeC3},
             {letra: this.datosSeccion.preeL4, umbral: this.datosSeccion.maxSup, desempeno: this.datosSeccion.preeC4},
           ]
+          this.descC1 = this.datosSeccion.nombreC1 != '' && this.datosSeccion.nombreC1 != null ? this.datosSeccion.nombreC1.substr(0,3) : 'C1'
+          this.descC2 = this.datosSeccion.nombreC2 != '' && this.datosSeccion.nombreC2 != null ? this.datosSeccion.nombreC2.substr(0,3) : 'C2'
+          this.descC3 = this.datosSeccion.nombreC3 != '' && this.datosSeccion.nombreC3 != null ? this.datosSeccion.nombreC3.substr(0,3) : 'C3'
           this.letrasCompor = [this.datosSeccion.compL1,this.datosSeccion.compL2,this.datosSeccion.compL3,this.datosSeccion.compL4]
-          //console.log(JSON.stringify(this.nuevaEscalaPreescolar))
-          // this.firma2 =  Asignar la firma que va en el boletin
+          if (this.$store.state.daneInstitucion === '115001002602') { // Sandoval
+            this.firmasBoletin = `
+              <table class="firmas" style="width: 100%;">
+                <tr>
+                  <td style="width: 50%;">
+                    <p>________________________________________<br>${this.nombreDirector}<br>Director(a) de Curso</p>
+                  </td>
+                  <td style="width: 50%;">
+                    <p>________________________________________<br>MARINA PEDRAZA CANARIA<br>Rectora</p>
+                  </td>
+                </tr>
+              </table>
+            `
+          } else if (this.$store.state.daneInstitucion === '315001000293') { // Grancolombiano
+            this.firmasBoletin = `
+              <table class="firmas" style="width: 100%;">
+                <tr>
+                  <td style="width: 50%;">
+                    <p>________________________________________<br>${this.nombreDirector}<br>Director(a) de Curso</p>
+                  </td>
+                  <td style="width: 50%;">
+                    <p>________________________________________<br>JUAN CARLOS GONZÁLEZ GALINDO<br>Rector</p>
+                  </td>
+                </tr>
+              </table>
+            `
+          } else if (this.$store.state.daneInstitucion === '115001002807') { // Gustavo Rojas
+            let cordi = ''
+            if (this.nombreSede == 'CLUB DE LEONES') {
+              cordi = 'CESAR MALPICA ROJAS'
+            } else if (this.nombreSede == 'CENTRAL') {
+              cordi = 'ELSA YOLANDA CASCANTE MOLINA'
+            } else {
+              cordi = 'GLORIA INES VARGAS AVENDAÑO'
+            }
+            this.firmasBoletin = `
+              <table class="firmas" style="width: 100%;">
+                <tr>
+                  <td style="width: 50%;">
+                    <p>________________________________________<br>${this.nombreDirector}<br>Director(a) de Curso</p>
+                  </td>
+                  <td style="width: 50%;">
+                    <p>________________________________________<br>${cordi}<br>Coordinador(a)</p>
+                  </td>
+                </tr>
+              </table>
+            `
+          } else if (this.$store.state.daneInstitucion === '115001000367') { // Inem
+            let cordi = ''
+            if (this.nombreSede == 'SEDE PRINCIPAL') {
+              cordi = '-'
+            } else if (this.nombreSede == 'SEDE LAS AMERICAS') {
+              cordi = '-'
+            } else if (this.nombreSede == 'SEDE ANTONIO RICAURTE') {
+              cordi = '-'
+            } else {
+              cordi = '-'
+            }
+            this.firmasBoletin = `
+              <table class="firmas" style="width: 100%;">
+                <tr>
+                  <td style="width: 50%;">
+                    <p>________________________________________<br>${this.nombreDirector}<br>Director(a) de Curso</p>
+                  </td>
+                  <td style="width: 50%;">
+                    <p>________________________________________<br>${cordi}<br>Coordinador(a)</p>
+                  </td>
+                </tr>
+              </table>
+            `
+          } else if (this.$store.state.daneInstitucion === '115001002751') { // Julius
+            this.firmasBoletin = `
+              <table class="firmas" style="width: 100%;">
+                <tr>
+                  <td style="width: 50%;">
+                    <p>________________________________________<br>${this.nombreDirector}<br>Director(a) de Curso</p>
+                  </td>
+                  <td style="width: 50%;">
+                    <p>________________________________________<br>FLORIBERTO SANCHEZ SALAZAR<br>Rector</p>
+                  </td>
+                </tr>
+              </table>
+            `
+          } else if (this.$store.state.daneInstitucion === '115001001061') { // Simon Bolivar
+            this.firmasBoletin = `
+              <table class="firmas" style="width: 100%;">
+                <tr>
+                  <td style="width: 50%;">
+                    <p>________________________________________<br>${this.nombreDirector}<br>Director(a) de Curso</p>
+                  </td>
+                  <td style="width: 50%;">
+                    <p>________________________________________<br>MARTHA CECILIA GARCIA MORENO<br>Rectora</p>
+                  </td>
+                </tr>
+              </table>
+            `
+          } else if (this.$store.state.daneInstitucion === '215001001007') { // Rural
+            this.firmasBoletin = `
+              <table class="firmas" style="width: 100%;">
+                <tr>
+                  <td style="width: 50%;">
+                    <p>________________________________________<br>${this.nombreDirector}<br>Director(a) de Curso</p>
+                  </td>
+                  <td style="width: 50%;">
+                    <p>________________________________________<br>JULIO RICARDO ESTUPIÑÁN CÁCERES<br>Rector</p>
+                  </td>
+                </tr>
+              </table>
+            `
+          } else if (this.$store.state.daneInstitucion === '315001001613') { // Emiliani
+            this.firmasBoletin = `
+              <table class="firmas" style="width: 100%;">
+                <tr>
+                  <td style="width: 50%;">
+                    <p>________________________________________<br>${this.nombreDirector}<br>Director(a) de Curso</p>
+                  </td>
+                  <td style="width: 50%;">
+                    <p>________________________________________<br>JENARO ANTONIO ESPITIA ORDOÑEZ<br>Rector</p>
+                  </td>
+                </tr>
+              </table>
+            `
+          } else if (this.$store.state.daneInstitucion === '115001000065') { // Silvino
+            this.firmasBoletin = `
+              <table class="firmas" style="width: 100%;">
+                <tr>
+                  <td style="width: 50%;">
+                    <p>________________________________________<br>${this.nombreDirector}<br>Director(a) de Curso</p>
+                  </td>
+                  <td style="width: 50%;">
+                    <p>________________________________________<br>OMAR SANDOVAL FONSECA<br>Rector</p>
+                  </td>
+                </tr>
+              </table>
+            `
+          } else if (this.$store.state.daneInstitucion === '115001000430') { // Santiago
+            this.firmasBoletin = `
+              <table class="firmas" style="width: 100%;">
+                <tr>
+                  <td style="width: 50%;">
+                    <p>________________________________________<br>${this.nombreDirector}<br>Director(a) de Curso</p>
+                  </td>
+                  <td style="width: 50%;">
+                    <p>________________________________________<br>MAURICIO FONSECA ALVAREZ<br>Rector</p>
+                  </td>
+                </tr>
+              </table>
+            `
+          } else if (this.$store.state.daneInstitucion === '315001001893') { // Gonzalo Suarez
+            this.firmasBoletin = `
+              <table class="firmas" style="width: 100%;">
+                <tr>
+                  <td style="width: 50%;">
+                    <p>________________________________________<br>${this.nombreDirector}<br>Director(a) de Curso</p>
+                  </td>
+                  <td style="width: 50%;">
+                    <p>________________________________________<br>CAMILO GALÁN GALÁN<br>Coordinador</p>
+                  </td>
+                </tr>
+              </table>
+            `
+          } else {  // Enslap
+            this.firmasBoletin = `
+              <table class="firmas" style="width: 100%;">
+                <tr>
+                  <td style="width: 50%;">
+                    <p>________________________________________<br>${this.nombreDirector}<br>Director(a) de Curso</p>
+                  </td>
+                </tr>
+              </table>
+            `
+          }
           setTimeout(()=>{
             this.btnCargando = false
           },500)

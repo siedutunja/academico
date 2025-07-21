@@ -15,7 +15,7 @@
                       <b-col lg="4">
                         <h6>Evaluaciones</h6>
                         <b-form-group label="" v-slot="{ ariaDescribedby }">
-                          <b-form-radio v-model="idConsolidado" :aria-describedby="ariaDescribedby" name="some-radios" value="1">Resumen por periodo</b-form-radio>
+                          <b-form-radio v-model="idConsolidado" :aria-describedby="ariaDescribedby" name="some-radios" value="1">Resumen por Periodo</b-form-radio>
                           <b-form-radio v-model="idConsolidado" :aria-describedby="ariaDescribedby" name="some-radios" value="2">Consolidado Acumulado/Promedio</b-form-radio>
                           <b-form-radio v-model="idConsolidado" :aria-describedby="ariaDescribedby" name="some-radios" value="3">Consolidado Acumulado/Ponderado</b-form-radio>
                         </b-form-group>
@@ -23,8 +23,13 @@
                       <b-col lg="4">
                         <h6>Ausencias</h6>
                         <b-form-group label="" v-slot="{ ariaDescribedby }">
-                          <b-form-radio v-model="idConsolidado" :aria-describedby="ariaDescribedby" name="some-radios" value="10">Ausencias Sin Justificar</b-form-radio>
-                          <b-form-radio v-model="idConsolidado" :aria-describedby="ariaDescribedby" name="some-radios" value="11">Ausencias Justificadas</b-form-radio>
+                          <b-form-radio v-model="idConsolidado" :aria-describedby="ariaDescribedby" name="some-radios" value="10">Ausencias por Periodo</b-form-radio>
+                        </b-form-group>
+                      </b-col>
+                      <b-col lg="4">
+                        <h6>Puestos</h6>
+                        <b-form-group label="" v-slot="{ ariaDescribedby }">
+                          <b-form-radio v-model="idConsolidado" :aria-describedby="ariaDescribedby" name="some-radios" value="20">Puestos por Periodo</b-form-radio>
                         </b-form-group>
                       </b-col>
                     </b-row>
@@ -43,6 +48,12 @@
                 <div v-if="idConsolidado==3">
                   <ConsolidadoPonderado/>
                 </div>
+                <div v-if="idConsolidado==10">
+                  <AusenciasPeriodo/>
+                </div>
+                <div v-if="idConsolidado==20">
+                  <PuestosPeriodo/>
+                </div>
               </b-col>
             </b-row>
           </b-card-text>
@@ -58,6 +69,8 @@
   import ResumenPeriodo from '@/views/informes/consolidados/ResumenPeriodo'
   import ConsolidadoPromedio from '@/views/informes/consolidados/ConsolidadoPromedio'
   import ConsolidadoPonderado from '@/views/informes/consolidados/ConsolidadoPonderado'
+  import AusenciasPeriodo from '@/views/informes/consolidados/AusenciasPeriodo'
+  import PuestosPeriodo from '@/views/informes/consolidados/PuestosPeriodo'
 
   export default {
     name: 'consolidados',
@@ -65,6 +78,8 @@
       ResumenPeriodo,
       ConsolidadoPromedio,
       ConsolidadoPonderado,
+      AusenciasPeriodo,
+      PuestosPeriodo,
     },
     data () {
       return {
