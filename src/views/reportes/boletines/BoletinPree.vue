@@ -142,16 +142,16 @@ export default {
 
       areas.forEach(area => {
         const asigns = this.listaAreasAsignaturas.filter(a => a.area === area)
-        const notasArea = this.periodosVisibles.map(p => `<td>${this.orden !== 99 ? this.letraDesdeValor(this.promedioAreaPorPeriodo(est, area, p)) : this.promedioAreaPorPeriodoComportamiento(est, area, p)}</td>`).join('')
-        const desempeño = this.datosDesempenoPorLetra(this.letraDesdeValor(this.promedioAreaPorPeriodo(est, area, this.periodoActual)))
+        const notasArea = this.periodosVisibles.map(p => `<td></td>`).join('') //this.periodosVisibles.map(p => `<td>${this.orden !== 99 ? this.letraDesdeValor(this.promedioAreaPorPeriodo(est, area, p)) : this.promedioAreaPorPeriodoComportamiento(est, area, p)}</td>`).join('')
+        const desempeño = '' //this.datosDesempenoPorLetra(this.letraDesdeValor(this.promedioAreaPorPeriodo(est, area, this.periodoActual)))
         html += `
           <tr class="fila-area">
             <td style="text-align: left"><strong>${nombreArea(area)}</strong></td>
             <td></td>
             ${ notasArea }
-            <td>${this.letraDesdeValor(this.promedioAreaPorAsignaturas(est, area))}</td>
             <td></td>
-            <td>${desempeño.texto} ${desempeño.emoji}</td>
+            <td></td>
+            <td></td> 
             <td></td>
             <td></td>
           </tr>
@@ -166,10 +166,10 @@ export default {
             <tr>
               <td style="text-align: left"><strong>${nombreAsignatura}</strong> <br> <i style="font-size: 10px;">${docente}</i></td>
               <td>${ih}</td>
-              ${periodos.map(p => `<td>${datos.periodos?.[p] || ''}</td>`).join('')}
-              <td>${promedio}</td>
-              <td>${notaActual}</td>
-              <td>${desempeño.texto} </td>
+              ${periodos.map(p => `<td>${orden === 98 ? '' : datos.periodos?.[p] || ''}</td>`).join('')}
+              <td>${orden === 98 ? '' : promedio}</td>
+              <td>${orden === 98 ? '' : notaActual}</td>
+              <td>${orden === 98 ? '' : desempeño.texto} </td>
               <td>${datos.ausJ || 0}</td>
               <td>${datos.ausS || 0}</td>
             </tr>
@@ -238,7 +238,7 @@ export default {
       const datos = est.areas?.[area]?.asignaturas?.[asignatura]
       if (!meta || !datos) return ''
 
-      if (datos.pd === 'S') {
+      if (datos.pd === 'S' || datos.concep === 'S') {
         return datos.inclusion || ''
       }
       const letra = datos.periodos?.[periodo] || ''
@@ -612,6 +612,7 @@ export default {
           inclusion,
           observaciones,
           pd,
+          concep,
           ausJ,
           ausS
         } = nota
@@ -645,6 +646,7 @@ export default {
             inclusion: null,
             observaciones: null,
             pd: null,
+            concep: null,
             ausJ: 0,
             ausS: 0
           }
@@ -660,6 +662,7 @@ export default {
           asig.inclusion = inclusion
           asig.observaciones = observaciones
           asig.pd = pd
+          asig.concep = concep
         } else {
           asig.periodos[periodo] = definitivapree
           asig.definitivas[periodo] = definitivapree
@@ -670,6 +673,7 @@ export default {
           asig.inclusion = inclusion
           asig.observaciones = observaciones
           asig.pd = pd
+          asig.concep = concep
         }
         asig.ausJ += ausJ || 0
         asig.ausS += ausS || 0

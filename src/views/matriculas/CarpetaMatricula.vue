@@ -81,6 +81,7 @@
                             <b-tr><b-th>Procedencia</b-th><b-td>{{datosFichaE.procedencia}}</b-td></b-tr>
                             <b-tr><b-th>Repitente</b-th><b-td>{{datosFichaE.id_repitente}}</b-td></b-tr>
                             <b-tr><b-th>Educación de Inclusión (PD)</b-th><b-td>{{datosFichaE.id_diversa}}</b-td></b-tr>
+                            <b-tr><b-th>Conceptual</b-th><b-td>{{datosFichaE.id_conceptual}}</b-td></b-tr>
                             <b-tr><b-th>Observaciones de la Matricula</b-th><b-td>{{datosFichaE.obs_matricula}}</b-td></b-tr>
                             <b-tr><b-th>Observaciones Finales</b-th><b-td>{{datosFichaE.obs_final}}</b-td></b-tr>
                             <b-tr><b-th>ID</b-th><b-td>{{idMatricula}}</b-td></b-tr>

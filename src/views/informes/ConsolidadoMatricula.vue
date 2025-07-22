@@ -137,6 +137,7 @@
           { label: 'Expedido', field: 'mundoce' },
           { label: 'Genero', field: 'id_genero' },
           { label: 'FechaNace', field: 'fechanace' },
+          { label: 'Edad', field: 'edad' },
           { label: 'MunicNace', field: 'munnace' },
           { label: 'Pais', field: 'pais' },
           { label: 'Rh', field: 'rh' },
@@ -247,6 +248,7 @@
           { label: 'NOMBRE2', field: 'nombre2' },
           { label: 'GENERO', field: 'genero' },
           { label: 'FECHA_NACIMIENTO', field: 'fechanacimiento' },
+          { label: 'EDAD', field: 'edad' },
           { label: 'BARRIO', field: 'barrio' },
           { label: 'EPS', field: 'eps' },
           { label: 'TIPO DE SANGRE', field: 'rh' },
@@ -278,7 +280,10 @@
           } else {
             if(response.data.datos != 0) {
               this.listaExportar = response.data.datos
-              //console.log(JSON.stringify(this.listaExportar))
+              this.listaExportar.forEach(element => {
+                let isValidDate = Date.parse(element.fechanace)
+                element.edad = !isNaN(isValidDate) ? this.calcularEdad(element.fechanace.substr(0,10)) : '*'
+              })
             }
           }
         })
@@ -407,6 +412,8 @@
                 } else {
                   registro.fechanacimiento = ''
                 }
+                let isValidDate = Date.parse(element.fecha_nacimiento)
+                registro.edad = !isNaN(isValidDate) ? this.calcularEdad(element.fecha_nacimiento.substr(0,10)) : '*'
                 registro.barrio = element.barrio
                 if (element.eps == ' SIN ASIGNAR') {
                   registro.eps = ''
@@ -441,6 +448,18 @@
           this.mensajeEmergente('danger',CONFIG.TITULO_MSG,'Algo salio mal y no se pudo realizar: Detallado Matricula. Intente más tarde.' + err)
           this.btnCargando = false
         })
+      },
+      calcularEdad(fecha) {
+        var hoy = new Date();
+        var cumpleanos = new Date(fecha);
+        var edad = hoy.getFullYear() - cumpleanos.getFullYear();
+        var m = hoy.getMonth() - cumpleanos.getMonth();
+    
+        if (m < 0 || (m === 0 && hoy.getDate() < cumpleanos.getDate())) {
+            edad--;
+        }
+    
+        return edad;
       },
       mensajeEmergente(variante, titulo, contenido) {
         this.$bvToast.toast(contenido, { title: titulo, variant: variante, toaster: "b-toaster-top-center", solid: true, autoHideDelay: 4000, appendToast: false })

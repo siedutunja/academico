@@ -57,9 +57,15 @@
                 </b-form-group>
               </b-col>
               <b-col lg="3" md="6">
-                <b-form-group label="Educación de Inclusión - (PD)*" label-for="diversa" class="etiqueta">
+                <b-form-group label="Educación de Inclusión - (PD)**" label-for="diversa" class="etiqueta">
                   <b-form-select  id="diversa" ref="diversa" v-model="$v.infoMatricula.id_diversa.$model" :options="comboDiversa" :state="validateStateD('id_diversa')"></b-form-select>
                   <b-form-invalid-feedback id="feedDiversa">Campo requerido.</b-form-invalid-feedback>
+                </b-form-group>
+              </b-col>
+              <b-col lg="3" md="6">
+                <b-form-group label="Conceptual*" label-for="concep" class="etiqueta">
+                  <b-form-select  id="concep" ref="concep" v-model="$v.infoMatricula.id_conceptual.$model" :options="comboConceptual" :state="validateStateD('id_conceptual')"></b-form-select>
+                  <b-form-invalid-feedback id="feedConcep">Campo requerido.</b-form-invalid-feedback>
                 </b-form-group>
               </b-col>
             </b-row>
@@ -101,6 +107,7 @@
           id_nuevo: null,
           id_repitente: null,
           id_diversa: null,
+          id_conceptual: null,
           obs_matricula: null,
           obs_final: null
         },
@@ -111,6 +118,7 @@
         comboRepitente: [],
         comboNuevo: [],
         comboDiversa: [],
+        comboConceptual: []
       }
     },
     validations: {
@@ -122,6 +130,7 @@
         id_nuevo: { required },
         id_repitente: { required },
         id_diversa: { required },
+        id_conceptual: { required },
       }
     },
     methods: {
@@ -206,6 +215,10 @@
         this.comboDiversa = []
         this.$store.state.datosTablas.sino.forEach(element => {
           this.comboDiversa.push({ 'value': element.id, 'text': element.sino.toUpperCase() })
+        })
+        this.comboConceptual = []
+        this.$store.state.datosTablas.sino.forEach(element => {
+          this.comboConceptual.push({ 'value': element.id, 'text': element.sino.toUpperCase() })
         })
         this.comboEspecialidades = []
         this.$store.state.datosEspecialidades.forEach(element => {

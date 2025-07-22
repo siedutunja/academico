@@ -65,6 +65,7 @@
           apellido2: null,
           id_genero: null,
           fecha_nacimiento: null,
+          edad: null,
           id_rh: null,
           direccion: null,
           id_municipio_direccion: null,
@@ -86,6 +87,7 @@
           { label: 'Tipo', field: 'nomenclatura', sortable: false },
           { label: 'Genero', field: 'id_genero', sortable: false },
           { label: 'Fecha_Nace', field: 'fechaNace', sortable: false },
+          { label: 'Edad', field: 'edad', sortable: false },
           { label: 'Dirección', field: 'direccion', sortable: false },
           { label: 'Municipio', field: 'munDireccion', sortable: false },
           { label: 'Teléfono', field: 'telefono1', sortable: false },
@@ -105,6 +107,10 @@
           } else{
             if (response.data.datos != 0) {
               this.listaDocentes = response.data.datos
+              this.listaDocentes.forEach(element => {
+                let isValidDate = Date.parse(element.fechaNace)
+                element.edad = !isNaN(isValidDate) ? this.calcularEdad(element.fechaNace.substr(0,10)) : '*'
+              })
             }
           }
         })
@@ -118,6 +124,18 @@
         } else { 
           return 'text-success text-left' 
         }
+      },
+      calcularEdad(fecha) {
+        var hoy = new Date();
+        var cumpleanos = new Date(fecha);
+        var edad = hoy.getFullYear() - cumpleanos.getFullYear();
+        var m = hoy.getMonth() - cumpleanos.getMonth();
+    
+        if (m < 0 || (m === 0 && hoy.getDate() < cumpleanos.getDate())) {
+            edad--;
+        }
+    
+        return edad;
       },
       mensajeEmergente(variante, titulo, contenido) {
         this.$bvToast.toast(contenido, { title: titulo, variant: variante, toaster: "b-toaster-top-center", solid: true, autoHideDelay: 4000, appendToast: false })
