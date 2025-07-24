@@ -34,6 +34,7 @@ export default {
     return {
       escudo: null,
       asignatur: null,
+      datosSeccion: {},
       orden: 0,
     }
   },
@@ -137,6 +138,11 @@ export default {
                 <th style="width:20%; text-align: left">Aus.SinJustificar: <strong>${this.estudiantesNotas[estudiante.nombre].ausS}</strong></th>
               </tr>
             </thead>
+          </table>
+          <table class="tabla-boletin">
+            <tr>
+              <th>Desempeños: BAJO [${(this.datosSeccion.minBaj).toFixed(1)} : ${(this.datosSeccion.maxBaj).toFixed(1)}] | BÁSICO [${(this.datosSeccion.minBas).toFixed(1)} : ${(this.datosSeccion.maxBas).toFixed(1)}] | ALTO [${(this.datosSeccion.minAlt).toFixed(1)} : ${(this.datosSeccion.maxAlt).toFixed(1)}] | SUPERIOR [${(this.datosSeccion.minSup).toFixed(1)} : ${(this.datosSeccion.maxSup).toFixed(1)}]</th>
+            </tr>
           </table>
           <table class="tabla-boletin observacion-comportamiento">
             <thead>
@@ -584,6 +590,7 @@ export default {
   },
   beforeMount() {
     this.escudo = "https://siedutunja.gov.co/api/colegios/escudos/" + this.$store.state.escudoInstitucion
+    this.datosSeccion = this.$store.state.datosSecciones[this.$store.state.idSeccion - 1]
   }
 }
 </script>

@@ -25,11 +25,17 @@
                         <b-form-group label="" v-slot="{ ariaDescribedby }">
                           <b-form-radio v-model="idConsolidado" :aria-describedby="ariaDescribedby" name="some-radios" value="10">Ausencias por Periodo</b-form-radio>
                         </b-form-group>
-                      </b-col>
-                      <b-col lg="4">
                         <h6>Puestos</h6>
                         <b-form-group label="" v-slot="{ ariaDescribedby }">
                           <b-form-radio v-model="idConsolidado" :aria-describedby="ariaDescribedby" name="some-radios" value="20">Puestos por Periodo</b-form-radio>
+                        </b-form-group>
+                      </b-col>
+                      <b-col lg="4">
+                        <h6>Finales</h6>
+                        <b-form-group label="" v-slot="{ ariaDescribedby }">
+                          <b-form-radio v-model="idConsolidado" :aria-describedby="ariaDescribedby" name="some-radios" value="30">Resumen Final</b-form-radio>
+                          <b-form-radio v-model="idConsolidado" :aria-describedby="ariaDescribedby" name="some-radios" value="31">Resumen Final con Habilitaciones</b-form-radio>
+                          <b-form-radio v-model="idConsolidado" :aria-describedby="ariaDescribedby" name="some-radios" value="32">Resumen Final de Promoción</b-form-radio>
                         </b-form-group>
                       </b-col>
                     </b-row>
@@ -54,6 +60,15 @@
                 <div v-if="idConsolidado==20">
                   <PuestosPeriodo/>
                 </div>
+                <div v-if="idConsolidado==30">
+                  <ResumenFinal/>
+                </div>
+                <div v-if="idConsolidado==31">
+                  <ResumenFinalHab/>
+                </div>
+                <div v-if="idConsolidado==32">
+                  <ResumenPromocion/>
+                </div>
               </b-col>
             </b-row>
           </b-card-text>
@@ -71,6 +86,9 @@
   import ConsolidadoPonderado from '@/views/informes/consolidados/ConsolidadoPonderado'
   import AusenciasPeriodo from '@/views/informes/consolidados/AusenciasPeriodo'
   import PuestosPeriodo from '@/views/informes/consolidados/PuestosPeriodo'
+  import ResumenFinal from '@/views/informes/consolidados/ResumenFinal'
+  import ResumenFinalHab from '@/views/informes/consolidados/ResumenFinalHab'
+  import ResumenPromocion from '@/views/informes/consolidados/ResumenPromocion'
 
   export default {
     name: 'consolidados',
@@ -80,6 +98,9 @@
       ConsolidadoPonderado,
       AusenciasPeriodo,
       PuestosPeriodo,
+      ResumenFinal,
+      ResumenFinalHab,
+      ResumenPromocion
     },
     data () {
       return {

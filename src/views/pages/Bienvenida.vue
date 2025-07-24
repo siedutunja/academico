@@ -389,17 +389,18 @@
             this.$store.commit('set', ['perActNotas', this.tokenDecodificado.permisos.perActNotas])
             
             this.$store.commit('set', ['perProgPeriodos', this.tokenDecodificado.permisos.perProgPeriodos])
-            this.escudoI = CONFIG.ROOT_ESCUDOS
+            
             this.cargarDatosSesionUsuario()
             this.cargarDatosTablas()
             setTimeout(()=>{
               this.btnHabilitado = true
-            },500)
+            },1000)
           }
         })
       }
     },
     beforeMount() {
+      this.escudoI = CONFIG.ROOT_ESCUDOS
       this.iniciarVista()
     }
   }

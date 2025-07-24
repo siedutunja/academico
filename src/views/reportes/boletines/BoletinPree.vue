@@ -189,7 +189,7 @@ export default {
           </thead>
         </table>
       `
-      return html + this.firmasBoletin
+      return html
     },
     valorNumericoDesdeLetra(letra) {
       const escala = this.nuevaEscalaPreescolar.find(e => e.letra === letra)

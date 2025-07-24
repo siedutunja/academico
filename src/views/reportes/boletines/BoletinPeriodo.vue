@@ -38,7 +38,10 @@ export default {
       escudo: null,
       asignatur: null,
       orden: 0,
-      colDesem: 0
+      conceptual: null,
+      datosSeccion: {},
+      colDesem: 0,
+      escala: 0,
     }
   },
   methods: {
@@ -158,6 +161,11 @@ export default {
               </tr>
             </thead>
           </table>
+          <table class="tabla-boletin">
+            <tr>
+              <th>Desempeños: BAJO [${(this.datosSeccion.minBaj).toFixed(1)} : ${(this.datosSeccion.maxBaj).toFixed(1)}] | BÁSICO [${(this.datosSeccion.minBas).toFixed(1)} : ${(this.datosSeccion.maxBas).toFixed(1)}] | ALTO [${(this.datosSeccion.minAlt).toFixed(1)} : ${(this.datosSeccion.maxAlt).toFixed(1)}] | SUPERIOR [${(this.datosSeccion.minSup).toFixed(1)} : ${(this.datosSeccion.maxSup).toFixed(1)}]</th>
+            </tr>
+          </table>
           <table class="tabla-boletin observacion-comportamiento">
             <thead>
               <tr>
@@ -208,7 +216,7 @@ export default {
                 <td>${ausJAsig}</td>
                 <td>${ausSAsig}</td>
               </tr>
-              <tr><td colspan="11" class="descriptor" style="text-align: left">${this.descriptorAsignatura(data, area, a, this.periodoActual)}</td></tr>
+              <tr><td colspan="11" class="descriptor" style="text-align: left">${this.descriptorAsignatura(data, area, a, this.periodoActual,this.orden)}</td></tr>
             `
           } else {
             return `
@@ -224,7 +232,7 @@ export default {
                 <td>${ausJAsig}</td>
                 <td>${ausSAsig}</td>
               </tr>
-              <tr><td colspan="${this.colDesem + 6}" class="descriptor" style="text-align: left">${this.descriptorAsignatura(data, area, a, this.periodoActual)}</td></tr>
+              <tr><td colspan="${this.colDesem + 6}" class="descriptor" style="text-align: left">${this.descriptorAsignatura(data, area, a, this.periodoActual,this.orden)}</td></tr>
             `
           }
         }).join('')
@@ -288,29 +296,25 @@ export default {
         }
       `
     },
-    descriptorAsignatura(est, area, asignatura, periodo) {
+    descriptorAsignatura(est, area, asignatura, periodo, ordencito) {
       const datos = est.areas?.[area]?.asignaturas?.[asignatura]
       const meta = this.listaAreasAsignaturas.find(
         a => a.area === area && a.asignatura === asignatura
       )
-
       if (!datos || !meta) return ''
-
       // Si la asignatura tiene pd === "S", usamos el campo inclusion directamente
-      if (datos.pd === 'S') {
+      if (datos.pd === 'S' || datos.concep === 'S' ) {
         return datos.inclusion || ''
       }
-
-
-      /*
-      // Buscar metadatos de la asignatura
-      const meta = this.listaAreasAsignaturas.find(
-        a => a.area === area && a.asignatura === asignatura
-      )
-      if (!meta) return ''
-      */
-      // Obtener la nota final del estudiante
-      const notaFinal = parseFloat(this.notaFinal(est, area, asignatura, periodo))
+      let notaFinal = 0
+      if (ordencito === 99 && this.tipoValComp == 0) {
+        notaFinal = parseFloat(this.notaFinal(est, area, asignatura, periodo))
+        notaFinal = this.escala
+      } else {
+        // Obtener la nota final del estudiante
+        notaFinal = parseFloat(this.notaFinal(est, area, asignatura, periodo))
+      }
+      //console.log(notaFinal)
       if (isNaN(notaFinal)) return ''
       // Determinar desempeño real
       const tipo = meta.idTipoEspecialidad
@@ -430,12 +434,20 @@ export default {
       return encontrado?.puesto || ''
     },
     definitivaPeriodo(est, area, asignatura, periodo) {
+      const concep = est.areas?.[area]?.asignaturas?.[asignatura]?.concep
+      if (concep === "S") return ''
       const orden = est.areas?.[area]?.asignaturas?.[asignatura]?.orden
       const nota = est.areas?.[area]?.asignaturas?.[asignatura]?.definitivas?.[periodo]
-      if (orden == 99 && this.tipoValComp == 0)
+      if (orden == 99 && this.tipoValComp == 0) {
+        this.escala = this.letrasCompor.findIndex(valor => valor === nota)
+        if (this.escala == 1) this.escala = 3
+        else if (this.escala == 2) this.escala = 4
+        else if (this.escala == 3) this.escala = 5
+        else this.escala = 2
         return nota
-      else
+      } else {
         return typeof nota === 'number' && nota > 0 ? nota.toFixed(1) : ''
+      }
     },
     recuperacion(est, area, asignatura, periodo) {
       const rec = est.areas?.[area]?.asignaturas?.[asignatura]?.recuperaciones?.[periodo]
@@ -452,6 +464,8 @@ export default {
       return def > 0 ? def.toFixed(1) : def
     },
     promedioAsignatura(est, area, asignatura) {
+      const concep = est.areas?.[area]?.asignaturas?.[asignatura]?.concep
+      if (concep === "S") return ''
       const orden = est.areas?.[area]?.asignaturas?.[asignatura]?.orden
       const asig = est.areas?.[area]?.asignaturas?.[asignatura]
       if (!asig) return ''
@@ -513,6 +527,8 @@ export default {
     promedioAreaPorPeriodo(est, area, periodo) {
       const asigns = Object.keys(est.areas?.[area]?.asignaturas || {})
       if (!asigns.length) return ''
+      const concep = est.areas?.[area]?.asignaturas?.[asigns]?.concep
+      if (concep === "S") return ''
       const orden = est.areas?.[area]?.asignaturas?.[asigns]?.orden
       if (orden == 99 && this.tipoValComp == 0) return est.areas?.[area]?.asignaturas?.[asigns]?.periodos?.[periodo] || ''
       const total = asigns.reduce((sum, asig) => {
@@ -537,21 +553,29 @@ export default {
       return asigns.reduce((sum, asig) => sum + this.intensidadHorariaAsignatura(est, area, asig), 0)
     },
     notaPeriodo(est, area, asignatura, periodo) {
+      const concep = est.areas?.[area]?.asignaturas?.[asignatura]?.concep
+      if (concep === "S") return ''
       const orden = est.areas?.[area]?.asignaturas?.[asignatura]?.orden
       if (orden == 99 && this.tipoValComp == 0) return est.areas?.[area]?.asignaturas?.[asignatura]?.periodos?.[periodo] || ''
       return est.areas?.[area]?.asignaturas?.[asignatura]?.periodos?.[periodo]?.toFixed(1) || ''
     },
     criterio1Periodo(est, area, asignatura, periodo) {
+      const concep = est.areas?.[area]?.asignaturas?.[asignatura]?.concep
+      if (concep === "S") return ''
       const orden = est.areas?.[area]?.asignaturas?.[asignatura]?.orden
       if (orden == 99 && this.tipoValComp == 0) return est.areas?.[area]?.asignaturas?.[asignatura]?.c1?.[periodo] || ''
       return est.areas?.[area]?.asignaturas?.[asignatura]?.c1?.[periodo]?.toFixed(1) || ''
     },
     criterio2Periodo(est, area, asignatura, periodo) {
+      const concep = est.areas?.[area]?.asignaturas?.[asignatura]?.concep
+      if (concep === "S") return ''
       const orden = est.areas?.[area]?.asignaturas?.[asignatura]?.orden
       if (orden == 99 && this.tipoValComp == 0) return est.areas?.[area]?.asignaturas?.[asignatura]?.c2?.[periodo] || ''
       return est.areas?.[area]?.asignaturas?.[asignatura]?.c2?.[periodo]?.toFixed(1) || ''
     },
     criterio3Periodo(est, area, asignatura, periodo) {
+      const concep = est.areas?.[area]?.asignaturas?.[asignatura]?.concep
+      if (concep === "S") return ''
       const orden = est.areas?.[area]?.asignaturas?.[asignatura]?.orden
       if (orden == 99 && this.tipoValComp == 0) return est.areas?.[area]?.asignaturas?.[asignatura]?.c3?.[periodo] || ''
       return est.areas?.[area]?.asignaturas?.[asignatura]?.c3?.[periodo]?.toFixed(1) || ''
@@ -583,6 +607,7 @@ export default {
           inclusion,
           observaciones,
           pd,
+          concep,
           ausJ,
           ausS
         } = nota
@@ -621,6 +646,7 @@ export default {
             inclusion: null,
             observaciones: null,
             pd: null,
+            concep: null,
             ausJ: 0,
             ausS: 0
           }
@@ -639,6 +665,7 @@ export default {
           asig.inclusion = inclusion
           asig.observaciones = observaciones
           asig.pd = pd
+          asig.concep = concep
         } else {
           asig.periodos[periodo] = recuperacion > definitiva ? recuperacion : definitiva
           asig.definitivas[periodo] = definitiva
@@ -652,6 +679,7 @@ export default {
           asig.inclusion = inclusion
           asig.observaciones = observaciones
           asig.pd = pd
+          asig.concep = concep
         }
         asig.ausJ += ausJ || 0
         asig.ausS += ausS || 0
@@ -676,6 +704,7 @@ export default {
     this.escudo = "https://siedutunja.gov.co/api/colegios/escudos/" + this.$store.state.escudoInstitucion
     if (this.$store.state.daneInstitucion === '115001002807' || this.$store.state.daneInstitucion === '315001001893' || this.$store.state.daneInstitucion === '115001000430' || this.$store.state.daneInstitucion === '315001001613' || this.$store.state.daneInstitucion === '115001002751' || this.$store.state.daneInstitucion === '115001000367') this.colDesem = 7
     else this.colDesem = 6
+    this.datosSeccion = this.$store.state.datosSecciones[this.$store.state.idSeccion - 1]
   }
 }
 </script>
