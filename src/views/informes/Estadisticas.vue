@@ -13,11 +13,18 @@
                   <b-card-text>
                     <b-row>
                       <b-col lg="4">
-                        <h6>Desempeño</h6>
+                        <h6>Desempeños</h6>
                         <b-form-group label="" v-slot="{ ariaDescribedby }">
-                          <b-form-radio v-model="idEstadistica" :aria-describedby="ariaDescribedby" name="some-radios" value="1">Desempeño por Curso</b-form-radio>
-                          <b-form-radio v-model="idEstadistica" :aria-describedby="ariaDescribedby" name="some-radios" value="2">Desempeño por Grado</b-form-radio>
-                          <b-form-radio v-model="idEstadistica" :aria-describedby="ariaDescribedby" name="some-radios" value="3">Desempeño por Área</b-form-radio>
+                          <b-form-radio v-model="idEstadistica" :aria-describedby="ariaDescribedby" name="some-radios" value="1">Resumen por Curso</b-form-radio>
+                          <b-form-radio v-model="idEstadistica" :aria-describedby="ariaDescribedby" name="some-radios" value="2">Resumen por Grado</b-form-radio>
+                          <b-form-radio v-model="idEstadistica" :aria-describedby="ariaDescribedby" name="some-radios" value="3">Resumen por Área</b-form-radio>
+                        </b-form-group>
+                      </b-col>
+                      <b-col lg="4">
+                        <h6>Rendimiento (Puestos)</h6>
+                        <b-form-group label="" v-slot="{ ariaDescribedby }">
+                          <b-form-radio v-model="idEstadistica" :aria-describedby="ariaDescribedby" name="some-radios" value="10">Estudiantes por Curso</b-form-radio>
+                          <b-form-radio v-model="idEstadistica" :aria-describedby="ariaDescribedby" name="some-radios" value="11">Estudiantes por Grado</b-form-radio>
                         </b-form-group>
                       </b-col>
                     </b-row>
@@ -33,6 +40,12 @@
                 <div v-if="idEstadistica==2">
                   <DesempenoGrado/>
                 </div>
+                <div v-if="idEstadistica==10">
+                  <PuestosEstCursoPeriodo/>
+                </div>
+                <div v-if="idEstadistica==11">
+                  <PuestosEstGradoPeriodo/>
+                </div>
               </b-col>
             </b-row>
           </b-card-text>
@@ -47,12 +60,16 @@
   import * as CONFIG from '@/assets/config.js'
   import DesempenoCurso from '@/views/informes/estadisticas/DesempenoCurso'
   import DesempenoGrado from '@/views/informes/estadisticas/DesempenoGrado'
+  import PuestosEstCursoPeriodo from '@/views/informes/estadisticas/PuestosEstCursoPeriodo'
+  import PuestosEstGradoPeriodo from '@/views/informes/estadisticas/PuestosEstGradoPeriodo'
 
   export default {
     name: 'estadisticas',
     components: {
       DesempenoCurso,
       DesempenoGrado,
+      PuestosEstCursoPeriodo,
+      PuestosEstGradoPeriodo,
     },
     data () {
       return {

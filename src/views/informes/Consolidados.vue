@@ -24,10 +24,7 @@
                         <h6>Ausencias</h6>
                         <b-form-group label="" v-slot="{ ariaDescribedby }">
                           <b-form-radio v-model="idConsolidado" :aria-describedby="ariaDescribedby" name="some-radios" value="10">Ausencias por Periodo</b-form-radio>
-                        </b-form-group>
-                        <h6>Puestos</h6>
-                        <b-form-group label="" v-slot="{ ariaDescribedby }">
-                          <b-form-radio v-model="idConsolidado" :aria-describedby="ariaDescribedby" name="some-radios" value="20">Puestos por Periodo</b-form-radio>
+                          <b-form-radio v-model="idConsolidado" :aria-describedby="ariaDescribedby" name="some-radios" value="11">Consolidado Ausencias</b-form-radio>
                         </b-form-group>
                       </b-col>
                       <b-col lg="4">
@@ -57,8 +54,8 @@
                 <div v-if="idConsolidado==10">
                   <AusenciasPeriodo/>
                 </div>
-                <div v-if="idConsolidado==20">
-                  <PuestosPeriodo/>
+                <div v-if="idConsolidado==11">
+                  <AusenciasPeriodos/>
                 </div>
                 <div v-if="idConsolidado==30">
                   <ResumenFinal/>
@@ -85,7 +82,7 @@
   import ConsolidadoPromedio from '@/views/informes/consolidados/ConsolidadoPromedio'
   import ConsolidadoPonderado from '@/views/informes/consolidados/ConsolidadoPonderado'
   import AusenciasPeriodo from '@/views/informes/consolidados/AusenciasPeriodo'
-  import PuestosPeriodo from '@/views/informes/consolidados/PuestosPeriodo'
+  import AusenciasPeriodos from '@/views/informes/consolidados/AusenciasPeriodos'
   import ResumenFinal from '@/views/informes/consolidados/ResumenFinal'
   import ResumenFinalHab from '@/views/informes/consolidados/ResumenFinalHab'
   import ResumenPromocion from '@/views/informes/consolidados/ResumenPromocion'
@@ -97,7 +94,7 @@
       ConsolidadoPromedio,
       ConsolidadoPonderado,
       AusenciasPeriodo,
-      PuestosPeriodo,
+      AusenciasPeriodos,
       ResumenFinal,
       ResumenFinalHab,
       ResumenPromocion

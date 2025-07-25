@@ -4,7 +4,7 @@
       <b-col lg="12">
         <b-card>
           <template #header>
-            <h5 class="mb-0"><b-icon icon="card-checklist" aria-hidden="true"></b-icon> PUESTOS POR PERIODO</h5>
+            <h5 class="mb-0"><b-icon icon="card-checklist" aria-hidden="true"></b-icon> RENDIMIENTO DE ESTUDIANTES POR CURSO</h5>
           </template>
           <b-card-text>
             <b-row>
@@ -45,6 +45,7 @@
             <tr>
               <th>Puesto</th>
               <th>Estudiante</th>
+              <th>Estado</th>
               <th>Promedio</th>
               <th>Medalla</th>
             </tr>
@@ -53,6 +54,7 @@
             <tr v-for="est in estudiantesConPromedioOrdenado" :key="est.idMatricula">
               <td style="text-align: left; width: 5%;">{{ est.puesto }}</td>
               <td style="text-align: left">{{ est.estudiante }}</td>
+              <td style="text-align: left">{{ est.estado }}</td>
               <td>{{ est.promedioGeneral > 0 ? est.promedioGeneral.toFixed(3) : '' }}</td>
               <td>{{ est.medalla }}</td>
             </tr>
@@ -92,7 +94,7 @@
   import * as XLSX from 'xlsx'
 
   export default {
-    name: 'puestosperiodo',
+    name: 'puestosestcursoperiodo',
     props: {
     },
     components: {
@@ -161,6 +163,7 @@
           return {
             idMatricula: est.idMatricula,
             estudiante: est.estudiante,
+            estado: est.estado,
             promedioGeneral: promedioGeneral ? parseFloat(promedioGeneral) : null
           }
         })
@@ -232,10 +235,10 @@
       },
       imprimir() {
         let fecha = 'Fecha: ' + new Date().toLocaleString()
-        let tituloInforme = 'PUESTOS POR PERIODO'
+        let tituloInforme = 'RENDIMIENTO DE ESTUDIANTES POR CURSO'
         const contenido = document.querySelector('table').outerHTML
         const ventana = window.open("Puestos", "_blank")
-        ventana.document.write(`<html><head><title>Ausencias</title></head>
+        ventana.document.write(`<html><head><title>Puestos</title></head>
         <style scoped>
           .tabla-puestos {
               border-collapse: collapse;

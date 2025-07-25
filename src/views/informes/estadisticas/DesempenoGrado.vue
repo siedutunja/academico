@@ -4,7 +4,7 @@
       <b-col lg="12">
         <b-card>
           <template #header>
-            <h5 class="mb-0"><b-icon icon="card-checklist" aria-hidden="true"></b-icon> ESTADÍSTICA DE EVALUACIONES POR PERIODO</h5>
+            <h5 class="mb-0"><b-icon icon="card-checklist" aria-hidden="true"></b-icon> RESUMEN DE DESEMPEÑOS POR GRADO</h5>
           </template>
           <b-card-text>
             <b-row>
@@ -163,7 +163,7 @@
       },
       imprimir() {
         let fecha = 'Fecha: ' + new Date().toLocaleString()
-        let tituloInforme = 'DESEMPEÑOS POR PERIODO'
+        let tituloInforme = 'RESUMEN DE DESEMPEÑOS POR GRADO'
         const contenido = document.querySelector('table').outerHTML
         const ventana = window.open("Desempeño Grado", "_blank")
         ventana.document.write(`<html><head><title>Desempeño Grado</title></head>
