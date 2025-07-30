@@ -26,6 +26,11 @@
                           <b-form-radio v-model="idConsolidado" :aria-describedby="ariaDescribedby" name="some-radios" value="10">Ausencias por Periodo</b-form-radio>
                           <b-form-radio v-model="idConsolidado" :aria-describedby="ariaDescribedby" name="some-radios" value="11">Consolidado Ausencias</b-form-radio>
                         </b-form-group>
+                        <h6>Perdidas</h6>
+                        <b-form-group label="" v-slot="{ ariaDescribedby }">
+                          <b-form-radio v-model="idConsolidado" :aria-describedby="ariaDescribedby" name="some-radios" value="20">Asignaturas Perdidas</b-form-radio>
+                          <b-form-radio v-model="idConsolidado" :aria-describedby="ariaDescribedby" name="some-radios" value="21">Áreas Perdidas</b-form-radio>
+                        </b-form-group>
                       </b-col>
                       <b-col lg="4">
                         <h6>Finales</h6>
@@ -57,6 +62,12 @@
                 <div v-if="idConsolidado==11">
                   <AusenciasPeriodos/>
                 </div>
+                <div v-if="idConsolidado==20">
+                  <AsignaturasPerdidas/>
+                </div>
+                <div v-if="idConsolidado==21">
+                  <AreasPerdidas/>
+                </div>
                 <div v-if="idConsolidado==30">
                   <ResumenFinal/>
                 </div>
@@ -86,6 +97,8 @@
   import ResumenFinal from '@/views/informes/consolidados/ResumenFinal'
   import ResumenFinalHab from '@/views/informes/consolidados/ResumenFinalHab'
   import ResumenPromocion from '@/views/informes/consolidados/ResumenPromocion'
+  import AsignaturasPerdidas from '@/views/informes/consolidados/AsignaturasPerdidas'
+  import AreasPerdidas from '@/views/informes/consolidados/AreasPerdidas'
 
   export default {
     name: 'consolidados',
@@ -97,7 +110,9 @@
       AusenciasPeriodos,
       ResumenFinal,
       ResumenFinalHab,
-      ResumenPromocion
+      ResumenPromocion,
+      AsignaturasPerdidas,
+      AreasPerdidas,
     },
     data () {
       return {

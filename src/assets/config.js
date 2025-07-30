@@ -1,12 +1,12 @@
 //*** Api Localhost
-//export const ROOT_PATH = "http://localhost:5001/api/"
-//export const ROOT_HOME = "http://localhost:8081/academico/"
-//export const ROOT_MODULO_LOGIN = "http://localhost:8080/login/"
+export const ROOT_PATH = "http://localhost:5001/api/"
+export const ROOT_HOME = "http://localhost:8081/academico/"
+export const ROOT_MODULO_LOGIN = "http://localhost:8080/login/"
 
 //*** Api Servidor
-export const ROOT_PATH = "https://siedutunja.gov.co:3001/api/"
-export const ROOT_HOME = "https://siedutunja.gov.co/academico/"
-export const ROOT_MODULO_LOGIN = "https://siedutunja.gov.co/login/"
+//export const ROOT_PATH = "https://siedutunja.gov.co:3001/api/"
+//export const ROOT_HOME = "https://siedutunja.gov.co/academico/"
+//export const ROOT_MODULO_LOGIN = "https://siedutunja.gov.co/login/"
 
 export const ROOT_REPO = "https://siedutunja.gov.co/api/"
 export const ROOT_ESCUDOS = "https://siedutunja.gov.co/api/colegios/escudos/"
