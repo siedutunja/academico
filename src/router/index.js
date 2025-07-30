@@ -421,6 +421,13 @@ function configRoutes () {
             render (c) { return c('router-view') }
           },
           children: [
+            // 2025-07-28
+            {
+              path: 'buscarestudiante',
+              beforeEnter: autenticar,
+              name: 'Buscar Estudiante',
+              component: () => import('@/views/secretaria/BuscarEstudiante')
+            },
             // 2024-03-06
             {
               path: 'buscargenerardocumentos',
