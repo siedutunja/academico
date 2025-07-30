@@ -4,7 +4,7 @@
       <b-col lg="12">
         <b-card>
           <template #header>
-            <h5 class="mb-0"><b-icon icon="card-checklist" aria-hidden="true"></b-icon> CONSOLIDADO ÁREAS PERDIDAS</h5>
+            <h5 class="mb-0"><b-icon icon="card-checklist" aria-hidden="true"></b-icon> RESUMEN DE DESEMPEÑOS POR AREA Y CURSO</h5>
           </template>
           <b-card-text>
             <b-row>
@@ -40,19 +40,36 @@
     </b-row>
     <b-row v-if="!btnCargando && idCurso!=null">
       <b-col lg="12">
-        <table border="1" cellspacing="0" cellpadding="1" class="tabla-perdidas">
+        <table class="tabla-desempeno table-responsive" border="1" cellspacing="0" cellpadding="1">
           <thead>
             <tr>
-              <th>Estudiante</th>
-              <th>Áreas Perdidas</th>
-              <th>Total</th>
+              <th rowspan="2">Área</th>
+              <th colspan="2">😟 Bajo</th>
+              <th colspan="2">😐 Básico</th>
+              <th colspan="2">🙂 Alto</th>
+              <th colspan="2">🌟 Superior</th>
+            </tr>
+            <tr>
+              <th>Cant</th><th>%</th>
+              <th>Cant</th><th>%</th>
+              <th>Cant</th><th>%</th>
+              <th>Cant</th><th>%</th>
             </tr>
           </thead>
           <tbody>
-            <tr v-for="fila in informeAreasPerdidas" :key="fila.estudiante">
-              <td>{{ fila.estudiante }}</td>
-              <td>{{ fila.perdidas.join(', ') }}</td>
-              <td>{{ fila.total }}</td>
+            <tr v-for="(fila,i) in resumenDesempenoPorArea" :key="fila.area">
+              <td style="text-align: left;">{{ fila.area }}</td>
+              <template v-for="(item,j) in fila.resumen">
+                <td :key="'cant' + i + '-' + j">{{ item.cantidad }}</td>
+                <td :key="'porc' + i + '-' + j">{{ item.porcentaje }}%</td>
+              </template>
+            </tr>
+            <tr class="fila-totales">
+              <td style="text-align: left;"><strong>Totales: {{ nombreCurso }}</strong></td>
+              <template v-for="(item,i) in totalesDesempeno">
+                <td :key="'canti' + item + i"><strong>{{ item.cantidad }}</strong></td>
+                <td :key="'total' + item + i"><strong>{{ item.porcentaje }}%</strong></td>
+              </template>
             </tr>
           </tbody>
         </table>
@@ -69,11 +86,8 @@
   import axios from "axios"
   import * as CONFIG from '@/assets/config.js'
   import * as XLSX from 'xlsx'
-
   export default {
-    name: 'areasperdidas',
-    props: {
-    },
+    name: 'estadisticaasignaturas',
     components: {
     },
     data () {
@@ -92,7 +106,6 @@
         datosSeccion: {},
         listaAreasAsignaturas: [],
         listaEstudiantes: [],
-        ausencias: [],
       }
     },
     methods: {
@@ -105,21 +118,6 @@
             if (element.id == this.idCurso) {
               this.idNivel = element.id_nivel
             }
-          })
-          this.listaEstudiantes = []
-          await axios
-          .get(CONFIG.ROOT_PATH + 'consolidado/listaestudiantes/curso', { params: { idCurso: this.idCurso }})
-          .then(response => {
-            if (response.data.error){
-              this.mensajeEmergente('danger',CONFIG.TITULO_MSG,response.data.mensaje + ' - Consulta Lista Curso')
-            } else{
-              if (response.data.datos != 0) {
-                this.listaEstudiantes = response.data.datos
-              }
-            }
-          })
-          .catch(err => {
-            this.mensajeEmergente('danger',CONFIG.TITULO_MSG,'Algo salio mal y no se pudo realizar: Consulta Lista Curso. Intente más tarde.' + err)
           })
           /*
           this.listaAreasAsignaturas = []
@@ -140,12 +138,27 @@
             this.btnCargando = false
           })
           */
-          this.dataConsultada = []
+          this.listaEstudiantes = []
           await axios
-          .get(CONFIG.ROOT_PATH + 'consolidados/notasperdidas/curso/periodo', {params: {idCurso: this.idCurso, periodo: this.idPeriodo}})
+          .get(CONFIG.ROOT_PATH + 'consolidado/listaestudiantes/curso', { params: { idCurso: this.idCurso }})
           .then(response => {
             if (response.data.error){
-              this.mensajeEmergente('danger',CONFIG.TITULO_MSG,response.data.mensaje + ' - Consolidados areas perdidas curso periodo')
+              this.mensajeEmergente('danger',CONFIG.TITULO_MSG,response.data.mensaje + ' - Consulta Lista Curso')
+            } else{
+              if (response.data.datos != 0) {
+                this.listaEstudiantes = response.data.datos
+              }
+            }
+          })
+          .catch(err => {
+            this.mensajeEmergente('danger',CONFIG.TITULO_MSG,'Algo salio mal y no se pudo realizar: Consulta Lista Curso. Intente más tarde.' + err)
+          })
+          this.dataConsultada = []
+          await axios
+          .get(CONFIG.ROOT_PATH + 'consolidados/notasdesempenoarea/curso/periodo', {params: {idCurso: this.idCurso, periodo: this.idPeriodo}})
+          .then(response => {
+            if (response.data.error){
+              this.mensajeEmergente('danger',CONFIG.TITULO_MSG,response.data.mensaje + ' - Consolidados notas curso periodo')
               this.btnCargando = false
             } else{
               if (response.data.datos != 0) {
@@ -154,37 +167,36 @@
             }
           })
           .catch(err => {
-            this.mensajeEmergente('danger',CONFIG.TITULO_MSG,'Algo salio mal y no se pudo realizar: Consolidados areas perdidas curso periodo. Intente más tarde.' + err)
+            this.mensajeEmergente('danger',CONFIG.TITULO_MSG,'Algo salio mal y no se pudo realizar: Consolidados notas curso periodo. Intente más tarde.' + err)
             this.btnCargando = false
           })
         }
-        //console.log(JSON.stringify(this.listaEstudiantes))
         //console.log(JSON.stringify(this.listaAreasAsignaturas))
-        //console.log(JSON.stringify(this.dataConsultada))
         this.btnCargando = false
       },
       imprimir() {
         let fecha = 'Fecha: ' + new Date().toLocaleString()
-        let tituloInforme = 'CONSOLIDADO DE ÁREAS PERDIDAS'
+        let tituloInforme = 'RESUMEN DE DESEMPEÑOS POR AREA Y CURSO'
         const contenido = document.querySelector('table').outerHTML
-        const ventana = window.open("Perdidas", "_blank")
-        ventana.document.write(`<html><head><title>Perdidas</title></head>
+        const ventana = window.open("Desempeño Area", "_blank")
+        ventana.document.write(`<html><head><title>Desempeño Area</title></head>
         <style scoped>
-          .tabla-perdidas {
+          .tabla-desempeno {
             width: 100%;
             border-collapse: collapse;
             font-size: 13px;
           }
-          .tabla-perdidas th, .tabla-perdidas td {
+          .tabla-desempeno th, .tabla-desempeno td {
             border: 1px solid #ccc;
-            padding: 1px;
-          }
-          .tabla-perdidas th {
-            background-color: #f2f8ff;
+            padding: 4px;
             text-align: center;
           }
-          .tabla-perdidas td {
-            vertical-align: top;
+          .tabla-desempeno thead {
+            background-color: #f0f0f0;
+          }
+          .fila-totales {
+            background-color: #f0f0f0;
+            font-weight: bold;
           }
         </style>
           <body class="container">
@@ -199,7 +211,11 @@
       exportarAExcel() {
         const tabla = document.querySelector('table')
         const wb = XLSX.utils.table_to_book(tabla)
-        XLSX.writeFile(wb, 'ausencias.xlsx')
+        XLSX.writeFile(wb, 'notas.xlsx')
+      },
+      redondear(num) {
+        var m = Number((Math.abs(num) * 10).toPrecision(15))
+        return Math.round(m) / 10 * Math.sign(num);
       },
       async ocuparComboCursosSede() {
         this.comboCursosSede = []
@@ -221,80 +237,110 @@
           this.comboPeriodos.push({ 'value': element.id, 'text': element.periodo.toUpperCase() })
         })
       },
-      redondear(num) {
-        var m = Number((Math.abs(num) * 10).toPrecision(15))
-        return Math.round(m) / 10 * Math.sign(num);
-      },
       mensajeEmergente(variante, titulo, contenido) {
         this.$bvToast.toast(contenido, { title: titulo, variant: variante, toaster: "b-toaster-top-center", solid: true, autoHideDelay: 4000, appendToast: false })
       }
     },
     computed: {
-      informeAreasPerdidas() {
-        return this.listaEstudiantes.map(est => {
+      resumenDesempenoPorArea() {
+        const conteo = {} // agrupación final por área
+        const totalPorArea = {} // conteo total por área
+        this.listaEstudiantes.forEach(est => {
           const registros = this.dataConsultada.filter(dc => dc.idMatricula === est.idMatricula && dc.orden !== 98 && dc.orden !== 99)
-          // Agrupamos por área
-          const areas = {}
+          const agrupadas = {}
           registros.forEach(dc => {
-            const area = dc.area
-            const definitiva = parseFloat(dc.definitiva) || 0
-            const recuperacion = parseFloat(dc.recuperacion)
-            const porcentaje = parseFloat(dc.porcentaje) || 0
-            const notaFinal = (!isNaN(recuperacion) && recuperacion > definitiva)
-              ? recuperacion
-              : definitiva
-            if (!areas[area]) {
-              areas[area] = { acumulado: 0, totalPorcentaje: 0, tipo: parseInt(dc.idTipoEspecialidad) }
-            }
-            areas[area].acumulado += notaFinal * porcentaje
-            areas[area].totalPorcentaje += porcentaje
+            const area = dc.nombreArea
+            if (!agrupadas[area]) agrupadas[area] = []
+            agrupadas[area].push(dc)
           })
-          // Calculamos promedio ponderado y evaluamos si es pérdida
-          const perdidas = Object.entries(areas)
-            .map(([area, datos]) => {
-              const promedio = datos.totalPorcentaje > 0
-                ? this.redondear(datos.acumulado / datos.totalPorcentaje).toFixed(1)
-                : 0
-              const esPerdida =
-                datos.tipo === 1 ? promedio < this.datosSeccion.minBas :
-                datos.tipo === 2 ? promedio < this.datosSeccion.minBasT :
-                false
-              return esPerdida
-                ? { area, promedio: promedio }
-                : null
+          Object.entries(agrupadas).forEach(([area, asignaturas]) => {
+            let suma = 0
+            let totalPorcentaje = 0
+            const tipo = parseInt(asignaturas[0].idTipoEspecialidad)
+            asignaturas.forEach(asig => {
+              const def = parseFloat(asig.definitiva) || 0
+              const rec = parseFloat(asig.recuperacion)
+              const final = !isNaN(rec) && rec > def ? rec : def
+              const peso = parseFloat(asig.porcentaje) || 0
+              suma += final * peso
+              totalPorcentaje += peso
             })
-            .filter(Boolean)
-          const resumen = perdidas.map(p => `${p.area}(${p.promedio})`)
+            if (totalPorcentaje === 0) return
+            const promedio = suma / totalPorcentaje
+            let nivel = ''
+            if (tipo === 1) {
+              nivel = promedio < this.datosSeccion.minBas ? 'BAJO'
+                  : promedio < this.datosSeccion.minAlt ? 'BÁSICO'
+                  : promedio < this.datosSeccion.minSup ? 'ALTO'
+                  : 'SUPERIOR'
+            } else if (tipo === 2) {
+              nivel = promedio < this.datosSeccion.minBasT ? 'BAJO'
+                  : promedio < this.datosSeccion.minAltT ? 'BÁSICO'
+                  : promedio < this.datosSeccion.minSupT ? 'ALTO'
+                  : 'SUPERIOR'
+            } else return
+            if (!conteo[area]) {
+              conteo[area] = { BAJO: 0, BÁSICO: 0, ALTO: 0, SUPERIOR: 0 }
+              totalPorArea[area] = 0
+            }
+            conteo[area][nivel]++
+            totalPorArea[area]++
+          })
+        })
+        // Formato final por área
+        return Object.entries(conteo).map(([area, datos]) => {
+          const total = totalPorArea[area]
           return {
-            estudiante: est.estudiante,
-            perdidas: resumen,
-            total: resumen.length
+            area,
+            resumen: ['BAJO', 'BÁSICO', 'ALTO', 'SUPERIOR'].map(nivel => ({
+              nivel,
+              cantidad: datos[nivel],
+              porcentaje: total ? ((datos[nivel] / total) * 100).toFixed(1) : '0.0'
+            }))
           }
-        }).filter(e => e.total > 0)
+        })
+      },
+      totalesDesempeno() {
+        const resumen = this.resumenDesempenoPorArea
+        const acumulado = { BAJO: 0, BÁSICO: 0, ALTO: 0, SUPERIOR: 0 }
+        let totalGlobal = 0
+        resumen.forEach(area => {
+          area.resumen.forEach(r => {
+            acumulado[r.nivel] += r.cantidad
+            totalGlobal += r.cantidad
+          })
+        })
+        return ['BAJO', 'BÁSICO', 'ALTO', 'SUPERIOR'].map(nivel => ({
+          nivel,
+          cantidad: acumulado[nivel],
+          porcentaje: totalGlobal ? ((acumulado[nivel] / totalGlobal) * 100).toFixed(1) : '0.0'
+        }))
       }
     },
     beforeMount() {
       this.ocuparComboSedes()
       this.ocuparComboPeriodos()
       this.datosSeccion = this.$store.state.datosSecciones[this.$store.state.idSeccion - 1]
+      //console.log(JSON.stringify(this.datosSeccion))
     }
   }
 </script>
 <style scoped>
-  .tabla-perdidas {
+  .tabla-desempeno {
     width: 100%;
     border-collapse: collapse;
     font-size: 13px;
   }
-  .tabla-perdidas th, .tabla-perdidas td {
+  .tabla-desempeno th, .tabla-desempeno td {
     border: 1px solid #ccc;
-    padding: 6px;
-  }
-  .tabla-perdidas th {
-    background-color: #f2f8ff;
+    padding: 4px;
     text-align: center;
   }
-  .tabla-perdidas td {
-    vertical-align: top;
+  .tabla-desempeno thead {
+    background-color: #f0f0f0;
+  }
+  .fila-totales {
+    background-color: #f0f0f0;
+    font-weight: bold;
   }
 </style>

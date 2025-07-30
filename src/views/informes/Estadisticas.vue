@@ -15,9 +15,9 @@
                       <b-col lg="4">
                         <h6>Desempeños</h6>
                         <b-form-group label="" v-slot="{ ariaDescribedby }">
-                          <b-form-radio v-model="idEstadistica" :aria-describedby="ariaDescribedby" name="some-radios" value="1">Resumen por Curso</b-form-radio>
-                          <b-form-radio v-model="idEstadistica" :aria-describedby="ariaDescribedby" name="some-radios" value="2">Resumen por Grado</b-form-radio>
-                          <b-form-radio v-model="idEstadistica" :aria-describedby="ariaDescribedby" name="some-radios" value="3">Resumen por Área</b-form-radio>
+                          <b-form-radio v-model="idEstadistica" :aria-describedby="ariaDescribedby" name="some-radios" value="1">Resumen Asignaturas por Curso</b-form-radio>
+                          <b-form-radio v-model="idEstadistica" :aria-describedby="ariaDescribedby" name="some-radios" value="2">Resumen Asignaturas por Grado</b-form-radio>
+                          <b-form-radio v-model="idEstadistica" :aria-describedby="ariaDescribedby" name="some-radios" value="3">Resumen Áreas por Curso</b-form-radio>
                         </b-form-group>
                       </b-col>
                       <b-col lg="4">
@@ -40,6 +40,9 @@
                 <div v-if="idEstadistica==2">
                   <DesempenoGrado/>
                 </div>
+                <div v-if="idEstadistica==3">
+                  <DesempenoAreaCurso/>
+                </div>
                 <div v-if="idEstadistica==10">
                   <PuestosEstCursoPeriodo/>
                 </div>
@@ -60,6 +63,7 @@
   import * as CONFIG from '@/assets/config.js'
   import DesempenoCurso from '@/views/informes/estadisticas/DesempenoCurso'
   import DesempenoGrado from '@/views/informes/estadisticas/DesempenoGrado'
+  import DesempenoAreaCurso from '@/views/informes/estadisticas/DesempenoAreaCurso'
   import PuestosEstCursoPeriodo from '@/views/informes/estadisticas/PuestosEstCursoPeriodo'
   import PuestosEstGradoPeriodo from '@/views/informes/estadisticas/PuestosEstGradoPeriodo'
 
@@ -68,6 +72,7 @@
     components: {
       DesempenoCurso,
       DesempenoGrado,
+      DesempenoAreaCurso,
       PuestosEstCursoPeriodo,
       PuestosEstGradoPeriodo,
     },
