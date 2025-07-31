@@ -25,6 +25,7 @@
                         <b-form-group label="" v-slot="{ ariaDescribedby }">
                           <b-form-radio v-model="idEstadistica" :aria-describedby="ariaDescribedby" name="some-radios" value="10">Estudiantes por Curso</b-form-radio>
                           <b-form-radio v-model="idEstadistica" :aria-describedby="ariaDescribedby" name="some-radios" value="11">Estudiantes por Grado</b-form-radio>
+                          <b-form-radio v-model="idEstadistica" :aria-describedby="ariaDescribedby" name="some-radios" value="12">Cursos por Sede</b-form-radio>
                         </b-form-group>
                       </b-col>
                     </b-row>
@@ -49,6 +50,9 @@
                 <div v-if="idEstadistica==11">
                   <PuestosEstGradoPeriodo/>
                 </div>
+                <div v-if="idEstadistica==12">
+                  <PuestosCursosSedePeriodo/>
+                </div>
               </b-col>
             </b-row>
           </b-card-text>
@@ -66,6 +70,7 @@
   import DesempenoAreaCurso from '@/views/informes/estadisticas/DesempenoAreaCurso'
   import PuestosEstCursoPeriodo from '@/views/informes/estadisticas/PuestosEstCursoPeriodo'
   import PuestosEstGradoPeriodo from '@/views/informes/estadisticas/PuestosEstGradoPeriodo'
+  import PuestosCursosSedePeriodo from '@/views/informes/estadisticas/PuestosCursosSedePeriodo'
 
   export default {
     name: 'estadisticas',
@@ -75,6 +80,7 @@
       DesempenoAreaCurso,
       PuestosEstCursoPeriodo,
       PuestosEstGradoPeriodo,
+      PuestosCursosSedePeriodo,
     },
     data () {
       return {
