@@ -39,7 +39,6 @@
               <b-row class="mt-3">
                 <b-col>
                   <b-button class="small mx-1 mt-2" variant="primary" v-if="$store.state.idRol==1 || $store.state.idRol==12 || $store.state.perActDirCurso == 1" @click="confirmarDirectoresCurso">Actualizar Directores de Curso</b-button>
-                  <b-button class="small mx-1 mt-2" variant="outline-primary" @click="imprimirInforme">Imprimir Directores de Curso</b-button>
                 </b-col>
               </b-row>
             </div>
@@ -80,18 +79,6 @@
       }
     },
     methods: {
-      imprimirInforme() {
-        let cursos =[]
-        let sede = document.getElementById('sedes')[document.getElementById('sedes').selectedIndex].text
-        this.listaCursos.forEach(element => {
-          cursos.push({'curso': element.nomenclatura, 'jornada': element.jornada, 'docente': element.docente})
-        })
-        let uri = "?ie=" + this.$store.state.nombreInstitucion + "&vigencia=" + this.$store.state.aLectivo + "&sede=" + sede + "&datos=" + JSON.stringify(cursos)
-        let encoded = encodeURI(uri);
-        //window.open("http://localhost/siedutunja/php/informes/directores-curso.php" + encoded,"_blank")
-        window.open("https://siedutunja.gov.co/php/informes/directores-curso.php" + encoded,"_blank")
-        return true
-      },
       async guardarDirectoresCurso() {
         await axios
         .put(CONFIG.ROOT_PATH + 'academico/docentes/directores', JSON.stringify(this.listaCursos), { headers: {"Content-Type": "application/json; charset=utf-8" }})

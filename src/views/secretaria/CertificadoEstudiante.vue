@@ -53,7 +53,7 @@
         <table class="tabla-certificado">
           <tr>
             <td style="text-align: left">
-              <li v-if="idEstadoFinal === 1 && $store.state.idSeccion == 2 && $store.state.daneInstitucion === '115001002017'">Cumplió con la asistencia a los seminarios programados para el semestre.</li>
+              <li v-if="(idEstadoFinal === 1 || idEstadoFinal === 7) && $store.state.idSeccion == 2 && $store.state.daneInstitucion === '115001002017'">Cumplió con la asistencia a los seminarios programados para el semestre.</li>
               <li>Promoción: <b>{{ estadofinal }}</b></li>
             </td>
           </tr>

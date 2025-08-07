@@ -523,6 +523,13 @@ function configRoutes () {
               name: 'Descriptores',
               component: () => import('@/views/docentes/Descriptores')
             },
+            // 2025-05-31
+            {
+              path: 'listadosdocentes',
+              beforeEnter: autenticar,
+              name: 'Listados',
+              component: () => import('@/views/docentes/ListadosDocentes')
+            },
           ]
         },
         // 2024-02-18
@@ -629,6 +636,13 @@ function configRoutes () {
               beforeEnter: autenticar,
               name: 'Habilitaciones',
               component: () => import('@/views/calificaciones/Habilitaciones')
+            },
+            // 2025-07-11
+            {
+              path: 'planillanotasasignatura',
+              beforeEnter: autenticar,
+              name: 'Notas Asignatura',
+              component: () => import('@/views/calificaciones/PlanillaNotasAsignatura')
             },
           ]
         },
