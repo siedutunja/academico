@@ -350,6 +350,20 @@ function configRoutes () {
               name: 'Auxiliar con Notas',
               component: () => import('@/views/listados/PlanillasNotas')
             },
+            // 2025-08-07
+            {
+              path: 'listadosdocentes',
+              beforeEnter: autenticar,
+              name: 'Listados Docentes',
+              component: () => import('@/views/listados/ListadosDocentes')
+            },
+            // 2025-08-07
+            {
+              path: 'listadosestudiantes',
+              beforeEnter: autenticar,
+              name: 'Listados Estudiantes',
+              component: () => import('@/views/listados/ListadosEstudiantes')
+            },
           ]
         },
         // 2025-01-19
@@ -522,13 +536,6 @@ function configRoutes () {
               beforeEnter: autenticar,
               name: 'Descriptores',
               component: () => import('@/views/docentes/Descriptores')
-            },
-            // 2025-05-31
-            {
-              path: 'listadosdocentes',
-              beforeEnter: autenticar,
-              name: 'Listados',
-              component: () => import('@/views/docentes/ListadosDocentes')
             },
           ]
         },

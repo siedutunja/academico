@@ -4,10 +4,18 @@
       <b-col lg="12">
         <b-card>
           <template #header>
-            <h5 class="mb-0"><b-icon icon="card-checklist" aria-hidden="true"></b-icon> LISTADO GENERAL DE DOCENTES</h5>
+            <h5 class="mb-0"><b-icon icon="card-checklist" aria-hidden="true"></b-icon> LISTADO DE DOCENTES POR ASIGNATURA</h5>
           </template>
           <b-card-text>
             <b-row>
+              <b-col lg="12">
+                <b-form-group label="Seleccione la Asignatura:" label-for="asignaturas" class="etiqueta">
+                  <b-form-select id="asignaturas" ref="asignaturas" v-model="idAsignatura" :options="comboAsignaturas" @change="generarListadoDocentes()"></b-form-select>
+                </b-form-group>
+              </b-col>
+            </b-row>
+            <b-row v-if="idAsignatura != null">
+              <b-col lg="12"><hr></b-col>
               <b-col lg="4">
                 <b-card bg-variant="light" text-variant="">
                   <b-card-text>
@@ -111,7 +119,7 @@
   import * as XLSX from 'xlsx'
 
   export default {
-    name: 'areasperdidas',
+    name: 'listaasignatura',
     props: {
     },
     components: {
@@ -127,6 +135,9 @@
         numeroColumnas: null,
         idGenero: null,
         comboGeneros: [],
+        idAsignatura: null,
+        comboAsignaturas: [],
+        nombreAsignatura: null,
       }
     },
     methods: {
@@ -153,12 +164,13 @@
       },
       async generarListadoDocentes() {
         this.btnCargando = true
+        this.nombreAsignatura = document.getElementById('asignaturas')[document.getElementById('asignaturas').selectedIndex].text
         this.listaDocentes = []
         await axios
-        .get(CONFIG.ROOT_PATH + 'docentes/listageneral', { params: { idInstitucion: this.$store.state.idInstitucion }})
+        .get(CONFIG.ROOT_PATH + 'docentes/listaasignatura', { params: { idInstitucion: this.$store.state.idInstitucion, idAsignatura: this.idAsignatura }})
         .then(response => {
           if (response.data.error){
-            this.mensajeEmergente('danger',CONFIG.TITULO_MSG,response.data.mensaje + ' - Consulta Lista General Docentes')
+            this.mensajeEmergente('danger',CONFIG.TITULO_MSG,response.data.mensaje + ' - Consulta Lista Docentes por Asignatura')
             this.btnCargando = false
           } else{
             if (response.data.datos != 0) {
@@ -170,7 +182,7 @@
           }
         })
         .catch(err => {
-          this.mensajeEmergente('danger',CONFIG.TITULO_MSG,'Algo salio mal y no se pudo realizar: Consulta Lista General Docentes. Intente más tarde.' + err)
+          this.mensajeEmergente('danger',CONFIG.TITULO_MSG,'Algo salio mal y no se pudo realizar: Consulta Lista Docentes por Asignatura. Intente más tarde.' + err)
           this.btnCargando = false
         })
         //console.log(JSON.stringify(this.listaDocentes))
@@ -178,10 +190,10 @@
       },
       imprimir() {
         let fecha = 'Fecha: ' + new Date().toLocaleString()
-        let tituloInforme = 'LISTA GENERAL DE DOCENTES'
+        let tituloInforme = 'LISTADO DE DOCENTES POR ASIGNATURA'
         const contenido = document.querySelector('table').outerHTML
-        const ventana = window.open("Docentes", "_blank")
-        ventana.document.write(`<html><head><title>Docentes</title></head>
+        const ventana = window.open("Docentes por Asignatura", "_blank")
+        ventana.document.write(`<html><head><title>Docentes por Asignatura</title></head>
         <style scoped>
           .tabla-docentes {
             font-family: Arial, sans-serif;
@@ -202,7 +214,7 @@
           }
         </style>
           <body class="container">
-            <p style="text-align: center; font-size: 12px;">SECRETARÍA DE EDUCACIÓN TERRITORIAL DE TUNJA<br><b>${this.$store.state.nombreInstitucion}</b><br>TUNJA - BOYACÁ<br>${tituloInforme}<br>Año Lectivo ${this.$store.state.aLectivo}</p>
+            <p style="text-align: center; font-size: 12px;">SECRETARÍA DE EDUCACIÓN TERRITORIAL DE TUNJA<br><b>${this.$store.state.nombreInstitucion}</b><br>TUNJA - BOYACÁ<br>${tituloInforme}<br>Asignatura: ${this.nombreAsignatura} | Año Lectivo ${this.$store.state.aLectivo}</p>
             ${contenido}
             <div style="text-align: right; font-size: 12px;"><i>${fecha}</i></div>
           </body>
@@ -223,8 +235,14 @@
       },
       exportarAExcel() {
         const tabla = document.querySelector('table')
-        const wb = XLSX.utils.table_to_book(tabla)
-        XLSX.writeFile(wb, 'ListaDocentes.xlsx')
+        const wb = XLSX.utils.table_to_book(tabla,)
+        XLSX.writeFile(wb, 'DocentesAsignatura-' + this.nombreAsignatura + '.xlsx')
+      },
+      cargarComboAsignaturas() {
+        this.comboAsignaturas = []
+        this.$store.state.datosAsignaturas.forEach(element => {
+          this.comboAsignaturas.push({ 'value': element.id, 'text': element.asignatura.toUpperCase() })
+        })
       },
       ocuparCombos() {
         this.comboGeneros = []
@@ -247,8 +265,8 @@
     },
     beforeMount() {
       this.datosSeccion = this.$store.state.datosSecciones[this.$store.state.idSeccion - 1]
-      this.generarListadoDocentes()
       this.ocuparCombos()
+      this.cargarComboAsignaturas()
       this.campos= [
         { value: 'docente', text: 'Apellidos y Nombres', disabled: true },
         { value: 'tipodoc', text: 'Tipo Documento' },
@@ -292,7 +310,7 @@
 <style scoped>
   .tabla-docentes {
     font-family: Arial, sans-serif;
-    margin: 20px;
+    margin: 5px;
   }
   table {
     width: 100%;

@@ -4,17 +4,22 @@
       <b-col lg="12">
         <b-card>
           <template #header>
-            <h5 class="mb-0"><b-icon icon="card-checklist" aria-hidden="true"></b-icon> LISTADO DE DOCENTES POR SEDE</h5>
+            <h5 class="mb-0"><b-icon icon="card-checklist" aria-hidden="true"></b-icon> LISTADO DE DOCENTES POR CURSO</h5>
           </template>
           <b-card-text>
             <b-row>
-              <b-col lg="12">
+              <b-col lg="6">
                 <b-form-group label="Seleccione la Sede:" label-for="sedes" class="etiqueta">
-                  <b-form-select id="sedes" ref="sedes" v-model="idSede" :options="comboSedes" @change="generarListadoDocentes()"></b-form-select>
+                  <b-form-select id="sedes" ref="sedes" v-model="idSede" :options="comboSedes" @change="ocuparComboCursos(),idCurso=null"></b-form-select>
+                </b-form-group>
+              </b-col>
+              <b-col lg="6">
+                <b-form-group label="Seleccione el Curso:" label-for="cursos" class="etiqueta">
+                  <b-form-select id="cursos" ref="cursos" v-model="idCurso" :options="comboCursos" @change="generarListadoDocentes()" :disabled="idSede!=null ? false : true"></b-form-select>
                 </b-form-group>
               </b-col>
             </b-row>
-            <b-row v-if="idSede != null">
+            <b-row v-if="idCurso != null">
               <b-col lg="12"><hr></b-col>
               <b-col lg="4">
                 <b-card bg-variant="light" text-variant="">
@@ -119,7 +124,7 @@
   import * as XLSX from 'xlsx'
 
   export default {
-    name: 'listasede',
+    name: 'listacurso',
     props: {
     },
     components: {
@@ -138,6 +143,9 @@
         idSede: null,
         comboSedes: [],
         nombreSede: null,
+        idCurso: null,
+        comboCursos: [],
+        nombreCurso: null,
       }
     },
     methods: {
@@ -165,12 +173,13 @@
       async generarListadoDocentes() {
         this.btnCargando = true
         this.nombreSede = document.getElementById('sedes')[document.getElementById('sedes').selectedIndex].text
+        this.nombreCurso = this.idCurso != null ? document.getElementById('cursos')[document.getElementById('cursos').selectedIndex].text : ''
         this.listaDocentes = []
         await axios
-        .get(CONFIG.ROOT_PATH + 'docentes/listasede', { params: { idInstitucion: this.$store.state.idInstitucion, idSede: this.idSede }})
+        .get(CONFIG.ROOT_PATH + 'docentes/listacurso', { params: { idInstitucion: this.$store.state.idInstitucion, idCurso: this.idCurso }})
         .then(response => {
           if (response.data.error){
-            this.mensajeEmergente('danger',CONFIG.TITULO_MSG,response.data.mensaje + ' - Consulta Lista Docentes por Sede')
+            this.mensajeEmergente('danger',CONFIG.TITULO_MSG,response.data.mensaje + ' - Consulta Lista Docentes por Curso')
             this.btnCargando = false
           } else{
             if (response.data.datos != 0) {
@@ -182,7 +191,7 @@
           }
         })
         .catch(err => {
-          this.mensajeEmergente('danger',CONFIG.TITULO_MSG,'Algo salio mal y no se pudo realizar: Consulta Lista Docentes por Sede. Intente más tarde.' + err)
+          this.mensajeEmergente('danger',CONFIG.TITULO_MSG,'Algo salio mal y no se pudo realizar: Consulta Lista Docentes por Curso. Intente más tarde.' + err)
           this.btnCargando = false
         })
         //console.log(JSON.stringify(this.listaDocentes))
@@ -190,10 +199,10 @@
       },
       imprimir() {
         let fecha = 'Fecha: ' + new Date().toLocaleString()
-        let tituloInforme = 'LISTADO DE DOCENTES POR SEDE'
+        let tituloInforme = 'LISTADO DE DOCENTES POR CURSO'
         const contenido = document.querySelector('table').outerHTML
-        const ventana = window.open("Docentes por Sede", "_blank")
-        ventana.document.write(`<html><head><title>Docentes por Sede</title></head>
+        const ventana = window.open("Docentes por Curso", "_blank")
+        ventana.document.write(`<html><head><title>Docentes por Curso</title></head>
         <style scoped>
           .tabla-docentes {
             font-family: Arial, sans-serif;
@@ -214,7 +223,7 @@
           }
         </style>
           <body class="container">
-            <p style="text-align: center; font-size: 12px;">SECRETARÍA DE EDUCACIÓN TERRITORIAL DE TUNJA<br><b>${this.$store.state.nombreInstitucion}</b><br>TUNJA - BOYACÁ<br>${tituloInforme}<br>Sede: ${this.nombreSede} | Año Lectivo ${this.$store.state.aLectivo}</p>
+            <p style="text-align: center; font-size: 12px;">SECRETARÍA DE EDUCACIÓN TERRITORIAL DE TUNJA<br><b>${this.$store.state.nombreInstitucion}</b><br>TUNJA - BOYACÁ<br>${tituloInforme}<br>Sede: ${this.nombreSede} | Curso: ${this.nombreCurso} | Año Lectivo ${this.$store.state.aLectivo}</p>
             ${contenido}
             <div style="text-align: right; font-size: 12px;"><i>${fecha}</i></div>
           </body>
@@ -236,7 +245,16 @@
       exportarAExcel() {
         const tabla = document.querySelector('table')
         const wb = XLSX.utils.table_to_book(tabla,)
-        XLSX.writeFile(wb, 'DocentesSede-' + this.nombreSede + '.xlsx')
+        XLSX.writeFile(wb, 'DocentesCurso-' + this.nombreCurso + '-' + this.nombreSede + '.xlsx')
+      },
+      async ocuparComboCursos() {
+        this.comboCursos = []
+        this.$store.state.datosCursos.forEach(element => {
+          if (element.id_sede == this.idSede) {
+            this.comboCursos.push({ 'value': element.id, 'text': element.nomenclatura.toUpperCase() })
+          }
+        })
+        //console.log(JSON.stringify(this.$store.state.datosCursos))
       },
       async ocuparComboSedes() {
         this.comboSedes = []
@@ -310,7 +328,7 @@
 <style scoped>
   .tabla-docentes {
     font-family: Arial, sans-serif;
-    margin: 20px;
+    margin: 5px;
   }
   table {
     width: 100%;

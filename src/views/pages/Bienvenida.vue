@@ -291,6 +291,26 @@
           location.replace(CONFIG.ROOT_WEBSITE)
         })
       },
+      async cargarDataEstudiantes() {
+        await axios
+        .get(CONFIG.ROOT_PATH + 'academico/data/estudiantes', { params: { idInstitucion: this.$store.state.idInstitucion, vigencia: this.$store.state.aLectivo }})
+        .then(response => {
+          if (response.data.error){
+            alert(response.data.mensaje + ' - Consulta Data Estudiantes')
+            location.replace(CONFIG.ROOT_MODULO_LOGIN)
+          } else{
+            if(response.data.datos != 0) {
+              this.$store.commit('set', ['datosDataEstudiantes', response.data.datos])
+            } else {
+              this.$store.commit('set', ['datosDataEstudiantes', []])
+            }
+          }
+        })
+        .catch(err => {
+          alert('Algo salio mal y no se pudo realizar: Consulta Data Estudiantes. Intente más tarde.' + err)
+          location.replace(CONFIG.ROOT_WEBSITE)
+        })
+      },
       async cargarDatosSesionUsuario() {
         await axios
         .get(CONFIG.ROOT_PATH + 'academico/iniciosesion', { params: { idPersona: this.tokenDecodificado.id_persona, idRol: this.tokenDecodificado.id_rol, idIE: this.tokenDecodificado.id_institucion }})
@@ -345,6 +365,7 @@
               this.cargarDatosAsignaturas()
               this.cargarDatosSecciones()
               this.cargarDatosEscalafones()
+              this.cargarDataEstudiantes()
 
               this.trazaProceso('Inicio de Sesión')
             }

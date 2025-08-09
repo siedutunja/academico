@@ -4,22 +4,17 @@
       <b-col lg="12">
         <b-card>
           <template #header>
-            <h5 class="mb-0"><b-icon icon="card-checklist" aria-hidden="true"></b-icon> LISTADO DE DOCENTES POR GRADO</h5>
+            <h5 class="mb-0"><b-icon icon="card-checklist" aria-hidden="true"></b-icon> LISTADO DE DOCENTES POR ÁREA</h5>
           </template>
           <b-card-text>
             <b-row>
-              <b-col lg="6">
-                <b-form-group label="Seleccione la Sede:" label-for="sedes" class="etiqueta">
-                  <b-form-select id="sedes" ref="sedes" v-model="idSede" :options="comboSedes" @change="ocuparComboGrados(),idGrado=null"></b-form-select>
-                </b-form-group>
-              </b-col>
-              <b-col lg="6">
-                <b-form-group label="Seleccione el Grado:" label-for="grados" class="etiqueta">
-                  <b-form-select id="grados" ref="grados" v-model="idGrado" :options="comboGrados" @change="generarListadoDocentes()" :disabled="idSede!=null ? false : true"></b-form-select>
+              <b-col lg="12">
+                <b-form-group label="Seleccione el Área:" label-for="areas" class="etiqueta">
+                  <b-form-select id="areas" ref="areas" v-model="idArea" :options="comboAreas" @change="generarListadoDocentes()"></b-form-select>
                 </b-form-group>
               </b-col>
             </b-row>
-            <b-row v-if="idGrado != null">
+            <b-row v-if="idArea != null">
               <b-col lg="12"><hr></b-col>
               <b-col lg="4">
                 <b-card bg-variant="light" text-variant="">
@@ -124,7 +119,7 @@
   import * as XLSX from 'xlsx'
 
   export default {
-    name: 'listagrado',
+    name: 'listaarea',
     props: {
     },
     components: {
@@ -140,12 +135,9 @@
         numeroColumnas: null,
         idGenero: null,
         comboGeneros: [],
-        idSede: null,
-        comboSedes: [],
-        nombreSede: null,
-        idGrado: null,
-        comboGrados: [],
-        nombreGrado: null,
+        idArea: null,
+        comboAreas: [],
+        nombreArea: null,
       }
     },
     methods: {
@@ -172,14 +164,13 @@
       },
       async generarListadoDocentes() {
         this.btnCargando = true
-        this.nombreSede = document.getElementById('sedes')[document.getElementById('sedes').selectedIndex].text
-        this.nombreGrado = this.idGrado != null ? document.getElementById('grados')[document.getElementById('grados').selectedIndex].text : ''
+        this.nombreArea = document.getElementById('areas')[document.getElementById('areas').selectedIndex].text
         this.listaDocentes = []
         await axios
-        .get(CONFIG.ROOT_PATH + 'docentes/listagrado', { params: { idInstitucion: this.$store.state.idInstitucion, idGrado: this.idGrado }})
+        .get(CONFIG.ROOT_PATH + 'docentes/listaarea', { params: { idInstitucion: this.$store.state.idInstitucion, idArea: this.idArea }})
         .then(response => {
           if (response.data.error){
-            this.mensajeEmergente('danger',CONFIG.TITULO_MSG,response.data.mensaje + ' - Consulta Lista Docentes por Grado')
+            this.mensajeEmergente('danger',CONFIG.TITULO_MSG,response.data.mensaje + ' - Consulta Lista Docentes por Area')
             this.btnCargando = false
           } else{
             if (response.data.datos != 0) {
@@ -191,7 +182,7 @@
           }
         })
         .catch(err => {
-          this.mensajeEmergente('danger',CONFIG.TITULO_MSG,'Algo salio mal y no se pudo realizar: Consulta Lista Docentes por Grado. Intente más tarde.' + err)
+          this.mensajeEmergente('danger',CONFIG.TITULO_MSG,'Algo salio mal y no se pudo realizar: Consulta Lista Docentes por Area. Intente más tarde.' + err)
           this.btnCargando = false
         })
         //console.log(JSON.stringify(this.listaDocentes))
@@ -199,10 +190,10 @@
       },
       imprimir() {
         let fecha = 'Fecha: ' + new Date().toLocaleString()
-        let tituloInforme = 'LISTADO DE DOCENTES POR GRADO'
+        let tituloInforme = 'LISTADO DE DOCENTES POR ÁREA'
         const contenido = document.querySelector('table').outerHTML
-        const ventana = window.open("Docentes por Grado", "_blank")
-        ventana.document.write(`<html><head><title>Docentes por Grado</title></head>
+        const ventana = window.open("Docentes por Área", "_blank")
+        ventana.document.write(`<html><head><title>Docentes por Área</title></head>
         <style scoped>
           .tabla-docentes {
             font-family: Arial, sans-serif;
@@ -223,7 +214,7 @@
           }
         </style>
           <body class="container">
-            <p style="text-align: center; font-size: 12px;">SECRETARÍA DE EDUCACIÓN TERRITORIAL DE TUNJA<br><b>${this.$store.state.nombreInstitucion}</b><br>TUNJA - BOYACÁ<br>${tituloInforme}<br>Sede: ${this.nombreSede} | Grado: ${this.nombreGrado} | Año Lectivo ${this.$store.state.aLectivo}</p>
+            <p style="text-align: center; font-size: 12px;">SECRETARÍA DE EDUCACIÓN TERRITORIAL DE TUNJA<br><b>${this.$store.state.nombreInstitucion}</b><br>TUNJA - BOYACÁ<br>${tituloInforme}<br>Área: ${this.nombreArea} | Año Lectivo ${this.$store.state.aLectivo}</p>
             ${contenido}
             <div style="text-align: right; font-size: 12px;"><i>${fecha}</i></div>
           </body>
@@ -245,21 +236,12 @@
       exportarAExcel() {
         const tabla = document.querySelector('table')
         const wb = XLSX.utils.table_to_book(tabla,)
-        XLSX.writeFile(wb, 'DocentesGrado-' + this.nombreGrado + '-' + this.nombreSede + '.xlsx')
+        XLSX.writeFile(wb, 'DocentesArea-' + this.nombreArea + '.xlsx')
       },
-      async ocuparComboGrados() {
-        this.comboGrados = []
-        this.$store.state.datosGrados.forEach(element => {
-          if (element.id_sede == this.idSede) {
-            this.comboGrados.push({ 'value': element.id, 'text': element.grado.toUpperCase() })
-          }
-        })
-        //console.log(JSON.stringify(this.$store.state.datosGrados))
-      },
-      async ocuparComboSedes() {
-        this.comboSedes = []
-        this.$store.state.datosSedes.forEach(element => {
-          this.comboSedes.push({ 'value': element.id, 'text': element.sede.toUpperCase() })
+      cargarComboAreas() {
+        this.comboAreas = []
+        this.$store.state.datosAreas.forEach(element => {
+          this.comboAreas.push({ 'value': element.id, 'text': element.area.toUpperCase() })
         })
       },
       ocuparCombos() {
@@ -284,7 +266,7 @@
     beforeMount() {
       this.datosSeccion = this.$store.state.datosSecciones[this.$store.state.idSeccion - 1]
       this.ocuparCombos()
-      this.ocuparComboSedes()
+      this.cargarComboAreas()
       this.campos= [
         { value: 'docente', text: 'Apellidos y Nombres', disabled: true },
         { value: 'tipodoc', text: 'Tipo Documento' },
@@ -328,7 +310,7 @@
 <style scoped>
   .tabla-docentes {
     font-family: Arial, sans-serif;
-    margin: 20px;
+    margin: 5px;
   }
   table {
     width: 100%;

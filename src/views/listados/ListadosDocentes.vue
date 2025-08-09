@@ -4,7 +4,7 @@
       <b-col lg="12">
         <b-card>
           <template #header>
-            <h5 class="mb-0"><b-icon icon="card-checklist" aria-hidden="true"></b-icon> CONSULTAS E INFORMES DE DOCENTES</h5>
+            <h5 class="mb-0"><b-icon icon="card-checklist" aria-hidden="true"></b-icon> LISTADOS DE DOCENTES</h5>
           </template>
           <b-card-text>
             <b-row>
@@ -56,6 +56,12 @@
                 <div v-if="idInforme==4">
                   <ListaCurso/>
                 </div>
+                <div v-if="idInforme==5">
+                  <ListaArea/>
+                </div>
+                <div v-if="idInforme==6">
+                  <ListaAsignatura/>
+                </div>
                 <div v-if="idInforme==10">
                   <AsignacionDocente/>
                 </div>
@@ -80,14 +86,16 @@
 <script>
   import axios from "axios"
   import * as CONFIG from '@/assets/config.js'
-  import ListaGeneral from '@/views/docentes/listados/ListaGeneral'
-  import ListaSede from '@/views/docentes/listados/ListaSede'
-  import ListaGrado from '@/views/docentes/listados/ListaGrado'
-  import ListaCurso from '@/views/docentes/listados/ListaCurso'
-  import Directorio from '@/views/docentes/listados/Directorio'
-  import AsignacionDocente from '@/views/docentes/listados/AsignacionDocente'
-  import AsignacionCurso from '@/views/docentes/listados/AsignacionCurso'
-  import DirectoresCurso from '@/views/docentes/listados/DirectoresCurso'
+  import ListaGeneral from '@/views/listados/docentes/ListaGeneral'
+  import ListaSede from '@/views/listados/docentes/ListaSede'
+  import ListaGrado from '@/views/listados/docentes/ListaGrado'
+  import ListaCurso from '@/views/listados/docentes/ListaCurso'
+  import ListaArea from '@/views/listados/docentes/ListaArea'
+  import ListaAsignatura from '@/views/listados/docentes/ListaAsignatura'
+  import Directorio from '@/views/listados/docentes/Directorio'
+  import AsignacionDocente from '@/views/listados/docentes/AsignacionDocente'
+  import AsignacionCurso from '@/views/listados/docentes/AsignacionCurso'
+  import DirectoresCurso from '@/views/listados/docentes/DirectoresCurso'
 
   export default {
     name: 'listadosdocentes',
@@ -96,6 +104,8 @@
       ListaSede,
       ListaGrado,
       ListaCurso,
+      ListaArea,
+      ListaAsignatura,
       Directorio,
       AsignacionDocente,
       AsignacionCurso,

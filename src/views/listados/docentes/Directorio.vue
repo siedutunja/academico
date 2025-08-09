@@ -66,7 +66,7 @@
   import * as XLSX from 'xlsx'
 
   export default {
-    name: 'areasperdidas',
+    name: 'directorio',
     props: {
     },
     components: {
