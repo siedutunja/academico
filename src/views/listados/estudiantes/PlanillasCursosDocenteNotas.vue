@@ -4,7 +4,7 @@
       <b-col lg="12">
         <b-card>
           <template #header>
-            <h5 class="mb-0"><b-icon icon="card-checklist" aria-hidden="true"></b-icon> PLANILLAS DE ESTUDIANTES POR DOCENTE</h5>
+            <h5 class="mb-0"><b-icon icon="card-checklist" aria-hidden="true"></b-icon> PLANILLAS DE ESTUDIANTES POR DOCENTE CON NOTAS</h5>
           </template>
           <b-card-text>
             <b-row>
@@ -20,11 +20,16 @@
             <b-row>
               <b-col lg="6">
                 <b-form-group label="Seleccione el Docente:" label-for="docentes" class="etiqueta">
-                  <b-form-select id="docentes" ref="docentes" v-model="idDocente" :options="comboDocentes" @change="listarCursosAsignados(),cursosConsultados=null"></b-form-select>
+                  <b-form-select id="docentes" ref="docentes" v-model="idDocente" :options="comboDocentes" @change="listarCursosAsignados(),cursosConsultados=null,periodoActual=null"></b-form-select>
                 </b-form-group>
               </b-col>
-              <b-col lg="3" class="mt-2">
-                <b-button class="small mx-1 mt-4" variant="success" @click="seleccionarCursos()" :disabled="idDocente!=null ? false : true">Seleccionar Planillas</b-button>
+              <b-col lg="2">
+                <b-form-group label="Periodo:" label-for="periodo" class="etiqueta">
+                  <b-form-select id="periodo" ref="periodo" v-model="periodoActual" :options="comboPeriodos" :disabled="idDocente!=null ? false : true"></b-form-select>
+                </b-form-group>
+              </b-col>
+              <b-col lg="4" class="mt-2">
+                <b-button class="small mx-1 mt-4" variant="success" @click="seleccionarCursos()" :disabled="periodoActual!=null ? false : true">Seleccionar Planillas</b-button>
               </b-col>
             </b-row>
             <b-row v-if="cursosConsultados">
@@ -118,6 +123,7 @@
                                   <tr>
                                     <th>#</th>
                                     <th>Estudiante</th>
+                                    <th v-for="p in periodoActual" :key="'P' + p">P{{ p }}</th>
                                     <th v-for="colum in numeroColumnas" :key="colum" :style="'width: ' + porcentajeArea/numeroColumnas + '%'"></th>
                                   </tr>
                                 </thead>
@@ -125,6 +131,9 @@
                                   <tr v-for="(est, i) in estudiantesPorCurso(curso.idCurso)" :key="i">
                                     <td>{{ i + 1 }}</td>
                                     <td><span v-if="est.estadoActual == 2" style="color: #9C2007">[R] {{ est.estudiante }}</span><span v-else>{{ est.estudiante }}</span></td>
+                                    <td v-for="p in periodoActual" :key="'nota-' + p">
+                                      {{ obtenerNota(est, p, curso) }}
+                                    </td>
                                     <td v-for="colum in numeroColumnas" :key="colum"></td>
                                   </tr>
                                 </tbody>
@@ -175,7 +184,7 @@
   import * as XLSX from 'xlsx'
 
   export default {
-    name: 'planillascursosdocente',
+    name: 'planillascursosdocentenotas',
     props: {
     },
     components: {
@@ -204,9 +213,23 @@
         cursosSeleccionados: [],
         fechaImpresion: null,
         retirados: false,
+        periodoActual: null,
+        comboPeriodos: [],
+        dataNotas: [],
       }
     },
     methods: {
+      obtenerNota(estudiante, periodo, cursoSeleccionado) {
+        const nota = this.dataNotas.find(n =>
+          n.idMatricula === estudiante.idMatricula &&
+          n.periodo === periodo &&
+          n.idAsignaturaCurso === cursoSeleccionado.idAsignaturaCurso
+        )
+        if (!nota) return ''
+        if (nota.orden === 99) return nota.definitivacompor || ''
+        if (nota.idNivel === 1) return nota.definitivapree || ''
+        return nota.finalPeriodo > 0 ? nota.finalPeriodo.toFixed(1) : '' || ''
+      },
       estudiantesPorCurso(idCurso) {
         //return this.dataConsultada.filter(e => e.idCurso === idCurso)
         return this.dataConsultada.filter(e =>
@@ -281,6 +304,33 @@
         this.cursosSeleccionados = this.$refs.cursitos.selectedRows
         this.$refs['modalSeleccionarCursos'].hide()
         //console.log(JSON.stringify(this.cursosSeleccionados))
+        this.consultarNotasCursosSeleccionados()
+      },
+      async consultarNotasCursosSeleccionados() {
+        this.btnCargando = true
+        let listaAsignaturasCurso = []
+        this.cursosSeleccionados.forEach(element => {
+          listaAsignaturasCurso.push(element.idAsignaturaCurso)
+        });
+        this.dataNotas = []
+        await axios
+        .get(CONFIG.ROOT_PATH + 'consolidados/notas/planillas/docente', { params: { listaAsignCursos: listaAsignaturasCurso, periodo: this.periodoActual }})
+        .then(response => {
+          if (response.data.error){
+            this.mensajeEmergente('danger',CONFIG.TITULO_MSG,response.data.mensaje + ' - Consulta Notas Cursos Seleccionados')
+            this.btnCargando = false
+          } else{
+            if (response.data.datos != 0) {
+              this.dataNotas = response.data.datos
+            }
+          }
+        })
+        .catch(err => {
+          this.mensajeEmergente('danger',CONFIG.TITULO_MSG,'Algo salio mal y no se pudo realizar: Consulta Notas Cursos Seleccionados. Intente más tarde.' + err)
+          this.btnCargando = false
+        })
+        //console.log(JSON.stringify(this.dataNotas))
+        this.btnCargando = false
       },
       seleccionarCursos() {
         this.$refs['modalSeleccionarCursos'].show()
@@ -327,6 +377,12 @@
         })
         //console.log(JSON.stringify(this.$store.state.datosDocentes))
       },
+      async ocuparComboPeriodos() {
+        this.comboPeriodos = []
+        this.$store.state.datosTablas.periodos.forEach(element => {
+          this.comboPeriodos.push({ 'value': element.id, 'text': element.periodo.toUpperCase() })
+        })
+      },
       mensajeEmergente(variante, titulo, contenido) {
         this.$bvToast.toast(contenido, { title: titulo, variant: variante, toaster: "b-toaster-top-center", solid: true, autoHideDelay: 4000, appendToast: false })
       }
@@ -339,6 +395,7 @@
       this.datosSeccion = this.$store.state.datosSecciones[this.$store.state.idSeccion - 1]
       this.fechaImpresion = 'Fecha: ' + new Date().toLocaleString()
       this.ocuparComboDocentes()
+      this.ocuparComboPeriodos()
       this.comboNumeroColumnas = [
         {'value': 0, 'text': 'Sin columnas adicionales'},
         {'value': 1, 'text': '1 columna'},
