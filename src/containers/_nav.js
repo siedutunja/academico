@@ -120,8 +120,8 @@ jwt.verify(token, CONFIG.SECRET_KEY, (err, data) => {
     //menu[0]._children[indice].items.push({ name: 'Listas por Grado/Curso', to: '/listados/listadoscurso'})
     //menu[0]._children[indice].items.push({ name: 'Listas por Docente', to: '/listados/listadosdocente'})
     //menu[0]._children[indice].items.push({ name: 'Auxiliar con Notas', to: '/listados/planillasnotas'})
-    menu[0]._children[indice].items.push({ name: 'Planillas/Formatos por Curso', to: '/listados/planillascurso'})
-    menu[0]._children[indice].items.push({ name: 'Listas Sin Curso', to: '/listados/listadossincurso'})
+    //menu[0]._children[indice].items.push({ name: 'Planillas/Formatos por Curso', to: '/listados/planillascurso'})
+    //menu[0]._children[indice].items.push({ name: 'Listas Sin Curso', to: '/listados/listadossincurso'})
     menu[0]._children.push(
       {
         _name: 'CSidebarNavDropdown',

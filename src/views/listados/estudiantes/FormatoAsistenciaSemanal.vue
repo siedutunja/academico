@@ -4,12 +4,12 @@
       <b-col lg="12">
         <b-card>
           <template #header>
-            <h5 class="mb-0"><b-icon icon="card-checklist" aria-hidden="true"></b-icon> PLANILLAS DE ESTUDIANTES POR DOCENTE CON NOTAS</h5>
+            <h5 class="mb-0"><b-icon icon="card-checklist" aria-hidden="true"></b-icon> PLANILLA CONTROL DE ASISTENCIA SEMANAL POR CURSO</h5>
           </template>
           <b-card-text>
             <b-row>
               <b-col lg="12">
-                <div v-if="btnCargando && cursosConsultados==null">
+                <div v-if="btnCargando">
                   <div class="text-center m-5 text-primary">
                     <b-spinner style="width: 3rem; height: 3rem;" label="Spinner"></b-spinner>
                     <br><strong>Cargando informe...</strong>
@@ -18,18 +18,13 @@
               </b-col>
             </b-row>
             <b-row>
-              <b-col lg="6">
-                <b-form-group label="Seleccione el Docente:" label-for="docentes" class="etiqueta">
-                  <b-form-select id="docentes" ref="docentes" v-model="idDocente" :options="comboDocentes" @change="listarCursosAsignados(),cursosConsultados=null,periodoActual=null"></b-form-select>
+              <b-col lg="9">
+                <b-form-group label="Seleccione la Sede:" label-for="sedes" class="etiqueta">
+                  <b-form-select id="sedes" ref="sedes" v-model="idSede" :options="comboSedes" @change="listarCursosSede(),cursosConsultados=null"></b-form-select>
                 </b-form-group>
               </b-col>
-              <b-col lg="2">
-                <b-form-group label="Periodo:" label-for="periodo" class="etiqueta">
-                  <b-form-select id="periodo" ref="periodo" v-model="periodoActual" :options="comboPeriodos" @change="cursosConsultados=null" :disabled="idDocente!=null ? false : true"></b-form-select>
-                </b-form-group>
-              </b-col>
-              <b-col lg="4" class="mt-2">
-                <b-button class="small mx-1 mt-4" variant="success" @click="seleccionarCursos()" :disabled="periodoActual!=null ? false : true">Seleccionar Planillas</b-button>
+              <b-col lg="3" class="mt-2">
+                <b-button class="small mx-1 mt-4" variant="success" @click="seleccionarCursos()" :disabled="idSede!=null ? false : true">Seleccionar Cursos</b-button>
               </b-col>
             </b-row>
             <b-row v-if="cursosConsultados">
@@ -40,7 +35,7 @@
                     <b-row>
                       <b-col lg="12">
                         <b-form-group>
-                          <h5>Columnas Adicionales:</h5>
+                          <h5>No. Horas Diarias:</h5>
                           <b-row class="m-1">
                             <b-col lg="12">
                               <b-form-select id="numCol" ref="numCol" v-model="numeroColumnas" :options="comboNumeroColumnas"></b-form-select>
@@ -52,7 +47,7 @@
                     <b-row>
                       <b-col lg="12">
                         <b-form-group>
-                          <h5>Área para las Columnas:</h5>
+                          <h5>Área para los días:</h5>
                           <b-row class="m-1">
                             <b-col lg="12">
                               <b-form-select id="porcentajeArea" ref="porcentajeArea" v-model="porcentajeArea" :options="comboPorcentajeArea"></b-form-select>
@@ -96,16 +91,16 @@
                         <div><hr></div>
                         <div class="informe-estudiantes">
                           <div ref="contenido">
-                            <div v-for="(curso, index) in cursosSeleccionados" :key="index" class="bloque-curso">
+                            <div v-for="(curso, index) in cursosSeleccionados" :key="curso.idCurso" class="bloque-curso">
                               <div class="encabezado">
-                                <p>SECRETARÍA DE EDUCACIÓN TERRITORIAL DE TUNJA<br><b>{{$store.state.nombreInstitucion}}</b><br>TUNJA - BOYACÁ<br>PANILLAS DE ESTUDIANTES POR DOCENTE<br></p>
+                                <p>SECRETARÍA DE EDUCACIÓN TERRITORIAL DE TUNJA<br><b>{{$store.state.nombreInstitucion}}</b><br>TUNJA - BOYACÁ<br>PLANILLA CONTROL DE ASISTENCIA SEMANAL<br></p>
                               </div>
                               <table class="tabla-estudiantes">
                                 <thead>
                                   <tr>
                                     <th>Sede: <b>{{ curso.sede }}</b></th>
                                     <th>Curso: <b>{{ curso.curso }}</b></th>
-                                    <th>Jornada:<b>{{ curso.jornada }}</b></th>
+                                    <th>Jornada: <b>{{ curso.jornada }}</b></th>
                                     <th>Año: <b>{{ $store.state.aLectivo }}</b></th>
                                   </tr>
                                 </thead>
@@ -113,32 +108,68 @@
                               <table class="tabla-estudiantes" style="margin-top: -20px">
                                 <thead>
                                   <tr>
-                                    <th>Asignatura: <b>{{ curso.asignatura }}</b></th>
-                                    <th>Docente: <b>{{ nombreDocente }}</b></th>
+                                    <th style="width: 15%">Semana No.:</th>
+                                    <th style="width: 30%">Día que Inicia la Semana:</th>
+                                    <th style="width: 30%">Día que Termina la Semana:</th>
+                                    <th style="width: 25%">Mes:</th>
                                   </tr>
                                 </thead>
                               </table>
                               <table class="tabla-estudiantes" style="margin-top: -20px">
                                 <thead>
                                   <tr>
+                                    <td colspan="2" :style="'text-align: right; width:' + (100 - porcentajeArea) + '%'"><i><strong>DIA DE LA SEMAMA</strong></i></td>
+                                    <td :colspan="numeroColumnas" style="text-align: center;"><i><strong>LUNES</strong></i></td>
+                                    <td :colspan="numeroColumnas" style="text-align: center; background-color: #dcdbdb"><i><strong>MARTES</strong></i></td>
+                                    <td :colspan="numeroColumnas" style="text-align: center;"><i><strong>MIERCOLES</strong></i></td>
+                                    <td :colspan="numeroColumnas" style="text-align: center; background-color: #dcdbdb"><i><strong>JUEVES</strong></i></td>
+                                    <td :colspan="numeroColumnas" style="text-align: center;"><i><strong>VIERNES</strong></i></td>
+                                  </tr>
+                                  <tr>
+                                    <td colspan="2" style="text-align: center; height: 80px"><strong>FIRMA DOCENTE =></strong></td>
+                                    <td v-for="(columa,a) in numeroColumnas" :key="'Lun-' + a"></td>
+                                    <td v-for="(columa,a) in numeroColumnas" :key="'Mar-' + a" style="background-color: #dcdbdb"></td>
+                                    <td v-for="(columa,a) in numeroColumnas" :key="'Mie-' + a"></td>
+                                    <td v-for="(columa,a) in numeroColumnas" :key="'Jue-' + a" style="background-color: #dcdbdb"></td>
+                                    <td v-for="(columa,a) in numeroColumnas" :key="'Vie-' + a"></td>
+                                  </tr>
+                                  <tr>
+                                    <td colspan="2" style="text-align: center; height: 120px"><strong>ASIGNATURAS =></strong></td>
+                                    <td v-for="(columa,a) in numeroColumnas" :key="'Lun-' + a"></td>
+                                    <td v-for="(columa,a) in numeroColumnas" :key="'Mar-' + a" style="background-color: #dcdbdb"></td>
+                                    <td v-for="(columa,a) in numeroColumnas" :key="'Mie-' + a"></td>
+                                    <td v-for="(columa,a) in numeroColumnas" :key="'Jue-' + a" style="background-color: #dcdbdb"></td>
+                                    <td v-for="(columa,a) in numeroColumnas" :key="'Vie-' + a"></td>
+                                  </tr>
+                                  <tr>
                                     <th>#</th>
                                     <th>Estudiante</th>
-                                    <th v-for="p in periodoActual" :key="'P' + p">P{{ p }}</th>
-                                    <th v-for="colum in numeroColumnas" :key="colum" :style="'width: ' + porcentajeArea/numeroColumnas + '%'"></th>
+                                    <th v-for="(columa,a) in numeroColumnas" :key="'Lun-' + a" style="text-align: center;">{{a + 1}}</th>
+                                    <th v-for="(columb,b) in numeroColumnas" :key="'Mar-' + b" style="text-align: center; background-color: #dcdbdb">{{b + 1}}</th>
+                                    <th v-for="(columc,c) in numeroColumnas" :key="'Mie-' + c" style="text-align: center;">{{c + 1}}</th>
+                                    <th v-for="(columd,d) in numeroColumnas" :key="'Jue-' + d" style="text-align: center; background-color: #dcdbdb">{{d + 1}}</th>
+                                    <th v-for="(colume,e) in numeroColumnas" :key="'Vie-' + e" style="text-align: center;">{{e + 1}}</th>
                                   </tr>
                                 </thead>
                                 <tbody>
                                   <tr v-for="(est, i) in estudiantesPorCurso(curso.idCurso)" :key="i">
                                     <td>{{ i + 1 }}</td>
                                     <td><span v-if="est.estadoActual == 2" style="color: #9C2007">[R] {{ est.estudiante }}</span><span v-else>{{ est.estudiante }}</span></td>
-                                    <td v-for="p in periodoActual" :key="'nota-' + p">
-                                      {{ obtenerNota(est, p, curso) }}
-                                    </td>
-                                    <td v-for="colum in numeroColumnas" :key="colum"></td>
+                                    <td v-for="colum in numeroColumnas" :key="'Lun-' + colum"></td>
+                                    <td v-for="colum in numeroColumnas" :key="'Mar-' + colum" style="background-color: #dcdbdb"></td>
+                                    <td v-for="colum in numeroColumnas" :key="'Mie-' + colum"></td>
+                                    <td v-for="colum in numeroColumnas" :key="'Jue-' + colum" style="background-color: #dcdbdb"></td>
+                                    <td v-for="colum in numeroColumnas" :key="'Vie-' + colum"></td>
                                   </tr>
                                 </tbody>
                               </table>
                               <p style="text-align: right; margin-top: -20px; font-size: 11px;" class="text-muted"><i>{{ fechaImpresion }}</i></p>
+                                <table style="border 1 solid; ">
+                                  <tr>
+                                    <td width="80%">OBSERVACIONES:<br><br><br><br></td>
+                                    <td style="text-align: center;"><br><br><br><br>FIRMA</td>
+                                  </tr>
+                                </table>
                               <div v-if="index < cursosSeleccionados.length - 1" class="page-break"></div>
                             </div>
                           </div>
@@ -167,7 +198,7 @@
               <button class="small btn btn-success" @click="procesarListasCursos()">Seleccionar >></button>
             </template>
             <div slot="emptystate">
-              <h5 class="text-danger ml-5">No existen cursos asignados al Docente</h5>
+              <h5 class="text-danger ml-5">No existen Cursos en la Sede</h5>
             </div>
           </vue-good-table>
         </div>
@@ -184,7 +215,7 @@
   import * as XLSX from 'xlsx'
 
   export default {
-    name: 'planillascursosdocentenotas',
+    name: 'formatoactividadmensual',
     props: {
     },
     components: {
@@ -199,37 +230,22 @@
         numeroColumnas: null,
         porcentajeArea: null,
         comboPorcentajeArea: [],
-        idDocente: null,
-        comboDocentes: [],
-        nombreDocente: null,
+        idSede: null,
+        comboSedes: [],
+        nombreSede: null,
         cursosConsultados: false,
         listaCursos: [],
         encabColumnasCursos: [
           { label: 'Grado-Curso', field: 'curso' },
-          { label: 'Asignatura', field: 'asignatura' },
           { label: 'Jornada', field: 'jornada' },
           //{ label: '', field: 'id', sortable: false }
         ],
         cursosSeleccionados: [],
         fechaImpresion: null,
         retirados: false,
-        periodoActual: null,
-        comboPeriodos: [],
-        dataNotas: [],
       }
     },
     methods: {
-      obtenerNota(estudiante, periodo, cursoSeleccionado) {
-        const nota = this.dataNotas.find(n =>
-          n.idMatricula === estudiante.idMatricula &&
-          n.periodo === periodo &&
-          n.idAsignaturaCurso === cursoSeleccionado.idAsignaturaCurso
-        )
-        if (!nota) return ''
-        if (nota.orden === 99) return nota.definitivacompor || ''
-        if (nota.idNivel === 1) return nota.definitivapree || ''
-        return nota.finalPeriodo > 0 ? nota.finalPeriodo.toFixed(1) : '' || ''
-      },
       estudiantesPorCurso(idCurso) {
         //return this.dataConsultada.filter(e => e.idCurso === idCurso)
         return this.dataConsultada.filter(e =>
@@ -243,7 +259,7 @@
           <style>
             .encabezado {
               text-align: center;
-              font-size: 13px;
+              font-size: 12px;
             }
             .informe-estudiantes {
               font-family: 'Segoe UI', sans-serif;
@@ -252,16 +268,14 @@
             table {
               width: 100%;
               border-collapse: collapse;
-              font-size: 13px;
+              font-size: 10px;
               margin-bottom: 20px;
             }
             th, td {
-              border: 1px solid #999;
-              padding: 3px;
+              border: 1px solid #000;
+              padding: 1px;
+              padding-left: 3px;
               text-align: left;
-            }
-            thead {
-              background-color: #f0f4fa;
             }
             @media print {
               .page-break {
@@ -275,21 +289,19 @@
               table {
                 width: 100%;
                 border-collapse: collapse;
-                font-size: 12px;
+                font-size: 10px;
                 margin-bottom: 20px;
               }
               th, td {
-                border: 1px solid #999;
-                padding: 2px;
+                border: 1px solid #000;
+                padding: 1px;
+                padding-left: 3px;
                 text-align: left;
-              }
-              thead {
-                background-color: #f0f4fa;
               }
             }
           </style>
         `
-        const ventana = window.open('Planillas por Docente', '_blank')
+        const ventana = window.open('Planillas por Curso', '_blank')
         ventana.document.write(`
           <html>
             <head><title>Planilla de Estudiantes</title>${estilos}</head>
@@ -303,37 +315,19 @@
         this.cursosConsultados = true
         this.cursosSeleccionados = this.$refs.cursitos.selectedRows
         this.$refs['modalSeleccionarCursos'].hide()
-        //console.log(JSON.stringify(this.cursosSeleccionados))
-        this.consultarNotasCursosSeleccionados()
-      },
-      async consultarNotasCursosSeleccionados() {
-        this.btnCargando = true
-        let listaAsignaturasCurso = []
-        this.cursosSeleccionados.forEach(element => {
-          listaAsignaturasCurso.push(element.idAsignaturaCurso)
-        });
-        this.dataNotas = []
-        await axios
-        .get(CONFIG.ROOT_PATH + 'consolidados/notas/planillas/docente', { params: { listaAsignCursos: listaAsignaturasCurso, periodo: this.periodoActual }})
-        .then(response => {
-          if (response.data.error){
-            this.mensajeEmergente('danger',CONFIG.TITULO_MSG,response.data.mensaje + ' - Consulta Notas Cursos Seleccionados')
-            this.btnCargando = false
-          } else{
-            if (response.data.datos != 0) {
-              this.dataNotas = response.data.datos
-            }
-          }
-        })
-        .catch(err => {
-          this.mensajeEmergente('danger',CONFIG.TITULO_MSG,'Algo salio mal y no se pudo realizar: Consulta Notas Cursos Seleccionados. Intente más tarde.' + err)
-          this.btnCargando = false
-        })
-        //console.log(JSON.stringify(this.dataNotas))
-        this.btnCargando = false
       },
       seleccionarCursos() {
         this.$refs['modalSeleccionarCursos'].show()
+      },
+      calcularEdad(fecha) {
+        var hoy = new Date()
+        var cumpleanos = new Date(fecha)
+        var edad = hoy.getFullYear() - cumpleanos.getFullYear()
+        var m = hoy.getMonth() - cumpleanos.getMonth()
+        if (m < 0 || (m === 0 && hoy.getDate() < cumpleanos.getDate())) {
+            edad--
+        }
+        return edad
       },
       exportarAExcel() {
         const libro = XLSX.utils.book_new()
@@ -344,43 +338,24 @@
             return fila
           })
           const hoja = XLSX.utils.json_to_sheet(datos)
-          XLSX.utils.book_append_sheet(libro, hoja, curso.asignatura.slice(0, 31))
+          XLSX.utils.book_append_sheet(libro, hoja, curso.curso.slice(0, 31))
         })
-        XLSX.writeFile(libro, 'Planillas Docente.xlsx')
+        XLSX.writeFile(libro, 'Planilla Estudiantes Curso.xlsx')
       },
-      async listarCursosAsignados() {
-        this.btnCargando = true
-        this.nombreDocente = document.getElementById('docentes')[document.getElementById('docentes').selectedIndex].text
+      listarCursosSede() {
+        this.nombreSede = document.getElementById('sedes')[document.getElementById('sedes').selectedIndex].text
         this.listaCursos = []
-        await axios
-        .get(CONFIG.ROOT_PATH + 'academico/cargaacademica/planillas/docente', { params: { idInstitucion: this.$store.state.idInstitucion, idDocente: this.idDocente }})
-        .then(response => {
-          if (response.data.error){
-            this.mensajeEmergente('danger',CONFIG.TITULO_MSG,response.data.mensaje + ' - Consulta Asignación Docente')
-            this.btnCargando = false
-          } else{
-            if (response.data.datos != 0) {
-              this.listaCursos = response.data.datos
-            }
+        this.$store.state.datosCursos.forEach(element => {
+          if (element.id_sede == this.idSede) {
+            this.listaCursos.push({ idCurso: element.id, curso: element.nomenclatura.toUpperCase(), jornada: element.jornada, sede: element.sede })
           }
         })
-        .catch(err => {
-          this.mensajeEmergente('danger',CONFIG.TITULO_MSG,'Algo salio mal y no se pudo realizar: Consulta Asignación Docente. Intente más tarde.' + err)
-          this.btnCargando = false
-        })
-        this.btnCargando = false
+        //console.log(JSON.stringify(this.listaCursos))
       },
-      async ocuparComboDocentes() {
-        this.comboDocentes = []
-        this.$store.state.datosDocentes.forEach(element => {
-          this.comboDocentes.push({ 'value': element.id, 'text': element.docente.toUpperCase() })
-        })
-        //console.log(JSON.stringify(this.$store.state.datosDocentes))
-      },
-      async ocuparComboPeriodos() {
-        this.comboPeriodos = []
-        this.$store.state.datosTablas.periodos.forEach(element => {
-          this.comboPeriodos.push({ 'value': element.id, 'text': element.periodo.toUpperCase() })
+      async ocuparComboSedes() {
+        this.comboSedes = []
+        this.$store.state.datosSedes.forEach(element => {
+          this.comboSedes.push({ 'value': element.id, 'text': element.sede.toUpperCase() })
         })
       },
       mensajeEmergente(variante, titulo, contenido) {
@@ -394,8 +369,7 @@
       this.dataConsultada = this.$store.state.datosDataEstudiantes
       this.datosSeccion = this.$store.state.datosSecciones[this.$store.state.idSeccion - 1]
       this.fechaImpresion = 'Fecha: ' + new Date().toLocaleString()
-      this.ocuparComboDocentes()
-      this.ocuparComboPeriodos()
+      this.ocuparComboSedes()
       this.comboNumeroColumnas = [
         {'value': 0, 'text': 'Sin columnas adicionales'},
         {'value': 1, 'text': '1 columna'},
@@ -420,9 +394,12 @@
         {'value': 30, 'text': '30%'},
         {'value': 40, 'text': '40%'},
         {'value': 50, 'text': '50%'},
+        {'value': 60, 'text': '60%'},
+        {'value': 70, 'text': '70%'},
+        {'value': 80, 'text': '80%'},
       ]
-      this.porcentajeArea = 50
-      this.numeroColumnas = 1
+      this.porcentajeArea = 60
+      this.numeroColumnas = 7
       setTimeout(()=>{
         this.btnCargando = false
       },100)
@@ -432,7 +409,7 @@
 <style scoped>
   .encabezado {
     text-align: center;
-    font-size: 13px;
+    font-size: 12px;
   }
   .informe-estudiantes {
     font-family: 'Segoe UI', sans-serif;
@@ -441,16 +418,13 @@
   table {
     width: 100%;
     border-collapse: collapse;
-    font-size: 13px;
+    font-size: 11px;
     margin-bottom: 20px;
   }
   th, td {
     border: 1px solid #999;
     padding: 3px;
     text-align: left;
-  }
-  thead {
-    background-color: #f0f4fa;
   }
   .page-break {
     page-break-after: always;

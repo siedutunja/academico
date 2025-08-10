@@ -34,7 +34,7 @@
                         <b-form-group label="" v-slot="{ ariaDescribedby }">
                           <b-form-radio v-model="idInforme" :aria-describedby="ariaDescribedby" name="some-radios" value="21">Asistencia Semanal</b-form-radio>
                           <b-form-radio v-model="idInforme" :aria-describedby="ariaDescribedby" name="some-radios" value="22">Actividades Mensual</b-form-radio>
-                          <b-form-radio v-model="idInforme" :aria-describedby="ariaDescribedby" name="some-radios" value="22">Observador</b-form-radio>
+                          <b-form-radio v-model="idInforme" :aria-describedby="ariaDescribedby" name="some-radios" value="23">Observador</b-form-radio>
                         </b-form-group>
                       </b-col>
                     </b-row>
@@ -62,6 +62,15 @@
                 <div v-if="idInforme==11">
                   <PlanillasCursosDocenteNotas/>
                 </div>
+                <div v-if="idInforme==21">
+                  <FormatoAsistenciaSemanal/>
+                </div>
+                <div v-if="idInforme==22">
+                  <FormatoActividadMensual/>
+                </div>
+                <div v-if="idInforme==23">
+                  <FormatoObservador/>
+                </div>
               </b-col>
             </b-row>
           </b-card-text>
@@ -80,6 +89,9 @@
   import ListasDatosGrados from '@/views/listados/estudiantes/ListasDatosGrados'
   import PlanillasCursosDocente from '@/views/listados/estudiantes/PlanillasCursosDocente'
   import PlanillasCursosDocenteNotas from '@/views/listados/estudiantes/PlanillasCursosDocenteNotas'
+  import FormatoAsistenciaSemanal from '@/views/listados/estudiantes/FormatoAsistenciaSemanal'
+  import FormatoActividadMensual from '@/views/listados/estudiantes/FormatoActividadMensual'
+  import FormatoObservador from '@/views/listados/estudiantes/FormatoObservador'
 
   export default {
     name: 'listadosdocentes',
@@ -90,6 +102,9 @@
       ListasDatosGrados,
       PlanillasCursosDocente,
       PlanillasCursosDocenteNotas,
+      FormatoAsistenciaSemanal,
+      FormatoActividadMensual,
+      FormatoObservador,
     },
     data () {
       return {

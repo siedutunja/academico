@@ -114,7 +114,7 @@
                                   <tr>
                                     <th>Sede: <b>{{ curso.sede }}</b></th>
                                     <th>Curso: <b>{{ curso.curso }}</b></th>
-                                    <th>Jornada:<b>{{ curso.jornada }}</b></th>
+                                    <th>Jornada: <b>{{ curso.jornada }}</b></th>
                                     <th>Año: <b>{{ $store.state.aLectivo }}</b></th>
                                   </tr>
                                 </thead>
