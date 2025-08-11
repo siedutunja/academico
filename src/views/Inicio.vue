@@ -29,7 +29,7 @@
                   <span><b-icon icon="card-list" font-scale="3"></b-icon></span>
                   <h5 class="mt-2">Listados</h5>
                 </b-card-text>
-                <b-card-text>Genere listados o planillas de Estudiantes</b-card-text>
+                <b-card-text>Genere listados, formatos o planillas de Estudiantes</b-card-text>
               </b-card>
               <b-card border-variant="light" class="text-center linkini" @click="irFichaMatricula">
                 <b-card-text>
@@ -96,7 +96,7 @@
         this.$router.push('/matriculas/buscarnuevo')
       },
       irListados() {
-        this.$router.push('/listados/listadoscurso')
+        this.$router.push('/listados/listadosestudiantes')
       },
       irFichaMatricula() {
         this.$router.push('/matriculas/buscarcarpetamatricula')
