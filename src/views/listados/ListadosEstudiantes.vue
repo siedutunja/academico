@@ -12,7 +12,7 @@
                 <b-card bg-variant="light" text-variant="">
                   <b-card-text>
                     <b-row>
-                      <b-col lg="4">
+                      <b-col lg="3">
                         <h6>Por Grados-Cursos</h6>
                         <b-form-group label="" v-slot="{ ariaDescribedby }">
                           <b-form-radio v-model="idInforme" :aria-describedby="ariaDescribedby" name="some-radios" value="1">Planillas por Curso</b-form-radio>
@@ -22,19 +22,26 @@
                           <b-form-radio v-model="idInforme" :aria-describedby="ariaDescribedby" name="some-radios" value="5">Sin Curso</b-form-radio>
                         </b-form-group>
                       </b-col>
-                      <b-col lg="4">
+                      <b-col lg="3">
                         <h6>Por Docente</h6>
                         <b-form-group label="" v-slot="{ ariaDescribedby }">
                           <b-form-radio v-model="idInforme" :aria-describedby="ariaDescribedby" name="some-radios" value="10">Auxiliares</b-form-radio>
                           <b-form-radio v-model="idInforme" :aria-describedby="ariaDescribedby" name="some-radios" value="11">Auxiliares con Notas </b-form-radio>
                         </b-form-group>
                       </b-col>
-                      <b-col lg="4">
+                      <b-col lg="3">
                         <h6>Formatos</h6>
                         <b-form-group label="" v-slot="{ ariaDescribedby }">
                           <b-form-radio v-model="idInforme" :aria-describedby="ariaDescribedby" name="some-radios" value="21">Asistencia Semanal</b-form-radio>
                           <b-form-radio v-model="idInforme" :aria-describedby="ariaDescribedby" name="some-radios" value="22">Actividades Mensual</b-form-radio>
                           <b-form-radio v-model="idInforme" :aria-describedby="ariaDescribedby" name="some-radios" value="23">Observador</b-form-radio>
+                        </b-form-group>
+                      </b-col>
+                      <b-col lg="3">
+                        <h6>Otros</h6>
+                        <b-form-group label="" v-slot="{ ariaDescribedby }">
+                          <b-form-radio v-model="idInforme" :aria-describedby="ariaDescribedby" name="some-radios" value="30">Por Acudiente</b-form-radio>
+                          <b-form-radio v-model="idInforme" :aria-describedby="ariaDescribedby" name="some-radios" value="31">Por Agrupación </b-form-radio>
                         </b-form-group>
                       </b-col>
                     </b-row>
@@ -71,6 +78,9 @@
                 <div v-if="idInforme==23">
                   <FormatoObservador/>
                 </div>
+                <div v-if="idInforme==30">
+                  <ListasPorAcudiente/>
+                </div>
               </b-col>
             </b-row>
           </b-card-text>
@@ -92,6 +102,7 @@
   import FormatoAsistenciaSemanal from '@/views/listados/estudiantes/FormatoAsistenciaSemanal'
   import FormatoActividadMensual from '@/views/listados/estudiantes/FormatoActividadMensual'
   import FormatoObservador from '@/views/listados/estudiantes/FormatoObservador'
+  import ListasPorAcudiente from '@/views/listados/estudiantes/ListasPorAcudiente'
 
   export default {
     name: 'listadosdocentes',
@@ -105,6 +116,7 @@
       FormatoAsistenciaSemanal,
       FormatoActividadMensual,
       FormatoObservador,
+      ListasPorAcudiente,
     },
     data () {
       return {

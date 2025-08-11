@@ -177,7 +177,7 @@
             }
             .tabla-asignacion th,
             .tabla-asignacion td {
-              border: 1px solid #ccc;
+              border: 1px solid #000;
               padding: 6px;
               text-align: left;
             }
@@ -203,7 +203,7 @@
                 font-size: 13px;
               }
               th, td {
-                border: 1px solid #999;
+                border: 1px solid #000;
                 padding: 4px;
                 text-align: left;
               }

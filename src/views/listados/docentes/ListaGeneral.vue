@@ -193,7 +193,7 @@
             font-size: 13px;
           }
           th, td {
-            border: 1px solid #ccc;
+            border: 1px solid #000;
             padding: 2px;
             text-align: left;
           }

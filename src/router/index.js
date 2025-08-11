@@ -364,6 +364,13 @@ function configRoutes () {
               name: 'Listados Estudiantes',
               component: () => import('@/views/listados/ListadosEstudiantes')
             },
+            // 2025-08-11
+            {
+              path: 'descriptores',
+              beforeEnter: autenticar,
+              name: 'Descriptores',
+              component: () => import('@/views/listados/Descriptores')
+            },
           ]
         },
         // 2025-01-19
@@ -529,13 +536,6 @@ function configRoutes () {
               beforeEnter: autenticar,
               name: 'Directorio de Docentes',
               component: () => import('@/views/docentes/DirectorioDocentes')
-            },
-            // 2025-05-31
-            {
-              path: 'descriptores',
-              beforeEnter: autenticar,
-              name: 'Descriptores',
-              component: () => import('@/views/docentes/Descriptores')
             },
           ]
         },

@@ -347,7 +347,7 @@
                 margin-bottom: 20px;
               }
               th, td {
-                border: 1px solid #999;
+                border: 1px solid #000;
                 padding: 2px;
                 text-align: left;
               }

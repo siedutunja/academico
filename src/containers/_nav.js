@@ -103,7 +103,6 @@ jwt.verify(token, CONFIG.SECRET_KEY, (err, data) => {
     menu[0]._children[indice].items.push({ name: 'Asig. Académica por Docente', to: '/docentes/asignaciondocente'})
     menu[0]._children[indice].items.push({ name: 'Asig. Académica por Curso', to: '/docentes/asignacioncurso'})
     menu[0]._children[indice].items.push({ name: 'Asignar Directores Curso', to: '/docentes/directorescurso'})
-    menu[0]._children[indice].items.push({ name: 'Descriptores', to: '/docentes/descriptores'})
     //menu[0]._children[indice].items.push({ name: 'Consulta Asig. Académica', to: '/docentes/consultaasignacion'})
     //menu[0]._children[indice].items.push({ name: 'Directorio', to: '/docentes/directoriodocentes'})
     menu[0]._children.push(
@@ -117,6 +116,7 @@ jwt.verify(token, CONFIG.SECRET_KEY, (err, data) => {
     indice++
     menu[0]._children[indice].items.push({ name: 'De Estudiantes', to: '/listados/ListadosEstudiantes'})
     menu[0]._children[indice].items.push({ name: 'De Docentes', to: '/listados/listadosdocentes'})
+    menu[0]._children[indice].items.push({ name: 'Descriptores', to: '/listados/descriptores'})
     //menu[0]._children[indice].items.push({ name: 'Listas por Grado/Curso', to: '/listados/listadoscurso'})
     //menu[0]._children[indice].items.push({ name: 'Listas por Docente', to: '/listados/listadosdocente'})
     //menu[0]._children[indice].items.push({ name: 'Auxiliar con Notas', to: '/listados/planillasnotas'})

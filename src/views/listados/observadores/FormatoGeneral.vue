@@ -9,7 +9,7 @@
       <div ref="contenido">
         <div v-for="(est, index) in estudiantesSeleccionados" :key="est.idMatricula" class="bloque-est">
           <div class="encabezado">
-            <p>SECRETARÍA DE EDUCACIÓN TERRITORIAL DE TUNJA<br><b>{{$store.state.nombreInstitucion}}</b><br>TUNJA - BOYACÁ<br>OBSERVADOR DEL ESTUDIANTE<br></p>
+            <p>SECRETARÍA DE EDUCACIÓN TERRITORIAL DE TUNJA<br><b>{{$store.state.nombreInstitucion}}</b><br>TUNJA - BOYACÁ<br>OBSERVADOR DEL ESTUDIANTE AÑO LECTIVO {{$store.state.aLectivo}}<br></p>
           </div>
           <div class="float-left" style="margin-top: -90px; margin-left: 20px;">
               <img :src="escudoUrl" alt="Escudo" class="escudo" width="65px" />
@@ -88,8 +88,30 @@
               </tr>
             </tbody>
           </table>
-
-
+          <table class="table">
+            <thead>
+              <tr>
+                <th colspan="7" style="text-align: center">ASPECTOS OBSERVADOS</th>
+              </tr>
+            </thead>
+            <tbody >
+              <tr>
+                <td style="text-align: center; width: 4%">FECHA</td>
+                <td style="text-align: center; width: 27%">ASPECTO OBSERVADO</td>
+                <td style="text-align: center; width: 27%">PROCEDIMIENTO Y RECOMENDACIONES</td>
+                <td style="text-align: center; width: 27%">COMPROMISOS</td>
+                <td style="text-align: center; width: 5%">FIRMA ESTUDIANTE</td>
+                <td style="text-align: center; width: 5%">FIRMA PADRE DE FAMILIA</td>
+                <td style="text-align: center; width: 5%">FIRMA DOCENTE</td>
+              </tr>
+              <tr v-for="n in 9" :key="n">
+                <td style="height: 48px"></td><td></td><td></td><td></td><td></td><td></td><td></td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="firmas">
+            <div><span>DIRECTOR DE CURSO_________________________________________________ Vo.Bo. PSICOORIENTACIÓN_________________________________________________ Vo.Bo. COORDINACIÓN_________________________________________________</span></div>
+          </div>
           <div v-if="index < estudiantesSeleccionados.length - 1" class="page-break"></div>
         </div>
       </div>
@@ -140,9 +162,15 @@
               margin-bottom: 5px;
             }
             th, td {
-              border: 1px solid #999;
+              border: 1px solid #000;
               padding: 3px;
               text-align: left;
+            }
+            .firmas {
+              display: flex;
+              justify-content: space-around;
+              margin-top: 40px;
+              font-size: 13px;
             }
             thead {
               background-color: #f0f4fa;
@@ -150,6 +178,12 @@
             @media print {
               .page-break {
                 page-break-after: always;
+              }
+              .firmas {
+                display: flex;
+                justify-content: space-around;
+                margin-top: 40px;
+                font-size: 13px;
               }
               body {
                 font-family: 'Segoe UI', sans-serif;
@@ -163,7 +197,7 @@
                 margin-bottom: 5px;
               }
               th, td {
-                border: 1px solid #999;
+                border: 1px solid #000;
                 padding: 2px;
                 text-align: left;
               }
@@ -214,6 +248,12 @@
   }
   thead {
     background-color: #f0f4fa;
+  }
+  .firmas {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 40px;
+    font-size: 13px;
   }
   .page-break {
     page-break-after: always;

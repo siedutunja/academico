@@ -39,7 +39,7 @@
                     <b-row v-if="!btnCargando">
                       <b-col lg="12">
                         <div v-if="$store.state.idInstitucion == 'f5529ba0-fcb3-11ec-8267-536b07c743c4'"> <!-- Gustavo Rojas -->
-                          <GustavoRojas :estudiantesSeleccionados="estudiantesSeleccionados"/>
+                          <GustavoRojas :estudiantesSeleccionados="estudiantesSeleccionados" :sede="nombreSede" :curso="nombreCurso" :jornada="nombreJornada"/>
                         </div>
                         <div v-else> <!-- Formato General -->
                           <FormatoGeneral :estudiantesSeleccionados="estudiantesSeleccionados" :sede="nombreSede" :curso="nombreCurso" :jornada="nombreJornada"/>

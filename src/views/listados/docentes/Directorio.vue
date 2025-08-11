@@ -132,7 +132,7 @@
             font-size: 13px;
           }
           th, td {
-            border: 1px solid #ccc;
+            border: 1px solid #000;
             padding: 6px;
             text-align: left;
           }

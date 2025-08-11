@@ -136,7 +136,7 @@
             }
             .tabla-directores th,
             .tabla-directores td {
-              border: 1px solid #ccc;
+              border: 1px solid #000;
               padding: 3px;
               text-align: left;
             }
@@ -160,7 +160,7 @@
                 font-size: 13px;
               }
               th, td {
-                border: 1px solid #999;
+                border: 1px solid #000;
                 padding: 3px;
                 text-align: left;
               }
