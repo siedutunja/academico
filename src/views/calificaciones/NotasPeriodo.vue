@@ -181,8 +181,6 @@
                         </b-button>
                       </b-col>
                     </b-row>
-
-
                     <b-row v-if="planillita == 5" class="mt-2">
                       <b-col lg="12">
                         <vue-good-table ref="table" :columns="encabColumnas" :rows="notasPlanillaCompor" styleClass="vgt-table condensed bordered striped" :line-numbers="true">
@@ -223,6 +221,47 @@
                       </b-col>
                       <b-col v-if="!botonGuardando">
                         <b-button class="small mx-1 mt-4" variant="success" @click="botonGuardando=true,guardarPlanillaComportamiento()" :disabled="!cambioActivo">Guardar Planilla de Calificaciones</b-button>
+                      </b-col>
+                      <b-col v-else>
+                        <b-button class="mx-1 mt-4" variant="primary" disabled>
+                          <b-spinner small type="grow"></b-spinner>
+                          Guardando la planilla...
+                        </b-button>
+                      </b-col>
+                    </b-row>
+                    <b-row v-if="planillita == 2" class="mt-2">
+                      <b-col lg="12">
+                        <vue-good-table ref="table" :columns="encabColumnas" :rows="notasPlanillaPree" styleClass="vgt-table condensed bordered striped" :line-numbers="true">
+                          <template slot="table-row" slot-scope="props">
+                            <span v-if="props.column.field == 'estudiante'">
+                              <span><strong>{{props.row.estudiante}}</strong></span>
+                            </span>
+                            <span v-if="props.column.field == 'definitivapree'">
+                              <b-form-input v-model="props.row.definitivapree" @blur="actualizarItemPreeLetra(props.row)" @change="cambioPlanilla" @keydown="handleKeyNavigation($event, props.row.originalIndex, 'definitivapree')" autocomplete="off" maxlength="1" :ref="'definitivapree-' + props.row.originalIndex"></b-form-input>
+                            </span>
+                            <span v-if="props.column.field == 'diversa'">
+                              <span><strong>{{props.row.diversa}}</strong></span>
+                            </span>
+                            <span v-if="props.column.field == 'concepto'">
+                              <span><strong>{{props.row.concepto}}</strong></span>
+                            </span>
+                            <span v-if="props.column.field == 'ausJ'">
+                              <b-form-input v-model="props.row.ausJ" @blur="actualizarFallasPree(props.row)" autocomplete="off" maxlength="2" @change="cambioPlanilla" @keydown="handleKeyNavigation($event, props.row.originalIndex, 'ausJ'),soloNumeros($event)" :ref="'ausJ-' + props.row.originalIndex"></b-form-input>
+                            </span>
+                            <span v-if="props.column.field == 'ausS'">
+                              <b-form-input v-model="props.row.ausS" @blur="actualizarFallasPree(props.row)" autocomplete="off" maxlength="2" @change="cambioPlanilla" @keydown="handleKeyNavigation($event, props.row.originalIndex, 'ausS'),soloNumeros($event)" :ref="'ausS-' + props.row.originalIndex"></b-form-input>
+                            </span>
+                          </template>
+                          <div slot="emptystate">
+                            <h5 class="text-danger ml-5">No existen estudiantes en la planilla</h5>
+                          </div>
+                        </vue-good-table>
+                      </b-col>
+                      <b-col lg="12">
+                        <b-alert v-if="cambioActivo==true" variant="danger" show><b>Advertencia: </b>La planilla se ha modificado, se recomienda guardar la planilla.</b-alert>
+                      </b-col>
+                      <b-col v-if="!botonGuardando">
+                        <b-button class="small mx-1 mt-4" variant="success" @click="botonGuardando=true,guardarPlanillaPreescolar()" :disabled="!cambioActivo">Guardar Planilla de Calificaciones</b-button>
                       </b-col>
                       <b-col v-else>
                         <b-button class="mx-1 mt-4" variant="primary" disabled>
@@ -273,28 +312,45 @@
         cambioActivo: false,
         notasPlanilla: [],
         notasPlanillaCompor: [],
+        notasPlanillaPree: [],
         botonGuardando: false,
         colEncabezados: null,
       }
     },
     methods: {
-    async guardarPlanillaComportamiento() {
-      await axios
-      .put(CONFIG.ROOT_PATH + 'academico/notas/planillacompor', JSON.stringify(this.notasPlanillaCompor), { headers: {"Content-Type": "application/json; charset=utf-8" }})
-      .then(response => {
-        if (response.data.error){
-          this.mensajeEmergente('danger',CONFIG.TITULO_MSG,response.data.mensaje + ' - Actualizar Planilla Comportamiento')
-        } else{
-          this.mensajeEmergente('success',CONFIG.TITULO_MSG,'La planilla parcial de evaluaciones se ha guardado satisfactoriamente.')
-          this.botonGuardando = false
-          this.cambioActivo = false
-        }
-      })
-      .catch(err => {
-        this.mensajeEmergente('danger',CONFIG.TITULO_MSG,'Algo salio mal y no se pudo realizar: Actualizar Planilla Comportamiento. Intente más tarde. ' + err)
-      })
-    },
-   async guardarPlanilla() {
+      async guardarPlanillaPreescolar() {
+        await axios
+        .put(CONFIG.ROOT_PATH + 'academico/notas/planillapree', JSON.stringify(this.notasPlanillaPree), { headers: {"Content-Type": "application/json; charset=utf-8" }})
+        .then(response => {
+          if (response.data.error){
+            this.mensajeEmergente('danger',CONFIG.TITULO_MSG,response.data.mensaje + ' - Actualizar Planilla Preescolar')
+          } else{
+            this.mensajeEmergente('success',CONFIG.TITULO_MSG,'La planilla parcial de evaluaciones se ha guardado satisfactoriamente.')
+            this.botonGuardando = false
+            this.cambioActivo = false
+          }
+        })
+        .catch(err => {
+          this.mensajeEmergente('danger',CONFIG.TITULO_MSG,'Algo salio mal y no se pudo realizar: Actualizar Planilla Preescolar. Intente más tarde. ' + err)
+        })
+      },
+      async guardarPlanillaComportamiento() {
+        await axios
+        .put(CONFIG.ROOT_PATH + 'academico/notas/planillacompor', JSON.stringify(this.notasPlanillaCompor), { headers: {"Content-Type": "application/json; charset=utf-8" }})
+        .then(response => {
+          if (response.data.error){
+            this.mensajeEmergente('danger',CONFIG.TITULO_MSG,response.data.mensaje + ' - Actualizar Planilla Comportamiento')
+          } else{
+            this.mensajeEmergente('success',CONFIG.TITULO_MSG,'La planilla parcial de evaluaciones se ha guardado satisfactoriamente.')
+            this.botonGuardando = false
+            this.cambioActivo = false
+          }
+        })
+        .catch(err => {
+          this.mensajeEmergente('danger',CONFIG.TITULO_MSG,'Algo salio mal y no se pudo realizar: Actualizar Planilla Comportamiento. Intente más tarde. ' + err)
+        })
+      },
+      async guardarPlanilla() {
         await axios
         .put(CONFIG.ROOT_PATH + 'academico/notas/planilla', JSON.stringify(this.notasPlanilla), { headers: {"Content-Type": "application/json; charset=utf-8" }})
         .then(response => {
@@ -447,6 +503,19 @@
           this.notasPlanillaCompor[indice].ausS = item.ausS
         }
       },
+      actualizarFallasPree(item) {
+        let indice = this.notasPlanillaPree.findIndex(asigna => asigna.idMatricula === item.idMatricula)
+        if (item.ausJ == '' || item.ausJ == null) {
+          this.notasPlanillaPree[indice].ausJ = null
+        } else  {
+          this.notasPlanillaPree[indice].ausJ = item.ausJ
+        }
+        if (item.ausS == '' || item.ausS == null) {
+          this.notasPlanillaPree[indice].ausS = null
+        } else  {
+          this.notasPlanillaPree[indice].ausS = item.ausS
+        }
+      },
       consultaListaCurso() {
         this.btnCargando = true
         this.planillita = 0
@@ -470,13 +539,45 @@
             this.cargarNotasPeriodo()
           } else if (nivel == 1) {
             this.planillita = 2
+          this.cargarNotasPeriodoPrees()
           } else {
             this.mensajeEmergente('info',CONFIG.TITULO_MSG,'Lo sentimos, debe seleccionar una asignatura para consultar las valoraciones.')
           }
         }
       },
+      async cargarNotasPeriodoPrees() {
+        this.notasPlanillaPree = []
+        await axios
+        .get(CONFIG.ROOT_PATH + 'academico/notas/planillapree', {params: {idCurso: this.idCurso, idPeriodo: this.idPeriodo, idPlanilla: this.idAsignatura}})
+        .then(response => {
+          if (response.data.error){
+            this.mensajeEmergente('danger',CONFIG.TITULO_MSG,response.data.mensaje + ' - Notas periodo preescolar')
+            this.btnCargando = false
+            this.cambioActivo = false
+          } else{
+            if (response.data.datos != 0) {
+              response.data.datos.forEach(element => {
+                element.id_asignatura_curso = this.idAsignatura
+                element.periodo = this.idPeriodo
+              })
+              this.notasPlanillaPree = response.data.datos
+              //console.log(JSON.stringify(this.notasPlanillaCompor))
+              setTimeout(()=>{
+                this.construirPlanillaNotasPree()
+                this.btnCargando = false
+                this.cambioActivo = false
+              },500)
+            }
+          }
+        })
+        .catch(err => {
+          this.mensajeEmergente('danger',CONFIG.TITULO_MSG,'Algo salio mal y no se pudo realizar: Notas periodo preescolar. Intente más tarde.' + err)
+          this.btnCargando = false
+          this.cambioActivo = false
+        })
+      },
       async cargarNotasPeriodoComportamiento() {
-        this.notasPlanilla = []
+        this.notasPlanillaCompor = []
         await axios
         .get(CONFIG.ROOT_PATH + 'academico/notas/planillacompor', {params: {idCurso: this.idCurso, idPeriodo: this.idPeriodo, idPlanilla: this.idAsignatura}})
         .then(response => {
@@ -506,7 +607,6 @@
           this.cambioActivo = false
         })
       },
-
       async cargarNotasPeriodo() {
         this.notasPlanilla = []
         await axios
@@ -523,7 +623,7 @@
                 element.periodo = this.idPeriodo
               })
               this.notasPlanilla = response.data.datos
-              console.log(JSON.stringify(this.notasPlanilla))
+              //console.log(JSON.stringify(this.notasPlanilla))
               setTimeout(()=>{
                 this.construirPlanillaNotas()
                 this.btnCargando = false
@@ -609,6 +709,16 @@
           ]
         }
       },
+      construirPlanillaNotasPree() {
+        this.encabColumnas = [
+          { label: 'Apellidos y Nombres Estudiante', width: '30%', field: 'estudiante', sortable: false },
+          { label: '', field: 'diversa', sortable: false, tdClass: this.tdClassFuncDiversa },
+          { label: 'Definitiva', field: 'definitivapree', sortable: false },
+          { label: 'Concepto', field: 'concepto', sortable: false, tdClass: this.tdClassFuncConceptoPreeLetra },
+          { label: 'AJ', field: 'ausJ', sortable: false, tooltip: 'Ausencias Justificadas' },
+          { label: 'AS', field: 'ausS', sortable: false, tooltip: 'Ausencias Sin Justificar' },
+        ]
+      },
       actualizarItemComporLetra(item) {
         let indice = this.notasPlanillaCompor.findIndex(asigna => asigna.idMatricula === item.idMatricula)
         if (item.definitivacompor == '' || item.definitivacompor == null) {
@@ -633,6 +743,32 @@
           this.notasPlanillaCompor[indice].concepto = this.configuracionPlanilla.compC4
         } else {
           this.notasPlanillaCompor[indice].concepto = null
+        }
+      },
+      actualizarItemPreeLetra(item) {
+        let indice = this.notasPlanillaPree.findIndex(asigna => asigna.idMatricula === item.idMatricula)
+        if (item.definitivapree == '' || item.definitivapree == null) {
+          this.notasPlanillaPree[indice].definitivapree = null
+          item.definitivapree = null
+        } else  {
+          if (item.definitivapree == this.configuracionPlanilla.preeL1 || item.definitivapree == this.configuracionPlanilla.preeL2 || item.definitivapree == this.configuracionPlanilla.preeL3 || item.definitivapree == this.configuracionPlanilla.preeL4) {
+            this.notasPlanillaPree[indice].definitivapree = item.definitivapree
+          } else {
+            this.notasPlanillaPree[indice].definitivapree = null
+            this.mensajeEmergente('danger',CONFIG.TITULO_MSG,'La evaluación: ' + item.definitivapree  + ' no es válida.')
+            item.definitivapree = null
+          }
+        }
+        if (item.definitivapree == this.configuracionPlanilla.preeL1) {
+          this.notasPlanillaPree[indice].concepto = this.configuracionPlanilla.preeC1
+        } else if (item.definitivapree == this.configuracionPlanilla.preeL2) {
+          this.notasPlanillaPree[indice].concepto = this.configuracionPlanilla.preeC2
+        } else if (item.definitivapree == this.configuracionPlanilla.preeL3) {
+          this.notasPlanillaPree[indice].concepto = this.configuracionPlanilla.preeC3
+        } else if (item.definitivapree == this.configuracionPlanilla.preeL4) {
+          this.notasPlanillaPree[indice].concepto = this.configuracionPlanilla.preeC4
+        } else {
+          this.notasPlanillaPree[indice].concepto = null
         }
       },
       actualizarItemComporNota(item) {
@@ -681,6 +817,18 @@
         } else if (fila.definitivacompor == this.configuracionPlanilla.compL3) {
           return 'text-warning text-center bg-light'
         } else if (fila.definitivacompor == this.configuracionPlanilla.compL4) {
+          return 'text-success text-center bg-light'
+        }
+        return 'text-secondary text-center bg-light'
+      },
+      tdClassFuncConceptoPreeLetra(fila) {
+        if (fila.definitivapree == this.configuracionPlanilla.preeL1) {
+          return 'text-danger text-center bg-light'
+        } else if (fila.definitivapree == this.configuracionPlanilla.preeL2) {
+          return 'text-primary text-center bg-light'
+        } else if (fila.definitivapree == this.configuracionPlanilla.preeL3) {
+          return 'text-warning text-center bg-light'
+        } else if (fila.definitivapree == this.configuracionPlanilla.preeL4) {
           return 'text-success text-center bg-light'
         }
         return 'text-secondary text-center bg-light'
