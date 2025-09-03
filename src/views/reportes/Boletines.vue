@@ -509,23 +509,43 @@
       },
       async consultarNotas() {
         this.notas = []
-        await axios
-        .get(CONFIG.ROOT_PATH + 'boletines/notas/curso/periodo', {params: {idCurso: this.idCurso, periodo: this.idPeriodo}})
-        .then(response => {
-          if (response.data.error){
-            this.mensajeEmergente('danger',CONFIG.TITULO_MSG,response.data.mensaje + ' - Notas boletines curso periodo')
-            this.btnCargando = false
-          } else{
-            if (response.data.datos != 0) {
-              this.notas = response.data.datos
-              //console.log(JSON.stringify(this.notas))
+        if (this.idBoletin == 1) {
+          await axios
+          .get(CONFIG.ROOT_PATH + 'boletines/notas/curso/periodo', {params: {idCurso: this.idCurso, periodo: this.idPeriodo}})
+          .then(response => {
+            if (response.data.error){
+              this.mensajeEmergente('danger',CONFIG.TITULO_MSG,response.data.mensaje + ' - Notas boletines curso periodo')
+              this.btnCargando = false
+            } else{
+              if (response.data.datos != 0) {
+                this.notas = response.data.datos
+                //console.log(JSON.stringify(this.notas))
+              }
             }
-          }
-        })
-        .catch(err => {
-          this.mensajeEmergente('danger',CONFIG.TITULO_MSG,'Algo salio mal y no se pudo realizar: Notas boletines curso periodo. Intente más tarde.' + err)
-          this.btnCargando = false
-        })
+          })
+          .catch(err => {
+            this.mensajeEmergente('danger',CONFIG.TITULO_MSG,'Algo salio mal y no se pudo realizar: Notas boletines curso periodo. Intente más tarde.' + err)
+            this.btnCargando = false
+          })
+        } else if (this.idBoletin == 2) { //RETIRADOS
+          await axios
+          .get(CONFIG.ROOT_PATH + 'boletines/notas/curso/periodo/retirados', {params: {idCurso: this.idCurso, periodo: this.idPeriodo}})
+          .then(response => {
+            if (response.data.error){
+              this.mensajeEmergente('danger',CONFIG.TITULO_MSG,response.data.mensaje + ' - Notas boletines curso periodo')
+              this.btnCargando = false
+            } else{
+              if (response.data.datos != 0) {
+                this.notas = response.data.datos
+                //console.log(JSON.stringify(this.notas))
+              }
+            }
+          })
+          .catch(err => {
+            this.mensajeEmergente('danger',CONFIG.TITULO_MSG,'Algo salio mal y no se pudo realizar: Notas boletines curso periodo. Intente más tarde.' + err)
+            this.btnCargando = false
+          })
+        }
       },
       async consultarAreasAsignaturas() {
         this.listaAreasAsignaturas = []

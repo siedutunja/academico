@@ -39,7 +39,7 @@
         </b-card>
       </b-col>
     </b-row>
-    <b-modal ref="modalCrearEditarFicha" size="xl" scrollable hide-footer title="Entrevista Familiar" ok-only>
+    <b-modal ref="modalCrearEditarFicha" size="xl" scrollable hide-footer :title="'Entrevista Familiar de ' + nombreEstudiante" ok-only>
       <div class="mx-3">
         <div>
           <FichaEntrevista :datosFicha="datosFicha"  @retorno="datosRecibidosFicha"/>
@@ -81,13 +81,15 @@
         datosFicha: {
           idEstudiante: null,
           idMatricula: null
-        }
+        },
+        nombreEstudiante: null,
       }
     },
     methods: {
       consultarEntrevista(item) {
         this.$store.commit('set', ['idEstudiante', item.idEstudiante])
         this.$store.commit('set', ['idMatricula', item.idMatricula])
+        this.nombreEstudiante = item.estudiante
         this.$refs['modalCrearEditarFicha'].show()
       },      
       async consultaListaCurso() {

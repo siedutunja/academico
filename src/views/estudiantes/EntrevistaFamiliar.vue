@@ -226,32 +226,70 @@
                       <th colspan="2" style="text-align: left"> INFORMACIÓN GENERAL DEL ESTUDIANTE</th>
                     </tr>
                     <tr>
-                      <td>¿Está en Centro de Protección?¿Dónde?</td>
-                      <td><b-form-input v-model.trim="datosEntrevista.centro_proteccion" autocomplete="off" maxlength="255"></b-form-input></td>
+                      <td>¿Está en Centro de Protección?</td>
+                      <td>
+                        <b-form-group>
+                          <b-form-select v-model="datosEntrevista.id_centro_proteccion" :options="comboCentrosProteccion"></b-form-select>
+                        </b-form-group>
+                        <div v-if="datosEntrevista.id_centro_proteccion=='S'">
+                          <label class="text-muted"><i>Centro de Protección:</i></label>
+                          <b-form-input v-model.trim="datosEntrevista.centro_proteccion" autocomplete="off" maxlength="255"></b-form-input>
+                        </div>
+                      </td>
                     </tr>
                     <tr>
                       <td>¿Se reconoce como víctima de conflicto armado?</td>
-                      <td><b-form-input v-model.trim="datosEntrevista.victima" autocomplete="off" maxlength="255"></b-form-input></td>
+                      <td>
+                        <b-form-group>
+                          <b-form-select v-model="datosEntrevista.id_victima" :options="comboVictimas"></b-form-select>
+                        </b-form-group>
+                      </td>
                     </tr>
                     <tr>
                       <td>El estudiante es</td>
-                      <td><b-form-input v-model.trim="datosEntrevista.cualidades" autocomplete="off" maxlength="255"></b-form-input></td>
+                      <td>
+                        <b-form-group>
+                          <b-form-checkbox class="ml-4 m-2" v-for="campo in camposEs" v-model="camposEsSeleccionados" :key="campo.value" :value="campo.value">
+                            {{ campo.text }}
+                          </b-form-checkbox>
+                        </b-form-group>
+                      </td>
                     </tr>
                     <tr>
                       <td>Calidad del sueño</td>
-                      <td><b-form-input v-model.trim="datosEntrevista.calidad_sueno" autocomplete="off" maxlength="255"></b-form-input></td>
+                      <td>
+                        <b-form-group>
+                          <b-form-checkbox class="ml-4 m-2" v-for="campo in camposSueno" v-model="camposSuenoSeleccionados" :key="campo.value" :value="campo.value">
+                            {{ campo.text }}
+                          </b-form-checkbox>
+                        </b-form-group>
+                      </td>
                     </tr>
                     <tr>
                       <td>¿Qué aptitudes tiene?</td>
-                      <td><b-form-input v-model.trim="datosEntrevista.aptitudes" autocomplete="off" maxlength="255"></b-form-input></td>
+                      <td>
+                        <b-form-group>
+                          <b-form-checkbox class="ml-4 m-2" v-for="campo in camposAptitud" v-model="camposAptitudSeleccionados" :key="campo.value" :value="campo.value">
+                            {{ campo.text }}
+                          </b-form-checkbox>
+                        </b-form-group>
+                      </td>
                     </tr>
                     <tr>
                       <td>¿Tiene desórdenes alimenticios?</td>
-                      <td><b-form-input v-model.trim="datosEntrevista.desorden_alimenticio" autocomplete="off" maxlength="255"></b-form-input></td>
+                      <td>
+                        <b-form-group>
+                          <b-form-select v-model="datosEntrevista.id_desorden_alimenticio" :options="comboDesordenAlimenticio"></b-form-select>
+                        </b-form-group>
+                        <div v-if="datosEntrevista.id_desorden_alimenticio=='S'">
+                          <label class="text-muted"><i>Cual:</i></label>
+                          <b-form-input v-model.trim="datosEntrevista.desorden_alimenticio" autocomplete="off" maxlength="255"></b-form-input>
+                        </div>
+                      </td>
                     </tr>
                     <tr>
                       <td>¿A que alimento es alérgico?</td>
-                      <td><b-form-input v-model.trim="datosEntrevista.alergias" autocomplete="off" maxlength="255"></b-form-input></td>
+                      <td><b-form-input v-model.trim="datosEntrevista.alergias" autocomplete="off" maxlength="255" placeholder="Ninguno."></b-form-input></td>
                     </tr>
                     <tr>
                       <th colspan="2" style="text-align: left"> SALUD Y BIENESTAR</th>
@@ -261,36 +299,86 @@
                       <td><b-form-input v-model.trim="datosEntrevista.eps" autocomplete="off" maxlength="255"></b-form-input></td>
                     </tr>
                     <tr>
-                      <td>¿Tiene algún diagnóstico médico?¿Cuál?</td>
-                      <td><b-form-input v-model.trim="datosEntrevista.diagnostico" autocomplete="off" maxlength="255"></b-form-input></td>
+                      <td>¿Tiene algún diagnóstico médico?</td>
+                      <td>
+                        <b-form-group>
+                          <b-form-select v-model="datosEntrevista.id_diagnostico" :options="comboDiagnostico"></b-form-select>
+                        </b-form-group>
+                        <div v-if="datosEntrevista.id_diagnostico=='S'">
+                          <label class="text-muted"><i>Cual:</i></label>
+                          <b-form-input v-model.trim="datosEntrevista.diagnostico" autocomplete="off" maxlength="255"></b-form-input>
+                        </div>
+                      </td>
                     </tr>
                     <tr>
                       <td>¿Actualmente se encuentra en tratamiento médico?</td>
-                      <td><b-form-input v-model.trim="datosEntrevista.tratamiento" autocomplete="off" maxlength="255"></b-form-input></td>
+                      <td>
+                        <b-form-group>
+                          <b-form-select v-model="datosEntrevista.id_tratamiento" :options="comboTratamiento"></b-form-select>
+                        </b-form-group>
+                        <div v-if="datosEntrevista.id_tratamiento=='S'">
+                          <label class="text-muted"><i>Cual:</i></label>
+                          <b-form-input v-model.trim="datosEntrevista.tratamiento" autocomplete="off" maxlength="255"></b-form-input>
+                        </div>
+                      </td>
                     </tr>
                     <tr>
                       <td>¿Asiste a terapias?</td>
-                      <td><b-form-input v-model.trim="datosEntrevista.terapias" autocomplete="off" maxlength="255"></b-form-input></td>
+                      <td>
+                        <b-form-group>
+                          <b-form-select v-model="datosEntrevista.id_terapias" :options="comboTerapias"></b-form-select>
+                        </b-form-group>
+                        <div v-if="datosEntrevista.id_terapias=='S'">
+                          <label class="text-muted"><i>Cuales:</i></label>
+                          <b-form-input v-model.trim="datosEntrevista.terapias" autocomplete="off" maxlength="255"></b-form-input>
+                        </div>
+                      </td>
                     </tr>
                     <tr>
                       <td>Presenta dificultades</td>
-                      <td><b-form-input v-model.trim="datosEntrevista.dificultades" autocomplete="off" maxlength="255"></b-form-input></td>
+                      <td>
+                        <b-form-group>
+                          <b-form-checkbox class="ml-4 m-2" v-for="campo in camposDificultad" v-model="camposDificultadSeleccionados" :key="campo.value" :value="campo.value">
+                            {{ campo.text }}
+                          </b-form-checkbox>
+                        </b-form-group>
+                      </td>
                     </tr>
                     <tr>
-                      <td>¿Requiere cuidados especiales en salud?¿Cuál(es)?</td>
-                      <td><b-form-input v-model.trim="datosEntrevista.cuidados" autocomplete="off" maxlength="255"></b-form-input></td>
+                      <td>¿Requiere cuidados especiales en salud?</td>
+                      <td>
+                        <b-form-group>
+                          <b-form-select v-model="datosEntrevista.id_cuidados" :options="comboCuidados"></b-form-select>
+                        </b-form-group>
+                        <div v-if="datosEntrevista.id_cuidados=='S'">
+                          <label class="text-muted"><i>Cuales:</i></label>
+                          <b-form-input v-model.trim="datosEntrevista.cuidados" autocomplete="off" maxlength="255"></b-form-input>
+                        </div>
+                      </td>
                     </tr>
                     <tr>
                       <td>Enfermedades padecidas</td>
-                      <td><b-form-input v-model.trim="datosEntrevista.enfermedades" autocomplete="off" maxlength="255"></b-form-input></td>
+                      <td><b-form-input v-model.trim="datosEntrevista.enfermedades" autocomplete="off" maxlength="255" placeholder="Ninguna."></b-form-input></td>
                     </tr>
                     <tr>
-                      <td>¿Cirugías?¿Cuál (es)?</td>
-                      <td><b-form-input v-model.trim="datosEntrevista.cirugias" autocomplete="off" maxlength="255"></b-form-input></td>
+                      <td>¿Cirugías?</td>
+                      <td>
+                        <b-form-group>
+                          <b-form-select v-model="datosEntrevista.id_cirugias" :options="comboCirugias"></b-form-select>
+                        </b-form-group>
+                        <div v-if="datosEntrevista.id_cirugias=='S'">
+                          <label class="text-muted"><i>Cuales:</i></label>
+                          <b-form-input v-model.trim="datosEntrevista.cirugias" autocomplete="off" maxlength="255"></b-form-input>
+                        </div>
+                      </td>
                     </tr>
                     <tr>
                       <td>¿Tiene el esquema de vacunación completo?</td>
-                      <td><b-form-input v-model.trim="datosEntrevista.vacunacion" autocomplete="off" maxlength="255"></b-form-input></td>
+                      <td>
+                        <b-form-group>
+                          <b-form-select v-model="datosEntrevista.id_vacunacion" :options="comboVacunacion"></b-form-select>
+                        </b-form-group>
+                      </td>
                     </tr>
                     <tr>
                       <td>¿En qué emplea el tiempo libre?</td>
@@ -311,16 +399,50 @@
                       <th colspan="2" style="text-align: left"> PERSONAS CON QUIENES CONVIVE</th>
                     </tr>
                     <tr>
-                      <td>Nombre (Parentesco)</td>
-                      <td><b-form-input v-model.trim="datosEntrevista.convive" autocomplete="off" maxlength="500"></b-form-input></td>
+                      <td>Nombre</td>
+                      <td>
+                        <b-form-input v-model.trim="datosEntrevista.convive1" autocomplete="off" maxlength="500" placeholder="Persona 1"></b-form-input>
+                        <b-form-group>
+                          <label class="text-muted mt-3"><i>Parentesco:</i></label>
+                          <b-form-checkbox class="ml-4 m-2" v-for="campo in camposParent1" v-model="camposParent1Seleccionados" :key="campo.value" :value="campo.value">
+                            {{ campo.text }}
+                          </b-form-checkbox>
+                        </b-form-group>
+                      </td>
                     </tr>
                     <tr>
-                      <td>¿La familia recibe subsidio de alguna Entidad o Institución?¿Cuál?</td>
-                      <td><b-form-input v-model.trim="datosEntrevista.subsidio" autocomplete="off" maxlength="255"></b-form-input></td>
+                      <td>Nombre</td>
+                      <td>
+                        <b-form-input v-model.trim="datosEntrevista.convive2" autocomplete="off" maxlength="500" placeholder="Persona 2"></b-form-input>
+                        <b-form-group>
+                          <label class="text-muted mt-3"><i>Parentesco:</i></label>
+                          <b-form-checkbox class="ml-4 m-2" v-for="campo in camposParent2" v-model="camposParent2Seleccionados" :key="campo.value" :value="campo.value">
+                            {{ campo.text }}
+                          </b-form-checkbox>
+                        </b-form-group>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>¿La familia recibe subsidio de alguna Entidad o Institución?</td>
+                      <td>
+                        <b-form-group>
+                          <b-form-select v-model="datosEntrevista.id_subsidio" :options="comboSubsidio"></b-form-select>
+                        </b-form-group>
+                        <div v-if="datosEntrevista.id_subsidio=='S'">
+                          <label class="text-muted"><i>Cual:</i></label>
+                          <b-form-input v-model.trim="datosEntrevista.subsidio" autocomplete="off" maxlength="255"></b-form-input>
+                        </div>
+                      </td>
                     </tr>
                     <tr>
                       <td>En las relaciones familiares hay</td>
-                      <td><b-form-input v-model.trim="datosEntrevista.relacion_familiar" autocomplete="off" maxlength="255"></b-form-input></td>
+                      <td>
+                        <b-form-group>
+                          <b-form-checkbox class="ml-4 m-2" v-for="campo in camposRelFam" v-model="camposRelFamSeleccionados" :key="campo.value" :value="campo.value">
+                            {{ campo.text }}
+                          </b-form-checkbox>
+                        </b-form-group>
+                      </td>
                     </tr>
                     <tr>
                       <td>¿Qué actividades comparten en familia?</td>
@@ -343,7 +465,13 @@
                     </tr>
                     <tr>
                       <td>Maneja buenas relaciones con</td>
-                      <td><b-form-input v-model.trim="datosEntrevista.buenas_relaciones" autocomplete="off" maxlength="255"></b-form-input></td>
+                      <td>
+                        <b-form-group>
+                          <b-form-checkbox class="ml-4 m-2" v-for="campo in camposBuenasRel" v-model="camposBuenasRelSeleccionados" :key="campo.value" :value="campo.value">
+                            {{ campo.text }}
+                          </b-form-checkbox>
+                        </b-form-group>
+                      </td>
                     </tr>
                     <tr>
                       <th colspan="2" style="text-align: left"> HISTORIA ESCOLAR</th>
@@ -354,15 +482,32 @@
                     </tr>
                     <tr>
                       <td>¿Reinicia el grado actual?</td>
-                      <td><b-form-input v-model.trim="datosEntrevista.reinicia_grado" autocomplete="off" maxlength="255"></b-form-input></td>
+                      <td>
+                        <b-form-group>
+                          <b-form-select v-model="datosEntrevista.id_reinicia_grado" :options="comboReiniciaGrado"></b-form-select>
+                        </b-form-group>
+                      </td>
                     </tr>
                     <tr>
                       <td>¿Qué años ha reiniciado?</td>
-                      <td><b-form-input v-model.trim="datosEntrevista.anos_reinicio" autocomplete="off" maxlength="255"></b-form-input></td>
+                      <td>
+                        <b-form-group>
+                          <b-form-checkbox class="ml-4 m-2" v-for="campo in camposReinicio" v-model="camposReinicioSeleccionados" :key="campo.value" :value="campo.value">
+                            {{ campo.text }}
+                          </b-form-checkbox>
+                        </b-form-group>
+                      </td>
                     </tr>
                     <tr>
                       <td>En general, el desempeño académico en el año anterior fue</td>
-                      <td><b-form-input v-model.trim="datosEntrevista.desempeno_anterior" autocomplete="off" maxlength="255"></b-form-input></td>
+                      <td>
+                        <b-form-group>
+                          <b-form-checkbox class="ml-4 m-2" v-for="campo in camposDesemp" v-model="camposDesempSeleccionados" :key="campo.value" :value="campo.value">
+                            {{ campo.text }}
+                          </b-form-checkbox>
+                          {{ camposDesempSeleccionados }}
+                        </b-form-group>
+                      </td>
                     </tr>
                     <tr>
                       <td>Áreas que se le facilitan</td>
@@ -378,11 +523,19 @@
                     </tr>
                     <tr>
                       <td>¿En el año anterior recibió algún(os) reconocimiento(s)?¿Cuál (es)?</td>
-                      <td><b-form-input v-model.trim="datosEntrevista.reconocimieto" autocomplete="off" maxlength="255"></b-form-input></td>
+                      <td>
+                        <b-form-group>
+                          <b-form-select v-model="datosEntrevista.id_reconocimieto" :options="comboReconocimieto"></b-form-select>
+                        </b-form-group>
+                        <div v-if="datosEntrevista.id_reconocimieto=='S'">
+                          <label class="text-muted"><i>Cual:</i></label>
+                          <b-form-input v-model.trim="datosEntrevista.reconocimieto" autocomplete="off" maxlength="255"></b-form-input>
+                        </div>
+                      </td>
                     </tr>
                     <tr>
                       <td>Observaciones generales</td>
-                      <td><b-form-input v-model.trim="datosEntrevista.observaciones" autocomplete="off" maxlength="255"></b-form-input></td>
+                      <td><b-form-textarea v-model.trim="datosEntrevista.observaciones" autocomplete="off" rows="5"></b-form-textarea></td>
                     </tr>
                   </tbody>
                 </table>
@@ -496,10 +649,10 @@
             <th colspan="2" style="text-align: left"> INFORMACIÓN GENERAL DEL ESTUDIANTE</th>
           </tr>
           <tr>
-            <td>¿Está en Centro de Protección?¿Dónde?</td><td>{{datosEntrevista.centro_proteccion}}</td>
+            <td>¿Está en Centro de Protección?¿Dónde?</td><td>{{datosEntrevista.id_centro_proteccion=='S' ? 'SI - ' + datosEntrevista.centro_proteccion : 'NO'}}</td>
           </tr>
           <tr>
-            <td>¿Se reconoce como víctima de conflicto armado?</td><td>{{datosEntrevista.victima}}</td>
+            <td>¿Se reconoce como víctima de conflicto armado?</td><td>{{datosEntrevista.id_centro_proteccion=='S' ? 'SI' : 'NO'}}</td>
           </tr>
           <tr>
             <td>El estudiante es</td><td>{{datosEntrevista.cualidades}}</td>
@@ -511,7 +664,7 @@
             <td>¿Qué aptitudes tiene?</td><td>{{datosEntrevista.aptitudes}}</td>
           </tr>
           <tr>
-            <td>¿Tiene desórdenes alimenticios?</td><td>{{datosEntrevista.desorden_alimenticio}}</td>
+            <td>¿Tiene desórdenes alimenticios?</td><td>{{datosEntrevista.id_desorden_alimenticio=='S' ? 'SI - ' + datosEntrevista.desorden_alimenticio : 'NO'}}</td>
           </tr>
           <tr>
             <td>¿A que alimento es alérgico?</td><td>{{datosEntrevista.alergias}}</td>
@@ -523,28 +676,28 @@
             <td>EPS, lugar de atención en caso de emergencia</td><td>{{datosEntrevista.eps}}</td>
           </tr>
           <tr>
-            <td>¿Tiene algún diagnóstico médico?¿Cuál?</td><td>{{datosEntrevista.diagnostico}}</td>
+            <td>¿Tiene algún diagnóstico médico?¿Cuál?</td><td>{{datosEntrevista.id_diagnostico=='S' ? 'SI - ' + datosEntrevista.diagnostico : 'NO'}}</td>
           </tr>
           <tr>
-            <td>¿Actualmente se encuentra en tratamiento médico?</td><td>{{datosEntrevista.tratamiento}}</td>
+            <td>¿Actualmente se encuentra en tratamiento médico?</td><td>{{datosEntrevista.id_tratamiento=='S' ? 'SI - ' + datosEntrevista.tratamiento : 'NO'}}</td>
           </tr>
           <tr>
-            <td>¿Asiste a terapias?</td><td>{{datosEntrevista.terapias}}</td>
+            <td>¿Asiste a terapias?</td><td>{{datosEntrevista.id_terapias=='S' ? 'SI - ' + datosEntrevista.terapias : 'NO'}}</td>
           </tr>
           <tr>
             <td>Presenta dificultades</td><td>{{datosEntrevista.dificultades}}</td>
           </tr>
           <tr>
-            <td>¿Requiere cuidados especiales en salud?¿Cuál(es)?</td><td>{{datosEntrevista.cuidados}}</td>
+            <td>¿Requiere cuidados especiales en salud?¿Cuál(es)?</td><td>{{datosEntrevista.id_cuidados=='S' ? 'SI - ' + datosEntrevista.cuidados : 'NO'}}</td>
           </tr>
           <tr>
             <td>Enfermedades padecidas</td><td>{{datosEntrevista.enfermedades}}</td>
           </tr>
           <tr>
-            <td>¿Cirugías?¿Cuál (es)?</td><td>{{datosEntrevista.cirugias}}</td>
+            <td>¿Cirugías?¿Cuál (es)?</td><td>{{datosEntrevista.id_cirugias=='S' ? 'SI - ' + datosEntrevista.cirugias : 'NO'}}</td>
           </tr>
           <tr>
-            <td>¿Tiene el esquema de vacunación completo?</td><td>{{datosEntrevista.vacunacion}}</td>
+            <td>¿Tiene el esquema de vacunación completo?</td><td>{{datosEntrevista.id_vacunacion=='S' ? 'SI' : 'NO'}}</td>
           </tr>
           <tr>
             <td>¿En qué emplea el tiempo libre?</td><td>{{datosEntrevista.tiempo_libre}}</td>
@@ -562,10 +715,13 @@
             <th colspan="2" style="text-align: left"> PERSONAS CON QUIENES CONVIVE</th>
           </tr>
           <tr>
-            <td>Nombre (Parentesco)</td><td>{{datosEntrevista.convive}}</td>
+            <td>Nombre (Parentesco)</td><td>{{datosEntrevista.convive1 != null ? datosEntrevista.convive1 + ' - ' + datosEntrevista.parentesco1 : ''}}</td>
           </tr>
           <tr>
-            <td>¿La familia recibe subsidio de alguna Entidad o Institución?¿Cuál?</td><td>{{datosEntrevista.subsidio}}</td>
+            <td>Nombre (Parentesco)</td><td>{{datosEntrevista.convive2 != null ? datosEntrevista.convive2 + ' - ' + datosEntrevista.parentesco2 : ''}}</td>
+          </tr>
+          <tr>
+            <td>¿La familia recibe subsidio de alguna Entidad o Institución?¿Cuál?</td><td>{{datosEntrevista.id_subsidio=='S' ? 'SI - ' + datosEntrevista.subsidio : 'NO'}}</td>
           </tr>
           <tr>
             <td>En las relaciones familiares hay</td><td>{{datosEntrevista.relacion_familiar}}</td>
@@ -595,7 +751,7 @@
             <td>¿De qué Institución viene?</td><td>{{datosEntrevista.ie_viene}}</td>
           </tr>
           <tr>
-            <td>¿Reinicia el grado actual?</td><td>{{datosEntrevista.reinicia_grado}}</td>
+            <td>¿Reinicia el grado actual?</td><td>{{datosEntrevista.id_reinicia_grado=='S' ? 'SI' : 'NO'}}</td>
           </tr>
           <tr>
             <td>¿Qué años ha reiniciado?</td><td>{{datosEntrevista.anos_reinicio}}</td>
@@ -613,7 +769,7 @@
             <td>¿Por qué?</td><td>{{datosEntrevista.porque_dificulta}}</td>
           </tr>
           <tr>
-            <td>¿En el año anterior recibió algún(os) reconocimiento(s)?¿Cuál (es)?</td><td>{{datosEntrevista.reconocimieto}}</td>
+            <td>¿En el año anterior recibió algún(os) reconocimiento(s)?¿Cuál (es)?</td><td>{{datosEntrevista.id_reconocimieto=='S' ? 'SI - ' + datosEntrevista.reconocimieto : 'NO'}}</td>
           </tr>
           <tr>
             <td>Observaciones generales</td><td>{{datosEntrevista.observaciones}}</td>
@@ -662,26 +818,37 @@
           fecha: null,
           aplico: this.$store.state.Persona,
           respondio: null,
+          id_centro_proteccion: 'N',
           centro_proteccion: null,
-          victima: null,
+          id_victima: 'N',
           cualidades: null,
           calidad_sueno: null,
           aptitudes: null,
+          id_desorden_alimenticio: 'N',
           desorden_alimenticio: null,
           alergias: null,
           eps: null,
+          id_diagnostico: 'N',
           diagnostico: null,
+          id_tratamiento: 'N',
           tratamiento: null,
+          id_terapias: 'N',
           terapias: null,
           dificultades	: null,
+          id_cuidados: 'N',
           cuidados: null,
           enfermedades: null,
+          id_cirugias: 'N',
           cirugias: null,
-          vacunacion: null,
+          id_vacunacion: 'N',
           tiempo_libre: null,
           hermanos: null,
           lugar: null,
-          convive: null,
+          convive1: null,
+          parentesco1: null,
+          convive2: null,
+          parentesco2: null,
+          id_subsidio: 'N',
           subsidio: null,
           relacion_familiar: null,
           actividades_familiares: null,
@@ -690,12 +857,13 @@
           no_se_lleva_bien: null,
           buenas_relaciones: null,
           ie_viene: null,
-          reinicia_grado: null,
+          id_reinicia_grado: 'N',
           anos_reinicio: null,
           desempeno_anterior: null,
           areas_facilita: null,
           areas_dificulta: null,
           porque_dificulta: null,
+          id_reconocimieto: 'N',
           reconocimieto: null,
           observaciones: null,
           creado: null,
@@ -703,6 +871,38 @@
         },
         fechaImprimir: null,
         botonGuardando: false,
+        comboCentrosProteccion: [],
+        comboVictimas: [],
+        camposEs: [],
+        camposEsSeleccionados: [],
+        camposSueno: [],
+        camposSuenoSeleccionados: [],
+        camposAptitud: [],
+        camposAptitudSeleccionados: [],
+        comboDesordenAlimenticio: [],
+        comboDiagnostico: [],
+        comboTratamiento: [],
+        comboTerapias: [],
+        camposDificultad: [],
+        camposDificultadSeleccionados: [],
+        comboCuidados: [],
+        comboCirugias: [],
+        comboVacunacion: [],
+        camposParent1: [],
+        camposParent2: [],
+        camposParent1Seleccionados: [],
+        camposParent2Seleccionados: [],
+        comboSubsidio: [],
+        camposRelFam: [],
+        camposRelFamSeleccionados: [],
+        camposBuenasRel: [],
+        camposBuenasRelSeleccionados: [],
+        comboReiniciaGrado: [],
+        camposReinicio: [],
+        camposReinicioSeleccionados: [],
+        camposDesemp: [],
+        camposDesempSeleccionados: [],
+        comboReconocimieto: [],
       }
     },
     validations: {
@@ -814,6 +1014,17 @@
       },
       async guardarEntrevista() {
         this.datosEntrevista.id_estudiante = this.idEstudiante
+        this.datosEntrevista.cualidades = JSON.stringify(this.camposEsSeleccionados)
+        this.datosEntrevista.calidad_sueno = JSON.stringify(this.camposSuenoSeleccionados)
+        this.datosEntrevista.aptitudes = JSON.stringify(this.camposAptitudSeleccionados)
+        this.datosEntrevista.dificultades = JSON.stringify(this.camposDificultadSeleccionados)
+        this.datosEntrevista.parentesco1 = JSON.stringify(this.camposParent1Seleccionados)
+        this.datosEntrevista.parentesco2 = JSON.stringify(this.camposParent2Seleccionados)
+        this.datosEntrevista.relacion_familiar = JSON.stringify(this.camposRelFamSeleccionados)
+        this.datosEntrevista.buenas_relaciones = JSON.stringify(this.camposBuenasRelSeleccionados)
+        this.datosEntrevista.anos_reinicio = JSON.stringify(this.camposReinicioSeleccionados)
+        this.datosEntrevista.desempeno_anterior = JSON.stringify(this.camposDesempSeleccionados)
+
         await axios
         .put(CONFIG.ROOT_PATH + 'academico/entrevistafamiliar', JSON.stringify(this.datosEntrevista), { headers: {"Content-Type": "application/json; charset=utf-8" }})
         .then(response => {
@@ -846,6 +1057,16 @@
                 if (this.datosEntrevista.fecha != null) {
                   this.datosEntrevista.fecha = this.datosEntrevista.fecha.substr(0,10)
                 }
+                this.camposEsSeleccionados = this.datosEntrevista.cualidades !== null ? JSON.parse(this.datosEntrevista.cualidades) : []
+                this.camposSuenoSeleccionados = this.datosEntrevista.calidad_sueno !== null ? JSON.parse(this.datosEntrevista.calidad_sueno) : []
+                this.camposAptitudSeleccionados = this.datosEntrevista.aptitudes !== null ? JSON.parse(this.datosEntrevista.aptitudes) : []
+                this.camposDificultadSeleccionados = this.datosEntrevista.dificultades !== null ? JSON.parse(this.datosEntrevista.dificultades) : []
+                this.camposParent1Seleccionados = this.datosEntrevista.parentesco1 !== null ? JSON.parse(this.datosEntrevista.parentesco1) : []
+                this.camposParent2Seleccionados = this.datosEntrevista.parentesco2 !== null ? JSON.parse(this.datosEntrevista.parentesco2) : []
+                this.camposRelFamSeleccionados = this.datosEntrevista.relacion_familiar !== null ? JSON.parse(this.datosEntrevista.relacion_familiar) : []
+                this.camposBuenasRelSeleccionados = this.datosEntrevista.buenas_relaciones !== null ? JSON.parse(this.datosEntrevista.buenas_relaciones) : []
+                this.camposReinicioSeleccionados = this.datosEntrevista.anos_reinicio !== null ? JSON.parse(this.datosEntrevista.anos_reinicio) : []
+                this.camposDesempSeleccionados = this.datosEntrevista.desempeno_anterior !== null ? JSON.parse(this.datosEntrevista.desempeno_anterior) : []
               }
               /*
               if (this.datosFichaE.foto == null || this.datosFichaE.foto == '') {
@@ -873,13 +1094,53 @@
         return edad
       },
       ocuparCombos() {
-        this.comboTiposObservacion = []
-        this.$store.state.datosTablas.tiposobservacion.forEach(element => {
-          this.comboTiposObservacion.push({ 'value': element.id, 'text': element.tipoobservacion.toUpperCase() })
+        this.comboCentrosProteccion = []
+        this.$store.state.datosTablas.sino.forEach(element => {
+          this.comboCentrosProteccion.push({ 'value': element.id, 'text': element.sino.toUpperCase() })
         })
-        this.comboEstadosSeguimiento = []
-        this.$store.state.datosTablas.estadosseguimiento.forEach(element => {
-          this.comboEstadosSeguimiento.push({ 'value': element.id, 'text': element.estadoseguimiento.toUpperCase() })
+        this.comboVictimas = []
+        this.$store.state.datosTablas.sino.forEach(element => {
+          this.comboVictimas.push({ 'value': element.id, 'text': element.sino.toUpperCase() })
+        })
+        this.comboDesordenAlimenticio = []
+        this.$store.state.datosTablas.sino.forEach(element => {
+          this.comboDesordenAlimenticio.push({ 'value': element.id, 'text': element.sino.toUpperCase() })
+        })
+        this.comboDiagnostico = []
+        this.$store.state.datosTablas.sino.forEach(element => {
+          this.comboDiagnostico.push({ 'value': element.id, 'text': element.sino.toUpperCase() })
+        })
+        this.comboTratamiento = []
+        this.$store.state.datosTablas.sino.forEach(element => {
+          this.comboTratamiento.push({ 'value': element.id, 'text': element.sino.toUpperCase() })
+        })
+        this.comboTerapias = []
+        this.$store.state.datosTablas.sino.forEach(element => {
+          this.comboTerapias.push({ 'value': element.id, 'text': element.sino.toUpperCase() })
+        })
+        this.comboCuidados = []
+        this.$store.state.datosTablas.sino.forEach(element => {
+          this.comboCuidados.push({ 'value': element.id, 'text': element.sino.toUpperCase() })
+        })
+        this.comboCirugias = []
+        this.$store.state.datosTablas.sino.forEach(element => {
+          this.comboCirugias.push({ 'value': element.id, 'text': element.sino.toUpperCase() })
+        })
+        this.comboVacunacion = []
+        this.$store.state.datosTablas.sino.forEach(element => {
+          this.comboVacunacion.push({ 'value': element.id, 'text': element.sino.toUpperCase() })
+        })
+        this.comboSubsidio = []
+        this.$store.state.datosTablas.sino.forEach(element => {
+          this.comboSubsidio.push({ 'value': element.id, 'text': element.sino.toUpperCase() })
+        })
+        this.comboReiniciaGrado = []
+        this.$store.state.datosTablas.sino.forEach(element => {
+          this.comboReiniciaGrado.push({ 'value': element.id, 'text': element.sino.toUpperCase() })
+        })
+        this.comboReconocimieto = []
+        this.$store.state.datosTablas.sino.forEach(element => {
+          this.comboReconocimieto.push({ 'value': element.id, 'text': element.sino.toUpperCase() })
         })
       },
       validateStateE(name) {
@@ -895,6 +1156,97 @@
       this.idMatricula = this.$store.state.idMatricula
       this.consultaEntrevista()
       this.ocuparCombos()
+      this.camposEs = [
+        { value: 'Sociable', text: 'Sociable' },
+        { value: 'Comunicativo', text: 'Comunicativo' },
+        { value: 'Empático', text: 'Empático' },
+        { value: 'Se valora a sí mismo', text: 'Se valora a sí mismo'},
+        { value: 'Colaborador', text: 'Colaborador' },
+        { value: 'Tranquilo', text: 'Tranquilo' },
+        { value: 'Afectuoso', text: 'Afectuoso' },
+        { value: 'Inquieto', text: 'Inquieto' },
+        { value: 'Ansioso', text: 'Ansioso' },
+        { value: 'Obediente', text: 'Obediente' },
+        { value: 'Emotivo', text: 'Emotivo' },
+        { value: 'Timido', text: 'Timido' },
+        { value: 'Agresivo', text: 'Agresivo' },
+        { value: 'Sensible', text: 'Sensible' },
+      ]
+      this.camposSueno = [
+        { value: 'Tranquilo', text: 'Tranquilo' },
+        { value: 'Insomnio', text: 'Insomnio' },
+        { value: 'Pesadillas', text: 'Pesadillas' },
+        { value: 'Temores nocturnos', text: 'Temores nocturnos' },
+      ]
+      this.camposAptitud = [
+        { value: 'Deportivas', text: 'Deportivas' },
+        { value: 'Artísticas', text: 'Artísticas' },
+        { value: 'Liderazgo', text: 'Liderazgo' },
+        { value: 'Tecnológicas', text: 'Tecnológicas' },
+      ]
+      this.camposDificultad = [
+        { value: 'Sensoriales', text: 'Sensoriales' },
+        { value: 'Motoras', text: 'Motoras' },
+        { value: 'Del lenguaje', text: 'Del lenguaje' },
+        { value: 'Psicológicas', text: 'Psicológicas' },
+        { value: 'Cognitivas', text: 'Cognitivas' },
+        { value: 'Otras', text: 'Otras' },
+      ]
+      this.camposParent1 = [
+        { value: 'Madre', text: 'Madre' },
+        { value: 'Padre', text: 'Padre' },
+        { value: 'Abuelo(a)', text: 'Abuelo(a)' },
+        { value: 'Tio(a)', text: 'Tio(a)' },
+        { value: 'Hermano(a)', text: 'Hermano(a)' },
+        { value: 'Amigo(a)', text: 'Amigo(a)' },
+        { value: 'Pareja - Conyugue', text: 'Pareja - Conyugue' },
+        { value: 'Otro', text: 'Otro' },
+      ]
+      this.camposParent2 = [
+        { value: 'Madre', text: 'Madre' },
+        { value: 'Padre', text: 'Padre' },
+        { value: 'Abuelo(a)', text: 'Abuelo(a)' },
+        { value: 'Tio(a)', text: 'Tio(a)' },
+        { value: 'Hermano(a)', text: 'Hermano(a)' },
+        { value: 'Amigo(a)', text: 'Amigo(a)' },
+        { value: 'Pareja - Conyugue', text: 'Pareja - Conyugue' },
+        { value: 'Otro', text: 'Otro' },
+      ]
+      this.camposRelFam = [
+        { value: 'Respeto', text: 'Respeto' },
+        { value: 'Cercanía', text: 'Cercanía' },
+        { value: 'Autoridad', text: 'Autoridad' },
+        { value: 'Diálogo', text: 'Diálogo' },
+        { value: 'Disciplina', text: 'Disciplina' },
+        { value: 'Normas', text: 'Normas' },
+        { value: 'Limites', text: 'Limites' },
+        { value: 'Solidaridad', text: 'Solidaridad' },
+      ]
+      this.camposBuenasRel = [
+        { value: 'Profesores', text: 'Profesores' },
+        { value: 'Compañeros', text: 'Compañeros' },
+        { value: 'Vecinos', text: 'Vecinos' },
+      ]
+      this.camposReinicio = [
+        { value: 'PRIMERO', text: 'PRIMERO' },
+        { value: 'SEGUNDO', text: 'SEGUNDO' },
+        { value: 'TERCERO', text: 'TERCERO' },
+        { value: 'CUARTO', text: 'CUARTO' },
+        { value: 'QUINTO', text: 'QUINTO' },
+        { value: 'SEXTO', text: 'SEXTO' },
+        { value: 'SEPTIMO', text: 'SEPTIMO' },
+        { value: 'OCTAVO', text: 'OCTAVO' },
+        { value: 'NOVENO', text: 'NOVENO' },
+        { value: 'DECIMO', text: 'DECIMO' },
+        { value: 'ONCE', text: 'ONCE' },
+        { value: 'OTRO', text: 'OTRO' },
+      ]
+      this.camposDesemp = [
+        { value: 'Superior', text: 'Superior' },
+        { value: 'Alto', text: 'Alto' },
+        { value: 'Básico', text: 'Básico' },
+        { value: 'Bajo', text: 'Bajo' },
+      ]
       this.fechaImprimir = new Date().toLocaleString()
     }
   }

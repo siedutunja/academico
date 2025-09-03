@@ -96,6 +96,7 @@
               </tr>
             </tbody>
           </table>
+          <button @click="guardarNotas">💾 Guardar notas</button>
         </div>
       </b-col>
     </b-row>
@@ -137,15 +138,14 @@
           est.subtotales[criterio] = 0
         })
       })
+      console.log(JSON.stringify(this.listaEstudiantes))
     },
     methods: {
       calcular(est) {
         let notaFinal = 0
-
         Object.entries(this.criteriosEvaluacion).forEach(([criterio, config]) => {
           const notas = est.notas[criterio]
           let subtotal = 0
-
           if (config.tipoCalculo === 1) {
             const validas = notas.filter(n => typeof n === 'number')
             const suma = validas.reduce((a, b) => a + b, 0)
@@ -157,7 +157,6 @@
             }, 0)
             subtotal = subtotal / 100
           }
-
           est.subtotales[criterio] = subtotal
           notaFinal += subtotal * (config.porcentaje / 100)
         })
@@ -193,12 +192,49 @@
             porcentajesNotas: [10, 20, 20, 25, 25]
           },
           SER: {
-            cantidadNotas: 3,
+            cantidadNotas: 10,
             tipoCalculo: 1,
             porcentaje: 25,
             porcentajesNotas: []
           }
         }
+      },
+      guardarNotas() {
+        const payload = this.listaEstudiantes.map(est => {
+          return {
+            idMatricula: est.idMatricula,
+            idAsignaturaCurso: this.idAsignaturaCurso,
+            periodo: this.periodoActual,
+            criterios: Object.entries(this.criteriosEvaluacion).map(([criterio, config]) => ({
+              criterio,
+              notas: est.notas[criterio],
+              subtotal: est.subtotales[criterio]
+            })),
+            notaFinal: est.notaFinal
+          }
+        })
+        console.log('📦 Respuesta API:', JSON.stringify(payload))
+        /*
+        fetch('https://tuservidor.com/api/notas', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(payload)
+        })
+        .then(res => {
+          if (!res.ok) throw new Error('Error al guardar')
+          return res.json()
+        })
+        .then(data => {
+          alert('✅ Notas guardadas correctamente')
+          console.log('📦 Respuesta API:', data)
+        })
+        .catch(err => {
+          console.error('❌ Error al guardar notas:', err)
+          alert('⚠️ Hubo un problema al guardar las notas')
+        })
+        */
       },
       async consultaListaCurso() {
         this.listaEstudiantes = []
@@ -210,6 +246,15 @@
           } else{
             if (response.data.datos != 0) {
               this.listaEstudiantes = response.data.datos
+              this.listaEstudiantes.forEach(est => {
+                est.notas = {}
+                est.subtotales = {}
+                est.notaFinal = 0
+                Object.entries(this.criteriosEvaluacion).forEach(([criterio, config]) => {
+                  est.notas[criterio] = Array(config.cantidadNotas).fill(null)
+                  est.subtotales[criterio] = 0
+                })
+              })
             }
           }
         })

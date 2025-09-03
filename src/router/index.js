@@ -645,12 +645,14 @@ function configRoutes () {
               component: () => import('@/views/calificaciones/Habilitaciones')
             },
             // 2025-07-11
+            /*
             {
               path: 'planillanotasasignatura',
               beforeEnter: autenticar,
               name: 'Notas Asignatura',
               component: () => import('@/views/calificaciones/PlanillaNotasAsignatura')
             },
+            */
           ]
         },
         // 2024-04-06
