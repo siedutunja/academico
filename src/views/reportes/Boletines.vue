@@ -15,8 +15,10 @@
                       <b-col lg="4">
                         <h6>Por Periodo</h6>
                         <b-form-group label="" v-slot="{ ariaDescribedby }">
-                          <b-form-radio v-model="idBoletin" :aria-describedby="ariaDescribedby" name="some-radios" value="1">Boletines por periodo</b-form-radio>
-                          <b-form-radio v-model="idBoletin" :aria-describedby="ariaDescribedby" name="some-radios" value="2">Boletines estudiantes retirados</b-form-radio>
+                          <b-form-radio v-model="idBoletin" :aria-describedby="ariaDescribedby" name="some-radios" value="1" @change="idPeriodo=null,idSede=null,idCurso=null">Boletines por periodo</b-form-radio>
+                          <b-form-radio v-model="idBoletin" :aria-describedby="ariaDescribedby" name="some-radios" value="2" @change="idPeriodo=null,idSede=null,idCurso=null">Boletines retirados</b-form-radio>
+                          <b-form-radio v-model="idBoletin" :aria-describedby="ariaDescribedby" name="some-radios" value="3" @change="idPeriodo=null,idSede=null,idCurso=null">Boletines ubicados/reubicados</b-form-radio>
+                          <b-form-radio v-model="idBoletin" :aria-describedby="ariaDescribedby" name="some-radios" value="4" @change="idPeriodo=null,idSede=null,idCurso=null">Boletines promocionados anticipadamente</b-form-radio>
                         </b-form-group>
                       </b-col>
                       <!--
@@ -198,6 +200,168 @@
                 </div>
               </b-col>
             </b-row>
+            <b-row v-if="idBoletin==3"> 
+              <b-col lg="12">
+                <b-card>
+                  <template #header>
+                    <h5 class="mb-0"><b-icon icon="card-checklist" aria-hidden="true"></b-icon> BOLETINES POR PERIODO</h5>
+                  </template>
+                  <b-card-text>
+                    <b-row>
+                      <b-col lg="2">
+                        <b-form-group label="Periodo:" label-for="periodo" class="etiqueta">
+                          <b-form-select id="periodo" ref="periodo" v-model="idPeriodo" :options="comboPeriodos" @change="idSede=null,idCurso=null,mostrarBoletines=null"></b-form-select>
+                        </b-form-group>
+                      </b-col>
+                      <b-col lg="6">
+                        <b-form-group label="Seleccione la Sede:" label-for="sedes" class="etiqueta">
+                          <b-form-select  id="sedes" ref="sedes" v-model="idSede" :options="comboSedes" @change="idCurso=null,ocuparComboCursosSede(),mostrarBoletines=null" :disabled="idPeriodo!=null ? false : true"></b-form-select>
+                        </b-form-group>
+                      </b-col>
+                      <b-col lg="4">
+                        <b-form-group label="Seleccione el Curso:" label-for="cursos" class="etiqueta">
+                          <b-form-select id="cursos" ref="cursos" v-model="idCurso" :options="comboCursosSede" @change="consultarEstudiantes(),mostrarBoletines=null" :disabled="idSede!=null ? false : true"></b-form-select>
+                        </b-form-group>
+                      </b-col>
+                    </b-row>
+                  </b-card-text>
+                </b-card>
+                <div v-if="idNivel == 1">
+                  <BoletinPreeReubicado
+                    v-if="mostrarBoletines"
+                    :estudiantesSeleccionados="estudiantesSeleccionados"
+                    :listaAreasAsignaturas="listaAreasAsignaturas"
+                    :listaDescriptores="listaDescriptores"
+                    :notas="notas"
+                    :datosEstudiantes="datosEstudiantes"
+                    :anio="Number($store.state.aLectivo)"
+                    :periodoActual="idPeriodo"
+                    :periodosVisibles="periodosVisibles"
+                    :nombreSede="nombreSede"
+                    :nombreCurso="nombreCurso"
+                    :nombrePeriodo="nombrePeriodo"
+                    :nombreJornada="nombreJornada"
+                    :nombreDirector="nombreDirector"
+                    :idNivel="idNivel"
+                    :umbralesA="umbralesA"
+                    :umbralesT="umbralesT"
+                    :pesosPeriodos="pesosPeriodos"
+                    :tipoValComp="tipoValComp"
+                    :promCompor="promCompor"
+                    :escalaPreescolar="escalaPreescolar"
+                    :nuevaEscalaPreescolar="nuevaEscalaPreescolar"
+                    :firmasBoletin="firmasBoletin"
+                  />
+                </div>
+                <div v-else>
+                  <BoletinPeriodoReubicado
+                    v-if="mostrarBoletines"
+                    :estudiantesSeleccionados="estudiantesSeleccionados"
+                    :listaAreasAsignaturas="listaAreasAsignaturas"
+                    :listaDescriptores="listaDescriptores"
+                    :notas="notas"
+                    :datosEstudiantes="datosEstudiantes"
+                    :anio="Number($store.state.aLectivo)"
+                    :periodoActual="idPeriodo"
+                    :periodosVisibles="periodosVisibles"
+                    :nombreSede="nombreSede"
+                    :nombreCurso="nombreCurso"
+                    :nombrePeriodo="nombrePeriodo"
+                    :nombreJornada="nombreJornada"
+                    :nombreDirector="nombreDirector"
+                    :idNivel="idNivel"
+                    :umbralesA="umbralesA"
+                    :umbralesT="umbralesT"
+                    :pesosPeriodos="pesosPeriodos"
+                    :tipoValComp="tipoValComp"
+                    :promCompor="promCompor"
+                    :letrasCompor="letrasCompor"
+                    :firmasBoletin="firmasBoletin"
+                  />
+                </div>
+              </b-col>
+            </b-row>
+            <b-row v-if="idBoletin==4"> 
+              <b-col lg="12">
+                <b-card>
+                  <template #header>
+                    <h5 class="mb-0"><b-icon icon="card-checklist" aria-hidden="true"></b-icon> BOLETINES POR PERIODO</h5>
+                  </template>
+                  <b-card-text>
+                    <b-row>
+                      <b-col lg="2">
+                        <b-form-group label="Periodo:" label-for="periodo" class="etiqueta">
+                          <b-form-select id="periodo" ref="periodo" v-model="idPeriodo" :options="comboPeriodos" @change="idSede=null,idCurso=null,mostrarBoletines=null"></b-form-select>
+                        </b-form-group>
+                      </b-col>
+                      <b-col lg="6">
+                        <b-form-group label="Seleccione la Sede:" label-for="sedes" class="etiqueta">
+                          <b-form-select  id="sedes" ref="sedes" v-model="idSede" :options="comboSedes" @change="idCurso=null,ocuparComboCursosSede(),mostrarBoletines=null" :disabled="idPeriodo!=null ? false : true"></b-form-select>
+                        </b-form-group>
+                      </b-col>
+                      <b-col lg="4">
+                        <b-form-group label="Seleccione el Curso:" label-for="cursos" class="etiqueta">
+                          <b-form-select id="cursos" ref="cursos" v-model="idCurso" :options="comboCursosSede" @change="consultarEstudiantes(),mostrarBoletines=null" :disabled="idSede!=null ? false : true"></b-form-select>
+                        </b-form-group>
+                      </b-col>
+                    </b-row>
+                  </b-card-text>
+                </b-card>
+                <div v-if="idNivel == 1">
+                  <BoletinPreePromocionado
+                    v-if="mostrarBoletines"
+                    :estudiantesSeleccionados="estudiantesSeleccionados"
+                    :listaAreasAsignaturas="listaAreasAsignaturas"
+                    :listaDescriptores="listaDescriptores"
+                    :notas="notas"
+                    :datosEstudiantes="datosEstudiantes"
+                    :anio="Number($store.state.aLectivo)"
+                    :periodoActual="idPeriodo"
+                    :periodosVisibles="periodosVisibles"
+                    :nombreSede="nombreSede"
+                    :nombreCurso="nombreCurso"
+                    :nombrePeriodo="nombrePeriodo"
+                    :nombreJornada="nombreJornada"
+                    :nombreDirector="nombreDirector"
+                    :idNivel="idNivel"
+                    :umbralesA="umbralesA"
+                    :umbralesT="umbralesT"
+                    :pesosPeriodos="pesosPeriodos"
+                    :tipoValComp="tipoValComp"
+                    :promCompor="promCompor"
+                    :escalaPreescolar="escalaPreescolar"
+                    :nuevaEscalaPreescolar="nuevaEscalaPreescolar"
+                    :firmasBoletin="firmasBoletin"
+                  />
+                </div>
+                <div v-else>
+                  <BoletinPeriodoPromocionado
+                    v-if="mostrarBoletines"
+                    :estudiantesSeleccionados="estudiantesSeleccionados"
+                    :listaAreasAsignaturas="listaAreasAsignaturas"
+                    :listaDescriptores="listaDescriptores"
+                    :notas="notas"
+                    :datosEstudiantes="datosEstudiantes"
+                    :anio="Number($store.state.aLectivo)"
+                    :periodoActual="idPeriodo"
+                    :periodosVisibles="periodosVisibles"
+                    :nombreSede="nombreSede"
+                    :nombreCurso="nombreCurso"
+                    :nombrePeriodo="nombrePeriodo"
+                    :nombreJornada="nombreJornada"
+                    :nombreDirector="nombreDirector"
+                    :idNivel="idNivel"
+                    :umbralesA="umbralesA"
+                    :umbralesT="umbralesT"
+                    :pesosPeriodos="pesosPeriodos"
+                    :tipoValComp="tipoValComp"
+                    :promCompor="promCompor"
+                    :letrasCompor="letrasCompor"
+                    :firmasBoletin="firmasBoletin"
+                  />
+                </div>
+              </b-col>
+            </b-row>
             <b-row class="mt-2" v-if="idCurso!=null">
               <b-col lg="12"><hr></b-col>
               <b-col lg="12">
@@ -236,6 +400,10 @@
   import BoletinPree from '@/views/reportes/boletines/BoletinPree'
   import BoletinPeriodoRetirado from '@/views/reportes/boletines/BoletinPeriodoRetirado'
   import BoletinPreeRetirado from '@/views/reportes/boletines/BoletinPreeRetirado'
+  import BoletinPeriodoReubicado from '@/views/reportes/boletines/BoletinPeriodoReubicado'
+  import BoletinPreeReubicado from '@/views/reportes/boletines/BoletinPreeReubicado'
+  import BoletinPeriodoPromocionado from '@/views/reportes/boletines/BoletinPeriodoPromocionado'
+  import BoletinPreePromocionado from '@/views/reportes/boletines/BoletinPreePromocionado'
 
   export default {
     name: 'boletines',
@@ -245,6 +413,10 @@
       BoletinPree,
       BoletinPeriodoRetirado,
       BoletinPreeRetirado,
+      BoletinPeriodoReubicado,
+      BoletinPreeReubicado,
+      BoletinPeriodoPromocionado,
+      BoletinPreePromocionado,
     },
     data () {
       return {
@@ -545,6 +717,42 @@
             this.mensajeEmergente('danger',CONFIG.TITULO_MSG,'Algo salio mal y no se pudo realizar: Notas boletines curso periodo. Intente más tarde.' + err)
             this.btnCargando = false
           })
+        } else if (this.idBoletin == 3) { //UBICADOS - REUBICADOS
+          await axios
+          .get(CONFIG.ROOT_PATH + 'boletines/notas/curso/periodo/reubicados', {params: {idCurso: this.idCurso, periodo: this.idPeriodo}})
+          .then(response => {
+            if (response.data.error){
+              this.mensajeEmergente('danger',CONFIG.TITULO_MSG,response.data.mensaje + ' - Notas boletines curso periodo')
+              this.btnCargando = false
+            } else{
+              if (response.data.datos != 0) {
+                this.notas = response.data.datos
+                //console.log(JSON.stringify(this.notas))
+              }
+            }
+          })
+          .catch(err => {
+            this.mensajeEmergente('danger',CONFIG.TITULO_MSG,'Algo salio mal y no se pudo realizar: Notas boletines curso periodo. Intente más tarde.' + err)
+            this.btnCargando = false
+          })
+        } else if (this.idBoletin == 4) { //PROMOCIONADO ANTICIPADAMENTE
+          await axios
+          .get(CONFIG.ROOT_PATH + 'boletines/notas/curso/periodo/promocionados', {params: {idCurso: this.idCurso, periodo: this.idPeriodo}})
+          .then(response => {
+            if (response.data.error){
+              this.mensajeEmergente('danger',CONFIG.TITULO_MSG,response.data.mensaje + ' - Notas boletines curso periodo')
+              this.btnCargando = false
+            } else{
+              if (response.data.datos != 0) {
+                this.notas = response.data.datos
+                //console.log(JSON.stringify(this.notas))
+              }
+            }
+          })
+          .catch(err => {
+            this.mensajeEmergente('danger',CONFIG.TITULO_MSG,'Algo salio mal y no se pudo realizar: Notas boletines curso periodo. Intente más tarde.' + err)
+            this.btnCargando = false
+          })
         }
       },
       async consultarAreasAsignaturas() {
@@ -604,6 +812,8 @@
           let apiRuta = 0
           if (this.idBoletin == 1) apiRuta = 'boletines/listacurso/boletines'
           else if (this.idBoletin == 2) apiRuta = 'boletines/listacurso/boletines/retirados'
+          else if (this.idBoletin == 3) apiRuta = 'boletines/listacurso/boletines/reubicados'
+          else if (this.idBoletin == 4) apiRuta = 'boletines/listacurso/boletines/promocionados'
           await axios
           .get(CONFIG.ROOT_PATH + apiRuta, { params: { idCurso: this.idCurso }})
           .then(response => {

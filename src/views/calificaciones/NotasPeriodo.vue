@@ -50,6 +50,9 @@
                             <span v-if="props.column.field == 'diversa'">
                               <span>{{props.row.diversa}}</span>
                             </span>
+                            <span v-if="props.column.field == 'estado'">
+                              <span>{{props.row.estado}}</span>
+                            </span>
                             <span v-if="props.column.field == 'defC1'">
                               <b-form-input v-model="props.row.defC1" @blur="actualizarItemNota(props.row)" @change="cambioPlanilla" autocomplete="off" maxlength="3" @keydown="handleKeyNavigation($event, props.row.originalIndex, 'defC1'),soloDecimales($event)" :ref="'defC1-' + props.row.originalIndex"></b-form-input>
                             </span>
@@ -93,6 +96,9 @@
                             </span>
                             <span v-if="props.column.field == 'diversa'">
                               <span>{{props.row.diversa}}</span>
+                            </span>
+                            <span v-if="props.column.field == 'estado'">
+                              <span>{{props.row.estado}}</span>
                             </span>
                             <span v-if="props.column.field == 'defC1'">
                               <b-form-input v-model="props.row.defC1" @blur="actualizarItemNota(props.row)" @change="cambioPlanilla" autocomplete="off" maxlength="3" @keydown="handleKeyNavigation($event, props.row.originalIndex, 'defC1'),soloDecimales($event)" :ref="'defC1-' + props.row.originalIndex"></b-form-input>
@@ -140,6 +146,9 @@
                             </span>
                             <span v-if="props.column.field == 'diversa'">
                               <span>{{props.row.diversa}}</span>
+                            </span>
+                            <span v-if="props.column.field == 'estado'">
+                              <span>{{props.row.estado}}</span>
                             </span>
                             <span v-if="props.column.field == 'defC1'">
                               <b-form-input v-model="props.row.defC1" @blur="actualizarItemNota(props.row)" @change="cambioPlanilla" autocomplete="off" maxlength="3" @keydown="handleKeyNavigation($event, props.row.originalIndex, 'defC1'),soloDecimales($event)" :ref="'defC1-' + props.row.originalIndex"></b-form-input>
@@ -643,8 +652,9 @@
           if (this.configuracionPlanilla.estadoC1 == 1 && this.configuracionPlanilla.estadoC2 == 0 && this.configuracionPlanilla.estadoC3 == 0) {
             this.colEncabezados = 1
             this.encabColumnas = [
-              { label: 'Apellidos y Nombres Estudiante', width: '30%', field: 'estudiante', sortable: false, tdClass: this.tdClassFuncE },
+              { label: 'Apellidos y Nombres Estudiante', width: '30%', field: 'estudiante', sortable: false },
               { label: '', field: 'diversa', sortable: false, tdClass: this.tdClassFuncDiversa },
+              { label: 'Estado', field: 'estado', sortable: false, tdClass: this.tdClassFuncE },
               { label: this.configuracionPlanilla.nombreC1+'\n'+this.configuracionPlanilla.porcentajeC1+'%', field: 'defC1', sortable: false },
               { label: 'Definitiva', field: 'definitiva', sortable: false },
               { label: 'Concepto', field: 'concepto', sortable: false, tdClass: this.tdClassFuncConcepto },
@@ -654,8 +664,9 @@
           } else if (this.configuracionPlanilla.estadoC1 == 1 && this.configuracionPlanilla.estadoC2 == 1 && this.configuracionPlanilla.estadoC3 == 0) {
             this.colEncabezados = 2
             this.encabColumnas = [
-              { label: 'Apellidos y Nombres Estudiante', width: '30%', field: 'estudiante', sortable: false, tdClass: this.tdClassFuncE },
+              { label: 'Apellidos y Nombres Estudiante', width: '30%', field: 'estudiante', sortable: false },
               { label: '', field: 'diversa', sortable: false, tdClass: this.tdClassFuncDiversa },
+              { label: 'Estado', field: 'id_estado_actual', sortable: false, tdClass: this.tdClassFuncE },
               { label: this.configuracionPlanilla.nombreC1+'\n'+this.configuracionPlanilla.porcentajeC1+'%', field: 'defC1', sortable: false },
               { label: this.configuracionPlanilla.nombreC2+'\n'+this.configuracionPlanilla.porcentajeC2+'%', field: 'defC2', sortable: false },
               { label: 'Definitiva', field: 'definitiva', sortable: false },
@@ -666,8 +677,9 @@
           } else if (this.configuracionPlanilla.estadoC1 == 1 && this.configuracionPlanilla.estadoC2 == 1 && this.configuracionPlanilla.estadoC3 == 1) {
             this.colEncabezados = 3
             this.encabColumnas = [
-              { label: 'Apellidos y Nombres Estudiante', width: '30%', field: 'estudiante', sortable: false, tdClass: this.tdClassFuncE },
+              { label: 'Apellidos y Nombres Estudiante', width: '30%', field: 'estudiante', sortable: false },
               { label: '', field: 'diversa', sortable: false, tdClass: this.tdClassFuncDiversa },
+              { label: 'Estado', field: 'id_estado_actual', sortable: false, tdClass: this.tdClassFuncE },
               { label: this.configuracionPlanilla.nombreC1+'\n'+this.configuracionPlanilla.porcentajeC1+'%', field: 'defC1', sortable: false },
               { label: this.configuracionPlanilla.nombreC2+'\n'+this.configuracionPlanilla.porcentajeC2+'%', field: 'defC2', sortable: false },
               { label: this.configuracionPlanilla.nombreC3+'\n'+this.configuracionPlanilla.porcentajeC3+'%', field: 'defC3', sortable: false },
@@ -681,6 +693,7 @@
           this.encabColumnas = [
             { label: 'Apellidos y Nombres Estudiante', width: '30%', field: 'estudiante', sortable: false },
             { label: '', field: 'diversa', sortable: false, tdClass: this.tdClassFuncDiversa },
+            { label: 'Estado', field: 'id_estado_actual', sortable: false, tdClass: this.tdClassFuncE },
             { label: 'Definitiva', field: 'definitivacompor', sortable: false },
             { label: 'Concepto', field: 'concepto', sortable: false, tdClass: this.tdClassFuncConcepto },
             { label: 'AJ', field: 'ausJ', sortable: false, tooltip: 'Ausencias Justificadas' },
@@ -876,8 +889,14 @@
         })
       },
       tdClassFuncE(row) {
-        if (row.id_estado_actual == 2) { 
+        if (row.id_estado_actual == 1) { 
+          return 'text-success' 
+        } else if (row.id_estado_actual == 2) { 
           return 'text-danger' 
+        } else if (row.id_estado_actual == 3) { 
+          return 'text-warning' 
+        } else if (row.id_estado_actual == 4) { 
+          return 'text-info' 
         }
       },
       handleKeyNavigation(event, i, col) {

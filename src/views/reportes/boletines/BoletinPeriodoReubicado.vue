@@ -491,7 +491,7 @@ export default {
       const compo = this.listaAreasAsignaturas.find(a => a.orden === 99)
       if (!compo) return ''
       const datos = est.areas?.[compo.area]?.asignaturas?.[compo.asignatura]
-      return 'ESTUDIANTE RETIRADO. | Motivo del Retiro: ' + datos?.motivo + ' - ' + datos?.obsRetiro + ' | Fecha de Retiro: ' + datos?.fechaRetiro || ''
+      return 'ESTUDIANTE UBICADO/REUBICADO. | Acto Administrativo: ' + datos?.obs_final + ' | Fecha Registro: ' + datos?.fechaReubica || ''
     },
 
     estructurarNotasPorEstudiante() {
@@ -512,9 +512,8 @@ export default {
           pd,
           ausJ,
           ausS,
-          obsRetiro,
-          motivo,
-          fechaRetiro
+          obs_final,
+          fechaReubica
         } = nota
         if (!mapa[estudiante]) {
           mapa[estudiante] = {
@@ -547,9 +546,8 @@ export default {
             pd: null,
             ausJ: 0,
             ausS: 0,
-            obsRetiro: '',
-            motivo: '',
-            fechaRetiro: ''
+            obs_final: '',
+            fechaReubica: ''
           }
         }
         const asig = est.areas[area].asignaturas[asignatura]
@@ -576,9 +574,8 @@ export default {
           asig.inclusion = inclusion
           asig.observaciones = observaciones
           asig.pd = pd
-          asig.obsRetiro = obsRetiro
-          asig.motivo = motivo
-          asig.fechaRetiro = fechaRetiro
+          asig.obs_final = obs_final
+          asig.fechaReubica = fechaReubica
         }
         asig.ausJ += ausJ || 0
         asig.ausS += ausS || 0
