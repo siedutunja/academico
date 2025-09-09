@@ -152,7 +152,7 @@
         let total = 0
         for (let p = 1; p <= 4; p++) {
           const nota = periodos[p] ?? 0
-          total += nota * pesos[p]
+          total += nota * pesos[p] / 100
         }
         return total.toFixed(2)
       },
@@ -415,7 +415,7 @@
             mapa[estudiante].areas[area].asignaturas[asignatura] = {
               periodos: {},
               orden,
-              pesos: { 1: 0.2, 2: 0.2, 3: 0.3, 4: 0.3 }
+              pesos: { 1: this.datosSeccion.pesoP1, 2: this.datosSeccion.pesoP2, 3: this.datosSeccion.pesoP3, 4: this.datosSeccion.pesoP4 }
             }
           }
           let notaFinal = 0

@@ -123,7 +123,7 @@
                                 <thead>
                                   <tr>
                                     <th>Sede: <b>{{ grado.sede }}</b></th>
-                                    <th>Grado: <b>{{ grado.grado }} - {{ grado.idGrado }}</b></th>
+                                    <th>Grado: <b>{{ grado.grado }}</b></th>
                                     <th>Año: <b>{{ $store.state.aLectivo }}</b></th>
                                   </tr>
                                 </thead>

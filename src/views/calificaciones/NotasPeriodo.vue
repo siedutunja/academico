@@ -548,7 +548,7 @@
             this.cargarNotasPeriodo()
           } else if (nivel == 1) {
             this.planillita = 2
-          this.cargarNotasPeriodoPrees()
+            this.cargarNotasPeriodoPrees()
           } else {
             this.mensajeEmergente('info',CONFIG.TITULO_MSG,'Lo sentimos, debe seleccionar una asignatura para consultar las valoraciones.')
           }
@@ -637,7 +637,7 @@
                 this.construirPlanillaNotas()
                 this.btnCargando = false
                 this.cambioActivo = false
-              },500)
+              },5)
             }
           }
         })
@@ -666,7 +666,7 @@
             this.encabColumnas = [
               { label: 'Apellidos y Nombres Estudiante', width: '30%', field: 'estudiante', sortable: false },
               { label: '', field: 'diversa', sortable: false, tdClass: this.tdClassFuncDiversa },
-              { label: 'Estado', field: 'id_estado_actual', sortable: false, tdClass: this.tdClassFuncE },
+              { label: 'Estado', field: 'estado', sortable: false, tdClass: this.tdClassFuncE },
               { label: this.configuracionPlanilla.nombreC1+'\n'+this.configuracionPlanilla.porcentajeC1+'%', field: 'defC1', sortable: false },
               { label: this.configuracionPlanilla.nombreC2+'\n'+this.configuracionPlanilla.porcentajeC2+'%', field: 'defC2', sortable: false },
               { label: 'Definitiva', field: 'definitiva', sortable: false },
@@ -679,7 +679,7 @@
             this.encabColumnas = [
               { label: 'Apellidos y Nombres Estudiante', width: '30%', field: 'estudiante', sortable: false },
               { label: '', field: 'diversa', sortable: false, tdClass: this.tdClassFuncDiversa },
-              { label: 'Estado', field: 'id_estado_actual', sortable: false, tdClass: this.tdClassFuncE },
+              { label: 'Estado', field: 'estado', sortable: false, tdClass: this.tdClassFuncE },
               { label: this.configuracionPlanilla.nombreC1+'\n'+this.configuracionPlanilla.porcentajeC1+'%', field: 'defC1', sortable: false },
               { label: this.configuracionPlanilla.nombreC2+'\n'+this.configuracionPlanilla.porcentajeC2+'%', field: 'defC2', sortable: false },
               { label: this.configuracionPlanilla.nombreC3+'\n'+this.configuracionPlanilla.porcentajeC3+'%', field: 'defC3', sortable: false },
