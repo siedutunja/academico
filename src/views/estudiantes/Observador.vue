@@ -11,7 +11,10 @@
             </b-row>
             <b-row>
               <b-col lg="12">
-                <b-alert class="text-center" :variant="datosFichaE.id_estado_actual==1 ? 'success' : 'danger'" show>ESTUDIANTE<br><h4 class="mb-0"><b>{{ datosFichaE.estudiante }}</b></h4><span><b>ESTADO: {{ datosFichaE.estado }}</b></span></b-alert>
+                <b-alert class="text-center" :variant="datosFichaE.id_estado_actual==1 ? 'success' : 'danger'" show>
+                  <img :src="datosFichaE.foto" id="photo" alt="photo" width="9%" class="float-left">
+                  ESTUDIANTE<br><h4 class="mb-0"><b>{{ datosFichaE.estudiante }}</b></h4><span><b>ESTADO: {{ datosFichaE.estado }}</b></span>
+                </b-alert>
               </b-col>
             </b-row>
             <b-row>
@@ -864,11 +867,9 @@
             if (response.data.datos != 0) {
               this.datosFichaE = response.data.datos
               this.listaAnotaciones = this.datosFichaE.observador
-              /*
               if (this.datosFichaE.foto == null || this.datosFichaE.foto == '') {
                 this.datosFichaE.foto = CONFIG.FOTO
               }
-              */  
             } else {
               this.mensajeEmergente('danger',CONFIG.TITULO_MSG,'No se encontró el Observador del Estudiante')
             }

@@ -9,7 +9,10 @@
           <b-card-text>
             <b-row>
               <b-col lg="12">
-                <b-alert class="text-center" :variant="datosFichaE.id_estado_actual==1 ? 'success' : datosFichaE.id_estado_actual==2 ? 'danger' : 'warning'" show>ESTUDIANTE<br><h4 class="mb-0"><b>{{ datosFichaE.estudiante }}</b></h4><span><b>ESTADO: {{ datosFichaE.estado }}</b></span><span v-if="codigo!='' && codigo!=null"><br><strong>CODIGO: {{ codigo }}</strong></span></b-alert>
+                <b-alert class="text-center" :variant="datosFichaE.id_estado_actual==1 ? 'success' : datosFichaE.id_estado_actual==2 ? 'danger' : 'warning'" show>
+                  <img :src="datosFichaE.foto" id="photo" alt="photo" width="7%" class="float-left">
+                  ESTUDIANTE<br><h4 class="mb-0"><b>{{ datosFichaE.estudiante }}</b></h4><span><b>ESTADO: {{ datosFichaE.estado }}</b></span><span v-if="codigo!='' && codigo!=null"><br><strong>CODIGO: {{ codigo }}</strong></span>
+                </b-alert>
               </b-col>
             </b-row>
             <b-row>
