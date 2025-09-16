@@ -13,7 +13,7 @@
               </div>
               <div v-else>
                 <div class="text-center">
-                  <img :src="escudoI + $store.state.escudoInstitucion" height="80"/>
+                  <img :src="escudoI" height="80"/>
                 </div>
                 <h4>{{ $store.state.nemoInstitucion }}</h4>
                 <h6>INSTITUCIÓN EDUCATIVA {{ $store.state.sectorInstitucion }}</h6>
@@ -60,6 +60,7 @@
           alert('Algo salio mal y no se pudo registrar la traza de la Sesión. Intente más tarde. ' + err)
           location.replace(CONFIG.ROOT_WEBSITE)
         })
+        this.btnHabilitado = true
       },
       async cargarDatosTablas() {
         await axios
@@ -74,6 +75,7 @@
             } else {
               this.$store.commit('set', ['datosTablas', []])
             }
+            console.log('Tablas cargadas...')
           }
         })
         .catch(err => {
@@ -94,6 +96,7 @@
             } else {
               this.$store.commit('set', ['datosSedes', []])
             }
+            console.log('Sedes cargadas...')
           }
         })
         .catch(err => {
@@ -114,6 +117,7 @@
             } else {
               this.$store.commit('set', ['datosGrados', []])
             }
+            console.log('Grados cargados...')
           }
         })
         .catch(err => {
@@ -134,6 +138,7 @@
             } else {
               this.$store.commit('set', ['datosCursos', []])
             }
+            console.log('Cursos cargados...')
           }
         })
         .catch(err => {
@@ -154,7 +159,7 @@
             } else {
               this.$store.commit('set', ['datosAsignaturas', []])
             }
-            //console.log(JSON.stringify(response.data.datos))
+            console.log('Asignaturas cargadas...')
           }
         })
         .catch(err => {
@@ -175,7 +180,7 @@
             } else {
               this.$store.commit('set', ['datosAreas', []])
             }
-            //console.log(JSON.stringify(response.data.datos))
+            console.log('Areas cargadas...')
           }
         })
         .catch(err => {
@@ -202,7 +207,7 @@
               this.$store.commit('set', ['datosSecciones', []])
               this.$store.commit('set', ['nombreSeccion', 'SIN SECCIÓN ACTIVA'])
             }
-            //console.log(JSON.stringify(response.data.datos))
+            console.log('Secciones cargadas...')
           }
         })
         .catch(err => {
@@ -223,6 +228,7 @@
             } else {
               this.$store.commit('set', ['datosDocentes', []])
             }
+            console.log('Docentes cargados...')
           }
         })
         .catch(err => {
@@ -243,6 +249,7 @@
             } else {
               this.$store.commit('set', ['datosRutas', []])
             }
+            console.log('Rutas cargadas...')
           }
           //console.log(JSON.stringify(response.data.datos))
         })
@@ -264,6 +271,7 @@
             } else {
               this.$store.commit('set', ['datosEspecialidades', []])
             }
+            console.log('Especialidades cargadas...')
           }
         })
         .catch(err => {
@@ -284,6 +292,7 @@
             } else {
               this.$store.commit('set', ['datosEscalafones', []])
             }
+            console.log('Escalafones cargadas...')
           }
         })
         .catch(err => {
@@ -304,6 +313,7 @@
             } else {
               this.$store.commit('set', ['datosDataEstudiantes', []])
             }
+            console.log('Estudiantes cargadas...')
           }
         })
         .catch(err => {
@@ -340,6 +350,8 @@
               this.$store.commit('set', ['nombreInstitucion', response.data.datos.ie.institucion])
               this.$store.commit('set', ['nemoInstitucion', response.data.datos.ie.nemo])
               this.$store.commit('set', ['escudoInstitucion', response.data.datos.ie.escudo])
+              this.escudoI = CONFIG.ROOT_ESCUDOS + this.$store.state.escudoInstitucion
+              console.log('Escudo: ' + this.escudoI)
               this.$store.commit('set', ['correoInstitucion', response.data.datos.ie.correo])
               this.$store.commit('set', ['sectorInstitucion', response.data.datos.ie.sector])
               this.$store.commit('set', ['daneInstitucion', response.data.datos.ie.dane])
@@ -412,17 +424,13 @@
             this.$store.commit('set', ['perProgPeriodos', this.tokenDecodificado.permisos.perProgPeriodos])
             
             this.cargarDatosSesionUsuario()
-            this.cargarDatosTablas()
-            setTimeout(()=>{
-              this.btnHabilitado = true
-            },1000)
           }
         })
       }
     },
     beforeMount() {
-      this.escudoI = CONFIG.ROOT_ESCUDOS
       this.iniciarVista()
+      this.cargarDatosTablas()
     }
   }
 </script>
