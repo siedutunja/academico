@@ -294,7 +294,7 @@
         return Array.from({ length: this.idPeriodo }, (_, i) => `P${i + 1}`)
       },
       asignaturasValidas() {
-        return this.listaAreasAsignaturas.filter(a => a.orden !== 99)
+        return this.listaAreasAsignaturas.filter(a => a.orden !== 999)
       },
       consolidadoAusencias() {
         return this.listaEstudiantes.map(est => {

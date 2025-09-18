@@ -79,35 +79,35 @@
                 :title="fueRecuperada(areas, area, asig)
                   ? `Recuperada desde ${obtenerOriginal(areas, area, asig)} → ${obtenerRecuperacion(areas, area, asig)}`
                   : `Nota final: ${obtenerNota(areas, area, asig)}`">
-                  {{ obtenerNota(areas, area, asig) }}
+                  {{ areas.id_conceptual=='N' ? obtenerNota(areas, area, asig) : '-' }}
                 </td>
                 <td style="font-weight: bold;" :key="area + i">
-                  {{ calcularPromedioArea(areas, area) }}
+                  {{ areas.id_conceptual=='N' ? calcularPromedioArea(areas, area) : '-' }}
                 </td>
               </template>
               <td :class="obtenerColorGeneral(calcularPromedioGeneral(areas))" style="font-weight: bold; text-align: center;">
-                {{ calcularPromedioGeneral(areas) }}
+                {{ areas.id_conceptual=='N' ? calcularPromedioGeneral(areas) : '-' }}
               </td>
               <td style="text-align: center; color: #b22222;">
-                {{ contarDesempenoEstudiante(areas, 'bajo') }}
+                {{ areas.id_conceptual=='N' ? contarDesempenoEstudiante(areas, 'bajo') : '-' }}
               </td>
               <td style="text-align: center; color: #2980b9;">
-                {{ contarDesempenoEstudiante(areas, 'basico') }}
+                {{ areas.id_conceptual=='N' ? contarDesempenoEstudiante(areas, 'basico') : '-' }}
               </td>
               <td style="text-align: center; color: #e67e22;">
-                {{ contarDesempenoEstudiante(areas, 'alto') }}
+                {{ areas.id_conceptual=='N' ? contarDesempenoEstudiante(areas, 'alto') : '-' }}
               </td>
               <td style="text-align: center; color: #2e7d32;">
-                {{ contarDesempenoEstudiante(areas, 'superior') }}
+                {{ areas.id_conceptual=='N' ? contarDesempenoEstudiante(areas, 'superior') : '-' }}
               </td>
               <td style="text-align: center;">
-                {{ areas.ausJ }}
+                {{ areas.id_conceptual=='N' ? areas.ausJ : '-' }}
               </td>
               <td style="text-align: center;">
-                {{ areas.ausS }}
+                {{ areas.id_conceptual=='N' ? areas.ausS : '-' }}
               </td>
               <td style="text-align: center; font-weight: bold;">
-                {{ iconoPuesto(puestosPorEstudiante[estudiante]) }} {{ puestosPorEstudiante[estudiante] }}
+                {{ areas.id_conceptual=='N' ? iconoPuesto(puestosPorEstudiante[estudiante]) : '-' }} {{ areas.id_conceptual=='N' ? puestosPorEstudiante[estudiante] : '-' }}
               </td>
               <td class="text-left">{{ i + 1 }}</td>
             </tr>
@@ -494,8 +494,8 @@
       estudiantesNotas() {
         const mapa = {}
         this.datosRaw.forEach(row => {
-          const { estudiante, area, asignatura, definitiva, recuperacion, orden, definitivacompor, definitivapree, idTipoEspecialidad, ausJ, ausS } = row
-          if (!mapa[estudiante]) mapa[estudiante] = { ausJ: 0, ausS: 0 }
+          const { estudiante, area, asignatura, definitiva, recuperacion, orden, definitivacompor, definitivapree, idTipoEspecialidad, ausJ, ausS, id_conceptual } = row
+          if (!mapa[estudiante]) mapa[estudiante] = { id_conceptual, ausJ: 0, ausS: 0 }
           if (!mapa[estudiante][area]) mapa[estudiante][area] = {}
           let notaFinal = 0
           if (orden === 99) {

@@ -249,7 +249,7 @@
     },
     computed: {
       asignaturasValidas() {
-        return this.listaAreasAsignaturas.filter(a => a.orden !== 98 && a.orden !== 99)
+        return this.listaAreasAsignaturas.filter(a => a.orden !== 999)
       },
       ausenciasConsolidadas() {
         return this.listaEstudiantes.map(est => {

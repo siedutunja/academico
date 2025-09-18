@@ -90,25 +90,25 @@
               <template v-for="(asigs, area) in encabezadoPorArea">
                 <template v-for="asig in asigs">
                   <td v-for="p in periodosVisibles"  :key="nombre + area + asig + p">
-                    {{ obtenerNota(est, area, asig, p) }}
+                    {{ est.id_conceptual=='N' ? obtenerNota(est, area, asig, p) : '-' }}
                   </td>
                   <td class="bloque-area" :key="'prom' + nombre + area + asig" style="font-weight: bold; text-align: center;">
-                    {{ obtenerPromedioAsignatura(est, area, asig) }}
+                    {{ est.id_conceptual=='N' ? obtenerPromedioAsignatura(est, area, asig) : '-' }}
                   </td>
                 </template>
                 <td class="promedio-area bloque-area" :key="'promArea' + nombre + area">
-                  {{ obtenerPromedioArea(est, area) }}
+                  {{ est.id_conceptual=='N' ? obtenerPromedioArea(est, area) : '-' }}
                 </td>
               </template>
 
-              <td>{{ calcularPromedioGeneral(est) }}</td>
-              <td>{{ contarDesempenoEstudiante(est.areas, 'bajo') }}</td>
-              <td>{{ contarDesempenoEstudiante(est.areas, 'basico') }}</td>
-              <td>{{ contarDesempenoEstudiante(est.areas, 'alto') }}</td>
-              <td>{{ contarDesempenoEstudiante(est.areas, 'superior') }}</td>
-              <td>{{ est.ausJ }}</td>
-              <td>{{ est.ausS }}</td>
-              <td>{{ iconoPuesto(puestosPorEstudiante[nombre]) }} {{ puestosPorEstudiante[nombre] }}</td>
+              <td>{{ est.id_conceptual=='N' ? calcularPromedioGeneral(est) : '-' }}</td>
+              <td>{{ est.id_conceptual=='N' ? contarDesempenoEstudiante(est.areas, 'bajo') : '-' }}</td>
+              <td>{{ est.id_conceptual=='N' ? contarDesempenoEstudiante(est.areas, 'basico') : '-' }}</td>
+              <td>{{ est.id_conceptual=='N' ? contarDesempenoEstudiante(est.areas, 'alto') : '-' }}</td>
+              <td>{{ est.id_conceptual=='N' ? contarDesempenoEstudiante(est.areas, 'superior') : '-' }}</td>
+              <td>{{ est.id_conceptual=='N' ? est.ausJ : '-' }}</td>
+              <td>{{ est.id_conceptual=='N' ? est.ausS : '-' }}</td>
+              <td>{{ est.id_conceptual=='N' ? iconoPuesto(puestosPorEstudiante[nombre]) : '-' }} {{ est.id_conceptual=='N' ? puestosPorEstudiante[nombre] : '-' }}</td>
               <td class="text-left">{{ i + 1 }}</td>
             </tr>
             <tr style="background-color: #f0f0f0; font-weight: bold;">
@@ -267,12 +267,15 @@
         const orden = asig.orden
         if (orden === 99 && this.datosSeccion.promCompor == 0) return '-'
         let total = 0
+        let cantidad = 0 // nuevo
         for (let p = 1; p <= 4; p++) {
           const nota = periodos[p] ?? 0
           total += nota
+          if (nota > 0) cantidad++
         }
         if (total === 0) return ''
-        const promedio = total / this.idPeriodo
+        const promedio = total / cantidad
+        //const promedio = total / this.idPeriodo
         return this.redondear(promedio).toFixed(1)
       },
       calcularPromedioArea(areaData) {
@@ -547,9 +550,9 @@
       estudiantesNotas() {
         const mapa = {}
         this.datosRaw.forEach(row => {
-          const { estudiante, area, asignatura, periodo, definitiva, recuperacion, orden, definitivacompor, idTipoEspecialidad, ausJ, ausS, porcentaje } = row
+          const { estudiante, area, asignatura, periodo, definitiva, recuperacion, orden, definitivacompor, idTipoEspecialidad, ausJ, ausS, porcentaje, id_conceptual } = row
           if (!mapa[estudiante]) {
-            mapa[estudiante] = { ausJ: 0, ausS: 0, areas: {} }
+            mapa[estudiante] = { id_conceptual, ausJ: 0, ausS: 0, areas: {} }
           }
           if (!mapa[estudiante].areas[area]) {
             mapa[estudiante].areas[area] = { asignaturas: {} }

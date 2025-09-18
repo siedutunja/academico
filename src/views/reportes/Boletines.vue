@@ -518,7 +518,7 @@
           } else if (this.$store.state.daneInstitucion === '115001002807') { // Gustavo Rojas
             let cordi = ''
             if (this.nombreSede == 'CLUB DE LEONES') {
-              cordi = 'CESAR MALPICA ROJAS'
+              cordi = this.idGrado === '08' ? 'ELSA YOLANDA CASCANTE MOLINA' : 'CESAR MALPICA ROJAS'
             } else if (this.nombreSede == 'CENTRAL') {
               cordi = 'ELSA YOLANDA CASCANTE MOLINA'
             } else {

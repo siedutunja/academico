@@ -154,17 +154,23 @@
         return asig ? this.calcularNotaFaltante(asig) : ''
       },
       calcularNotaFaltante(asig) {
-        const pesos = asig.pesos
+        console.log(asig)
+        const tipo = asig.idTipoEspecialidad
         const periodos = asig.periodos
         const orden = asig.orden
         if (orden === 99 && this.datosSeccion.promCompor == 0) return '-'
         let total = 0
-        for (let p = 1; p <= 4; p++) {
+        for (let p = 1; p <= 3; p++) {
           const nota = periodos[p] ?? 0
           total += nota
         }
         if (total === 0) return ''
-        const faltante = 12 - total
+        let faltante = 0
+        if (tipo === 1) {
+          faltante = (this.datosSeccion.minBas * 4) - total
+        } else {
+          faltante = (this.datosSeccion.minBasT * 4) - total
+        }
         return faltante.toFixed(1)
       },
       obtenerAcumulado(est, area, asignatura) {
