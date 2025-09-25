@@ -305,7 +305,7 @@ export default {
       )
       if (!datos || !meta) return ''
       // Si la asignatura tiene pd === "S", usamos el campo inclusion directamente
-      if (datos.pd === 'S' || datos.concep === 'S' ) {
+      if (ordencito != 99 && (datos.pd === 'S' || datos.concep === 'S') ) {
         return datos.inclusion || ''
       }
       let notaFinal = 0
