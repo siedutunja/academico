@@ -176,7 +176,7 @@ export default {
               <td>${datos.ausS || 0}</td>
             </tr>
           `
-          html += `<tr><td colspan="9" class="descriptor" style="text-align: left">${ this.descriptorDesdeLetraFlexible(est, area, asignatura, this.periodoActual)}</td></tr>`
+          html += `<tr><td colspan="9" class="descriptor" style="text-align: left">${ this.descriptorDesdeLetraFlexible(est, area, asignatura, this.periodoActual, orden)}</td></tr>`
         })
       })
       html += `
@@ -193,9 +193,28 @@ export default {
       `
       return html
     },
-    valorNumericoDesdeLetra(letra) {
-      const escala = this.nuevaEscalaPreescolar.find(e => e.letra === letra)
-      return escala?.umbral || null
+    valorNumericoDesdeLetra(letra,orden) {
+      if (orden==99) {
+        if (this.$store.state.idInstitucion == 'bd226a20-fc82-11ec-a1d1-1dc2835404e5') { // Julius
+          if (letra == 'J') return 1
+          else if (letra == 'B') return 2
+          else if (letra == 'S') return 3
+          else if (letra == 'E') return 4
+        } else if (this.$store.state.idInstitucion == 'f5529ba0-fcb3-11ec-8267-536b07c743c4') { // Gustavo Rojas
+          if (letra == 'I') return 1
+          else if (letra == 'A') return 2
+          else if (letra == 'S') return 3
+          else if (letra == 'E') return 4
+        } else {
+          if (letra == 'J') return 1
+          else if (letra == 'B') return 2
+          else if (letra == 'A') return 3
+          else if (letra == 'S') return 4
+        }
+      } else {
+        const escala = this.nuevaEscalaPreescolar.find(e => e.letra === letra)
+        return escala?.umbral || null
+      }
     },
     //ok
     conceptoDesdeValor(valor) {
@@ -221,9 +240,14 @@ export default {
     datosDesempenoPorLetra(letra,orden) {
       let desempe = ''
       if(orden == 99) {
-        if (this.$store.state.idInstitucion == 'bd226a20-fc82-11ec-a1d1-1dc2835404e5') {
+        if (this.$store.state.idInstitucion == 'bd226a20-fc82-11ec-a1d1-1dc2835404e5') { // Julius
           if (letra == 'J') desempe = 'BAJO'
           else if (letra == 'B') desempe = 'BÁSICO'
+          else if (letra == 'S') desempe = 'SOBRESALIENTE'
+          else if (letra == 'E') desempe = 'EXCELENTE'
+        } else if (this.$store.state.idInstitucion == 'f5529ba0-fcb3-11ec-8267-536b07c743c4') { // Gustavo Rojas
+          if (letra == 'I') desempe = 'INSUFICIENTE'
+          else if (letra == 'A') desempe = 'ACEPTABLE'
           else if (letra == 'S') desempe = 'SOBRESALIENTE'
           else if (letra == 'E') desempe = 'EXCELENTE'
         } else {
@@ -248,7 +272,7 @@ export default {
         }
       }
     },
-    descriptorDesdeLetraFlexible(est, area, asignatura, periodo) {
+    descriptorDesdeLetraFlexible(est, area, asignatura, periodo, orden) {
       const meta = this.listaAreasAsignaturas.find(
         a => a.area === area && a.asignatura === asignatura
       )
@@ -259,7 +283,7 @@ export default {
         return datos.inclusion || ''
       }
       const letra = datos.periodos?.[periodo] || ''
-      const valor = this.valorNumericoDesdeLetra(letra)
+      const valor = this.valorNumericoDesdeLetra(letra,orden)
       if (valor === null) return ''
       const concepto = this.conceptoDesdeValor(valor)
       if (!concepto) return ''

@@ -335,21 +335,29 @@ export default {
       return descriptorObj?.descriptor || ''
     },
     desempeno(nota, area, asignatura) {
-      const meta = this.listaAreasAsignaturas.find(
-        a => a.area === area && a.asignatura === asignatura
-      )
-      const tipo = meta?.idTipoEspecialidad || 1
-      const valor = parseFloat(nota)
-      if (isNaN(valor)) return ''
-      const umbralBajo = tipo === 2 ? this.umbralesT[0] : this.umbralesA[0]
-      const umbralBasico = tipo === 2 ? this.umbralesT[1] : this.umbralesA[1]
-      const umbralAlto = tipo === 2 ? this.umbralesT[2] : this.umbralesA[2]
-      const umbralSuperior = tipo === 2 ? this.umbralesT[3] : this.umbralesA[3]
-      if (valor < umbralBajo) return 'Bajo'
-      if (valor < umbralBasico) return 'Básico'
-      if (valor < umbralAlto) return 'Alto'
-      if (valor <= umbralSuperior) return 'Superior'
-      return ''
+      if (this.orden == 99) {
+        if (nota == 'I') return 'Insuficiente'
+        if (nota == 'A') return 'Aceptable'
+        if (nota == 'S') return 'Sobresaliente'
+        if (nota == 'E') return 'Excelente'
+        return ''
+      } else {
+        const meta = this.listaAreasAsignaturas.find(
+          a => a.area === area && a.asignatura === asignatura
+        )
+        const tipo = meta?.idTipoEspecialidad || 1
+        const valor = parseFloat(nota)
+        if (isNaN(valor)) return ''
+        const umbralBajo = tipo === 2 ? this.umbralesT[0] : this.umbralesA[0]
+        const umbralBasico = tipo === 2 ? this.umbralesT[1] : this.umbralesA[1]
+        const umbralAlto = tipo === 2 ? this.umbralesT[2] : this.umbralesA[2]
+        const umbralSuperior = tipo === 2 ? this.umbralesT[3] : this.umbralesA[3]
+        if (valor < umbralBajo) return 'Bajo'
+        if (valor < umbralBasico) return 'Básico'
+        if (valor < umbralAlto) return 'Alto'
+        if (valor <= umbralSuperior) return 'Superior'
+        return ''
+      }
     },
     notaFinalArea(est, area) {
       let asigns = ''
