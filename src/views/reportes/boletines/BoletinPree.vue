@@ -35,6 +35,7 @@ export default {
     return {
       escudo: null,
       asignatur: null,
+      orden: null
     }
   },
   methods: {
@@ -157,11 +158,12 @@ export default {
           </tr>
         `
         asigns.forEach(({ asignatura, ih, orden, nombreAsignatura, docente }) => {
+          this.orden = orden
           const datos = est.areas?.[area]?.asignaturas?.[asignatura]
           if (!datos) return
           const promedio = this.letraDesdeValor(this.promedioAsignaturaPreescolar(datos))
           const notaActual = datos.periodos?.[this.periodoActual] || ''
-          const desempeño = this.datosDesempenoPorLetra(notaActual)
+          const desempeño = this.datosDesempenoPorLetra(notaActual,orden)
           html += `
             <tr>
               <td style="text-align: left"><strong>${nombreAsignatura}</strong> <br> <i style="font-size: 10px;">${docente}</i></td>
@@ -216,19 +218,34 @@ export default {
       const concepto = this.conceptoDesdeValor(valor)
       return concepto?.letra || ''
     },
-    datosDesempenoPorLetra(letra) {
-      const mapaEmoji = ['😞', '🙂', '😊', '😄']
-      
-      const index = this.nuevaEscalaPreescolar.findIndex(e => e.letra === letra)
-      if (index === -1) {
-        return { emoji: '', texto: '', color: '#aaa' }
-      }
-
-      const escala = this.nuevaEscalaPreescolar[index]
-      return {
-        emoji: mapaEmoji[index],
-        texto: escala.desempeno || 'Sin descripción',
-        color: this.colorPorIndice?.[index] || '#555' // opcional
+    datosDesempenoPorLetra(letra,orden) {
+      let desempe = ''
+      if(orden == 99) {
+        if (this.$store.state.idInstitucion == 'bd226a20-fc82-11ec-a1d1-1dc2835404e5') {
+          if (letra == 'J') desempe = 'BAJO'
+          else if (letra == 'B') desempe = 'BÁSICO'
+          else if (letra == 'S') desempe = 'SOBRESALIENTE'
+          else if (letra == 'E') desempe = 'EXCELENTE'
+        } else {
+          desempe = ''
+        }
+        return {
+          emoji: '',
+          texto: desempe,
+          color: '#555' // opcional
+        }
+      } else {
+        const mapaEmoji = ['😞', '🙂', '😊', '😄']
+        const index = this.nuevaEscalaPreescolar.findIndex(e => e.letra === letra)
+        if (index === -1) {
+          return { emoji: '', texto: '', color: '#aaa' }
+        }
+        const escala = this.nuevaEscalaPreescolar[index]
+        return {
+          emoji: mapaEmoji[index],
+          texto: escala.desempeno || 'Sin descripción',
+          color: this.colorPorIndice?.[index] || '#555' // opcional
+        }
       }
     },
     descriptorDesdeLetraFlexible(est, area, asignatura, periodo) {
@@ -378,21 +395,37 @@ export default {
       ventana.focus()
     },
     desempeno(nota, area, asignatura) {
-      const meta = this.listaAreasAsignaturas.find(
-        a => a.area === area && a.asignatura === asignatura
-      )
-      const tipo = meta?.idTipoEspecialidad || 1
-      const valor = parseFloat(nota)
-      if (isNaN(valor)) return ''
-      const umbralBajo = tipo === 2 ? this.umbralesT[0] : this.umbralesA[0]
-      const umbralBasico = tipo === 2 ? this.umbralesT[1] : this.umbralesA[1]
-      const umbralAlto = tipo === 2 ? this.umbralesT[2] : this.umbralesA[2]
-      const umbralSuperior = tipo === 2 ? this.umbralesT[3] : this.umbralesA[3]
-      if (valor < umbralBajo) return 'Bajo'
-      if (valor < umbralBasico) return 'Básico'
-      if (valor < umbralAlto) return 'Alto'
-      if (valor <= umbralSuperior) return 'Superior'
-      return ''
+      if (this.orden == 99) {
+        if (this.$store.state.idInstitucion == 'bd226a20-fc82-11ec-a1d1-1dc2835404e5') {
+          if (nota == 'J') return 'BAJO'
+          if (nota == 'B') return 'BÁSICO'
+          if (nota == 'S') return 'SOBRESALIENTE'
+          if (nota == 'E') return 'EXCELENTE'
+          return ''
+        } else {
+          if (nota == 'J') return 'Bajo'
+          if (nota == 'B') return 'Básico'
+          if (nota == 'S') return 'Sobresaliente'
+          if (nota == 'E') return 'Excelente'
+          return ''
+        }
+      } else {
+        const meta = this.listaAreasAsignaturas.find(
+          a => a.area === area && a.asignatura === asignatura
+        )
+        const tipo = meta?.idTipoEspecialidad || 1
+        const valor = parseFloat(nota)
+        if (isNaN(valor)) return ''
+        const umbralBajo = tipo === 2 ? this.umbralesT[0] : this.umbralesA[0]
+        const umbralBasico = tipo === 2 ? this.umbralesT[1] : this.umbralesA[1]
+        const umbralAlto = tipo === 2 ? this.umbralesT[2] : this.umbralesA[2]
+        const umbralSuperior = tipo === 2 ? this.umbralesT[3] : this.umbralesA[3]
+        if (valor < umbralBajo) return 'Bajo'
+        if (valor < umbralBasico) return 'Básico'
+        if (valor < umbralAlto) return 'Alto'
+        if (valor <= umbralSuperior) return 'Superior'
+        return ''
+      }
     },
     notaFinalArea(est, area) {
       /*

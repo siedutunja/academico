@@ -98,6 +98,9 @@
                   <span v-if="$store.state.idInstitucion == 'f5529ba0-fcb3-11ec-8267-536b07c743c4'"> <!-- GUSTAVOROJAS -->
                     <BoletinPeriodoGustavoRojas v-if="mostrarBoletines" :estudiantesSeleccionados="estudiantesSeleccionados" :listaAreasAsignaturas="listaAreasAsignaturas" :listaDescriptores="listaDescriptores" :notas="notas" :datosEstudiantes="datosEstudiantes" :anio="Number($store.state.aLectivo)" :periodoActual="idPeriodo" :periodosVisibles="periodosVisibles" :nombreSede="nombreSede" :nombreCurso="nombreCurso" :nombrePeriodo="nombrePeriodo" :nombreJornada="nombreJornada" :nombreDirector="nombreDirector" :idNivel="idNivel" :umbralesA="umbralesA" :umbralesT="umbralesT" :pesosPeriodos="pesosPeriodos" :tipoValComp="tipoValComp" :promCompor="promCompor" :letrasCompor="letrasCompor" :firmasBoletin="firmasBoletin" :descC1="descC1" :descC2="descC2" :descC3="descC3" :idGrado="idGrado" />
                   </span>
+                  <span v-if="$store.state.idInstitucion == 'bd226a20-fc82-11ec-a1d1-1dc2835404e5'"> <!-- JULIUS -->
+                    <BoletinPeriodoJulius v-if="mostrarBoletines" :estudiantesSeleccionados="estudiantesSeleccionados" :listaAreasAsignaturas="listaAreasAsignaturas" :listaDescriptores="listaDescriptores" :notas="notas" :datosEstudiantes="datosEstudiantes" :anio="Number($store.state.aLectivo)" :periodoActual="idPeriodo" :periodosVisibles="periodosVisibles" :nombreSede="nombreSede" :nombreCurso="nombreCurso" :nombrePeriodo="nombrePeriodo" :nombreJornada="nombreJornada" :nombreDirector="nombreDirector" :idNivel="idNivel" :umbralesA="umbralesA" :umbralesT="umbralesT" :pesosPeriodos="pesosPeriodos" :tipoValComp="tipoValComp" :promCompor="promCompor" :letrasCompor="letrasCompor" :firmasBoletin="firmasBoletin" :descC1="descC1" :descC2="descC2" :descC3="descC3" :idGrado="idGrado" />
+                  </span>
                   <span v-else>
                     <BoletinPeriodo v-if="mostrarBoletines" :estudiantesSeleccionados="estudiantesSeleccionados" :listaAreasAsignaturas="listaAreasAsignaturas" :listaDescriptores="listaDescriptores" :notas="notas" :datosEstudiantes="datosEstudiantes" :anio="Number($store.state.aLectivo)" :periodoActual="idPeriodo" :periodosVisibles="periodosVisibles" :nombreSede="nombreSede" :nombreCurso="nombreCurso" :nombrePeriodo="nombrePeriodo" :nombreJornada="nombreJornada" :nombreDirector="nombreDirector" :idNivel="idNivel" :umbralesA="umbralesA" :umbralesT="umbralesT" :pesosPeriodos="pesosPeriodos" :tipoValComp="tipoValComp" :promCompor="promCompor" :letrasCompor="letrasCompor" :firmasBoletin="firmasBoletin" :descC1="descC1" :descC2="descC2" :descC3="descC3" />
                   </span>
@@ -384,6 +387,7 @@
   import BoletinPeriodoInem from '@/views/reportes/boletines/BoletinPeriodoInem'
   import BoletinPeriodoGranColombiano from '@/views/reportes/boletines/BoletinPeriodoGranColombiano'
   import BoletinPeriodoGustavoRojas from '@/views/reportes/boletines/BoletinPeriodoGustavoRojas'
+  import BoletinPeriodoJulius from '@/views/reportes/boletines/BoletinPeriodoJulius'
   import BoletinPeriodo from '@/views/reportes/boletines/BoletinPeriodo'
   import BoletinPree from '@/views/reportes/boletines/BoletinPree'
   import BoletinPeriodoRetirado from '@/views/reportes/boletines/BoletinPeriodoRetirado'
@@ -400,6 +404,7 @@
       BoletinPeriodoInem,
       BoletinPeriodoGranColombiano,
       BoletinPeriodoGustavoRojas,
+      BoletinPeriodoJulius,
       BoletinPeriodo,
       BoletinPree,
       BoletinPeriodoRetirado,
