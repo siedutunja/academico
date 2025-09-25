@@ -216,7 +216,7 @@ export default {
                 <td>${ausJAsig}</td>
                 <td>${ausSAsig}</td>
               </tr>
-              <tr><td colspan="11" class="descriptor" style="text-align: left">${this.descriptorAsignatura(data, area, a, this.periodoActual,this.orden)}</td></tr>
+              <tr><td colspan="13" class="descriptor" style="text-align: left">${this.descriptorAsignatura(data, area, a, this.periodoActual,this.orden)}</td></tr>
             `
           } else {
             return `

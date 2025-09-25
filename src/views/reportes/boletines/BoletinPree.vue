@@ -176,7 +176,7 @@ export default {
               <td>${datos.ausS || 0}</td>
             </tr>
           `
-          html += `<tr><td colspan="9" class="descriptor" style="text-align: left">${ this.descriptorDesdeLetraFlexible(est, area, asignatura, this.periodoActual, orden)}</td></tr>`
+          html += `<tr><td colspan="10" class="descriptor" style="text-align: left">${ this.descriptorDesdeLetraFlexible(est, area, asignatura, this.periodoActual, orden)}</td></tr>`
         })
       })
       html += `
