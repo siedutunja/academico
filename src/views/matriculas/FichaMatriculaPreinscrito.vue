@@ -1001,7 +1001,7 @@
             this.comboCursos.push({ 'value': element.id, 'text': element.nomenclatura.toUpperCase() })
           }
         })
-        this.comboCursos.push({ 'value': 0, 'text': ' --- SIN CURSO (BOLSA) ---' })
+        //this.comboCursos.push({ 'value': 0, 'text': ' --- SIN CURSO (BOLSA) ---' })
       },
       cancelarFormulario() {
         this.$router.push('/')

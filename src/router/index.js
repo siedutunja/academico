@@ -235,6 +235,13 @@ function configRoutes () {
               name: 'Criterios de Evaluación',
               component: () => import('@/views/configuracion/CriteriosEvaluacion')
             },
+            // 2025-10-02
+            {
+              path: 'configurarconsultaacudiente',
+              beforeEnter: autenticar,
+              name: 'Configurar Consulta Acudiente',
+              component: () => import('@/views/configuracion/ConfigurarConsultaAcudiente')
+            },
 
 
             // 2024-10-26 ????????????????????

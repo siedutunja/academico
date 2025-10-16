@@ -125,6 +125,61 @@
                       </b-card-text>
                     </b-card>
                   </b-tab>
+                  <b-tab title="Paz y Salvo">
+                    <b-card style="margin-top: -17">
+                      <b-card-text>
+                        <b-row>
+                          <b-col lg="6" md="6">
+                            <b-form-group label="Firma 1:" label-for="firma1" class="etiqueta">
+                              <b-form-input id="firma1" ref="firma1" v-model.trim="infoPaz.firmaP1" autocomplete="off" maxlength="50"></b-form-input>
+                            </b-form-group>
+                          </b-col>
+                          <b-col lg="6" md="6">
+                            <b-form-group label="Firma 2:" label-for="firma2" class="etiqueta">
+                              <b-form-input id="firma2" ref="firma2" v-model.trim="infoPaz.firmaP2" autocomplete="off" maxlength="50"></b-form-input>
+                            </b-form-group>
+                          </b-col>
+                          <b-col lg="6" md="6">
+                            <b-form-group label="Firma 3:" label-for="firma3" class="etiqueta">
+                              <b-form-input id="firma3" ref="firma3" v-model.trim="infoPaz.firmaP3" autocomplete="off" maxlength="50"></b-form-input>
+                            </b-form-group>
+                          </b-col>
+                          <b-col lg="6" md="6">
+                            <b-form-group label="Firma 4:" label-for="firma4" class="etiqueta">
+                              <b-form-input id="firma4" ref="firma4" v-model.trim="infoPaz.firmaP4" autocomplete="off" maxlength="50"></b-form-input>
+                            </b-form-group>
+                          </b-col>
+                          <b-col lg="6" md="6">
+                            <b-form-group label="Firma 5:" label-for="firma5" class="etiqueta">
+                              <b-form-input id="firma5" ref="firma5" v-model.trim="infoPaz.firmaP5" autocomplete="off" maxlength="50"></b-form-input>
+                            </b-form-group>
+                          </b-col>
+                          <b-col lg="6" md="6">
+                            <b-form-group label="Firma 6:" label-for="firma6" class="etiqueta">
+                              <b-form-input id="firma6" ref="firma6" v-model.trim="infoPaz.firmaP6" autocomplete="off" maxlength="50"></b-form-input>
+                            </b-form-group>
+                          </b-col>
+                          <b-col lg="6" md="6">
+                            <b-form-group label="Firma 7:" label-for="firma7" class="etiqueta">
+                              <b-form-input id="firma7" ref="firma7" v-model.trim="infoPaz.firmaP7" autocomplete="off" maxlength="50"></b-form-input>
+                            </b-form-group>
+                          </b-col>
+                          <b-col lg="6" md="6">
+                            <b-form-group label="Firma 8:" label-for="firma8" class="etiqueta">
+                              <b-form-input id="firma8" ref="firma8" v-model.trim="infoPaz.firmaP8" autocomplete="off" maxlength="50"></b-form-input>
+                            </b-form-group>
+                          </b-col>
+                        </b-row>
+                        <b-row>
+                          <b-col lg="12">
+                            <hr>
+                            <div class="float-right text-medium-emphasis text-info">* Campo requerido</div>
+                            <b-button class="small mx-1 mt-2" variant="primary" @click="guardarDatosPaz">Guardar Datos</b-button>
+                          </b-col>
+                        </b-row>
+                      </b-card-text>
+                    </b-card>
+                  </b-tab>
                 </b-tabs>
               </b-col>
             </b-row>
@@ -180,6 +235,17 @@
           cons_firma_secre: null,
           cons_margen: null,
         },
+        infoPaz: {
+          id: null,
+          firmaP1: null,
+          firmaP2: null,
+          firmaP3: null,
+          firmaP4: null,
+          firmaP5: null,
+          firmaP6: null,
+          firmaP7: null,
+          firmaP8: null,
+        },
         firmas: [
           { value: 1, text: 'Rector(a)'},
           { value: 2, text: 'Secretario(a)' }
@@ -209,6 +275,28 @@
       }
     },
     methods: {
+      async guardarDatosPaz() {
+        await axios
+        .put(CONFIG.ROOT_PATH + 'academico/configuracion/pazysalvo', JSON.stringify(this.infoPaz), { headers: {"Content-Type": "application/json; charset=utf-8" }})
+        .then(response => {
+          if (response.data.error){
+            this.mensajeEmergente('danger',CONFIG.TITULO_MSG,response.data.mensaje + ' - Actualizar Datos Paz y Salvo')
+          } else{
+            this.$store.commit('set', ['firmaPaz1', this.infoPaz.firmaP1])
+            this.$store.commit('set', ['firmaPaz2', this.infoPaz.firmaP2])
+            this.$store.commit('set', ['firmaPaz3', this.infoPaz.firmaP3])
+            this.$store.commit('set', ['firmaPaz4', this.infoPaz.firmaP4])
+            this.$store.commit('set', ['firmaPaz5', this.infoPaz.firmaP5])
+            this.$store.commit('set', ['firmaPaz6', this.infoPaz.firmaP6])
+            this.$store.commit('set', ['firmaPaz7', this.infoPaz.firmaP7])
+            this.$store.commit('set', ['firmaPaz8', this.infoPaz.firmaP8])
+            this.mensajeEmergente('success',CONFIG.TITULO_MSG,'Los datos de la configuración del Paz y Salvo se han actualizado correctamente.')
+          }
+        })
+        .catch(err => {
+          this.mensajeEmergente('danger',CONFIG.TITULO_MSG,'Algo salio mal y no se pudo realizar: Actualizar Datos Paz y Salvo. Intente más tarde. ' + err)
+        })
+      },
       async guardarDatosGeneral() {
         this.$v.infoGeneral.$touch()
         if (this.$v.infoGeneral.$anyError) {
@@ -287,6 +375,16 @@
               this.infoGeneral.cargo_secretaria = response.data.datos.cargo_secretaria
               this.infoGeneral.pie = response.data.datos.pie
               this.infoGeneral.resolucion = response.data.datos.resolucion
+
+              this.infoPaz.id = response.data.datos.id
+              this.infoPaz.firmaP1 = response.data.datos.firmaP1
+              this.infoPaz.firmaP2 = response.data.datos.firmaP2
+              this.infoPaz.firmaP3 = response.data.datos.firmaP3
+              this.infoPaz.firmaP4 = response.data.datos.firmaP4
+              this.infoPaz.firmaP5 = response.data.datos.firmaP5
+              this.infoPaz.firmaP6 = response.data.datos.firmaP6
+              this.infoPaz.firmaP7 = response.data.datos.firmaP7
+              this.infoPaz.firmaP8 = response.data.datos.firmaP8
               //console.log(JSON.stringify(response.data.datos))
             }
           }

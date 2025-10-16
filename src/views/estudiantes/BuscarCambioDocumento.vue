@@ -120,7 +120,7 @@
           return false
         } else {
           await axios
-          .get(CONFIG.ROOT_PATH + 'academico/buscarestudiante/carpetamatricula', { params: { texto: this.buscarTexto.textoBusqueda, idInstitucion: this.$store.state.idInstitucion, vigencia: this.$store.state.aMatriculas }})
+          .get(CONFIG.ROOT_PATH + 'academico/buscarestudiante/carpetamatricula', { params: { texto: this.buscarTexto.textoBusqueda, idInstitucion: this.$store.state.idInstitucion, vigencia: this.$store.state.aLectivo }})
           .then(response => {
             if (response.data.error){
               this.mensajeEmergente('danger',CONFIG.TITULO_MSG,response.data.mensaje + ' - Buscar carpeta estudiante')

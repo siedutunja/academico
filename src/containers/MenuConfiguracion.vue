@@ -33,6 +33,10 @@
     <CDropdownItem to="/configuracion/criteriosevaluacion">
       <CIcon name="cilGroup" />Criterios de Evaluación
     </CDropdownItem>
+    <CDropdownDivider/>
+    <CDropdownItem to="/configuracion/configurarconsultaacudiente">
+      <CIcon name="cilGroup" />Consulta Boletines por los Acudientes
+    </CDropdownItem>
     <!--
     <CDropdownItem to="infoinstitucional">
       <CIcon name="cilBuilding" />Datos Generales de la IE

@@ -366,7 +366,22 @@
               this.$store.commit('set', ['NombreSecretaria', response.data.datos.configuracion.secretaria])
               this.$store.commit('set', ['DocumentoSecretaria', response.data.datos.configuracion.documento_secretaria])
               this.$store.commit('set', ['CargoSecretaria', response.data.datos.configuracion.cargo_secretaria])
-                            
+              this.$store.commit('set', ['firmaPaz1', response.data.datos.configuracion.firmaP1])
+              this.$store.commit('set', ['firmaPaz2', response.data.datos.configuracion.firmaP2])
+              this.$store.commit('set', ['firmaPaz3', response.data.datos.configuracion.firmaP3])
+              this.$store.commit('set', ['firmaPaz4', response.data.datos.configuracion.firmaP4])
+              this.$store.commit('set', ['firmaPaz5', response.data.datos.configuracion.firmaP5])
+              this.$store.commit('set', ['firmaPaz6', response.data.datos.configuracion.firmaP6])
+              this.$store.commit('set', ['firmaPaz7', response.data.datos.configuracion.firmaP7])
+              this.$store.commit('set', ['firmaPaz8', response.data.datos.configuracion.firmaP8])
+              /*
+              this.$store.commit('set', ['periodoConsultaBoletin', response.data.datos.configuracion.periodo_consulta])
+              this.$store.commit('set', ['fechaIniConsulta', response.data.datos.configuracion.fechaIniConsulta])
+              this.$store.commit('set', ['fechaFinConsulta', response.data.datos.configuracion.fechaFinConsulta])
+              this.$store.commit('set', ['actualizarFicha', response.data.datos.configuracion.actualizarFicha])
+              this.$store.commit('set', ['consultaBoletin', response.data.datos.configuracion.consultaBoletin])
+              this.$store.commit('set', ['consultaObservador', response.data.datos.configuracion.consultaObservador])
+              */
               this.cargarDatosDocentes()
               this.cargarDatosSedes()
               this.cargarDatosGrados()

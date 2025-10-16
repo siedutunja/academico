@@ -87,14 +87,14 @@
         ],
         estudSeleccionados: [],
         campos: [
-          { value: 1, text: 'Coordinación' },
-          { value: 2, text: 'Secretaría' },
-          { value: 3, text: 'Almacén'},
-          { value: 4, text: 'Pagaduría'},
-          { value: 5, text: 'Biblioteca'},
-          { value: 6, text: 'Director de Curso'},
-          { value: 7, text: 'Coordinador de Sede'},
-          { value: 8, text: 'Rectoría' },
+          { value: this.$store.state.firmaPaz1, text: this.$store.state.firmaPaz1},
+          { value: this.$store.state.firmaPaz2, text: this.$store.state.firmaPaz2},
+          { value: this.$store.state.firmaPaz3, text: this.$store.state.firmaPaz3},
+          { value: this.$store.state.firmaPaz4, text: this.$store.state.firmaPaz4},
+          { value: this.$store.state.firmaPaz5, text: this.$store.state.firmaPaz5},
+          { value: this.$store.state.firmaPaz6, text: this.$store.state.firmaPaz6},
+          { value: this.$store.state.firmaPaz7, text: this.$store.state.firmaPaz7},
+          { value: this.$store.state.firmaPaz8, text: this.$store.state.firmaPaz8},
         ],
       }
     },
@@ -111,6 +111,7 @@
         //window.open("http://localhost/siedutunja/php/documentos/pazysalvos-01.php" + encoded,"_blank")
         window.open("https://siedutunja.gov.co/php/documentos/pazysalvos-01.php" + encoded,"_blank")
         //console.log(JSON.stringify(this.estudSeleccionados))
+        //console.log(JSON.stringify(this.camposSeleccionados))
         return true
       },
       tdClassFuncE(row) {
