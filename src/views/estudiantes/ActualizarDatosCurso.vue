@@ -314,7 +314,7 @@
       async consultarMatriculadosEspecialidad() {
         this.listaMatriculadosEspecialidad = []
         await axios
-        .get(CONFIG.ROOT_PATH + 'academico/estudiantes/actualizarespecialidad', {params: {idCurso: this.idCurso}})
+        .get(CONFIG.ROOT_PATH + 'academico/estudiantes/actualizarespecialidad', {params: {idCurso: this.idCurso, vigencia: this.$store.state.aLectivo}})
         .then(response => {
           if (response.data.error){
             this.mensajeEmergente('danger',CONFIG.TITULO_MSG,response.data.mensaje + ' - Cambiar especialidad')
@@ -331,7 +331,7 @@
       async consultarMatriculadosMetodologia() {
         this.listaMatriculadosMetodologia = []
         await axios
-        .get(CONFIG.ROOT_PATH + 'academico/estudiantes/actualizarmetodologia', {params: {idCurso: this.idCurso}})
+        .get(CONFIG.ROOT_PATH + 'academico/estudiantes/actualizarmetodologia', {params: {idCurso: this.idCurso, vigencia: this.$store.state.aLectivo}})
         .then(response => {
           if (response.data.error){
             this.mensajeEmergente('danger',CONFIG.TITULO_MSG,response.data.mensaje + ' - Cambiar metodología')
@@ -348,7 +348,7 @@
       async consultarMatriculadosModalidad() {
         this.listaMatriculadosModalidad = []
         await axios
-        .get(CONFIG.ROOT_PATH + 'academico/estudiantes/actualizarmodalidad', {params: {idCurso: this.idCurso}})
+        .get(CONFIG.ROOT_PATH + 'academico/estudiantes/actualizarmodalidad', {params: {idCurso: this.idCurso, vigencia: this.$store.state.aLectivo}})
         .then(response => {
           if (response.data.error){
             this.mensajeEmergente('danger',CONFIG.TITULO_MSG,response.data.mensaje + ' - Cambiar modalidad')

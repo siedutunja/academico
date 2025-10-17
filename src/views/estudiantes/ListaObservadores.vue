@@ -93,7 +93,7 @@
       },      
       async consultaListaCurso() {
         await axios
-        .get(CONFIG.ROOT_PATH + 'observador/listacurso', { params: { idCurso: this.idCurso }})
+        .get(CONFIG.ROOT_PATH + 'observador/listacurso', { params: { idCurso: this.idCurso, vigencia: this.$store.state.aLectivo }})
         .then(response => {
           if (response.data.error){
             this.mensajeEmergente('danger',CONFIG.TITULO_MSG,response.data.mensaje + ' - Consulta Lista Curso')
