@@ -219,7 +219,7 @@
       async cargarNotasPeriodoPreescolar() {
         this.notasPlanillaPree = []
         await axios
-        .get(CONFIG.ROOT_PATH + 'docente/notas/planillapree', {params: {idCurso: this.configuracionPlanilla.idCurso, idPeriodo: this.configuracionPlanilla.idPeriodo, idPlanilla: this.configuracionPlanilla.idPlanilla}})
+        .get(CONFIG.ROOT_PATH + 'docente/notas/planillapree', {params: {idCurso: this.configuracionPlanilla.idCurso, idPeriodo: this.configuracionPlanilla.idPeriodo, idPlanilla: this.configuracionPlanilla.idPlanilla, vigencia: this.$store.state.aLectivo}})
         .then(response => {
           if (response.data.error){
             this.mensajeEmergente('danger',CONFIG.TITULO_MSG,response.data.mensaje + ' - Notas periodo Preescolar')

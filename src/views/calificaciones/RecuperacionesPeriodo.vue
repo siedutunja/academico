@@ -240,7 +240,7 @@
         this.btnCargando = true
         this.notasPlanilla = []
         await axios
-        .get(CONFIG.ROOT_PATH + 'academico/recuperaciones/planilla', {params: {idCurso: this.idCurso, idPeriodo: this.idPeriodo, idPlanilla: this.idAsignatura, idTipoEsp: this.configuracionPlanilla.id_tipo, idEspecialidad: this.configuracionPlanilla.id_especialidad}})
+        .get(CONFIG.ROOT_PATH + 'academico/recuperaciones/planilla', {params: {idCurso: this.idCurso, idPeriodo: this.idPeriodo, idPlanilla: this.idAsignatura, idTipoEsp: this.configuracionPlanilla.id_tipo, idEspecialidad: this.configuracionPlanilla.id_especialidad, vigencia: this.$store.state.aLectivo}})
         .then(response => {
           if (response.data.error){
             this.mensajeEmergente('danger',CONFIG.TITULO_MSG,response.data.mensaje + ' - Recuperaciones periodo')

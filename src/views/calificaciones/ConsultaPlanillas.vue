@@ -43,6 +43,7 @@
             <div v-else-if="planillita == 5">
               <PreeParcialPeriodoSilvino :configuracionPlanilla="configuracionPlanilla"/>
             </div>
+            
           </b-card-text>
           <template #footer>
             <em>Consulta planilla parcial por periodo.</em>

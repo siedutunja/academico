@@ -557,7 +557,7 @@
       async cargarNotasPeriodoPrees() {
         this.notasPlanillaPree = []
         await axios
-        .get(CONFIG.ROOT_PATH + 'academico/notas/planillapree', {params: {idCurso: this.idCurso, idPeriodo: this.idPeriodo, idPlanilla: this.idAsignatura}})
+        .get(CONFIG.ROOT_PATH + 'academico/notas/planillapree', {params: {idCurso: this.idCurso, idPeriodo: this.idPeriodo, idPlanilla: this.idAsignatura, vigencia: this.$store.state.aLectivo}})
         .then(response => {
           if (response.data.error){
             this.mensajeEmergente('danger',CONFIG.TITULO_MSG,response.data.mensaje + ' - Notas periodo preescolar')
@@ -588,7 +588,7 @@
       async cargarNotasPeriodoComportamiento() {
         this.notasPlanillaCompor = []
         await axios
-        .get(CONFIG.ROOT_PATH + 'academico/notas/planillacompor', {params: {idCurso: this.idCurso, idPeriodo: this.idPeriodo, idPlanilla: this.idAsignatura}})
+        .get(CONFIG.ROOT_PATH + 'academico/notas/planillacompor', {params: {idCurso: this.idCurso, idPeriodo: this.idPeriodo, idPlanilla: this.idAsignatura, vigencia: this.$store.state.aLectivo}})
         .then(response => {
           if (response.data.error){
             this.mensajeEmergente('danger',CONFIG.TITULO_MSG,response.data.mensaje + ' - Notas periodo')
@@ -619,7 +619,7 @@
       async cargarNotasPeriodo() {
         this.notasPlanilla = []
         await axios
-        .get(CONFIG.ROOT_PATH + 'academico/notas/planilla', {params: {idCurso: this.idCurso, idPeriodo: this.idPeriodo, idPlanilla: this.idAsignatura, idTipoEsp: this.configuracionPlanilla.id_tipo, idEspecialidad: this.configuracionPlanilla.id_especialidad}})
+        .get(CONFIG.ROOT_PATH + 'academico/notas/planilla', {params: {idCurso: this.idCurso, idPeriodo: this.idPeriodo, idPlanilla: this.idAsignatura, idTipoEsp: this.configuracionPlanilla.id_tipo, idEspecialidad: this.configuracionPlanilla.id_especialidad, vigencia: this.$store.state.aLectivo}})
         .then(response => {
           if (response.data.error){
             this.mensajeEmergente('danger',CONFIG.TITULO_MSG,response.data.mensaje + ' - Notas periodo')
