@@ -63,10 +63,10 @@
             </tr>
             <tr>
               <template v-for="(asigs, area) in encabezadoPorArea">
-                <template v-for="asig in asigs">
-                  <th :key="'prom' + asig + area">ACU</th>
-                  <th :key="'prom' + asig + area + 1">PRM</th>
-                  <th :key="'prom' + asig + area + 2">FALTA</th>
+                <template v-for="(asig, l) in asigs">
+                  <th :key="'acum' + asig + area + l">ACU</th>
+                  <th :key="'prom' + asig + area + l">PRM</th>
+                  <th :key="'falta' + asig + area + l">FALTA</th>
                 </template>
               </template>
               <!-- columnas finales vacías -->
@@ -154,7 +154,6 @@
         return asig ? this.calcularNotaFaltante(asig) : ''
       },
       calcularNotaFaltante(asig) {
-        console.log(asig)
         const tipo = asig.idTipoEspecialidad
         const periodos = asig.periodos
         const orden = asig.orden
@@ -264,7 +263,6 @@
         }
       },
       claseDesempeno(nota) {
-        console.log(nota)
         if (typeof nota !== 'number') return 'desempeno-extra'
         if (nota < 3) return 'desempeno-bajo'
         if (nota < 4) return 'desempeno-basico'
@@ -309,7 +307,7 @@
           })
           this.datosRaw = []
           await axios
-          .get(CONFIG.ROOT_PATH + 'consolidados/asignaturas/curso/acumulado', {params: {idCurso: this.idCurso, periodo: this.idPeriodo}})
+          .get(CONFIG.ROOT_PATH + 'consolidados/asignaturas/curso/acumulado', {params: {idCurso: this.idCurso, periodo: this.idPeriodo, vigencia: this.$store.state.aLectivo}})
           .then(response => {
             if (response.data.error){
               this.mensajeEmergente('danger',CONFIG.TITULO_MSG,response.data.mensaje + ' - Consolidados asignaturas curso periodo')

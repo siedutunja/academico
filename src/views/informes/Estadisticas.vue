@@ -53,6 +53,7 @@
                 <div v-if="idEstadistica==12">
                   <PuestosCursosSedePeriodo/>
                 </div>
+                
               </b-col>
             </b-row>
           </b-card-text>

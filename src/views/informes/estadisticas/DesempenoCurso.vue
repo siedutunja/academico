@@ -141,7 +141,7 @@
           })
           this.dataConsultada = []
           await axios
-          .get(CONFIG.ROOT_PATH + 'consolidados/notasdesempeno/curso/periodo', {params: {idCurso: this.idCurso, periodo: this.idPeriodo}})
+          .get(CONFIG.ROOT_PATH + 'consolidados/notasdesempeno/curso/periodo', {params: {idCurso: this.idCurso, periodo: this.idPeriodo, vigencia: this.$store.state.aLectivo}})
           .then(response => {
             if (response.data.error){
               this.mensajeEmergente('danger',CONFIG.TITULO_MSG,response.data.mensaje + ' - Consolidados notas curso periodo')

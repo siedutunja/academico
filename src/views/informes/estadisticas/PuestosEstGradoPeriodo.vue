@@ -160,7 +160,7 @@
           })
           this.listaEstudiantes = []
           await axios
-          .get(CONFIG.ROOT_PATH + 'consolidado/listaestudiantes/grado', { params: { idGrado: this.idGrado }})
+          .get(CONFIG.ROOT_PATH + 'consolidado/listaestudiantes/grado', { params: { idGrado: this.idGrado, vigencia: this.$store.state.aLectivo }})
           .then(response => {
             if (response.data.error){
               this.mensajeEmergente('danger',CONFIG.TITULO_MSG,response.data.mensaje + ' - Consulta Lista Grado')
@@ -192,7 +192,7 @@
           })
           this.dataConsultada = []
           await axios
-          .get(CONFIG.ROOT_PATH + 'consolidados/notasdesempeno/grado/periodo', {params: {idGrado: this.idGrado, periodo: this.idPeriodo}})
+          .get(CONFIG.ROOT_PATH + 'consolidados/notasdesempeno/grado/periodo', {params: {idGrado: this.idGrado, periodo: this.idPeriodo, vigencia: this.$store.state.aLectivo}})
           .then(response => {
             if (response.data.error){
               this.mensajeEmergente('danger',CONFIG.TITULO_MSG,response.data.mensaje + ' - Consolidados notas curso periodo')

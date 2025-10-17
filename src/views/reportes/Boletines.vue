@@ -685,7 +685,7 @@
         this.notas = []
         if (this.idBoletin == 1) {
           await axios
-          .get(CONFIG.ROOT_PATH + 'boletines/notas/curso/periodo', {params: {idCurso: this.idCurso, periodo: this.idPeriodo}})
+          .get(CONFIG.ROOT_PATH + 'boletines/notas/curso/periodo', {params: {idCurso: this.idCurso, periodo: this.idPeriodo, vigencia: this.$store.state.aLectivo}})
           .then(response => {
             if (response.data.error){
               this.mensajeEmergente('danger',CONFIG.TITULO_MSG,response.data.mensaje + ' - Notas boletines curso periodo')
@@ -703,7 +703,7 @@
           })
         } else if (this.idBoletin == 2) { //RETIRADOS
           await axios
-          .get(CONFIG.ROOT_PATH + 'boletines/notas/curso/periodo/retirados', {params: {idCurso: this.idCurso, periodo: this.idPeriodo}})
+          .get(CONFIG.ROOT_PATH + 'boletines/notas/curso/periodo/retirados', {params: {idCurso: this.idCurso, periodo: this.idPeriodo, vigencia: this.$store.state.aLectivo}})
           .then(response => {
             if (response.data.error){
               this.mensajeEmergente('danger',CONFIG.TITULO_MSG,response.data.mensaje + ' - Notas boletines curso periodo')
@@ -721,7 +721,7 @@
           })
         } else if (this.idBoletin == 3) { //UBICADOS - REUBICADOS
           await axios
-          .get(CONFIG.ROOT_PATH + 'boletines/notas/curso/periodo/reubicados', {params: {idCurso: this.idCurso, periodo: this.idPeriodo}})
+          .get(CONFIG.ROOT_PATH + 'boletines/notas/curso/periodo/reubicados', {params: {idCurso: this.idCurso, periodo: this.idPeriodo, vigencia: this.$store.state.aLectivo}})
           .then(response => {
             if (response.data.error){
               this.mensajeEmergente('danger',CONFIG.TITULO_MSG,response.data.mensaje + ' - Notas boletines curso periodo')
@@ -739,7 +739,7 @@
           })
         } else if (this.idBoletin == 4) { //PROMOCIONADO ANTICIPADAMENTE
           await axios
-          .get(CONFIG.ROOT_PATH + 'boletines/notas/curso/periodo/promocionados', {params: {idCurso: this.idCurso, periodo: this.idPeriodo}})
+          .get(CONFIG.ROOT_PATH + 'boletines/notas/curso/periodo/promocionados', {params: {idCurso: this.idCurso, periodo: this.idPeriodo, vigencia: this.$store.state.aLectivo}})
           .then(response => {
             if (response.data.error){
               this.mensajeEmergente('danger',CONFIG.TITULO_MSG,response.data.mensaje + ' - Notas boletines curso periodo')
@@ -818,7 +818,7 @@
           else if (this.idBoletin == 3) apiRuta = 'boletines/listacurso/boletines/reubicados'
           else if (this.idBoletin == 4) apiRuta = 'boletines/listacurso/boletines/promocionados'
           await axios
-          .get(CONFIG.ROOT_PATH + apiRuta, { params: { idCurso: this.idCurso }})
+          .get(CONFIG.ROOT_PATH + apiRuta, { params: { idCurso: this.idCurso, vigencia: this.$store.state.aLectivo }})
           .then(response => {
             if (response.data.error){
               this.mensajeEmergente('danger',CONFIG.TITULO_MSG,response.data.mensaje + ' - Consulta Lista Curso')
