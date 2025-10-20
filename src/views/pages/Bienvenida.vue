@@ -300,6 +300,27 @@
           location.replace(CONFIG.ROOT_WEBSITE)
         })
       },
+      async cargarDatosJornadas() {
+        await axios
+        .get(CONFIG.ROOT_PATH + 'academico/carguejornadas')
+        .then(response => {
+          if (response.data.error){
+            alert(response.data.mensaje + ' - Consulta datos Jornadas')
+            location.replace(CONFIG.ROOT_MODULO_LOGIN)
+          } else {
+            if(response.data.datos != 0) {
+              this.$store.commit('set', ['datosJornadas', response.data.datos])
+            } else {
+              this.$store.commit('set', ['datosJornadas', []])
+            }
+            //console.log('Jornadas cargadas...')
+          }
+        })
+        .catch(err => {
+          alert('Algo salio mal y no se pudo realizar: Consulta datos Escalafones. Intente más tarde. ' + err)
+          location.replace(CONFIG.ROOT_WEBSITE)
+        })
+      },
       async cargarDataEstudiantes() {
         await axios
         .get(CONFIG.ROOT_PATH + 'academico/data/estudiantes', { params: { idInstitucion: this.$store.state.idInstitucion, vigencia: this.$store.state.aLectivo }})
@@ -392,6 +413,7 @@
               this.cargarDatosAsignaturas()
               this.cargarDatosSecciones()
               this.cargarDatosEscalafones()
+              this.cargarDatosJornadas()
               this.cargarDataEstudiantes()
 
               this.trazaProceso('Inicio de Sesión')

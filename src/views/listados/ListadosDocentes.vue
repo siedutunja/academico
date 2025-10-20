@@ -21,6 +21,7 @@
                           <b-form-radio v-model="idInforme" :aria-describedby="ariaDescribedby" name="some-radios" value="4">Por Curso</b-form-radio>
                           <b-form-radio v-model="idInforme" :aria-describedby="ariaDescribedby" name="some-radios" value="5">Por Área</b-form-radio>
                           <b-form-radio v-model="idInforme" :aria-describedby="ariaDescribedby" name="some-radios" value="6">Por Asignatura</b-form-radio>
+                          <b-form-radio v-model="idInforme" :aria-describedby="ariaDescribedby" name="some-radios" value="7">Por Jornada</b-form-radio>
                         </b-form-group>
                       </b-col>
                       <b-col lg="4">
@@ -62,6 +63,9 @@
                 <div v-if="idInforme==6">
                   <ListaAsignatura/>
                 </div>
+                <div v-if="idInforme==7">
+                  <ListaJornada/>
+                </div>
                 <div v-if="idInforme==10">
                   <AsignacionDocente/>
                 </div>
@@ -92,6 +96,7 @@
   import ListaCurso from '@/views/listados/docentes/ListaCurso'
   import ListaArea from '@/views/listados/docentes/ListaArea'
   import ListaAsignatura from '@/views/listados/docentes/ListaAsignatura'
+  import ListaJornada from '@/views/listados/docentes/ListaJornada'
   import Directorio from '@/views/listados/docentes/Directorio'
   import AsignacionDocente from '@/views/listados/docentes/AsignacionDocente'
   import AsignacionCurso from '@/views/listados/docentes/AsignacionCurso'
@@ -106,6 +111,7 @@
       ListaCurso,
       ListaArea,
       ListaAsignatura,
+      ListaJornada,
       Directorio,
       AsignacionDocente,
       AsignacionCurso,
