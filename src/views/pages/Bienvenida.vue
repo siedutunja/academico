@@ -15,10 +15,15 @@
                 <div class="text-center">
                   <img :src="escudoI" height="80"/>
                 </div>
-                <h4>{{ $store.state.nemoInstitucion }}</h4>
+                <h4>{{ $store.state.nombreInstitucion }}</h4>
                 <h6>INSTITUCIÓN EDUCATIVA {{ $store.state.sectorInstitucion }}</h6>
                 <h5 class="text-muted">{{ $store.state.generoUsuario=='M' ? 'BIENVENIDO' : 'BIENVENIDA' }} {{ $store.state.nombreUsuario }}</h5>
-                <b-button type="submit" class="btn mb-2 mt-4" variant="primary" @click="continuar">Continuar</b-button>
+                <div class="row justify-content-md-center mt-4">
+                  <b-form-group label="Seleccione la Vigencia*" label-for="vigencia" style="font-weight: bold; font-size: 16">
+                    <b-form-select  id="vigencia" ref="vigencia" v-model="aSeleccionado" :options="comboAnios"></b-form-select>
+                  </b-form-group>
+                </div>
+                <b-button type="submit" class="btn mb-2 mt-4" variant="primary" @click="continuar" v-if="aSeleccionado!=null">Continuar</b-button>
               </div>
             </b-card>
           </div>
@@ -39,12 +44,31 @@
       return {
         btnHabilitado: false,
         escudoI: null,
-        tokenDecodificado: {}
+        tokenDecodificado: {},
+        aSeleccionado: this.$store.state.aLectivo,
+        comboAnios: [],
       }
     },
     methods: {
       continuar() {
-        this.$router.push('/')
+        this.btnHabilitado = false
+        this.$store.commit('set', ['aLectivo', this.aSeleccionado])
+        this.$store.commit('set', ['aMatriculas', this.aSeleccionado])
+        console.log(this.$store.state.aLectivo)
+        console.log(this.$store.state.aMatriculas)
+        this.cargarDatosDocentes()
+        this.cargarDatosSedes()
+        this.cargarDatosGrados()
+        this.cargarDatosCursos()
+        this.cargarDatosRutas()
+        this.cargarDatosEspecialidades()
+        this.cargarDatosAreas()
+        this.cargarDatosAsignaturas()
+        this.cargarDatosSecciones()
+        this.cargarDatosEscalafones()
+        this.cargarDatosJornadas()
+        this.trazaProceso('Inicio de Sesión')
+        //this.cargarDataEstudiantes()
       },
       async trazaProceso(descProceso) {
         let traza = { idUsuario: this.tokenDecodificado.id, descProceso: descProceso, ip: null}
@@ -60,6 +84,7 @@
           alert('Algo salio mal y no se pudo registrar la traza de la Sesión. Intente más tarde. ' + err)
           location.replace(CONFIG.ROOT_WEBSITE)
         })
+        this.$router.push('/')
         this.btnHabilitado = true
       },
       async cargarDatosTablas() {
@@ -76,6 +101,7 @@
               this.$store.commit('set', ['datosTablas', []])
             }
             //console.log('Tablas cargadas...')
+            this.btnHabilitado = true
           }
         })
         .catch(err => {
@@ -321,27 +347,6 @@
           location.replace(CONFIG.ROOT_WEBSITE)
         })
       },
-      async cargarDataEstudiantes() {
-        await axios
-        .get(CONFIG.ROOT_PATH + 'academico/data/estudiantes', { params: { idInstitucion: this.$store.state.idInstitucion, vigencia: this.$store.state.aLectivo }})
-        .then(response => {
-          if (response.data.error){
-            alert(response.data.mensaje + ' - Consulta Data Estudiantes')
-            location.replace(CONFIG.ROOT_MODULO_LOGIN)
-          } else{
-            if(response.data.datos != 0) {
-              this.$store.commit('set', ['datosDataEstudiantes', response.data.datos])
-            } else {
-              this.$store.commit('set', ['datosDataEstudiantes', []])
-            }
-            //console.log('Estudiantes cargadas...')
-          }
-        })
-        .catch(err => {
-          alert('Algo salio mal y no se pudo realizar: Consulta Data Estudiantes. Intente más tarde.' + err)
-          location.replace(CONFIG.ROOT_WEBSITE)
-        })
-      },
       async cargarDatosSesionUsuario() {
         await axios
         .get(CONFIG.ROOT_PATH + 'academico/iniciosesion', { params: { idPersona: this.tokenDecodificado.id_persona, idRol: this.tokenDecodificado.id_rol, idIE: this.tokenDecodificado.id_institucion }})
@@ -395,28 +400,9 @@
               this.$store.commit('set', ['firmaPaz6', response.data.datos.configuracion.firmaP6])
               this.$store.commit('set', ['firmaPaz7', response.data.datos.configuracion.firmaP7])
               this.$store.commit('set', ['firmaPaz8', response.data.datos.configuracion.firmaP8])
-              /*
-              this.$store.commit('set', ['periodoConsultaBoletin', response.data.datos.configuracion.periodo_consulta])
-              this.$store.commit('set', ['fechaIniConsulta', response.data.datos.configuracion.fechaIniConsulta])
-              this.$store.commit('set', ['fechaFinConsulta', response.data.datos.configuracion.fechaFinConsulta])
-              this.$store.commit('set', ['actualizarFicha', response.data.datos.configuracion.actualizarFicha])
-              this.$store.commit('set', ['consultaBoletin', response.data.datos.configuracion.consultaBoletin])
-              this.$store.commit('set', ['consultaObservador', response.data.datos.configuracion.consultaObservador])
-              */
-              this.cargarDatosDocentes()
-              this.cargarDatosSedes()
-              this.cargarDatosGrados()
-              this.cargarDatosCursos()
-              this.cargarDatosRutas()
-              this.cargarDatosEspecialidades()
-              this.cargarDatosAreas()
-              this.cargarDatosAsignaturas()
-              this.cargarDatosSecciones()
-              this.cargarDatosEscalafones()
-              this.cargarDatosJornadas()
-              this.cargarDataEstudiantes()
-
-              this.trazaProceso('Inicio de Sesión')
+              for (var i = this.$store.state.aMatriculas; i >= 2025; i--) {
+                this.comboAnios.push({ 'value': i, 'text': i })
+              }
             }
           }
         })

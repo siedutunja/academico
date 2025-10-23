@@ -7,7 +7,7 @@
             <div class="float-right">
               <b-button class="mx-2" size="sm" variant="info" @click="verPreInscritos" title="Actualizar Lista Preinscritos"><b-icon icon="arrow-repeat"></b-icon></b-button>
             </div>
-            <h5 class="mb-0"><b-icon icon="credit-card2-front" aria-hidden="true"></b-icon> PREINSCRITOS</h5>
+            <h5 class="mb-0"><b-icon icon="credit-card2-front" aria-hidden="true"></b-icon> PREINSCRITOS {{ $store.state.aLectivo }}</h5>
           </template>
           <b-card-text>
             <b-row>
@@ -36,7 +36,7 @@
                   </span>
                 </template>
                 <div slot="emptystate">
-                  <h5 class="text-danger ml-5">No existen estudiantes preinscritos</h5>
+                  <h5 class="text-danger ml-5">No existen estudiantes para sentar matricula</h5>
                 </div>
               </vue-good-table>
               </b-col>
@@ -72,7 +72,8 @@
           { label: 'Genero', field: 'genero', sortable: false },
           { label: 'Nacionalidad', field: 'pais', sortable: false },
           { label: 'Grado', field: 'grado', sortable: false },
-          { label: 'Población', field: 'id_poblacion', formatFn: this.formatFnF, sortable: false }
+          { label: 'Población', field: 'id_poblacion', formatFn: this.formatFnF, sortable: false },
+          { label: 'Vigencia', field: 'vigencia', sortable: false },
         ]
       }
     },
@@ -105,7 +106,7 @@
       async verPreInscritos() {
         this.listaPreinscritos = []
         await axios
-        .get(CONFIG.ROOT_PATH + 'academico/preinscritos', { params: { idIE: this.$store.state.idInstitucion }})
+        .get(CONFIG.ROOT_PATH + 'academico/preinscritos', { params: { idIE: this.$store.state.idInstitucion, vigencia: this.$store.state.aLectivo }})
         .then(response => {
           if (response.data.error){
             this.mensajeEmergente('danger',CONFIG.TITULO_MSG,response.data.mensaje + ' - Lista de preinscritos')

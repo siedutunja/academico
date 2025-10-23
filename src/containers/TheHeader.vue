@@ -30,7 +30,7 @@
     <CHeaderNav class="mr-4">
       <CHeaderNavItem class="d-md-down-none mx-2">
         <CHeaderNavLink>
-          <CIcon name="cil-calendar"/><span class="ml-2 text-primary"><strong>AÑO LECTIVO {{ $store.state.aLectivo }}</strong></span><span class="mx-3">|</span>
+          <CIcon name="cil-calendar"/><span class="ml-2 text-primary"><strong @click="cambiarVigencia">AÑO LECTIVO {{ $store.state.aLectivo }}</strong></span><span class="mx-3">|</span>
           <CIcon name="cil-user" class="mr-1"/>{{ $store.state.nombreUsuario }} {{ $store.state.apellidoUsuario }} - {{ $store.state.nemoRol }}
         </CHeaderNavLink>
       </CHeaderNavItem>
@@ -61,6 +61,32 @@
     data () {
       return { 
         itemsCount: 1
+      }
+    },
+    methods: {
+      cambiarVigencia() {
+        this.$bvModal.msgBoxConfirm('Desea cambiar de Año Lectivo?', {
+          headerBgVariant: 'primary',
+          headerTextVariant: 'light',
+          bodyBgVariant: 'light',
+          bodyBgClass: 'text-center',
+          title: 'Cambiar Año Lectivo',
+          size: '',
+          buttonSize: 'sm',
+          okVariant: 'primary',
+          okTitle: 'Si, Cambiar de Año Lectivo',
+          cancelVariant: 'danger',
+          cancelTitle: 'Cancelar',
+          bodyClass: 'p-5',
+          footerClass: 'p-2',
+          hideHeaderClose: false,
+          centered: true
+        })
+        .then(value => {
+          if (value) {
+            this.$router.push('/bienvenida')
+          }
+        })
       }
     }
   }
