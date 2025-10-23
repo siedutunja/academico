@@ -18,7 +18,8 @@
                           <b-form-radio v-model="idConsolidado" :aria-describedby="ariaDescribedby" name="some-radios" value="1">Resumen por Periodo</b-form-radio>
                           <b-form-radio v-model="idConsolidado" :aria-describedby="ariaDescribedby" name="some-radios" value="2">Consolidado Acumulado/Promedio</b-form-radio>
                           <b-form-radio v-model="idConsolidado" :aria-describedby="ariaDescribedby" name="some-radios" value="3">Consolidado Acumulado/Ponderado</b-form-radio>
-                          <b-form-radio v-model="idConsolidado" :aria-describedby="ariaDescribedby" name="some-radios" value="4">Notas Faltantes</b-form-radio>
+                          <b-form-radio v-model="idConsolidado" :aria-describedby="ariaDescribedby" name="some-radios" value="4">Notas Faltantes por Asignatura</b-form-radio>
+                          <b-form-radio v-model="idConsolidado" :aria-describedby="ariaDescribedby" name="some-radios" value="5">Notas Faltantes por Área</b-form-radio>
                         </b-form-group>
                       </b-col>
                       <b-col lg="4">
@@ -60,6 +61,9 @@
                 <div v-if="idConsolidado==4">
                   <NotasFaltantes/>
                 </div>
+                <div v-if="idConsolidado==5">
+                  <NotasFaltantesArea/>
+                </div>
                 <div v-if="idConsolidado==10">
                   <AusenciasPeriodo/>
                 </div>
@@ -97,6 +101,7 @@
   import ResumenPeriodo from '@/views/informes/consolidados/ResumenPeriodo'
   import ConsolidadoPromedio from '@/views/informes/consolidados/ConsolidadoPromedio'
   import NotasFaltantes from '@/views/informes/consolidados/NotasFaltantes'
+  import NotasFaltantesArea from '@/views/informes/consolidados/NotasFaltantesArea'
   import ConsolidadoPonderado from '@/views/informes/consolidados/ConsolidadoPonderado'
   import AusenciasPeriodo from '@/views/informes/consolidados/AusenciasPeriodo'
   import AusenciasPeriodos from '@/views/informes/consolidados/AusenciasPeriodos'
@@ -113,6 +118,7 @@
       ConsolidadoPromedio,
       ConsolidadoPonderado,
       NotasFaltantes,
+      NotasFaltantesArea,
       AusenciasPeriodo,
       AusenciasPeriodos,
       ResumenFinal,
