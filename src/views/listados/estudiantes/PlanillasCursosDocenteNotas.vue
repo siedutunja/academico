@@ -226,7 +226,13 @@
           n.idAsignaturaCurso === cursoSeleccionado.idAsignaturaCurso
         )
         if (!nota) return ''
-        if (nota.orden === 99) return nota.definitivacompor || ''
+        if (nota.orden === 99) {
+          if (this.$store.state.idInstitucion == 'c50f3d80-fca0-11ec-8267-536b07c743c4' || this.$store.state.idInstitucion ==  '7c63ed50-fcb0-11ec-8267-536b07c743c4') {
+            return nota.finalPeriodo || ''
+          } else {
+            return nota.definitivacompor || ''
+          }
+        } 
         if (nota.idNivel === 1) return nota.definitivapree || ''
         return nota.finalPeriodo > 0 ? nota.finalPeriodo.toFixed(1) : '' || ''
       },
@@ -329,7 +335,7 @@
           this.mensajeEmergente('danger',CONFIG.TITULO_MSG,'Algo salio mal y no se pudo realizar: Consulta Notas Cursos Seleccionados. Intente más tarde.' + err)
           this.btnCargando = false
         })
-        //console.log(JSON.stringify(this.dataNotas))
+        console.log(JSON.stringify(this.dataNotas))
         this.btnCargando = false
       },
       seleccionarCursos() {

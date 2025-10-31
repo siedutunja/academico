@@ -282,7 +282,7 @@ export default {
       return `
         body { font-family: Arial, sans-serif; margin: 5px; }
         .boletin { page-break-after: always; }
-        .tabla-boletin { width: 100%; border-collapse: collapse; font-size: 0.7rem; margin-top: 0.5rem; }
+        .tabla-boletin { width: 100%; border-collapse: collapse; font-size: 0.9rem; margin-top: 0.5rem; }
         .tabla-boletin th, .tabla-boletin td { border: 1px solid #ccc; padding: 1px 1px; text-align: center; }
         .fila-area { background-color: #f0f0f0; font-weight: bold; }
         .descriptor { font-style: italic; background-color: #f9f9f9; text-align: left; }

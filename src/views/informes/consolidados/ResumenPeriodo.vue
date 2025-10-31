@@ -120,8 +120,13 @@
                     {{ contarNotasPorAsignatura(area, asig, 'bajo') }}
                   </td>
                 </template>
-                <!-- Celda vacía para promedio de área -->
+                <!-- Celda vacía para promedio de área
                 <td :key="area"></td>
+                 -->
+                <!-- Bajos por promedio de área -->
+                <td  :key="'bja' + area">
+                  {{ totalBajosPromedioArea(area) }}
+                </td>
               </template>
               <td></td> <!-- Prom. General -->
               <td>{{ contarNotasTotales('bajo') }}</td>
@@ -171,6 +176,17 @@
       }
     },
     methods: {
+      totalBajosPromedioArea(area) {
+        let total = 0
+        //calcularPromedioArea(areas, area)
+
+
+        Object.values(this.estudiantesNotas).forEach(est => {
+          const prom = parseFloat(this.calcularPromedioArea(est, area))
+          if (!isNaN(prom) && prom < this.datosSeccion.minBas) total++
+        })
+        return total
+      },
       contarAusencias(tipo) {
         let total = 0
         Object.values(this.estudiantesNotas).forEach(est => {

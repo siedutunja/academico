@@ -270,8 +270,10 @@
         let cantidad = 0 // nuevo
         for (let p = 1; p <= 4; p++) {
           const nota = periodos[p] ?? 0
-          total += nota
-          if (nota > 0) cantidad++
+          if (nota > 0) {
+            total += nota
+            cantidad++
+          }
         }
         if (total === 0) return ''
         const promedio = total / cantidad
@@ -286,7 +288,7 @@
           if (asig.orden === 99 && this.datosSeccion.promCompor == 0) return '-'
           total += parseFloat((this.calcularPromedioAsignatura(asig) * asig.porcentaje) / 100)
         })
-        return total > 0 ?  this.redondear(total).toFixed(1) : ''
+        return total > 0 ? this.redondear(total).toFixed(1) : ''
       },
       calcularPromedioGeneral(est) {
         const areas = Object.keys(est.areas || {})
@@ -550,7 +552,7 @@
       estudiantesNotas() {
         const mapa = {}
         this.datosRaw.forEach(row => {
-          const { estudiante, area, asignatura, periodo, definitiva, recuperacion, orden, definitivacompor, idTipoEspecialidad, ausJ, ausS, porcentaje, id_conceptual } = row
+          const { estudiante, area, asignatura, periodo, definitiva, recuperacion, orden, definitivacompor, definitivapree, idTipoEspecialidad, ausJ, ausS, porcentaje, id_conceptual } = row
           if (!mapa[estudiante]) {
             mapa[estudiante] = { id_conceptual, ausJ: 0, ausS: 0, areas: {} }
           }
@@ -574,7 +576,11 @@
               notaFinal = definitivacompor != null ? definitivacompor : ''
             }
           } else {
-            notaFinal = recuperacion > definitiva ? recuperacion : definitiva
+            if (this.idNivel == 1) {
+              notaFinal = definitivapree != null && definitivapree != 0 && definitivapree != '' ? definitivapree : ''
+            } else {
+              notaFinal = recuperacion > definitiva ? recuperacion : definitiva
+            }
           }
           mapa[estudiante].areas[area].asignaturas[asignatura].periodos[periodo] = notaFinal
           mapa[estudiante].ausJ += ausJ || 0

@@ -378,6 +378,13 @@ function configRoutes () {
               name: 'Descriptores',
               component: () => import('@/views/listados/Descriptores')
             },
+            // 2025-10-23
+            {
+              path: 'planillamanualparcial',
+              beforeEnter: autenticar,
+              name: 'Planilla Manual Notas',
+              component: () => import('@/views/listados/PlanillaManualParcial')
+            },
           ]
         },
         // 2025-01-19
