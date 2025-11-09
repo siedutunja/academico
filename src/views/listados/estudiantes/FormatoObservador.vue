@@ -7,6 +7,7 @@
             <h5 class="mb-0"><b-icon icon="card-checklist" aria-hidden="true"></b-icon> FORMATO OBSERVADOR</h5>
           </template>
           <b-card-text>
+            <!--
             <b-row>
               <b-col lg="12">
                 <div v-if="btnCargando">
@@ -17,6 +18,7 @@
                 </div>
               </b-col>
             </b-row>
+            -->
             <b-row>
               <b-col lg="6">
                 <b-form-group label="Seleccione la Sede:" label-for="sedes" class="etiqueta">
@@ -54,7 +56,7 @@
         </b-card>
       </b-col>
     </b-row>
-    <b-modal ref="modalSeleccionarEstudiantes" size="xl" scrollable hide-footer title="Seleccionar Cursos" ok-only>
+    <b-modal ref="modalSeleccionarEstudiantes" size="xl" scrollable hide-footer title="Seleccionar Estudiantes" ok-only>
       <div class="mx-3">
         <div>
           <vue-good-table ref="estudianticos" :columns="encabColumnas" :rows="listaEstudiantes" styleClass="vgt-table condensed bordered striped" :line-numbers="true" :search-options="{enabled: true,placeholder: 'Filtrar estudiantes...'}"
@@ -112,17 +114,7 @@
     },
     methods: {
       generarListadoEstudiantes() {
-        this.listaEstudiantes = this.$store.state.datosDataEstudiantes.filter(e => e.idCurso == this.idCurso)
-        this.listaEstudiantes.forEach(element => {
-          element.edad = this.calcularEdad(element.fnace) + " Años"
-        })
-        this.nombreSede = document.getElementById('sedes')[document.getElementById('sedes').selectedIndex].text
-        this.nombreCurso = document.getElementById('cursos')[document.getElementById('cursos').selectedIndex].text
-        this.$store.state.datosCursos.forEach(element => {
-          if (element.id == this.idCurso) {
-            this.nombreJornada = element.jornada
-          }
-        })
+        this.cargarDataEstudiantes()
         //console.log(JSON.stringify(this.listaEstudiantes))
       },
       procesarFormatoObservador() {
@@ -156,6 +148,42 @@
         this.comboSedes = []
         this.$store.state.datosSedes.forEach(element => {
           this.comboSedes.push({ 'value': element.id, 'text': element.sede.toUpperCase() })
+        })
+      },
+      async cargarDataEstudiantes() {
+        this.btnCargando = true
+        let cursillos = []
+        cursillos.push(this.idCurso)
+        await axios
+        .get(CONFIG.ROOT_PATH + 'academico/data/estudiantes/cursos/campos', { params: { idInstitucion: this.$store.state.idInstitucion, vigencia: this.$store.state.aLectivo, cursos: JSON.stringify(cursillos) }})
+        .then(response => {
+          if (response.data.error){
+            this.mensajeEmergente('danger',CONFIG.TITULO_MSG,response.data.mensaje + ' - Consulta Estudiantes')
+            this.btnCargando = false
+          } else{
+            if(response.data.datos != 0) {
+              this.dataConsultada = response.data.datos
+              this.btnCargando = false
+            } else {
+              this.dataConsultada = []
+              this.btnCargando = false
+            }
+          }
+        })
+        .catch(err => {
+          this.mensajeEmergente('danger',CONFIG.TITULO_MSG,response.data.mensaje + ' - Algo salio mal y no se pudo realizar: Consulta Data Estudiantes. Intente más tarde.' + err)
+          this.btnCargando = false
+        })
+        this.listaEstudiantes = this.dataConsultada.filter(e => e.idCurso == this.idCurso)
+        this.listaEstudiantes.forEach(element => {
+          element.edad = this.calcularEdad(element.fnace) + " Años"
+        })
+        this.nombreSede = document.getElementById('sedes')[document.getElementById('sedes').selectedIndex].text
+        this.nombreCurso = document.getElementById('cursos')[document.getElementById('cursos').selectedIndex].text
+        this.$store.state.datosCursos.forEach(element => {
+          if (element.id == this.idCurso) {
+            this.nombreJornada = element.jornada
+          }
         })
       },
       mensajeEmergente(variante, titulo, contenido) {

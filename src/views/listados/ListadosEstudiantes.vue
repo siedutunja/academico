@@ -9,16 +9,6 @@
           <b-card-text>
             <b-row>
               <b-col lg="12">
-                <div v-if="btnCargando">
-                  <div class="text-center m-5 text-primary">
-                    <b-spinner style="width: 3rem; height: 3rem;" label="Spinner"></b-spinner>
-                    <br><strong>Cargando datos de estudiantes...</strong>
-                  </div>
-                </div>
-              </b-col>
-            </b-row>
-            <b-row v-if="!btnCargando">
-              <b-col lg="12">
                 <b-card bg-variant="light" text-variant="">
                   <b-card-text>
                     <b-row>
@@ -29,7 +19,6 @@
                           <b-form-radio v-model="idInforme" :aria-describedby="ariaDescribedby" name="some-radios" value="2">Planillas por Grado</b-form-radio>
                           <b-form-radio v-model="idInforme" :aria-describedby="ariaDescribedby" name="some-radios" value="3">Listas con Datos por Curso</b-form-radio>
                           <b-form-radio v-model="idInforme" :aria-describedby="ariaDescribedby" name="some-radios" value="4">Listas con Datos por Grado</b-form-radio>
-                          <b-form-radio v-model="idInforme" :aria-describedby="ariaDescribedby" name="some-radios" value="5">Sin Curso</b-form-radio>
                         </b-form-group>
                       </b-col>
                       <b-col lg="3">
@@ -51,7 +40,6 @@
                         <h6>Otros</h6>
                         <b-form-group label="" v-slot="{ ariaDescribedby }">
                           <b-form-radio v-model="idInforme" :aria-describedby="ariaDescribedby" name="some-radios" value="30">Por Acudiente</b-form-radio>
-                          <b-form-radio v-model="idInforme" :aria-describedby="ariaDescribedby" name="some-radios" value="31">Por Agrupación </b-form-radio>
                         </b-form-group>
                       </b-col>
                     </b-row>
@@ -131,41 +119,14 @@
     data () {
       return {
         idInforme: null,
-        btnCargando: false,
       }
     },
     methods: {
-      async cargarDataEstudiantes() {
-        this.btnCargando = true
-        await axios
-        .get(CONFIG.ROOT_PATH + 'academico/data/estudiantes', { params: { idInstitucion: this.$store.state.idInstitucion, vigencia: this.$store.state.aLectivo }})
-        .then(response => {
-          if (response.data.error){
-            alert(response.data.mensaje + ' - Consulta Data Estudiantes')
-            location.replace(CONFIG.ROOT_MODULO_LOGIN)
-            this.btnCargando = false
-          } else{
-            if(response.data.datos != 0) {
-              this.$store.commit('set', ['datosDataEstudiantes', response.data.datos])
-            } else {
-              this.$store.commit('set', ['datosDataEstudiantes', []])
-            }
-            this.btnCargando = false
-            //console.log('Estudiantes cargadas...')
-          }
-        })
-        .catch(err => {
-          alert('Algo salio mal y no se pudo realizar: Consulta Data Estudiantes. Intente más tarde.' + err)
-          location.replace(CONFIG.ROOT_WEBSITE)
-          this.btnCargando = false
-        })
-      },
       mensajeEmergente(variante, titulo, contenido) {
         this.$bvToast.toast(contenido, { title: titulo, variant: variante, toaster: "b-toaster-top-center", solid: true, autoHideDelay: 4000, appendToast: false })
       }
     },
     beforeMount() {
-      this.cargarDataEstudiantes()
     }
   }
 </script>

@@ -364,6 +364,7 @@
       procesarListasCursos() {
         this.cursosConsultados = true
         this.cursosSeleccionados = this.$refs.cursitos.selectedRows
+        this.cargarDataEstudiantes()
         this.$refs['modalSeleccionarCursos'].hide()
       },
       seleccionarCursos() {
@@ -418,6 +419,40 @@
           this.comboGeneros.push({ 'value': element.id, 'text': element.genero.toUpperCase() })
         })
       },
+      async cargarDataEstudiantes() {
+        this.btnCargando = true
+        let cursillos = []
+        this.cursosSeleccionados.forEach(element => {
+          cursillos.push(element.idCurso)
+        })
+        let arraySinDuplicados = cursillos.filter((valor, indice, self) => {
+          return self.indexOf(valor) === indice;
+        })
+        cursillos = arraySinDuplicados
+        await axios
+        .get(CONFIG.ROOT_PATH + 'academico/data/estudiantes/cursos/campos', { params: { idInstitucion: this.$store.state.idInstitucion, vigencia: this.$store.state.aLectivo, cursos: JSON.stringify(cursillos) }})
+        .then(response => {
+          if (response.data.error){
+            this.mensajeEmergente('danger',CONFIG.TITULO_MSG,response.data.mensaje + ' - Consulta Estudiantes')
+            this.btnCargando = false
+          } else{
+            if(response.data.datos != 0) {
+              this.dataConsultada = response.data.datos
+              this.dataConsultada.forEach(element => {
+                element.edad = this.calcularEdad(element.fnace) + " Años"
+              })
+              this.btnCargando = false
+            } else {
+              this.dataConsultada = []
+              this.btnCargando = false
+            }
+          }
+        })
+        .catch(err => {
+          this.mensajeEmergente('danger',CONFIG.TITULO_MSG,response.data.mensaje + ' - Algo salio mal y no se pudo realizar: Consulta Data Estudiantes. Intente más tarde.' + err)
+          this.btnCargando = false
+        })
+      },
       mensajeEmergente(variante, titulo, contenido) {
         this.$bvToast.toast(contenido, { title: titulo, variant: variante, toaster: "b-toaster-top-center", solid: true, autoHideDelay: 4000, appendToast: false })
       }
@@ -425,11 +460,6 @@
     computed: {
     },
     beforeMount() {
-      this.btnCargando = true
-      this.dataConsultada = this.$store.state.datosDataEstudiantes
-      this.dataConsultada.forEach(element => {
-        element.edad = this.calcularEdad(element.fnace) + " Años"
-      })
       this.datosSeccion = this.$store.state.datosSecciones[this.$store.state.idSeccion - 1]
       this.fechaImpresion = 'Fecha: ' + new Date().toLocaleString()
       this.ocuparCombos()
@@ -527,9 +557,6 @@
       ]
       this.porcentajeArea = 60
       this.numeroColumnas = 0
-      setTimeout(()=>{
-        this.btnCargando = false
-      },100)
     }
   }
 </script>

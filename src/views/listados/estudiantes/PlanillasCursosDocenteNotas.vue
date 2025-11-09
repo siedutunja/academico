@@ -310,7 +310,7 @@
         this.cursosSeleccionados = this.$refs.cursitos.selectedRows
         this.$refs['modalSeleccionarCursos'].hide()
         //console.log(JSON.stringify(this.cursosSeleccionados))
-        this.consultarNotasCursosSeleccionados()
+        this.cargarDataEstudiantes()
       },
       async consultarNotasCursosSeleccionados() {
         this.btnCargando = true
@@ -328,6 +328,9 @@
           } else{
             if (response.data.datos != 0) {
               this.dataNotas = response.data.datos
+              this.btnCargando = false
+            } else {
+              this.btnCargando = false
             }
           }
         })
@@ -335,7 +338,7 @@
           this.mensajeEmergente('danger',CONFIG.TITULO_MSG,'Algo salio mal y no se pudo realizar: Consulta Notas Cursos Seleccionados. Intente más tarde.' + err)
           this.btnCargando = false
         })
-        console.log(JSON.stringify(this.dataNotas))
+        //console.log(JSON.stringify(this.dataNotas))
         this.btnCargando = false
       },
       seleccionarCursos() {
@@ -389,6 +392,38 @@
           this.comboPeriodos.push({ 'value': element.id, 'text': element.periodo.toUpperCase() })
         })
       },
+      async cargarDataEstudiantes() {
+        this.btnCargando = true
+        let cursillos = []
+        this.cursosSeleccionados.forEach(element => {
+          cursillos.push(element.idCurso)
+        })
+        let arraySinDuplicados = cursillos.filter((valor, indice, self) => {
+          return self.indexOf(valor) === indice;
+        })
+        cursillos = arraySinDuplicados
+        await axios
+        .get(CONFIG.ROOT_PATH + 'academico/data/estudiantes/cursos', { params: { idInstitucion: this.$store.state.idInstitucion, vigencia: this.$store.state.aLectivo, cursos: JSON.stringify(cursillos) }})
+        .then(response => {
+          if (response.data.error){
+            this.mensajeEmergente('danger',CONFIG.TITULO_MSG,response.data.mensaje + ' - Consulta Estudiantes')
+            this.btnCargando = false
+          } else{
+            if(response.data.datos != 0) {
+              this.dataConsultada = response.data.datos
+              this.consultarNotasCursosSeleccionados()
+              this.btnCargando = false
+            } else {
+              this.dataConsultada = []
+              this.btnCargando = false
+            }
+          }
+        })
+        .catch(err => {
+          this.mensajeEmergente('danger',CONFIG.TITULO_MSG,response.data.mensaje + ' - Algo salio mal y no se pudo realizar: Consulta Data Estudiantes. Intente más tarde.' + err)
+          this.btnCargando = false
+        })
+      },
       mensajeEmergente(variante, titulo, contenido) {
         this.$bvToast.toast(contenido, { title: titulo, variant: variante, toaster: "b-toaster-top-center", solid: true, autoHideDelay: 4000, appendToast: false })
       }
@@ -396,8 +431,6 @@
     computed: {
     },
     beforeMount() {
-      this.btnCargando = true
-      this.dataConsultada = this.$store.state.datosDataEstudiantes
       this.datosSeccion = this.$store.state.datosSecciones[this.$store.state.idSeccion - 1]
       this.fechaImpresion = 'Fecha: ' + new Date().toLocaleString()
       this.ocuparComboDocentes()
@@ -429,9 +462,6 @@
       ]
       this.porcentajeArea = 50
       this.numeroColumnas = 1
-      setTimeout(()=>{
-        this.btnCargando = false
-      },100)
     }
   }
 </script>
