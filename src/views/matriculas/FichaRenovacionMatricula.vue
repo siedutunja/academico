@@ -207,6 +207,7 @@
                 </b-card>
               </b-col>
             </b-row>
+            <!--
             <b-row>
               <b-col lg="12">
                 <b-card header-bg-variant="secondary">
@@ -280,7 +281,6 @@
                           <b-form-invalid-feedback id="feedMuniNaceA">Campo requerido.</b-form-invalid-feedback>
                         </b-form-group>
                       </b-col>
-                      <!--+
                       <b-col lg="3" md="6">
                         <b-form-group label="Género*" label-for="generoA" class="etiqueta">
                           <b-form-select  id="generoA" ref="generoA" v-model="$v.infoEstudiante.id_generoA.$model" :options="comboGeneros" :state="validateStateD('id_generoA')" aria-describedby="feedGeneroA"></b-form-select>
@@ -299,7 +299,6 @@
                           <b-form-invalid-feedback id="feedEpsA">Campo requerido.</b-form-invalid-feedback>
                         </b-form-group>
                       </b-col>
-                      -->
                       <b-col lg="6" md="12">
                         <b-form-group label="Municipio de Domicilio*" label-for="muniDirA" class="etiqueta">
                           <b-form-select  id="muniDirA" ref="muniDirA" v-model="$v.infoEstudiante.id_municipio_direccionA.$model" :options="comboMunicipios" :state="validateStateD('id_municipio_direccionA')" aria-describedby="feedMuniDirA" :disabled="!documentoBuscado"></b-form-select>
@@ -312,7 +311,6 @@
                           <b-form-invalid-feedback id="feedDirA">Campo requerido.</b-form-invalid-feedback>
                         </b-form-group>
                       </b-col>
-                      <!--
                       <b-col lg="3" md="6">
                         <b-form-group label="Barrio*" label-for="barrioA" class="etiqueta">
                           <b-form-input id="barrioA" ref="barrioA" v-model.trim="$v.infoEstudiante.barrioA.$model" :state="validateStateD('barrioA')" aria-describedby="feedBarrioA" autocomplete="off" maxlength="50"></b-form-input>
@@ -337,7 +335,6 @@
                           <b-form-invalid-feedback id="feedSisbenA">Campo requerido.</b-form-invalid-feedback>
                         </b-form-group>
                       </b-col>
-                      -->
                       <b-col lg="3" md="6">
                         <b-form-group label="Teléfono Principal*" label-for="tel1A" class="etiqueta">
                           <b-form-input id="tel1A" ref="tel1A" v-model.trim="$v.infoEstudiante.telefono1A.$model" :state="validateStateD('telefono1A')" aria-describedby="feedTel1A" autocomplete="off" maxlength="15" @keydown="soloNumeros" :disabled="!documentoBuscado"></b-form-input>
@@ -373,6 +370,7 @@
                 </b-card>
               </b-col>
             </b-row>
+            -->
             <b-row>
               <b-col lg="12">
                 <b-card header-bg-variant="secondary">
@@ -450,10 +448,12 @@
                         </b-form-group>
                       </b-col>
                       <b-col lg="12" md="12">
-                        <b-form-group label="Observaciones de la Matrícula" label-for="observ" class="etiqueta">
-                          <b-form-textarea id="observ" ref="observ" v-model.trim="infoEstudiante.obs_matricula" aria-describedby="feedObserv" autocomplete="off" rows="2"></b-form-textarea>
-                          <b-form-invalid-feedback id="feedObserv">Campo requerido.</b-form-invalid-feedback>
-                        </b-form-group>
+                        <b-alert variant="info" show>
+                          <b-form-group label="Observaciones de la Matrícula" label-for="observ" class="etiqueta">
+                            <b-form-textarea id="observ" ref="observ" v-model.trim="infoEstudiante.obs_matricula" aria-describedby="feedObserv" autocomplete="off" rows="5"></b-form-textarea>
+                            <b-form-invalid-feedback id="feedObserv">Campo requerido.</b-form-invalid-feedback>
+                          </b-form-group>
+                        </b-alert>
                       </b-col>
                     </b-row>
                     <b-row>
@@ -635,6 +635,7 @@
         id_nuevo: { required },
         id_seguro: { required },
         id_ruta: { required },
+        /*
         documentoA: { required, minLength: minLength(6) },
         id_tipo_documentoA: { required },
         id_municipio_documentoA: { required },
@@ -657,6 +658,7 @@
         telefono1A: { required, minLength: minLength(10) },
         correoA: { required },
         id_parentesco: { required }
+        */
       }
     },
     methods: {
@@ -803,6 +805,7 @@
         this.infoEstudiante.idInstitucion = this.$store.state.idInstitucion
         this.infoEstudiante.idMatricula = uuid.v1()
         this.infoEstudiante.vigencia = this.$store.state.aMatriculas
+        /*
         this.infoEstudiante.idAcudiente = uuid.v1()
         this.infoEstudiante.apellido1A = this.infoEstudiante.apellido1A.toUpperCase()
         if (this.infoEstudiante.apellido2A == '' || this.infoEstudiante.apellido2A == null) {
@@ -819,14 +822,15 @@
         if (this.infoEstudiante.telefono2A == '' || this.infoEstudiante.telefono2A == null) {
           this.infoEstudiante.telefono2A = null
         }
-        if (this.infoEstudiante.codigo != '' && this.infoEstudiante.codigo != null) {
-          this.infoEstudiante.codigo = this.infoEstudiante.codigo.toUpperCase()
-        }
         if (this.infoEstudiante.ocupacionA != '' && this.infoEstudiante.ocupacionA != null) {
           this.infoEstudiante.ocupacionA = this.infoEstudiante.ocupacionA.toUpperCase()
         }
         this.infoEstudiante.barrioA = this.infoEstudiante.barrioA.toUpperCase()
         this.infoEstudiante.correoA = this.infoEstudiante.correoA.toLowerCase()
+        */
+        if (this.infoEstudiante.codigo != '' && this.infoEstudiante.codigo != null) {
+          this.infoEstudiante.codigo = this.infoEstudiante.codigo.toUpperCase()
+        }
         await axios
         .post(CONFIG.ROOT_PATH + 'academico/matriculas/renovacion', JSON.stringify(this.infoEstudiante), { headers: {"Content-Type": "application/json; charset=utf-8" }})
         .then(response => {
@@ -859,6 +863,7 @@
             this.infoEstudiante.desRepitente = document.getElementById('repitente')[document.getElementById('repitente').selectedIndex].text
             this.infoEstudiante.desRuta = ''//document.getElementById('ruta')[document.getElementById('ruta').selectedIndex].text
             this.infoEstudiante.desSeguro = document.getElementById('seguro')[document.getElementById('seguro').selectedIndex].text
+            /*
             this.infoEstudiante.barrioA = this.infoEstudiante.barrioA.toUpperCase()
             this.infoEstudiante.desTipoDocumentoA = document.getElementById('tipoDocA')[document.getElementById('tipoDocA').selectedIndex].text
             this.infoEstudiante.desMunicipioDocumentoA = document.getElementById('muniDocA')[document.getElementById('muniDocA').selectedIndex].text
@@ -872,6 +877,7 @@
             this.infoEstudiante.desMunicipioDireccionA = document.getElementById('muniDirA')[document.getElementById('muniDirA').selectedIndex].text
             this.infoEstudiante.desZonaA = ''//document.getElementById('zonaA')[document.getElementById('zonaA').selectedIndex].text
             this.infoEstudiante.desParentesco = document.getElementById('parentesco')[document.getElementById('parentesco').selectedIndex].text
+            */
             //this.enviarCorreoNuevo()
             //this.$store.commit('set', ['datosMatriculaPreinscrito', this.infoEstudiante])
             //sessionStorage.setItem('datosMatriculaPreinscrito', JSON.stringify(this.infoEstudiante))
@@ -908,7 +914,6 @@
             this.comboCursos.push({ 'value': element.id, 'text': element.nomenclatura.toUpperCase() })
           }
         })
-        this.comboCursos.push({ 'value': 0, 'text': ' --- SIN CURSO (BOLSA) ---' })
       },
       cancelarFormulario() {
         this.$router.push('/')
@@ -938,11 +943,7 @@
       llenarFormulario() {
         this.infoEstudiante.idEstudiante = this.$store.state.datosEstudianteRenovar.idEstudiante
         this.infoEstudiante.documento = this.$store.state.datosEstudianteRenovar.documento        
-        if (this.$store.state.datosEstudianteRenovar.id_tipo_documento == 15) {
-          this.infoEstudiante.id_tipo_documento = 13
-        } else {
-          this.infoEstudiante.id_tipo_documento = this.$store.state.datosEstudianteRenovar.id_tipo_documento
-        }
+        this.infoEstudiante.id_tipo_documento = this.$store.state.datosEstudianteRenovar.id_tipo_documento
         this.infoEstudiante.id_municipio_documento = this.$store.state.datosEstudianteRenovar.id_municipio_documento
         this.infoEstudiante.nombre1 = this.$store.state.datosEstudianteRenovar.nombre1
         this.infoEstudiante.nombre2 = this.$store.state.datosEstudianteRenovar.nombre2
@@ -965,7 +966,11 @@
         this.infoEstudiante.id_victima = this.$store.state.datosEstudianteRenovar.id_victima
         this.infoEstudiante.enfermedades = this.$store.state.datosEstudianteRenovar.enfermedades
         this.infoEstudiante.id_diversa = 'N'
-        this.infoEstudiante.id_eps = this.$store.state.datosEstudianteRenovar.id_eps
+        if (this.$store.state.datosEstudianteRenovar.id_eps !== null) {
+          this.infoEstudiante.id_eps = this.$store.state.datosEstudianteRenovar.id_eps
+        } else {
+          this.infoEstudiante.id_eps = '000000'
+        }
         this.infoEstudiante.direccion = this.$store.state.datosEstudianteRenovar.direccion
         this.infoEstudiante.id_municipio_direccion = this.$store.state.datosEstudianteRenovar.id_municipio_direccion
         this.infoEstudiante.id_zona = this.$store.state.datosEstudianteRenovar.id_zona
@@ -1001,6 +1006,8 @@
         this.infoEstudiante.correoA = this.$store.state.datosEstudianteRenovar.correo
         this.infoEstudiante.id_parentesco = null
         this.infoEstudiante.ocupacionA = null
+
+        this.infoEstudiante.obs_matricula = this.$store.state.datosEstudianteRenovar.obs_matricula
       },
       ocuparCombos() {
         this.comboParentescos = []
@@ -1090,7 +1097,7 @@
       },
       habilitaMunicipioNace() {
         if (this.infoEstudiante.id_nacionalidad == '170') {
-          this.infoEstudiante.id_municipio_nacimiento = null
+          this.infoEstudiante.id_municipio_nacimiento = this.$store.state.datosEstudianteRenovar.id_municipio_nacimiento
           this.deshabMunNace = false
         } else {
           this.infoEstudiante.id_municipio_nacimiento='00000'

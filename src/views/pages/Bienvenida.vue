@@ -53,7 +53,6 @@
       continuar() {
         this.btnHabilitado = false
         this.$store.commit('set', ['aLectivo', this.aSeleccionado])
-        this.$store.commit('set', ['aMatriculas', this.aSeleccionado])
         console.log(this.$store.state.aLectivo)
         console.log(this.$store.state.aMatriculas)
         this.cargarDatosDocentes()

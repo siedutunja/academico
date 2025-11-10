@@ -19,7 +19,7 @@
               <b-col lg="12">
                 <b-card header-bg-variant="secondary">
                   <template #header>
-                    <b-button class="small float-right" variant="dark" @click="nuevaAsignatura" v-if="$store.state.idRol==1 || $store.state.idRol==12">Nueva Asignatura</b-button>
+                    <b-button class="small float-right" variant="dark" @click="nuevaAsignatura" v-if="$store.state.idRol==1">Nueva Asignatura</b-button>
                     <h5 class="mb-0"><b-icon icon="card-checklist" aria-hidden="true"></b-icon> Lista de Asignaturas</h5>
                   </template>
                   <b-card-text>

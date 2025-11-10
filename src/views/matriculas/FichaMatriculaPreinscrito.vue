@@ -14,7 +14,7 @@
                   <h5 class="mb-3">El número de documento <span class="text-info"><b>({{ docEstudiante }})</b></span> ya se encuentra registrado en el sistema sieduTunja.</h5>
                   <h5 class="mb-3">El número de documento corresponde a: {{ estudianteEncontrado }}.</h5>
                   <h5 class="mb-3">En el momento el estudiante NO SE ENCUENTRA VINCULADO a otra Institución Educativa Oficial de Tunja.</h5>
-                  <h5 class="mb-3">Para matricularlo en esta Institución se debe realizar el proceso de Renovar Matricula.</h5>
+                  <h5 class="mb-3">Para matricularlo continue con el proceso.</h5>
                 </b-alert>
                 <b-alert show variant="primary" class="p-5" v-else-if="estadoDocumento==2">
                   <h5 class="mb-5"><b>¡Informamos que!</b></h5>
@@ -22,8 +22,7 @@
                   <h5 class="mb-3">El número de documento corresponde a: {{ estudianteEncontrado }}.</h5>
                   <h5 class="mb-3">En el momento el estudiante SE ENCUENTRA VINCULADO en una Institución Educativa.</h5>
                   <h5 class="mb-3">La Institución vinculante es: {{ ieVinculante }}.</h5>
-                  <h5 class="mb-3">Para matricularlo en esta Institución, debe comunicarse con la Institución Educativa  {{ ieVinculante }} para solicitar que sea desvinculado.</h5>
-                  <h5 class="mb-3">Una vez el estudiante sea desvinculado, se debe realizar el proceso de Renovar Matricula.</h5>
+                  <h5 class="mb-3">Para matricularlo en esta Institución, se debe preinscribir como TRASLADO.</h5>
                 </b-alert>
                 <b-alert show variant="danger" class="p-5" v-else-if="estadoDocumento==3">
                   <h5 class="mb-5"><b>¡Lo sentimos!</b></h5>
@@ -43,7 +42,7 @@
       <b-col lg="12">
         <b-card>
           <template #header>
-            <h3 class="mb-0 text-center">FORMULARIO DE MATRICULA DE ESTUDIANTE<br> Año Lectivo {{ $store.state.aMatriculas }}</h3>
+            <h3 class="mb-0 text-center">FORMULARIO DE MATRICULA DE ESTUDIANTE<br> Año Lectivo {{ $store.state.aLectivo }}</h3>
           </template>
           <b-card-text>
             <b-row>
@@ -864,7 +863,7 @@
         }
         this.infoEstudiante.idInstitucion = this.$store.state.idInstitucion
         this.infoEstudiante.idMatricula = uuid.v1()
-        this.infoEstudiante.vigencia = this.$store.state.aMatriculas
+        this.infoEstudiante.vigencia = this.$store.state.aLectivo
         this.infoEstudiante.idAcudiente = uuid.v1()
         this.infoEstudiante.apellido1A = this.infoEstudiante.apellido1A.toUpperCase()
         if (this.infoEstudiante.apellido2A == '' || this.infoEstudiante.apellido2A == null) {
@@ -951,7 +950,7 @@
       },
       async validarDocumentoEstudiante() {
         await axios
-        .get(CONFIG.ROOT_PATH + 'academico/matriculas/buscardocumento', { params: { documento: this.docEstudiante, vigencia: this.$store.state.aMatriculas }})
+        .get(CONFIG.ROOT_PATH + 'academico/matriculas/buscardocumento', { params: { documento: this.docEstudiante, vigencia: this.$store.state.aLectivo }})
         .then(response => {
           if (response.data.error){
             this.mensajeEmergente('danger',CONFIG.TITULO_MSG,response.data.mensaje + ' - Validar documento estudiante')

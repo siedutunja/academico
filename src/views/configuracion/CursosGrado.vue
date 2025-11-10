@@ -24,7 +24,7 @@
               <b-col lg="12">
                 <b-card header-bg-variant="secondary">
                   <template #header>
-                    <b-button class="small float-right" variant="dark" @click="nuevoCurso" v-if="$store.state.idRol==1 || $store.state.idRol==12">Nuevo Curso</b-button>
+                    <b-button class="small float-right" variant="dark" @click="nuevoCurso" v-if="$store.state.idRol==1">Nuevo Curso</b-button>
                     <h5 class="mb-0"><b-icon icon="card-checklist" aria-hidden="true"></b-icon> Lista de Cursos</h5>
                   </template>
                   <b-card-text>
