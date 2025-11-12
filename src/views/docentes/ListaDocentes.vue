@@ -168,6 +168,7 @@
           } else{
             if (response.data.datos != 0) {
               this.listaDocentes = response.data.datos
+              //console.log(JSON.stringify(this.listaDocentes))
             }
           }
         })

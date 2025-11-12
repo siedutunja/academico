@@ -202,13 +202,9 @@
     computed: {
     },
     beforeMount() {
-      this.btnCargando = true
       this.dataConsultada = this.$store.state.datosDataEstudiantes
       this.datosSeccion = this.$store.state.datosSecciones[this.$store.state.idSeccion - 1]
       this.fechaImpresion = 'Fecha: ' + new Date().toLocaleString()
-      setTimeout(()=>{
-        this.btnCargando = false
-      },100)
     }
   }
 </script>

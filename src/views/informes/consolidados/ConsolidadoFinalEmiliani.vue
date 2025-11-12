@@ -4,15 +4,17 @@
       <b-col lg="12">
         <b-card>
           <template #header>
-            <h5 class="mb-0"><b-icon icon="card-checklist" aria-hidden="true"></b-icon> CONSOLIDADO EVALUACIONES ACUMULADO PONDERADO</h5>
+            <h5 class="mb-0"><b-icon icon="card-checklist" aria-hidden="true"></b-icon> CONSOLIDADO EVALUACIONES FINALES</h5>
           </template>
           <b-card-text>
             <b-row>
+              <!--
               <b-col lg="2">
                 <b-form-group label="Periodo:" label-for="periodo" class="etiqueta">
                   <b-form-select id="periodo" ref="periodo" v-model="idPeriodo" :options="comboPeriodos" @change="idSede=null,idCurso=null"></b-form-select>
                 </b-form-group>
               </b-col>
+              -->
               <b-col lg="6">
                 <b-form-group label="Seleccione la Sede:" label-for="sedes" class="etiqueta">
                   <b-form-select  id="sedes" ref="sedes" v-model="idSede" :options="comboSedes" @change="idCurso=null,ocuparComboCursosSede()" :disabled="idPeriodo!=null ? false : true"></b-form-select>
@@ -118,7 +120,7 @@
       return {
         idSede: null,
         comboSedes: [],
-        idPeriodo: null,
+        idPeriodo: 5,
         comboPeriodos: null,
         idCurso: null,
         comboCursosSede: [],
@@ -303,7 +305,12 @@
               this.btnCargando = false
             } else{
               if (response.data.datos != 0) {
-                this.listaAreasAsignaturas = response.data.datos
+                //this.listaAreasAsignaturas = response.data.datos
+                response.data.datos.forEach(element => {
+                  if (element.orden != 99) {
+                    this.listaAreasAsignaturas.push(element)
+                  }
+                });
               }
             }
           })
@@ -334,7 +341,7 @@
       },
       imprimir() {
         let fecha = 'Fecha: ' + new Date().toLocaleString()
-        let tituloInforme = 'CONSOLIDADO EVALUACIONES ACUMULADO PONDERADO'
+        let tituloInforme = 'CONSOLIDADO EVALUACIONES FINALES'
         const contenido = document.querySelector('table').outerHTML
         const ventana = window.open("Consolidados", "_blank")
         ventana.document.write(`<html><head><title>Imprimir</title></head>
@@ -359,7 +366,7 @@
           .desempeno-extra { background-color: #f4ecf5; color: #2f2e2e; }
         </style>
           <body class="container">
-            <p style="text-align: center; font-size: 12px;">SECRETARÍA DE EDUCACIÓN TERRITORIAL DE TUNJA<br><b>${this.$store.state.nombreInstitucion}</b><br>TUNJA - BOYACÁ<br>${tituloInforme}<br>Sede: ${this.nombreSede} | Curso: ${this.nombreCurso} | Año Lectivo ${this.$store.state.aLectivo} | Periodo: ${this.idPeriodo}</p>
+            <p style="text-align: center; font-size: 12px;">SECRETARÍA DE EDUCACIÓN TERRITORIAL DE TUNJA<br><b>${this.$store.state.nombreInstitucion}</b><br>TUNJA - BOYACÁ<br>${tituloInforme}<br>Sede: ${this.nombreSede} | Curso: ${this.nombreCurso} | Año Lectivo ${this.$store.state.aLectivo} | Periodo: FINAL</p>
             ${contenido}
             <div style="text-align: right; font-size: 12px;"><i>${fecha}</i></div>
           </body>
@@ -370,7 +377,7 @@
       exportarAExcel() {
         const tabla = document.querySelector('table')
         const wb = XLSX.utils.table_to_book(tabla)
-        XLSX.writeFile(wb, 'notas.xlsx')
+        XLSX.writeFile(wb, 'ConsolidadoFinal.xlsx')
       },
       redondear(num) {
         var m = Number((Math.abs(num) * 10).toPrecision(15))

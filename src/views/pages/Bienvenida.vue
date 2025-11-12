@@ -51,21 +51,13 @@
     },
     methods: {
       continuar() {
-        this.btnHabilitado = false
         this.$store.commit('set', ['aLectivo', this.aSeleccionado])
         console.log(this.$store.state.aLectivo)
         console.log(this.$store.state.aMatriculas)
-        this.cargarDatosDocentes()
-        this.cargarDatosSedes()
-        this.cargarDatosGrados()
-        this.cargarDatosCursos()
         this.cargarDatosRutas()
-        this.cargarDatosEspecialidades()
-        this.cargarDatosAreas()
-        this.cargarDatosAsignaturas()
-        this.cargarDatosSecciones()
         this.cargarDatosEscalafones()
         this.cargarDatosJornadas()
+        this.cargarDatosTablas()
         this.trazaProceso('Inicio de Sesión')
         //this.cargarDataEstudiantes()
       },
@@ -83,10 +75,12 @@
           alert('Algo salio mal y no se pudo registrar la traza de la Sesión. Intente más tarde. ' + err)
           location.replace(CONFIG.ROOT_WEBSITE)
         })
+        const periodos = [{'id': 1, 'periodo': 'PRIMERO'},{'id': 2, 'periodo': 'SEGUNDO'},{'id': 3, 'periodo': 'TERCERO'},{'id': 4, 'periodo': 'CUARTO'}]
+        this.$store.commit('set', ['periodos', periodos])
         this.$router.push('/')
-        this.btnHabilitado = true
       },
       async cargarDatosTablas() {
+        //console.log('Cargando tablas...')
         await axios
         .get(CONFIG.ROOT_PATH + 'academico/carguetablas')
         .then(response => {
@@ -99,7 +93,6 @@
             } else {
               this.$store.commit('set', ['datosTablas', []])
             }
-            //console.log('Tablas cargadas...')
             this.btnHabilitado = true
           }
         })
@@ -402,6 +395,16 @@
               for (var i = this.$store.state.aMatriculas; i >= 2025; i--) {
                 this.comboAnios.push({ 'value': i, 'text': i })
               }
+              
+              this.cargarDatosDocentes()
+              this.cargarDatosSedes()
+              this.cargarDatosGrados()
+              this.cargarDatosCursos()
+              this.cargarDatosEspecialidades()
+              this.cargarDatosSecciones()
+              this.cargarDatosAreas()
+              this.cargarDatosAsignaturas()
+              this.btnHabilitado = true
             }
           }
         })
@@ -411,6 +414,7 @@
         })
       },
       async iniciarVista() {
+        this.btnHabilitado = false
         let idSeccion = sessionStorage.getItem('idSeccion')
         if ( idSeccion == null ) {
           idSeccion = 1
@@ -444,7 +448,6 @@
             this.$store.commit('set', ['perActNotas', this.tokenDecodificado.permisos.perActNotas])
             
             this.$store.commit('set', ['perProgPeriodos', this.tokenDecodificado.permisos.perProgPeriodos])
-            
             this.cargarDatosSesionUsuario()
           }
         })
@@ -452,7 +455,6 @@
     },
     beforeMount() {
       this.iniciarVista()
-      this.cargarDatosTablas()
     }
   }
 </script>

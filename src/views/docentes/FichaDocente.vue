@@ -570,32 +570,69 @@
       cancelarFormulario() {
         this.$emit("retorno", 0)
       },
-      ocuparCombos() {
-        this.comboEstados = []
-        this.$store.state.datosTablas.estados.forEach(element => {
-          this.comboEstados.push({ 'value': element.id, 'text': element.estado.toUpperCase() })
-        })
-        this.comboRhs = []
-        this.$store.state.datosTablas.rhs.forEach(element => {
-          this.comboRhs.push({ 'value': element.id, 'text': element.rh.toUpperCase() })
-        })
-        this.comboGeneros = []
-        this.$store.state.datosTablas.generos.forEach(element => {
-          this.comboGeneros.push({ 'value': element.id, 'text': element.genero.toUpperCase() })
-        })
+      async cargarCatalogos() {
+        this.comboEstados = [{'value': '1', 'text': 'ACTIVO'}, {'value': '2', 'text': 'INACTIVO'}]
+        this.comboRhs = [{'value': '1', 'text': 'O+'}, {'value': '2', 'text': 'O-'}, {'value': '3', 'text': 'A+'}, {'value': '4', 'text': 'A-'}, {'value': '5', 'text': 'B+'}, {'value': '6', 'text': 'B-'}, {'value': '7', 'text': 'AB+'}, {'value': '8', 'text': 'AB-'}, {'value': '9', 'text': 'NO REPORTA'}]
+        this.comboGeneros = [{'value': 'F', 'text': 'FEMENINO'}, {'value': 'M', 'text': 'MASCULINO'}]
         this.comboTiposDoc = []
-        this.$store.state.datosTablas.tiposdocumentos.forEach(element => {
-          this.comboTiposDoc.push({ 'value': element.id, 'text': element.tipodocumento.toUpperCase() })
+        await axios
+        .get(CONFIG.ROOT_PATH + 'academico/tiposdocumentos')
+        .then(response => {
+          if (response.data.error){
+            this.mensajeEmergente('danger',CONFIG.TITULO_MSG,response.data.mensaje + ' - Consulta datos tiposdocumentos')
+            this.btnCargando = false
+          } else {
+            if(response.data.datos != 0) {
+              response.data.datos.forEach(element => {
+                this.comboTiposDoc.push({ 'value': element.id, 'text': element.tipodocumento.toUpperCase() })
+              })
+              console.log('tiposdocumentos cargadas...')
+            }
+          }
+        })
+        .catch(err => {
+          this.mensajeEmergente('danger',CONFIG.TITULO_MSG,'Algo salio mal y no se pudo realizar: Consulta datos tiposdocumentos. Intente más tarde. ' + err)
+          this.btnCargando = false
         })
         this.comboMunicipios = []
-        this.$store.state.datosTablas.municipios.forEach(element => {
-          this.comboMunicipios.push({ 'value': element.id, 'text': element.municipio.toUpperCase() + ' - ' + element.departamento.toUpperCase() })
+        await axios
+        .get(CONFIG.ROOT_PATH + 'academico/municipios')
+        .then(response => {
+          if (response.data.error){
+            this.mensajeEmergente('danger',CONFIG.TITULO_MSG,response.data.mensaje + ' - Consulta datos municipios')
+            this.btnCargando = false
+          } else {
+            if(response.data.datos != 0) {
+              response.data.datos.forEach(element => {
+                this.comboMunicipios.push({ 'value': element.id, 'text': element.municipio.toUpperCase() + ' - ' + element.departamento.toUpperCase() })
+              })
+              console.log('municipios cargadas...')
+            }
+          }
         })
-      },
-      async ocuparComboEscalafones() {
+        .catch(err => {
+          this.mensajeEmergente('danger',CONFIG.TITULO_MSG,'Algo salio mal y no se pudo realizar: Consulta datos municipios. Intente más tarde. ' + err)
+          this.btnCargando = false
+        })
         this.comboEscalafones = []
-        this.$store.state.datosEscalafones.forEach(element => {
-          this.comboEscalafones.push({ 'value': element.id, 'text': element.escalafon.toUpperCase() })
+        await axios
+        .get(CONFIG.ROOT_PATH + 'academico/escalafones')
+        .then(response => {
+          if (response.data.error){
+            this.mensajeEmergente('danger',CONFIG.TITULO_MSG,response.data.mensaje + ' - Consulta datos escalafon')
+            this.btnCargando = false
+          } else {
+            if(response.data.datos != 0) {
+              response.data.datos.forEach(element => {
+                this.comboEscalafones.push({ 'value': element.id, 'text': element.escalafon.toUpperCase() })
+              })
+              console.log('escalafon cargadas...')
+            }
+          }
+        })
+        .catch(err => {
+          this.mensajeEmergente('danger',CONFIG.TITULO_MSG,'Algo salio mal y no se pudo realizar: Consulta datos escalafon. Intente más tarde. ' + err)
+          this.btnCargando = false
         })
       },
       validateStateD(name) {
@@ -608,8 +645,7 @@
     },
     beforeMount() {
       this.habilitarCampo = this.$store.state.idRol==1 || this.$store.state.idRol==12 || this.$store.state.perActDocente == 1 ? true : false
-      this.ocuparCombos()
-      this.ocuparComboEscalafones()
+      this.cargarCatalogos()
       this.consultaDatosPersona()
     }
   }

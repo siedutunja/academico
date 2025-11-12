@@ -98,7 +98,7 @@
                           <div ref="contenido">
                             <div v-for="(curso, index) in cursosSeleccionados" :key="index" class="bloque-curso">
                               <div class="encabezado">
-                                <p>SECRETARÍA DE EDUCACIÓN TERRITORIAL DE TUNJA<br><b>{{$store.state.nombreInstitucion}}</b><br>TUNJA - BOYACÁ<br>PANILLAS DE ESTUDIANTES POR DOCENTE<br></p>
+                                <p>SECRETARÍA DE EDUCACIÓN TERRITORIAL DE TUNJA<br><b>{{$store.state.nombreInstitucion}}</b><br>TUNJA - BOYACÁ<br>PLANILLAS DE ESTUDIANTES POR DOCENTE<br></p>
                               </div>
                               <table class="tabla-estudiantes">
                                 <thead>
@@ -388,7 +388,7 @@
       },
       async ocuparComboPeriodos() {
         this.comboPeriodos = []
-        this.$store.state.datosTablas.periodos.forEach(element => {
+        this.$store.state.periodos.forEach(element => {
           this.comboPeriodos.push({ 'value': element.id, 'text': element.periodo.toUpperCase() })
         })
       },

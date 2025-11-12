@@ -211,27 +211,31 @@
             this.mensajeEmergente('danger',CONFIG.TITULO_MSG,'Algo salio mal y no se pudo realizar: Datos Matricula. Intente más tarde. ' + err)
         })
       },
-      ocuparCombos() {
-        this.comboDiversa = []
-        this.$store.state.datosTablas.sino.forEach(element => {
-          this.comboDiversa.push({ 'value': element.id, 'text': element.sino.toUpperCase() })
-        })
-        this.comboConceptual = []
-        this.$store.state.datosTablas.sino.forEach(element => {
-          this.comboConceptual.push({ 'value': element.id, 'text': element.sino.toUpperCase() })
-        })
+      async cargarCatalogos() {
         this.comboEspecialidades = []
-        this.$store.state.datosEspecialidades.forEach(element => {
-          this.comboEspecialidades.push({ 'value': element.id, 'text': element.especialidad.toUpperCase() })
+        await axios
+        .get(CONFIG.ROOT_PATH + 'academico/cargueespecialidades', {params: {idInstitucion: this.$store.state.idInstitucion}})
+        .then(response => {
+          if (response.data.error){
+            this.mensajeEmergente('danger',CONFIG.TITULO_MSG,response.data.mensaje + ' - Consulta datos especialidades')
+            this.btnCargando = false
+          } else {
+            if(response.data.datos != 0) {
+              response.data.datos.forEach(element => {
+                this.comboEspecialidades.push({ 'value': element.id, 'text': element.especialidad.toUpperCase() })
+              })
+              console.log('Especialidades cargadas...')
+            }
+          }
         })
-        this.comboRepitente = []
-        this.$store.state.datosTablas.sino.forEach(element => {
-          this.comboRepitente.push({ 'value': element.id, 'text': element.sino.toUpperCase() })
+        .catch(err => {
+          this.mensajeEmergente('danger',CONFIG.TITULO_MSG,'Algo salio mal y no se pudo realizar: Consulta datos especialidades. Intente más tarde. ' + err)
+          this.btnCargando = false
         })
-        this.comboNuevo = []
-        this.$store.state.datosTablas.sino.forEach(element => {
-          this.comboNuevo.push({ 'value': element.id, 'text': element.sino.toUpperCase() })
-        })
+        this.comboDiversa = [{'value': 'S', 'text': 'SI'}, {'value': 'N', 'text': 'NO'}]
+        this.comboConceptual = [{'value': 'S', 'text': 'SI'}, {'value': 'N', 'text': 'NO'}]
+        this.comboRepitente = [{'value': 'S', 'text': 'SI'}, {'value': 'N', 'text': 'NO'}]
+        this.comboNuevo = [{'value': 'S', 'text': 'SI'}, {'value': 'N', 'text': 'NO'}]
       },
       ocuparComboSedes() {
         this.comboSedes = []
@@ -254,7 +258,6 @@
             this.comboCursos.push({ 'value': element.id, 'text': element.nomenclatura.toUpperCase() })
           }
         })
-        this.comboCursos.push({ 'value': 0, 'text': ' --- SIN CURSO (BOLSA) ---' })
       },
       cancelarFormulario() {
         this.$emit("retorno", 0)
@@ -268,8 +271,8 @@
       }
     },
     beforeMount() {
+      this.cargarCatalogos()
       this.consultaDatosMatriculaId()
-      this.ocuparCombos()
       this.ocuparComboSedes()
     }
   }

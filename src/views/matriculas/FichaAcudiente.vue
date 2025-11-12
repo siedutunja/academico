@@ -8,6 +8,16 @@
           </template>
           <b-card-text>
             <b-row>
+              <b-col lg="12">
+                <div v-if="btnCargando">
+                  <div class="text-center m-5 text-primary">
+                    <b-spinner style="width: 3rem; height: 3rem;" label="Spinner"></b-spinner>
+                    <br><strong>Cargando informe...</strong>
+                  </div>
+                </div>
+              </b-col>
+            </b-row>
+            <b-row v-if="!btnCargando">
               <b-col lg="3" md="6">
                 <b-form-group label="Número de Documento*" label-for="doc" class="etiqueta">
                   <b-input-group>
@@ -169,6 +179,7 @@
           idEstudiante: null,
           id_parentesco: null
         },
+        btnCargando: false,
         comboTiposDoc: [],
         comboMunicipios: [],
         comboGeneros: [],
@@ -336,7 +347,6 @@
         }
         this.infoAcudiente.correo = this.infoAcudiente.correo.toLowerCase()
         this.infoAcudiente.acudienteExiste = this.acudienteExiste
-        console.log(JSON.stringify(this.infoAcudiente))
         await axios
         .post(CONFIG.ROOT_PATH + 'academico/acudiente', JSON.stringify(this.infoAcudiente), { headers: {"Content-Type": "application/json; charset=utf-8" }})
         .then(response => {
@@ -395,27 +405,90 @@
             this.mensajeEmergente('danger',CONFIG.TITULO_MSG,'Algo salio mal y no se pudo realizar: Datos acudiente. Intente más tarde. ' + err)
         })
       },
-      ocuparCombos() {
-        this.comboGeneros = []
-        this.$store.state.datosTablas.generos.forEach(element => {
-          this.comboGeneros.push({ 'value': element.id, 'text': element.genero.toUpperCase() })
-        })
+      async cargarCatalogos() {
+        this.btnCargando = true
+        this.comboGeneros = [{'value': 'F', 'text': 'FEMENINO'}, {'value': 'M', 'text': 'MASCULINO'}]
         this.comboTiposDoc = []
-        this.$store.state.datosTablas.tiposdocumentos.forEach(element => {
-          this.comboTiposDoc.push({ 'value': element.id, 'text': element.tipodocumento.toUpperCase() })
+        await axios
+        .get(CONFIG.ROOT_PATH + 'academico/tiposdocumentos')
+        .then(response => {
+          if (response.data.error){
+            this.mensajeEmergente('danger',CONFIG.TITULO_MSG,response.data.mensaje + ' - Consulta datos tiposdocumentos')
+            this.btnCargando = false
+          } else {
+            if(response.data.datos != 0) {
+              response.data.datos.forEach(element => {
+                this.comboTiposDoc.push({ 'value': element.id, 'text': element.tipodocumento.toUpperCase() })
+              })
+              console.log('tiposdocumentos cargadas...')
+            }
+          }
+        })
+        .catch(err => {
+          this.mensajeEmergente('danger',CONFIG.TITULO_MSG,'Algo salio mal y no se pudo realizar: Consulta datos tiposdocumentos. Intente más tarde. ' + err)
+          this.btnCargando = false
         })
         this.comboMunicipios = []
-        this.$store.state.datosTablas.municipios.forEach(element => {
-          this.comboMunicipios.push({ 'value': element.id, 'text': element.municipio.toUpperCase() + ' - ' + element.departamento.toUpperCase() })
+        await axios
+        .get(CONFIG.ROOT_PATH + 'academico/municipios')
+        .then(response => {
+          if (response.data.error){
+            this.mensajeEmergente('danger',CONFIG.TITULO_MSG,response.data.mensaje + ' - Consulta datos municipios')
+            this.btnCargando = false
+          } else {
+            if(response.data.datos != 0) {
+              response.data.datos.forEach(element => {
+                this.comboMunicipios.push({ 'value': element.id, 'text': element.municipio.toUpperCase() + ' - ' + element.departamento.toUpperCase() })
+              })
+              console.log('municipios cargadas...')
+            }
+          }
+        })
+        .catch(err => {
+          this.mensajeEmergente('danger',CONFIG.TITULO_MSG,'Algo salio mal y no se pudo realizar: Consulta datos municipios. Intente más tarde. ' + err)
+          this.btnCargando = false
         })
         this.comboPaises = []
-        this.$store.state.datosTablas.paises.forEach(element => {
-          this.comboPaises.push({ 'value': element.id, 'text': element.pais.toUpperCase() })
+        await axios
+        .get(CONFIG.ROOT_PATH + 'academico/paises') 
+        .then(response => {
+          if (response.data.error){
+            this.mensajeEmergente('danger',CONFIG.TITULO_MSG,response.data.mensaje + ' - Consulta datos paises')
+            this.btnCargando = false
+          } else {
+            if(response.data.datos != 0) {
+              response.data.datos.forEach(element => {
+                this.comboPaises.push({ 'value': element.id, 'text': element.pais.toUpperCase() })
+              })
+              console.log('paises cargadas...')
+            }
+          }
+        })
+        .catch(err => {
+          this.mensajeEmergente('danger',CONFIG.TITULO_MSG,'Algo salio mal y no se pudo realizar: Consulta datos paises. Intente más tarde. ' + err)
+          this.btnCargando = false
         })
         this.comboParentescos = []
-        this.$store.state.datosTablas.parentescos.forEach(element => {
-          this.comboParentescos.push({ 'value': element.id, 'text': element.parentesco.toUpperCase() })
+        await axios
+        .get(CONFIG.ROOT_PATH + 'academico/parentescos') 
+        .then(response => {
+          if (response.data.error){
+            this.mensajeEmergente('danger',CONFIG.TITULO_MSG,response.data.mensaje + ' - Consulta datos parentescos')
+            this.btnCargando = false
+          } else {
+            if(response.data.datos != 0) {
+              response.data.datos.forEach(element => {
+                this.comboParentescos.push({ 'value': element.id, 'text': element.parentesco.toUpperCase() })
+              })
+              console.log('parentescos cargadas...')
+            }
+          }
         })
+        .catch(err => {
+          this.mensajeEmergente('danger',CONFIG.TITULO_MSG,'Algo salio mal y no se pudo realizar: Consulta datos parentescos. Intente más tarde. ' + err)
+          this.btnCargando = false
+        })
+        this.btnCargando = false
       },
       soloLetras(e) {
         let key = window.Event ? e.which : e.keyCode
@@ -447,8 +520,8 @@
       }
     },
     beforeMount() {
+      this.cargarCatalogos()
       this.consultaDatosAcudienteId()
-      this.ocuparCombos()
     }
   }
 </script>

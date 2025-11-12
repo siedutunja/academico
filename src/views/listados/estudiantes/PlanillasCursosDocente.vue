@@ -93,7 +93,7 @@
                           <div ref="contenido">
                             <div v-for="(curso, index) in cursosSeleccionados" :key="index" class="bloque-curso">
                               <div class="encabezado">
-                                <p>SECRETARÍA DE EDUCACIÓN TERRITORIAL DE TUNJA<br><b>{{$store.state.nombreInstitucion}}</b><br>TUNJA - BOYACÁ<br>PANILLAS DE ESTUDIANTES POR DOCENTE<br></p>
+                                <p>SECRETARÍA DE EDUCACIÓN TERRITORIAL DE TUNJA<br><b>{{$store.state.nombreInstitucion}}</b><br>TUNJA - BOYACÁ<br>PLANILLAS DE ESTUDIANTES POR DOCENTE<br></p>
                               </div>
                               <table class="tabla-estudiantes">
                                 <thead>

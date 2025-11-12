@@ -217,7 +217,7 @@
       },
       async ocuparComboPeriodos() {
         this.comboPeriodos = []
-        this.$store.state.datosTablas.periodos.forEach(element => {
+        this.$store.state.periodos.forEach(element => {
           this.comboPeriodos.push({ 'value': element.id, 'text': element.periodo.toUpperCase() })
         })
       },
