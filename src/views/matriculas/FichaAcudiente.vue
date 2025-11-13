@@ -257,8 +257,6 @@
               this.infoAcudiente.telefono2 = response.data.datos.telefono2
               this.infoAcudiente.correo = response.data.datos.correo
               this.infoAcudiente.ocupacion = response.data.datos.ocupacion
-              this.infoAcudiente.idEstudiante = this.datosAcudiente.idEstudiante
-              this.infoAcudiente.id_parentesco = null
               this.acudienteExiste = true
             } else {
               this.infoAcudiente.idAcudiente = uuid.v1()
@@ -277,10 +275,10 @@
               this.infoAcudiente.telefono2 = null
               this.infoAcudiente.correo = null
               this.infoAcudiente.ocupacion = null
-              this.infoAcudiente.idEstudiante = this.datosAcudiente.idEstudiante
-              this.infoAcudiente.id_parentesco = null
               this.acudienteExiste = false
             }
+            this.infoAcudiente.idEstudiante = this.datosAcudiente.idEstudiante
+            this.infoAcudiente.id_parentesco = 1
             if (this.infoAcudiente.id_nacionalidad != '170') {
               this.infoAcudiente.id_municipio_nacimiento = '00000'
               this.deshabMunNace = true

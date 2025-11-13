@@ -419,11 +419,7 @@
         })
       },
       ocuparCombos() {
-        this.comboGeneros = []
-        this.comboGeneros.push({ 'value': null, 'text': 'TODOS' })
-        this.$store.state.datosTablas.generos.forEach(element => {
-          this.comboGeneros.push({ 'value': element.id, 'text': element.genero.toUpperCase() })
-        })
+        this.comboGeneros = [{ 'value': null, 'text': 'TODOS' },{'value': 'F', 'text': 'FEMENINO'}, {'value': 'M', 'text': 'MASCULINO'}]
       },
       async cargarDataEstudiantes() {
         this.btnCargando = true

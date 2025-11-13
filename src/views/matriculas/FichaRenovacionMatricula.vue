@@ -26,6 +26,19 @@
                   </template>
                   <b-card-text>
                     <b-row>
+                      <b-col lg="2">
+                        <img :src="infoEstudiante.foto" id="photo" alt="photo" width="100%" class="float-left">
+                      </b-col>
+                      <b-col lg="10">
+                        <b-alert :variant="infoEstudiante.obs_matricula === null ? 'info' : 'danger'" show>
+                          <h6>Observaciones de la Matrícula Año Anterior</h6>
+                          <hr>
+                          <h5> {{ infoEstudiante.obs_matricula === null ? 'No tiene observaciones' : infoEstudiante.obs_matricula }}</h5>
+                        </b-alert>
+                      </b-col>
+                    </b-row>
+                    <hr>
+                    <b-row>
                       <b-col lg="3" md="6">
                         <b-form-group label="Número de Documento*" label-for="doc" class="etiqueta">
                           <b-form-input id="doc" ref="doc" v-model="infoEstudiante.documento" aria-describedby="feedDoc" autocomplete="off" maxlength="50" @keydown="soloNumerosLetras" disabled></b-form-input>
@@ -648,6 +661,7 @@
         id_nuevo: { required },
         id_seguro: { required },
         id_ruta: { required },
+        id_parentesco: { required }
         /*
         documentoA: { required, minLength: minLength(6) },
         id_tipo_documentoA: { required },
@@ -670,7 +684,7 @@
         id_zonaA: { required },
         telefono1A: { required, minLength: minLength(10) },
         correoA: { required },
-        id_parentesco: { required }
+        
         */
       }
     },
@@ -732,8 +746,9 @@
               this.infoEstudiante.correoA = response.data.datos.correo
               this.infoEstudiante.id_parentesco = null
               this.infoEstudiante.ocupacionA = response.data.datos.ocupacion
+              //console.log(JSON.stringify(response.data.datos))
             }
-            //console.log(JSON.stringify(response.data.datos))
+            
           }
         })
         .catch(err => {
@@ -998,7 +1013,9 @@
         this.infoEstudiante.id_parentesco = null
         this.infoEstudiante.ocupacionA = null
 
-        this.infoEstudiante.obs_matricula = this.$store.state.datosEstudianteRenovar.obs_matricula
+        this.infoEstudiante.obs_matricula = this.$store.state.datosEstudianteRenovar.obs_matricula != null ? this.$store.state.datosEstudianteRenovar.obs_matricula : ''  + ' ' + this.$store.state.datosEstudianteRenovar.obs_final != null ? this.$store.state.datosEstudianteRenovar.obs_final : ''
+        this.infoEstudiante.obs_final = this.$store.state.datosEstudianteRenovar.obs_final
+        this.infoEstudiante.foto = this.$store.state.datosEstudianteRenovar.foto
       },
       habilitaMunicipioNace() {
         if (this.infoEstudiante.id_nacionalidad == '170') {

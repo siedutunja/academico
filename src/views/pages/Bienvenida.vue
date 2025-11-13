@@ -75,7 +75,12 @@
           alert('Algo salio mal y no se pudo registrar la traza de la Sesión. Intente más tarde. ' + err)
           location.replace(CONFIG.ROOT_WEBSITE)
         })
-        const periodos = [{'id': 1, 'periodo': 'PRIMERO'},{'id': 2, 'periodo': 'SEGUNDO'},{'id': 3, 'periodo': 'TERCERO'},{'id': 4, 'periodo': 'CUARTO'}]
+        let periodos
+        if (this.$store.state.idInstitucion == 'c50f3d80-fca0-11ec-8267-536b07c743c4' || this.$store.state.idInstitucion == '8a1bd1e0-fcb2-11ec-8267-536b07c743c4') { //Silvino || Simon Bolivar
+          periodos = [{'id': 1, 'periodo': 'PRIMERO'},{'id': 2, 'periodo': 'SEGUNDO'},{'id': 3, 'periodo': 'TERCERO'},{'id': 4, 'periodo': 'CUARTO'},{'id': 5, 'periodo': 'FINAL'}]
+        } else {
+          periodos = [{'id': 1, 'periodo': 'PRIMERO'},{'id': 2, 'periodo': 'SEGUNDO'},{'id': 3, 'periodo': 'TERCERO'},{'id': 4, 'periodo': 'CUARTO'}]
+        }
         this.$store.commit('set', ['periodos', periodos])
         this.$router.push('/')
       },
