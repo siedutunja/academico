@@ -661,7 +661,6 @@
         id_nuevo: { required },
         id_seguro: { required },
         id_ruta: { required },
-        id_parentesco: { required }
         /*
         documentoA: { required, minLength: minLength(6) },
         id_tipo_documentoA: { required },

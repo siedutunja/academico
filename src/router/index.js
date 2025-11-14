@@ -126,6 +126,13 @@ function configRoutes () {
               name: 'Promoción Anticipada',
               component: () => import('@/views/matriculas/PromocionAnticipada')
             },
+            // 2025-11-14
+            {
+              path: 'estadosfinales',
+              beforeEnter: autenticar,
+              name: 'Gestión Estados Finales',
+              component: () => import('@/views/matriculas/EstadosFinales')
+            },
             // 2025-07-20
             {
               path: 'promocion',
