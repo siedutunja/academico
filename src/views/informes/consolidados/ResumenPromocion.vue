@@ -122,10 +122,14 @@
               border-collapse: collapse;
               width: 100%;
               text-align: center;
-              font-size: 10px;
+              font-size: 8px;
           }
           .tabla-estado-final th {
             background: #eee;
+          }
+          .tabla-estado-final {
+            border: 2px solid #ffa500;
+            box-shadow: 0 0 5px #ffa500;
           }
         </style>
           <body class="container">
@@ -289,10 +293,25 @@
           this.comboSedes.push({ 'value': element.id, 'text': element.sede.toUpperCase() })
         })
       },
-      ocuparComboEstadosFinales() {
+      async ocuparComboEstadosFinales() {
         this.comboEstadosFinales = []
-        this.$store.state.datosTablas.estadosfinales.forEach(element => {
-          this.comboEstadosFinales.push({ 'value': element.id, 'text': element.estado.toUpperCase() })
+        await axios
+        .get(CONFIG.ROOT_PATH + 'academico/estadosfinales', {params: {idInstitucion: this.$store.state.idInstitucion}})
+        .then(response => {
+          if (response.data.error){
+            this.mensajeEmergente('danger',CONFIG.TITULO_MSG,response.data.mensaje + ' - Consulta datos estados finales')
+            this.btnCargando = false
+          } else {
+            if(response.data.datos != 0) {
+              response.data.datos.forEach(element => {
+                this.comboEstadosFinales.push({ 'value': element.id, 'text': element.estado.toUpperCase() })
+              })
+            }
+          }
+        })
+        .catch(err => {
+          this.mensajeEmergente('danger',CONFIG.TITULO_MSG,'Algo salio mal y no se pudo realizar: Consulta datos estados finales. Intente más tarde. ' + err)
+          this.btnCargando = false
         })
       },
       redondear(num) {
@@ -349,9 +368,22 @@
               if (promedioArea < limiteBajo) areasPerdidas++
             }
           })
-          let estadoFinal = "PROMOVIDO AL SIGUIENTE GRADO"
-          if (areasPerdidas === 1) estadoFinal = "PENDIENTE DE PROMOCIÓN"
-          else if (areasPerdidas >= 2) estadoFinal = "REPROBADO"
+          let estadoFinal = "*"
+          if ( this.$store.state.idInstitucion == '17ee4f30-fc80-11ec-a1d1-1dc2835404e5') {
+            if (areasPerdidas == 0) {
+              estadoFinal = "PROMOVIDO"
+            } else if (areasPerdidas >= 1 && areasPerdidas <= 2) {
+              estadoFinal = "PENDIENTE"
+            } else
+            estadoFinal = "REPROBADO"
+          } else {
+            if (areasPerdidas == 0) {
+              estadoFinal = "PROMOVIDO"
+            } else if (areasPerdidas >= 1 && areasPerdidas <= 2) {
+              estadoFinal = "PENDIENTE"
+            } else
+            estadoFinal = "REPROBADO"
+          }
           return {
             idMatricula: est.idMatricula,
             estudiante: est.estudiante,
@@ -368,7 +400,6 @@
       this.ocuparComboEstadosFinales()
       this.datosSeccion = this.$store.state.datosSecciones[this.$store.state.idSeccion - 1]
       this.idPeriodosSeccion = this.datosSeccion.numPeriodos
-      //console.log(JSON.stringify(this.datosSeccion))
     }
   }
 </script>
@@ -377,9 +408,13 @@
     border-collapse: collapse;
     width: 100%;
     text-align: center;
-    font-size: 10px;
+    font-size: 8px;
   }
   .tabla-estado-final th {
     background: #eee;
+  }
+  .tabla-estado-final {
+    border: 2px solid #ffa500;
+    box-shadow: 0 0 5px #ffa500;
   }
 </style>

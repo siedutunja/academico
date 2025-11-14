@@ -97,6 +97,7 @@
         nombreSede: null,
         nombreCurso: null,
         idNivel: null,
+        idGrado: null,
         btnCargando: false,
         dataConsultada: [],
         datosSeccion: {},
@@ -194,6 +195,7 @@
           this.$store.state.datosCursos.forEach(element => {
             if (element.id == this.idCurso) {
               this.idNivel = element.id_nivel
+              this.idGrado = element.id_grado
             }
           })
           this.listaEstudiantes = []
@@ -406,8 +408,11 @@
             }
           })
           let estadoFinal = 1
-          if (areasPerdidas === 1) estadoFinal = 3
-          else if (areasPerdidas >= 2) estadoFinal = 2
+          if (this.idNivel == 6) {
+            areasPerdidas > 0 ? estadoFinal = 12 : estadoFinal = 11
+          } else {
+            areasPerdidas > 0 ? estadoFinal = 2 : this.idGrado == '11' ? estadoFinal = 7 : estadoFinal = 1
+          }
           return {
             idMatricula: est.idMatricula,
             estudiante: est.estudiante,
@@ -425,7 +430,7 @@
       this.ocuparComboEstadosFinales()
       this.datosSeccion = this.$store.state.datosSecciones[this.$store.state.idSeccion - 1]
       this.idPeriodosSeccion = this.datosSeccion.numPeriodos
-      //console.log(JSON.stringify(this.datosSeccion))
+      console.log(JSON.stringify(this.$store.state.datosCursos))
     }
   }
 </script>
