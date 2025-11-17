@@ -4,15 +4,17 @@
       <b-col lg="12">
         <b-card>
           <template #header>
-            <h5 class="mb-0"><b-icon icon="card-checklist" aria-hidden="true"></b-icon> CONSOLIDADO EVALUACIONES ACUMULADO PONDERADO</h5>
+            <h5 class="mb-0"><b-icon icon="card-checklist" aria-hidden="true"></b-icon> CONSOLIDADO EVALUACIONES FINALES</h5>
           </template>
           <b-card-text>
             <b-row>
+              <!--
               <b-col lg="2">
                 <b-form-group label="Periodo:" label-for="periodo" class="etiqueta">
                   <b-form-select id="periodo" ref="periodo" v-model="idPeriodo" :options="comboPeriodos" @change="idSede=null,idCurso=null"></b-form-select>
                 </b-form-group>
               </b-col>
+              -->
               <b-col lg="6">
                 <b-form-group label="Seleccione la Sede:" label-for="sedes" class="etiqueta">
                   <b-form-select  id="sedes" ref="sedes" v-model="idSede" :options="comboSedes" @change="idCurso=null,ocuparComboCursosSede()" :disabled="idPeriodo!=null ? false : true"></b-form-select>
@@ -118,7 +120,7 @@
       return {
         idSede: null,
         comboSedes: [],
-        idPeriodo: null,
+        idPeriodo: 5,
         comboPeriodos: null,
         idCurso: null,
         comboCursosSede: [],
@@ -134,7 +136,7 @@
     methods: {
       obtenerPromedioArea(est, area) {
         const areaData = est.areas && est.areas[area]
-        return areaData ? this.calcularPromedioArea(areaData) : '0.0'
+        return areaData ? this.calcularPromedioArea(areaData) : '0.00'
       },
       obtenerNota(est, area, asignatura, periodo) {
         const nota = est?.areas?.[area]?.asignaturas?.[asignatura]?.periodos?.[periodo]
@@ -142,7 +144,7 @@
       },
       obtenerPromedioAsignatura(est, area, asignatura) {
         const asig = est?.areas?.[area]?.asignaturas?.[asignatura]
-        return asig ? this.calcularPromedioAsignatura(asig) : '0.0'
+        return asig ? this.calcularPromedioAsignatura(asig) : '0.00'
       },
       calcularPromedioAsignatura(asig) {
         const pesos = asig.pesos
@@ -150,28 +152,15 @@
         const orden = asig.orden
         if (orden === 99) return ''
         let total = 0
-        if (this.$store.state.idInstitucion == 'eb58bf60-fc83-11ec-a1d1-1dc2835404e5' && orden == 55) { // Exploración Vocacional Inem 55
-          let cantidad = 0
-          for (let p = 1; p <= 4; p++) {
-            const nota = periodos[p] ?? 0
-            if (nota > 0) {
-              total += nota
-              cantidad++
-            }
-          }
-          if (total === 0) return ''
-          total = total / cantidad
-        } else {
-          for (let p = 1; p <= 4; p++) {
-            const nota = periodos[p] ?? 0
-            total += nota * pesos[p] / 100
-          }
+        for (let p = 1; p <= 4; p++) {
+          const nota = periodos[p] ?? 0
+          total += nota * pesos[p] / 100
         }
-        return this.redondear(total).toFixed(1)
+        return total.toFixed(1)
       },
       calcularPromedioArea(areaData) {
         const asigns = Object.values(areaData.asignaturas)
-        if (!asigns.length) return '0.0'
+        if (!asigns.length) return '0.00'
         let total = 0
         asigns.forEach(asig => {
           total += parseFloat(this.calcularPromedioAsignatura(asig))
@@ -185,7 +174,7 @@
         areas.forEach(area => {
           total += parseFloat(this.calcularPromedioArea(area))
         })
-        return (total / areas.length).toFixed(1)
+        return (total / areas.length).toFixed(2)
       },
       contarAusencias(tipo) {
         let total = 0
@@ -318,10 +307,10 @@
               if (response.data.datos != 0) {
                 //this.listaAreasAsignaturas = response.data.datos
                 response.data.datos.forEach(element => {
-                  if (element.orden != 90) {
+                  if (element.orden != 99) {
                     this.listaAreasAsignaturas.push(element)
                   }
-                })
+                });
               }
             }
           })
@@ -352,7 +341,7 @@
       },
       imprimir() {
         let fecha = 'Fecha: ' + new Date().toLocaleString()
-        let tituloInforme = 'CONSOLIDADO EVALUACIONES ACUMULADO PONDERADO'
+        let tituloInforme = 'CONSOLIDADO EVALUACIONES FINALES'
         const contenido = document.querySelector('table').outerHTML
         const ventana = window.open("Consolidados", "_blank")
         ventana.document.write(`<html><head><title>Imprimir</title></head>
@@ -377,7 +366,7 @@
           .desempeno-extra { background-color: #f4ecf5; color: #2f2e2e; }
         </style>
           <body class="container">
-            <p style="text-align: center; font-size: 12px;">SECRETARÍA DE EDUCACIÓN TERRITORIAL DE TUNJA<br><b>${this.$store.state.nombreInstitucion}</b><br>TUNJA - BOYACÁ<br>${tituloInforme}<br>Sede: ${this.nombreSede} | Curso: ${this.nombreCurso} | Año Lectivo ${this.$store.state.aLectivo} | Periodo: ${this.idPeriodo}</p>
+            <p style="text-align: center; font-size: 12px;">SECRETARÍA DE EDUCACIÓN TERRITORIAL DE TUNJA<br><b>${this.$store.state.nombreInstitucion}</b><br>TUNJA - BOYACÁ<br>${tituloInforme}<br>Sede: ${this.nombreSede} | Curso: ${this.nombreCurso} | Año Lectivo ${this.$store.state.aLectivo} | Periodo: FINAL</p>
             ${contenido}
             <div style="text-align: right; font-size: 12px;"><i>${fecha}</i></div>
           </body>
@@ -388,7 +377,7 @@
       exportarAExcel() {
         const tabla = document.querySelector('table')
         const wb = XLSX.utils.table_to_book(tabla)
-        XLSX.writeFile(wb, 'notas.xlsx')
+        XLSX.writeFile(wb, 'ConsolidadoFinal.xlsx')
       },
       redondear(num) {
         var m = Number((Math.abs(num) * 10).toPrecision(15))

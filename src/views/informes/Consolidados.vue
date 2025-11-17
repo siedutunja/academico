@@ -38,9 +38,12 @@
                         <h6>Finales</h6>
                         <b-form-group label="" v-slot="{ ariaDescribedby }">
                           <b-form-radio v-model="idConsolidado" :aria-describedby="ariaDescribedby" name="some-radios" value="33">Consolidado Final</b-form-radio>
+                          <!--
                           <b-form-radio v-model="idConsolidado" :aria-describedby="ariaDescribedby" name="some-radios" value="30">Resumen Final por Estudiante</b-form-radio>
                           <b-form-radio v-model="idConsolidado" :aria-describedby="ariaDescribedby" name="some-radios" value="31">Resumen Final por Estudiante con Habilitaciones</b-form-radio>
                           <b-form-radio v-model="idConsolidado" :aria-describedby="ariaDescribedby" name="some-radios" value="32">Resumen Final de Promoción por Curso</b-form-radio>
+                          -->
+                          <b-form-radio v-model="idConsolidado" :aria-describedby="ariaDescribedby" name="some-radios" value="34">Resumen Final Asignaturas Perdidas por Curso</b-form-radio>
                         </b-form-group>
                       </b-col>
                     </b-row>
@@ -87,12 +90,10 @@
                   <ResumenPromocion/>
                 </div>
                 <div v-if="idConsolidado==33">
-                  <div v-if="$store.state.idInstitucion == 'acaa36d0-fcb1-11ec-8267-536b07c743c4'">
-                    <ConsolidadoFinalEmiliani/> <!-- Emiliani -->
-                  </div>
-                  <div v-else>
-                    <ConsolidadoFinal/>
-                  </div>
+                  <ConsolidadoFinal/>
+                </div>
+                <div v-if="idConsolidado==34">
+                  <ResumenFinalAsigPerdidas/>
                 </div>
                 
               </b-col>
@@ -116,11 +117,13 @@
   import AusenciasPeriodos from '@/views/informes/consolidados/AusenciasPeriodos'
   import ResumenFinal from '@/views/informes/consolidados/ResumenFinal'
   import ResumenFinalHab from '@/views/informes/consolidados/ResumenFinalHab'
-  import ResumenPromocion from '@/views/informes/consolidados/ResumenPromocion'
+  //import ResumenPromocion from '@/views/informes/consolidados/ResumenPromocion'
   import AsignaturasPerdidas from '@/views/informes/consolidados/AsignaturasPerdidas'
   import AreasPerdidas from '@/views/informes/consolidados/AreasPerdidas'
   import ConsolidadoFinal from '@/views/informes/consolidados/ConsolidadoFinal'
   import ConsolidadoFinalEmiliani from '@/views/informes/consolidados/ConsolidadoFinalEmiliani'
+  import ConsolidadoFinalInem from '@/views/informes/consolidados/ConsolidadoFinalInem'
+  import ResumenFinalAsigPerdidas from '@/views/informes/consolidados/ResumenFinalAsigPerdidas'
 
   export default {
     name: 'consolidados',
@@ -134,11 +137,13 @@
       AusenciasPeriodos,
       ResumenFinal,
       ResumenFinalHab,
-      ResumenPromocion,
+      //ResumenPromocion,
       AsignaturasPerdidas,
       AreasPerdidas,
       ConsolidadoFinal,
       ConsolidadoFinalEmiliani,
+      ConsolidadoFinalInem,
+      ResumenFinalAsigPerdidas,
     },
     data () {
       return {

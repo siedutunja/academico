@@ -269,18 +269,45 @@
         const orden = asig.orden
         if (orden === 99 && this.datosSeccion.promCompor == 0) return '-'
         let total = 0
-        let cantidad = 0 // nuevo
-        for (let p = 1; p <= 4; p++) {
-          const nota = periodos[p] ?? 0
-          if (nota > 0) {
-            total += nota
-            cantidad++
+        if (this.$store.state.idInstitucion == 'acaa36d0-fcb1-11ec-8267-536b07c743c4') { // Emiliani
+          for (let p = 1; p <= 4; p++) {
+            const nota = periodos[p] ?? 0
+            total += nota * pesos[p] / 100
           }
+          return this.redondear(total).toFixed(1) > 0 ? this.redondear(total).toFixed(1) : ''
+        } else if (this.$store.state.idInstitucion == 'eb58bf60-fc83-11ec-a1d1-1dc2835404e5') { // Inem
+          if (orden == 55) {
+            let cantidad = 0 // nuevo
+            for (let p = 1; p <= 4; p++) {
+              const nota = periodos[p] ?? 0
+              if (nota > 0) {
+                total += nota
+                cantidad++
+              }
+            }
+            if (total === 0) return ''
+            total = total / cantidad
+            return this.redondear(total).toFixed(1) > 0 ? this.redondear(total).toFixed(1) : ''
+          } else {
+            for (let p = 1; p <= 4; p++) {
+              const nota = periodos[p] ?? 0
+              total += nota * pesos[p] / 100
+            }
+            return this.redondear(total).toFixed(1) > 0 ? this.redondear(total).toFixed(1) : ''
+          }
+        } else {
+          let cantidad = 0 
+          for (let p = 1; p <= 4; p++) {
+            const nota = periodos[p] ?? 0
+            if (nota > 0) {
+              total += nota
+              cantidad++
+            }
+          }
+          if (total === 0) return ''
+          const promedio = total / cantidad
+          return this.redondear(promedio).toFixed(1) > 0 ? this.redondear(total).toFixed(1) : ''
         }
-        if (total === 0) return ''
-        const promedio = total / cantidad
-        //const promedio = total / this.idPeriodo
-        return this.redondear(promedio).toFixed(1)
       },
       calcularPromedioArea(areaData) {
         const asigns = Object.values(areaData.asignaturas)
@@ -368,6 +395,8 @@
           Object.values(area.asignaturas || {}).forEach(asig => {
             const nota = parseFloat(this.calcularPromedioAsignatura(asig))
             const val =  asig.idTipoEspecialidad
+            const orden =  asig.orden
+            if (orden == 90) return // No se tiene en cuenta el area de Inem Exploracion vocacional - Complementaria
             if (typeof nota !== 'number') return
             if (val === 1) {
               if (tipo === 'bajo' && nota < this.datosSeccion.minBas) contador++
@@ -452,7 +481,7 @@
               if (response.data.datos != 0) {
                 //this.listaAreasAsignaturas = response.data.datos
                 response.data.datos.forEach(element => {
-                  if (element.orden != 99) {
+                  if (element.orden != 99 && element.orden != 90) {
                     this.listaAreasAsignaturas.push(element)
                   }
                 });
@@ -572,7 +601,7 @@
               orden,
               idTipoEspecialidad,
               porcentaje,
-              pesos: { 1: 0.2, 2: 0.2, 3: 0.3, 4: 0.3 }
+              pesos: { 1: this.datosSeccion.pesoP1, 2: this.datosSeccion.pesoP2, 3: this.datosSeccion.pesoP3, 4: this.datosSeccion.pesoP4 }
             }
           }
           let notaFinal = 0

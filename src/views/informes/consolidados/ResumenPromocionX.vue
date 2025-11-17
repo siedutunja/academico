@@ -369,7 +369,7 @@
             }
           })
           let estadoFinal = "*"
-          if ( this.$store.state.idInstitucion == '17ee4f30-fc80-11ec-a1d1-1dc2835404e5') {
+          if ( this.$store.state.idInstitucion == '17ee4f30-fc80-11ec-a1d1-1dc2835404e5') { //Enslap
             if (areasPerdidas == 0) {
               estadoFinal = "PROMOVIDO"
             } else if (areasPerdidas >= 1 && areasPerdidas <= 2) {
