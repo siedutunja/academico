@@ -37,7 +37,8 @@
                       <b-col lg="4">
                         <h6>Finales</h6>
                         <b-form-group label="" v-slot="{ ariaDescribedby }">
-                          <b-form-radio v-model="idConsolidado" :aria-describedby="ariaDescribedby" name="some-radios" value="33">Consolidado Final</b-form-radio>
+                          <b-form-radio v-model="idConsolidado" :aria-describedby="ariaDescribedby" name="some-radios" value="33">Consolidado Final de Asignaturas</b-form-radio>
+                          <b-form-radio v-model="idConsolidado" :aria-describedby="ariaDescribedby" name="some-radios" value="35">Consolidado Final de Areas</b-form-radio>
                           <!--
                           <b-form-radio v-model="idConsolidado" :aria-describedby="ariaDescribedby" name="some-radios" value="30">Resumen Final por Estudiante</b-form-radio>
                           <b-form-radio v-model="idConsolidado" :aria-describedby="ariaDescribedby" name="some-radios" value="31">Resumen Final por Estudiante con Habilitaciones</b-form-radio>
@@ -95,6 +96,9 @@
                 <div v-if="idConsolidado==34">
                   <ResumenFinalAsigPerdidas/>
                 </div>
+                <div v-if="idConsolidado==35">
+                  <ConsolidadoFinalAreas/>
+                </div>
                 
               </b-col>
             </b-row>
@@ -124,6 +128,7 @@
   import ConsolidadoFinalEmiliani from '@/views/informes/consolidados/ConsolidadoFinalEmiliani'
   import ConsolidadoFinalInem from '@/views/informes/consolidados/ConsolidadoFinalInem'
   import ResumenFinalAsigPerdidas from '@/views/informes/consolidados/ResumenFinalAsigPerdidas'
+  import ConsolidadoFinalAreas from '@/views/informes/consolidados/ConsolidadoFinalAreas'
 
   export default {
     name: 'consolidados',
@@ -144,6 +149,7 @@
       ConsolidadoFinalEmiliani,
       ConsolidadoFinalInem,
       ResumenFinalAsigPerdidas,
+      ConsolidadoFinalAreas,
     },
     data () {
       return {

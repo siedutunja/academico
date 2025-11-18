@@ -4,7 +4,7 @@
       <b-col lg="12">
         <b-card>
           <template #header>
-            <h5 class="mb-0"><b-icon icon="card-checklist" aria-hidden="true"></b-icon> CONSOLIDADO EVALUACIONES FINALES</h5>
+            <h5 class="mb-0"><b-icon icon="card-checklist" aria-hidden="true"></b-icon> CONSOLIDADO EVALUACIONES FINALES DE ASIGNATURAS</h5>
           </template>
           <b-card-text>
             <b-row>
@@ -295,6 +295,12 @@
             }
             return this.redondear(total).toFixed(1) > 0 ? this.redondear(total).toFixed(1) : ''
           }
+        } else if (this.$store.state.idInstitucion == 'c50f3d80-fca0-11ec-8267-536b07c743c4') { // Silvino
+          const nota = periodos[5] ?? 0
+          return nota > 0 ? nota.toFixed(1) : ''
+        } else if (this.$store.state.idInstitucion == '8a1bd1e0-fcb2-11ec-8267-536b07c743c4') { // Libertador
+          const nota = periodos[5] ?? 0
+          return nota > 0 ? nota.toFixed(1) : ''
         } else {
           let cantidad = 0 
           for (let p = 1; p <= 4; p++) {
@@ -306,7 +312,7 @@
           }
           if (total === 0) return ''
           const promedio = total / cantidad
-          return this.redondear(promedio).toFixed(1) > 0 ? this.redondear(total).toFixed(1) : ''
+          return this.redondear(promedio).toFixed(1) > 0 ? this.redondear(promedio).toFixed(1) : ''
         }
       },
       calcularPromedioArea(areaData) {
@@ -396,7 +402,8 @@
             const nota = parseFloat(this.calcularPromedioAsignatura(asig))
             const val =  asig.idTipoEspecialidad
             const orden =  asig.orden
-            if (orden == 90) return // No se tiene en cuenta el area de Inem Exploracion vocacional - Complementaria
+            if (this.$store.state.idInstitucion == 'eb58bf60-fc83-11ec-a1d1-1dc2835404e5' && orden == 90) return // No se tiene en cuenta el area de Inem Exploracion vocacional - Complementaria
+            if (this.$store.state.idInstitucion == '097b7b10-fcaa-11ec-8267-536b07c743c4' && orden == 98) return // No se tiene en cuenta el area de Rural Proyectos Profundizacion
             if (typeof nota !== 'number') return
             if (val === 1) {
               if (tipo === 'bajo' && nota < this.datosSeccion.minBas) contador++
@@ -481,10 +488,26 @@
               if (response.data.datos != 0) {
                 //this.listaAreasAsignaturas = response.data.datos
                 response.data.datos.forEach(element => {
-                  if (element.orden != 99 && element.orden != 90) {
+                  if ( this.$store.state.idInstitucion == 'eb58bf60-fc83-11ec-a1d1-1dc2835404e5' ) { //Inem
+                    if (element.orden != 99 && element.orden != 90) {
+                      this.listaAreasAsignaturas.push(element)
+                    }
+                  } else if ( this.$store.state.idInstitucion == 'f5529ba0-fcb3-11ec-8267-536b07c743c4' ) { // Gustavo Rojas
+                    if (element.orden != 99 && element.orden != 15 && element.orden != 16 && element.orden != 98) {
+                      this.listaAreasAsignaturas.push(element)
+                    }
+                  } else if ( this.$store.state.idInstitucion == '097b7b10-fcaa-11ec-8267-536b07c743c4' ) { // Rural
+                    if (element.orden != 99 && element.orden != 98) {
+                      this.listaAreasAsignaturas.push(element)
+                    }
+                  } else if ( this.$store.state.idInstitucion == '54fd7440-fc81-11ec-a1d1-1dc2835404e5' || this.$store.state.idInstitucion == '7c63ed50-fcb0-11ec-8267-536b07c743c4' ) { // Antonio Jose Sandoval, Normal Santiago, 
                     this.listaAreasAsignaturas.push(element)
+                  } else {
+                    if (element.orden != 99) {
+                      this.listaAreasAsignaturas.push(element)
+                    }
                   }
-                });
+                })
               }
             }
           })
@@ -515,7 +538,7 @@
       },
       imprimir() {
         let fecha = 'Fecha: ' + new Date().toLocaleString()
-        let tituloInforme = 'CONSOLIDADO EVALUACIONES FINALES'
+        let tituloInforme = 'CONSOLIDADO EVALUACIONES FINALES DE ASIGNATURAS'
         const contenido = document.querySelector('table').outerHTML
         const ventana = window.open("Consolidados", "_blank")
         ventana.document.write(`<html><head><title>Imprimir</title></head>

@@ -307,6 +307,12 @@
             }
             return this.redondear(total).toFixed(1)
           }
+        } else if (this.$store.state.idInstitucion == 'c50f3d80-fca0-11ec-8267-536b07c743c4') { // Silvino
+          const nota = periodos[5] ?? 0
+          return nota > 0 ? nota.toFixed(1) : ''
+        } else if (this.$store.state.idInstitucion == '8a1bd1e0-fcb2-11ec-8267-536b07c743c4') { // Libertador
+          const nota = periodos[5] ?? 0
+          return nota > 0 ? nota.toFixed(1) : ''
         } else {
           let cantidad = 0 
           for (let p = 1; p <= 4; p++) {
@@ -398,7 +404,8 @@
             const nota = parseFloat(this.calcularPromedioAsignatura(asig))
             const val =  asig.idTipoEspecialidad
             const orden =  asig.orden
-            if (orden == 90) return // No se tiene en cuenta el area de Inem Exploracion vocacional - Complementaria
+            if (this.$store.state.idInstitucion == 'eb58bf60-fc83-11ec-a1d1-1dc2835404e5' && orden == 90) return // No se tiene en cuenta el area de Inem Exploracion vocacional - Complementaria
+            if (this.$store.state.idInstitucion == '097b7b10-fcaa-11ec-8267-536b07c743c4' && orden == 98) return // No se tiene en cuenta el area de Rural Proyectos Profundizacion
             if (typeof nota !== 'number' || nota == 0) return
             if (val === 1) {
               if (tipo === 'bajo' && nota < this.datosSeccion.minBas) contador++
@@ -420,10 +427,19 @@
         Object.values(areas || {}).forEach(area => {
           Object.values(area.asignaturas || {}).forEach(asig => {
             const orden =  asig.orden
-            if (orden == 90) return // No se tiene en cuenta el area de Inem Exploracion vocacional - Complementaria
+            const asignita = asig.asignatura
+            const val =  asig.idTipoEspecialidad
+            if (this.$store.state.idInstitucion == 'eb58bf60-fc83-11ec-a1d1-1dc2835404e5' && orden == 90) return // No se tiene en cuenta el area de Inem Exploracion vocacional - Complementaria
+            if ( (this.$store.state.idInstitucion == '54fd7440-fc81-11ec-a1d1-1dc2835404e5' || this.$store.state.idInstitucion == '7c63ed50-fcb0-11ec-8267-536b07c743c4') && orden == 99 ) { // SandovaL, Santiago
+              const nota = parseFloat(this.calcularPromedioAsignatura(asig))
+              if (typeof nota !== 'number') return
+              if (val === 1) {
+                if (tipo === 'bajo' && nota > 0 && nota < this.datosSeccion.minBas) listaAsigPerdidas += asignita + '(' + nota + ') '
+              } else {
+                if (tipo === 'bajo' && nota > 0 && nota < this.datosSeccion.minBasT) listaAsigPerdidas += asignita + '(' + nota + ') '
+              }
+            }
             if (orden !== 99 && orden !== 98) {
-              const asignita = asig.asignatura
-              const val =  asig.idTipoEspecialidad
               const nota = parseFloat(this.calcularPromedioAsignatura(asig))
               if (typeof nota !== 'number') return
               if (val === 1) {
@@ -504,10 +520,26 @@
               if (response.data.datos != 0) {
                 //this.listaAreasAsignaturas = response.data.datos
                 response.data.datos.forEach(element => {
-                  if (element.orden != 99 && element.orden != 90) {
+                  if ( this.$store.state.idInstitucion == 'eb58bf60-fc83-11ec-a1d1-1dc2835404e5' ) { //Inem
+                    if (element.orden != 99 && element.orden != 90) {
+                      this.listaAreasAsignaturas.push(element)
+                    }
+                  } else if ( this.$store.state.idInstitucion == 'f5529ba0-fcb3-11ec-8267-536b07c743c4' ) { // Gustavo Rojas
+                    if (element.orden != 99 && element.orden != 15 && element.orden != 16 && element.orden != 98) {
+                      this.listaAreasAsignaturas.push(element)
+                    }
+                  } else if ( this.$store.state.idInstitucion == '097b7b10-fcaa-11ec-8267-536b07c743c4' ) { // Rural
+                    if (element.orden != 99 && element.orden != 98) {
+                      this.listaAreasAsignaturas.push(element)
+                    }
+                  } else if ( this.$store.state.idInstitucion == '54fd7440-fc81-11ec-a1d1-1dc2835404e5' || this.$store.state.idInstitucion == '7c63ed50-fcb0-11ec-8267-536b07c743c4' ) { // Antonio Jose Sandoval, Normal Santiago, 
                     this.listaAreasAsignaturas.push(element)
+                  } else {
+                    if (element.orden != 99) {
+                      this.listaAreasAsignaturas.push(element)
+                    }
                   }
-                });
+                })
               }
             }
           })

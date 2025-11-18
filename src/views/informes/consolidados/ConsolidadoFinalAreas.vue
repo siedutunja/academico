@@ -4,7 +4,7 @@
       <b-col lg="12">
         <b-card>
           <template #header>
-            <h5 class="mb-0"><b-icon icon="card-checklist" aria-hidden="true"></b-icon> CONSOLIDADO EVALUACIONES FINALES POR AREA</h5>
+            <h5 class="mb-0"><b-icon icon="card-checklist" aria-hidden="true"></b-icon> CONSOLIDADO EVALUACIONES FINALES DE AREAS</h5>
           </template>
           <b-card-text>
             <b-row>
@@ -47,22 +47,21 @@
             <tr>
               <th rowspan="3">#</th>
               <th rowspan="3">Estudiante</th>
-              <!--
               <template v-for="(asigs, area) in encabezadoPorArea">
                 <th :colspan="colspanArea(area)" :key="area">
                   {{ area }}
                 </th>
               </template>
-              -->
-              <th rowspan="3">Tot<br>Asig<br>Baj</th>
-              <th rowspan="3">Asignaturas Perdidas</th>
               <th rowspan="3">PRO GEN</th>
+              <th rowspan="3">Tot<br>Area<br>Baj</th>
+              <th rowspan="3">Tot<br>Area<br>Bas</th>
+              <th rowspan="3">Tot<br>Area<br>Alt</th>
+              <th rowspan="3">Tot<br>Area<br>Sup</th>
               <th rowspan="3">Tot<br>AuJ</th>
               <th rowspan="3">Tot<br>AuS</th>
               <th rowspan="3">Puesto</th>
               <th rowspan="3">#</th>
             </tr>
-            <!--
             <tr>
               <template v-for="(asigs, area) in encabezadoPorArea">
                 <template v-for="(asig, k) in asigs">
@@ -83,14 +82,13 @@
                 </template>
                 <th :key="'prom' + area"></th>
               </template>
+              <!-- columnas finales vacías -->
             </tr>
-            -->
           </thead>
           <tbody>
             <tr v-for="(est, nombre, i) in estudiantesNotas" :key="nombre">
               <td class="text-left">{{ i + 1 }}</td>
               <td style="text-align: left">{{ nombre }}</td>
-              <!--
               <template v-for="(asigs, area) in encabezadoPorArea">
                 <template v-for="asig in asigs">
                   <td v-for="p in periodosVisibles"  :key="nombre + area + asig + p">
@@ -104,10 +102,12 @@
                   {{ est.id_conceptual=='N' ? obtenerPromedioArea(est, area) : '-' }}
                 </td>
               </template>
-              -->
-              <td>{{ est.id_conceptual=='N' ? contarDesempenoEstudiante(est.areas, 'bajo') : '-' }}</td>
-              <td style="text-align: left">{{ est.id_conceptual=='N' ? mostrarNotasPorAsignaturaPerdidas(est.areas, 'bajo') : '-' }}</td>
+
               <td>{{ est.id_conceptual=='N' ? calcularPromedioGeneral(est) : '-' }}</td>
+              <td>{{ est.id_conceptual=='N' ? contarDesempenoEstudianteArea(est, 'bajo') : '-' }}</td>
+              <td>{{ est.id_conceptual=='N' ? contarDesempenoEstudianteArea(est, 'basico') : '-' }}</td>
+              <td>{{ est.id_conceptual=='N' ? contarDesempenoEstudianteArea(est, 'alto') : '-' }}</td>
+              <td>{{ est.id_conceptual=='N' ? contarDesempenoEstudianteArea(est, 'superior') : '-' }}</td>
               <td>{{ est.id_conceptual=='N' ? est.ausJ : '-' }}</td>
               <td>{{ est.id_conceptual=='N' ? est.ausS : '-' }}</td>
               <td>{{ est.id_conceptual=='N' ? iconoPuesto(puestosPorEstudiante[nombre]) : '-' }} {{ est.id_conceptual=='N' ? puestosPorEstudiante[nombre] : '-' }}</td>
@@ -115,32 +115,30 @@
             </tr>
             <tr style="background-color: #f0f0f0; font-weight: bold;">
               <td colspan="2">Total Bajos</td>
-              <!--
               <template v-for="(asigs, area) in encabezadoPorArea">
                 <template v-for="asig in asigs">
+                  <!-- Bajos por periodo -->
                   <td v-for="p in periodosVisibles" :key="'bp' + area + asig + p">
                     {{ totalBajosPorPeriodo(area, asig, p) }}
                   </td>
+                  <!-- Bajos por promedio de asignatura -->
                   <td :key="'bj' + area + asig">
                     {{ totalBajosPromedioAsignatura(area, asig) }}
                   </td>
                 </template>
+                <!-- Bajos por promedio de área -->
                 <td  :key="'bja' + area" class="promedio-area">
                   {{ totalBajosPromedioArea(area) }}
                 </td>
               </template>
-              -->
+              <td></td> <!-- Prom. General -->
               <td>{{ totales.bajo }}</td>
-              <td></td>
-              <!--
               <td>{{ totales.basico }}</td>
               <td>{{ totales.alto }}</td>
               <td>{{ totales.superior }}</td>
-              -->
-              <td></td>
               <td>{{ totales.ausJ }}</td>
               <td>{{ totales.ausS }}</td>
-              <td></td>
+              <td></td> <!-- Puesto -->
               <td></td>
             </tr>
           </tbody>
@@ -234,10 +232,10 @@
       totalesGlobales() {
         let bajo = 0, basico = 0, alto = 0, superior = 0, ausJ = 0, ausS = 0
         Object.values(this.estudiantesNotas).forEach(est => {
-          bajo += this.contarDesempenoEstudiante(est.areas, 'bajo')
-          basico += this.contarDesempenoEstudiante(est.areas, 'basico')
-          alto += this.contarDesempenoEstudiante(est.areas, 'alto')
-          superior += this.contarDesempenoEstudiante(est.areas, 'superior')
+          bajo += this.contarDesempenoEstudianteArea(est, 'bajo')
+          basico += this.contarDesempenoEstudianteArea(est, 'basico')
+          alto += this.contarDesempenoEstudianteArea(est, 'alto')
+          superior += this.contarDesempenoEstudianteArea(est, 'superior')
           ausJ += est.ausJ || 0
           ausS += est.ausS || 0
         })
@@ -255,16 +253,6 @@
       obtenerPromedioArea(est, area) {
         const areaData = est.areas && est.areas[area]
         return areaData ? this.calcularPromedioArea(areaData) : ''
-      },
-      calcularPromedioArea(areaData) {
-        const asigns = Object.values(areaData.asignaturas)
-        if (!asigns.length) return '0.00'
-        let total = 0
-        asigns.forEach(asig => {
-          if (asig.orden === 99 && this.datosSeccion.promCompor == 0) return '-'
-          total += parseFloat((this.calcularPromedioAsignatura(asig) * asig.porcentaje) / 100)
-        })
-        return total > 0 ? this.redondear(total).toFixed(1) : ''
       },
       obtenerNota(est, area, asignatura, periodo) {
         let nota = est?.areas?.[area]?.asignaturas?.[asignatura]?.periodos?.[periodo]
@@ -286,7 +274,7 @@
             const nota = periodos[p] ?? 0
             total += nota * pesos[p] / 100
           }
-          return this.redondear(total).toFixed(1)
+          return this.redondear(total).toFixed(1) > 0 ? this.redondear(total).toFixed(1) : ''
         } else if (this.$store.state.idInstitucion == 'eb58bf60-fc83-11ec-a1d1-1dc2835404e5') { // Inem
           if (orden == 55) {
             let cantidad = 0 // nuevo
@@ -299,14 +287,20 @@
             }
             if (total === 0) return ''
             total = total / cantidad
-            return this.redondear(total).toFixed(1)
+            return this.redondear(total).toFixed(1) > 0 ? this.redondear(total).toFixed(1) : ''
           } else {
             for (let p = 1; p <= 4; p++) {
               const nota = periodos[p] ?? 0
               total += nota * pesos[p] / 100
             }
-            return this.redondear(total).toFixed(1)
+            return this.redondear(total).toFixed(1) > 0 ? this.redondear(total).toFixed(1) : ''
           }
+        } else if (this.$store.state.idInstitucion == 'c50f3d80-fca0-11ec-8267-536b07c743c4') { // Silvino
+          const nota = periodos[5] ?? 0
+          return nota > 0 ? nota.toFixed(1) : ''
+        } else if (this.$store.state.idInstitucion == '8a1bd1e0-fcb2-11ec-8267-536b07c743c4') { // Libertador
+          const nota = periodos[5] ?? 0
+          return nota > 0 ? nota.toFixed(1) : ''
         } else {
           let cantidad = 0 
           for (let p = 1; p <= 4; p++) {
@@ -318,8 +312,33 @@
           }
           if (total === 0) return ''
           const promedio = total / cantidad
-          return this.redondear(promedio).toFixed(1)
+          return this.redondear(promedio).toFixed(1) > 0 ? this.redondear(promedio).toFixed(1) : ''
         }
+      },
+      calcularPromedioArea(areaData) {
+        const asigns = Object.values(areaData.asignaturas)
+        if (!asigns.length) return '0.00'
+        let total = 0
+        asigns.forEach(asig => {
+          if (asig.orden === 99 && this.datosSeccion.promCompor == 0) return '-'
+          total += parseFloat((this.calcularPromedioAsignatura(asig) * asig.porcentaje) / 100)
+        })
+        return total > 0 ? this.redondear(total).toFixed(1) : ''
+      },
+      contarDesempenoEstudianteArea(est, tipo) {
+        const areas = Object.keys(est.areas || {})
+        let contador = 0
+        areas.forEach(area => {
+          if (!this.esAreaValida(area)) return
+          const promedio = parseFloat(this.calcularPromedioArea(est.areas[area]))
+          if (!isNaN(promedio)) {
+            if (tipo === 'bajo' && promedio < this.datosSeccion.minBas) contador++
+            else if (tipo === 'basico' && promedio >= this.datosSeccion.minBas && promedio < this.datosSeccion.minAlt) contador++
+            else if (tipo === 'alto' && promedio >= this.datosSeccion.minAlt && promedio < this.datosSeccion.minSup) contador++
+            else if (tipo === 'superior' && promedio >= this.datosSeccion.minSup && promedio <= this.datosSeccion.maxSup) contador++
+          }
+        })
+        return contador
       },
       calcularPromedioGeneral(est) {
         const areas = Object.keys(est.areas || {})
@@ -398,7 +417,8 @@
             const nota = parseFloat(this.calcularPromedioAsignatura(asig))
             const val =  asig.idTipoEspecialidad
             const orden =  asig.orden
-            if (orden == 90) return // No se tiene en cuenta el area de Inem Exploracion vocacional - Complementaria
+            if (this.$store.state.idInstitucion == 'eb58bf60-fc83-11ec-a1d1-1dc2835404e5' && orden == 90) return // No se tiene en cuenta el area de Inem Exploracion vocacional - Complementaria
+            if (this.$store.state.idInstitucion == '097b7b10-fcaa-11ec-8267-536b07c743c4' && orden == 98) return // No se tiene en cuenta el area de Rural Proyectos Profundizacion
             if (typeof nota !== 'number') return
             if (val === 1) {
               if (tipo === 'bajo' && nota < this.datosSeccion.minBas) contador++
@@ -414,27 +434,6 @@
           })
         })
         return contador
-      },
-      mostrarNotasPorAsignaturaPerdidas(areas, tipo) {
-        let listaAsigPerdidas = ''
-        Object.values(areas || {}).forEach(area => {
-          Object.values(area.asignaturas || {}).forEach(asig => {
-            const orden =  asig.orden
-            if (orden == 90) return // No se tiene en cuenta el area de Inem Exploracion vocacional - Complementaria
-            if (orden !== 99 && orden !== 98) {
-              const asignita = asig.asignatura
-              const val =  asig.idTipoEspecialidad
-              const nota = parseFloat(this.calcularPromedioAsignatura(asig))
-              if (typeof nota !== 'number') return
-              if (val === 1) {
-                if (tipo === 'bajo' && nota < this.datosSeccion.minBas) listaAsigPerdidas += asignita + '(' + nota + ') '
-              } else {
-                if (tipo === 'bajo' && nota < this.datosSeccion.minBasT) listaAsigPerdidas += asignita + '(' + nota + ') '
-              }
-            }
-          })
-        })
-        return listaAsigPerdidas
       },
       fueRecuperada(areas, area, asig) {
         return areas?.[area]?.[asig]?.fueRecuperada ?? false
@@ -504,10 +503,26 @@
               if (response.data.datos != 0) {
                 //this.listaAreasAsignaturas = response.data.datos
                 response.data.datos.forEach(element => {
-                  if (element.orden != 99 && element.orden != 90) {
+                  if ( this.$store.state.idInstitucion == 'eb58bf60-fc83-11ec-a1d1-1dc2835404e5' ) { //Inem
+                    if (element.orden != 99 && element.orden != 90) {
+                      this.listaAreasAsignaturas.push(element)
+                    }
+                  } else if ( this.$store.state.idInstitucion == 'f5529ba0-fcb3-11ec-8267-536b07c743c4' ) { // Gustavo Rojas
+                    if (element.orden != 99 && element.orden != 15 && element.orden != 16 && element.orden != 98) {
+                      this.listaAreasAsignaturas.push(element)
+                    }
+                  } else if ( this.$store.state.idInstitucion == '097b7b10-fcaa-11ec-8267-536b07c743c4' ) { // Rural
+                    if (element.orden != 99 && element.orden != 98) {
+                      this.listaAreasAsignaturas.push(element)
+                    }
+                  } else if ( this.$store.state.idInstitucion == '54fd7440-fc81-11ec-a1d1-1dc2835404e5' || this.$store.state.idInstitucion == '7c63ed50-fcb0-11ec-8267-536b07c743c4' ) { // Antonio Jose Sandoval, Normal Santiago, 
                     this.listaAreasAsignaturas.push(element)
+                  } else {
+                    if (element.orden != 99) {
+                      this.listaAreasAsignaturas.push(element)
+                    }
                   }
-                });
+                })
               }
             }
           })
@@ -538,7 +553,7 @@
       },
       imprimir() {
         let fecha = 'Fecha: ' + new Date().toLocaleString()
-        let tituloInforme = 'CONSOLIDADO EVALUACIONES FINALES'
+        let tituloInforme = 'CONSOLIDADO EVALUACIONES FINALES DE AREAS'
         const contenido = document.querySelector('table').outerHTML
         const ventana = window.open("Consolidados", "_blank")
         ventana.document.write(`<html><head><title>Imprimir</title></head>
@@ -620,7 +635,6 @@
           }
           if (!mapa[estudiante].areas[area].asignaturas[asignatura]) {
             mapa[estudiante].areas[area].asignaturas[asignatura] = {
-              asignatura,
               periodos: {},
               orden,
               idTipoEspecialidad,
