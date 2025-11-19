@@ -626,6 +626,13 @@ function configRoutes () {
               name: 'Recuperaciones Periodo',
               component: () => import('@/views/periodos/RecuperacionesPeriodo')
             },
+            // 2025-04-08
+            {
+              path: 'superacionesfinales',
+              beforeEnter: autenticar,
+              name: 'Superaciones Finales',
+              component: () => import('@/views/periodos/SuperacionesFinales')
+            },
           ]
         },
         // 2025-04-06

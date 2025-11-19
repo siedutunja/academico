@@ -330,12 +330,21 @@
         let contador = 0
         areas.forEach(area => {
           if (!this.esAreaValida(area)) return
+          const meta = this.listaAreasAsignaturas.find( a => a.area === area)
+          const idTipoEspecialidadArea = meta?.idTipoArea
           const promedio = parseFloat(this.calcularPromedioArea(est.areas[area]))
           if (!isNaN(promedio)) {
-            if (tipo === 'bajo' && promedio < this.datosSeccion.minBas) contador++
-            else if (tipo === 'basico' && promedio >= this.datosSeccion.minBas && promedio < this.datosSeccion.minAlt) contador++
-            else if (tipo === 'alto' && promedio >= this.datosSeccion.minAlt && promedio < this.datosSeccion.minSup) contador++
-            else if (tipo === 'superior' && promedio >= this.datosSeccion.minSup && promedio <= this.datosSeccion.maxSup) contador++
+            if (idTipoEspecialidadArea === 1) {
+              if (tipo === 'bajo' && promedio < this.datosSeccion.minBas) contador++
+              else if (tipo === 'basico' && promedio >= this.datosSeccion.minBas && promedio < this.datosSeccion.minAlt) contador++
+              else if (tipo === 'alto' && promedio >= this.datosSeccion.minAlt && promedio < this.datosSeccion.minSup) contador++
+              else if (tipo === 'superior' && promedio >= this.datosSeccion.minSup && promedio <= this.datosSeccion.maxSup) contador++
+            } else {
+              if (tipo === 'bajo' && promedio < this.datosSeccion.minBasT) contador++
+              else if (tipo === 'basico' && promedio >= this.datosSeccion.minBasT && promedio < this.datosSeccion.minAltT) contador++
+              else if (tipo === 'alto' && promedio >= this.datosSeccion.minAltT && promedio < this.datosSeccion.minSupT) contador++
+              else if (tipo === 'superior' && promedio >= this.datosSeccion.minSupT && promedio <= this.datosSeccion.maxSupT) contador++
+            }
           }
         })
         return contador
