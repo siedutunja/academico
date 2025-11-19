@@ -234,7 +234,8 @@
           let habilitacion = null
           let fecha = null
           asignaturas.forEach(asig => {
-            notaAcumulada += asig.nota_final * (asig.porcentaje / 100)
+            //notaAcumulada += asig.nota_final * (asig.porcentaje / 100)
+            notaAcumulada += asig.nota_definitiva * (asig.porcentaje / 100)
             porcentajeAcumulado += asig.porcentaje
             ihArea += asig.ih
             if (asig.habilitacion && habilitacion === null) {

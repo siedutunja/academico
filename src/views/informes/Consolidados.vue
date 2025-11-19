@@ -42,9 +42,9 @@
                           <!--
                           <b-form-radio v-model="idConsolidado" :aria-describedby="ariaDescribedby" name="some-radios" value="30">Resumen Final por Estudiante</b-form-radio>
                           <b-form-radio v-model="idConsolidado" :aria-describedby="ariaDescribedby" name="some-radios" value="31">Resumen Final por Estudiante con Habilitaciones</b-form-radio>
-                          <b-form-radio v-model="idConsolidado" :aria-describedby="ariaDescribedby" name="some-radios" value="32">Resumen Final de Promoción por Curso</b-form-radio>
                           -->
                           <b-form-radio v-model="idConsolidado" :aria-describedby="ariaDescribedby" name="some-radios" value="34">Resumen Final Asignaturas Perdidas por Curso</b-form-radio>
+                          <b-form-radio v-model="idConsolidado" :aria-describedby="ariaDescribedby" name="some-radios" value="32">Resumen Final de Promoción por Curso</b-form-radio>
                         </b-form-group>
                       </b-col>
                     </b-row>
@@ -88,7 +88,7 @@
                   <ResumenFinalHab/>
                 </div>
                 <div v-if="idConsolidado==32">
-                  <ResumenPromocion/>
+                  <ResumenPromocionAreas/>
                 </div>
                 <div v-if="idConsolidado==33">
                   <ConsolidadoFinal/>
@@ -121,7 +121,7 @@
   import AusenciasPeriodos from '@/views/informes/consolidados/AusenciasPeriodos'
   import ResumenFinal from '@/views/informes/consolidados/ResumenFinal'
   import ResumenFinalHab from '@/views/informes/consolidados/ResumenFinalHab'
-  //import ResumenPromocion from '@/views/informes/consolidados/ResumenPromocion'
+  import ResumenPromocionAreas from '@/views/informes/consolidados/ResumenPromocionAreas'
   import AsignaturasPerdidas from '@/views/informes/consolidados/AsignaturasPerdidas'
   import AreasPerdidas from '@/views/informes/consolidados/AreasPerdidas'
   import ConsolidadoFinal from '@/views/informes/consolidados/ConsolidadoFinal'
@@ -142,7 +142,7 @@
       AusenciasPeriodos,
       ResumenFinal,
       ResumenFinalHab,
-      //ResumenPromocion,
+      ResumenPromocionAreas,
       AsignaturasPerdidas,
       AreasPerdidas,
       ConsolidadoFinal,

@@ -214,6 +214,7 @@
           } else{
             if (response.data.datos != 0) {
               this.dataConsultada = response.data.datos
+              console.log(JSON.stringify(this.dataConsultada))
             }
           }
         })

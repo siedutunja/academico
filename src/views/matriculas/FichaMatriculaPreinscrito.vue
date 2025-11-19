@@ -15,6 +15,7 @@
                   <h5 class="mb-3">El número de documento corresponde a: {{ estudianteEncontrado }}.</h5>
                   <h5 class="mb-3">En el momento el estudiante NO SE ENCUENTRA VINCULADO a otra Institución Educativa Oficial de Tunja.</h5>
                   <h5 class="mb-3">Para matricularlo continue con el proceso.</h5>
+                  <b-button class="small mx-1 mt-2" variant="primary" @click="estadoDocumento=1">Continuar</b-button>
                 </b-alert>
                 <b-alert show variant="primary" class="p-5" v-else-if="estadoDocumento==2">
                   <h5 class="mb-5"><b>¡Informamos que!</b></h5>
@@ -180,7 +181,7 @@
                       </b-col>
                       <b-col lg="4" md="6">
                         <b-form-group label="Educación Diversa/Inclusión*" label-for="diversa" class="etiqueta">
-                          <b-form-select  id="diversa" ref="diversa" v-model="$v.infoEstudiante.id_diversa.$model" :options="comboDiversa" :state="validateStateD('id_diversa')" aria-describedby="feedDiversa" :disabled="infoEstudiante.id_discapacidad!=='99' ? false : true"></b-form-select>
+                          <b-form-select  id="diversa" ref="diversa" v-model="$v.infoEstudiante.id_diversa.$model" :options="comboDiversa" :state="validateStateD('id_diversa')" aria-describedby="feedDiversa"></b-form-select>
                           <b-form-invalid-feedback id="feedDiversa">Campo requerido.</b-form-invalid-feedback>
                         </b-form-group>
                       </b-col>
@@ -558,6 +559,7 @@
       return {
         documentoBuscado: false,
         btnCargando: false,
+        estudianteExistente: {},
         infoEstudiante: {
           idPreinscrito: null,
           idEstudiante: null,//
@@ -666,7 +668,8 @@
         estadoDocumento: null,
         docEstudiante: null,
         ieVinculante: null,
-        estudianteEncontrado: null
+        estudianteEncontrado: null,
+        acudienteEncontrado: 0
       }
     },
     validations: {
@@ -703,7 +706,6 @@
         id_grado: { required },
         id_curso: { required },
         id_especialidad: { required },
-        id_metodologia: { required },
         id_repitente: { required },
         id_nuevo: { required },
         id_seguro: { required },
@@ -718,15 +720,15 @@
         fecha_nacimientoA: { required },
         id_municipio_nacimientoA: { required },
         id_nacionalidadA: { required },
-        id_generoA: { required },
-        id_rhA: { required },
-        id_estratoA: { required },
-        id_sisbenA: { required },
-        id_epsA: { required },
+        //id_generoA: { required },
+        //id_rhA: { required },
+        //id_estratoA: { required },
+        //id_sisbenA: { required },
+        //id_epsA: { required },
         direccionA: { required },
-        barrioA: { required },
+        //barrioA: { required },
         id_municipio_direccionA: { required },
-        id_zonaA: { required },
+        //id_zonaA: { required },
         telefono1A: { required, minLength: minLength(10) },
         correoA: { required },
         id_parentesco: { required }
@@ -734,6 +736,7 @@
     },
     methods: {
       async buscarDocumentoAcudiente() {
+        this.acudienteEncontrado = 0
         await axios
         .get(CONFIG.ROOT_PATH + 'academico/matriculas/buscardocumentopersona', { params: { documento: this.infoEstudiante.documentoA }})
         .then(response => {
@@ -742,6 +745,8 @@
           } else{
             this.documentoBuscado = true
             if (response.data.datos != 0) {
+              this.acudienteEncontrado = 1
+              this.infoEstudiante.idAcudiente = response.data.id
               this.infoEstudiante.apellido1A = response.data.datos.apellido1
               this.infoEstudiante.apellido2A = response.data.datos.apellido2
               this.infoEstudiante.nombre1A = response.data.datos.nombre1
@@ -832,7 +837,10 @@
         return true
       },
       async guardarMatricula() {
-        this.infoEstudiante.idEstudiante = uuid.v1()
+        this.estudianteEncontrado == null ? this.infoEstudiante.idEstudiante = uuid.v1() : this.infoEstudiante.idEstudiante = this.estudianteExistente.id
+        if (this.acudienteEncontrado == 0) {
+          this.infoEstudiante.idAcudiente = uuid.v1()
+        }
         this.infoEstudiante.apellido1 = this.infoEstudiante.apellido1.toUpperCase()
         if (this.infoEstudiante.apellido2 == '' || this.infoEstudiante.apellido2 == null) {
           this.infoEstudiante.apellido2 = null
@@ -877,7 +885,6 @@
         this.infoEstudiante.idInstitucion = this.$store.state.idInstitucion
         this.infoEstudiante.idMatricula = uuid.v1()
         this.infoEstudiante.vigencia = this.$store.state.aLectivo
-        this.infoEstudiante.idAcudiente = uuid.v1()
         this.infoEstudiante.apellido1A = this.infoEstudiante.apellido1A.toUpperCase()
         if (this.infoEstudiante.apellido2A == '' || this.infoEstudiante.apellido2A == null) {
           this.infoEstudiante.apellido2A = null
@@ -901,6 +908,10 @@
         }
         this.infoEstudiante.barrioA = this.infoEstudiante.barrioA.toUpperCase()
         this.infoEstudiante.correoA = this.infoEstudiante.correoA.toLowerCase()
+        this.infoEstudiante.estudianteEncontrado = this.estudianteEncontrado
+        this.infoEstudiante.acudienteEncontrado = this.acudienteEncontrado
+        console.loh(JSON.stringify(this.infoEstudiante))
+        /*
         await axios
         .post(CONFIG.ROOT_PATH + 'academico/matriculas/preinscrito', JSON.stringify(this.infoEstudiante), { headers: {"Content-Type": "application/json; charset=utf-8" }})
         .then(response => {
@@ -960,6 +971,7 @@
         .catch(err => {
           this.mensajeEmergente('danger',CONFIG.TITULO_MSG,'Algo salio mal y no se pudo realizar: Matricula Estudiante Preinscrito. Intente más tarde. ' + err)
         })
+        */
       },
       async validarDocumentoEstudiante() {
         await axios
@@ -976,9 +988,18 @@
               this.habilitaMunicipioExpulsor()
               this.ocuparComboSedes()
               this.estadoDocumento = 0
+              this.estudianteEncontrado = null
+              this.estudianteExistente = null
             } else if (response.data.bandera == 1) {
               this.estadoDocumento = 1
               this.estudianteEncontrado = response.data.datos.estudiante
+              this.estudianteExistente = response.data.datos
+              this.cargarCatalogos()
+              this.llenarFormularioEstudianteExistente()
+              this.habilitaMunicipioNace()
+              this.habilitaMunicipioNaceA()
+              this.habilitaMunicipioExpulsor()
+              this.ocuparComboSedes()
             } else if (response.data.bandera == 2) {
               this.estadoDocumento = 2
               this.ieVinculante = response.data.datos.institucion
@@ -1110,6 +1131,77 @@
         } else {
           this.infoEstudiante.documentoA = this.$store.state.datosPreinscrito.documentoA
         }
+        this.infoEstudiante.id_tipo_documentoA = 1
+        this.infoEstudiante.id_nacionalidadA = '170'
+        this.infoEstudiante.nombre1A = this.$store.state.datosPreinscrito.nombre1A
+        this.infoEstudiante.nombre2A = this.$store.state.datosPreinscrito.nombre2A
+        this.infoEstudiante.apellido1A = this.$store.state.datosPreinscrito.apellido1A
+        this.infoEstudiante.apellido2A = this.$store.state.datosPreinscrito.apellido2A
+        this.infoEstudiante.id_municipio_nacimientoA = '00000'
+        if (this.$store.state.datosPreinscrito.id_generoA == 1) {
+          this.infoEstudiante.id_generoA = 'M'
+        } else if (this.$store.state.datosPreinscrito.id_generoA == 2) {
+          this.infoEstudiante.id_generoA = 'F'
+        } else {
+          this.infoEstudiante.id_generoA = '-'
+        }
+        this.infoEstudiante.id_rhA = 9
+        this.infoEstudiante.id_estratoA = 9
+        this.infoEstudiante.id_sisbenA = 0
+        this.infoEstudiante.id_epsA = '000000'
+        this.infoEstudiante.direccionA = this.$store.state.datosPreinscrito.direccion
+        this.infoEstudiante.id_municipio_direccionA = this.$store.state.datosPreinscrito.id_municipio_direccion
+        this.infoEstudiante.id_zonaA = 1
+        this.infoEstudiante.telefono1A = this.$store.state.datosPreinscrito.telefono1
+        this.infoEstudiante.telefono2A = this.$store.state.datosPreinscrito.telefono2
+        this.infoEstudiante.correoA = this.$store.state.datosPreinscrito.correo
+        this.infoEstudiante.id_parentesco = this.$store.state.datosPreinscrito.id_parentesco
+        this.infoEstudiante.ocupacionA = null
+      },
+      llenarFormularioEstudianteExistente() {
+        this.infoEstudiante.idEstudiante = this.estudianteExistente.id
+        this.infoEstudiante.documento = this.estudianteExistente.documento        
+        this.infoEstudiante.id_tipo_documento = this.estudianteExistente.id_tipo_documento
+        this.infoEstudiante.id_municipio_documento = this.estudianteExistente.id_municipio_documento
+        this.infoEstudiante.nombre1 = this.estudianteExistente.nombre1
+        this.infoEstudiante.nombre2 = this.estudianteExistente.nombre2
+        this.infoEstudiante.apellido1 = this.estudianteExistente.apellido1
+        this.infoEstudiante.apellido2 = this.estudianteExistente.apellido2
+        if (this.estudianteExistente.fecha_nacimiento != null && this.estudianteExistente.fecha_nacimiento != '') {
+          this.infoEstudiante.fecha_nacimiento = this.estudianteExistente.fecha_nacimiento.substr(0,10)
+        } else {
+          this.infoEstudiante.fecha_nacimiento = null
+        }
+        this.infoEstudiante.id_nacionalidad = this.estudianteExistente.id_nacionalidad
+        this.infoEstudiante.id_municipio_nacimiento = this.estudianteExistente.id_municipio_nacimiento
+        this.infoEstudiante.id_genero = this.estudianteExistente.id_genero
+        this.infoEstudiante.id_rh = this.estudianteExistente.id_rh
+        this.infoEstudiante.id_estrato = this.estudianteExistente.id_estrato
+        this.infoEstudiante.id_sisben = this.estudianteExistente.id_sisben
+        this.infoEstudiante.id_discapacidad = this.estudianteExistente.id_discapacidad
+        this.infoEstudiante.id_capacidades = this.estudianteExistente.id_capacidades
+        this.infoEstudiante.id_trastorno = this.estudianteExistente.id_trastorno
+        this.infoEstudiante.id_apoyo = this.estudianteExistente.id_apoyo
+        this.infoEstudiante.id_etnia = this.estudianteExistente.id_etnia
+        this.infoEstudiante.id_victima = this.estudianteExistente.id_victima
+        this.infoEstudiante.enfermedades = this.estudianteExistente.enfermedades
+        this.infoEstudiante.id_diversa = this.estudianteExistente.id_diversa
+        this.infoEstudiante.id_eps = this.estudianteExistente.id_eps
+        this.infoEstudiante.direccion = this.estudianteExistente.direccion
+        this.infoEstudiante.id_municipio_direccion = this.estudianteExistente.id_municipio_direccion
+        this.infoEstudiante.id_zona = this.estudianteExistente.id_zona
+        this.infoEstudiante.telefono1 = this.estudianteExistente.telefono1
+        this.infoEstudiante.telefono2 = this.estudianteExistente.telefono2
+        this.infoEstudiante.correo = this.estudianteExistente.correo
+        this.infoEstudiante.codigo = this.estudianteExistente.codigo
+        this.infoEstudiante.id_especialidad = this.estudianteExistente.id_especialidad
+        this.infoEstudiante.id_metodologia = this.estudianteExistente.id_metodologia
+        this.infoEstudiante.id_nuevo = this.estudianteExistente.id_nuevo
+        this.infoEstudiante.id_repitente = this.estudianteExistente.id_repitente
+        this.infoEstudiante.id_ruta = this.estudianteExistente.id_ruta
+        this.infoEstudiante.id_seguro = this.estudianteExistente.id_seguro
+        //------------------------- Información del Acudiente
+        this.infoEstudiante.documentoA = this.$store.state.datosPreinscrito.documentoA
         this.infoEstudiante.id_tipo_documentoA = 1
         this.infoEstudiante.id_nacionalidadA = '170'
         this.infoEstudiante.nombre1A = this.$store.state.datosPreinscrito.nombre1A
