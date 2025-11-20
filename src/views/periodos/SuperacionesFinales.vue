@@ -55,12 +55,12 @@
           <b-row>
             <b-col lg="12">
               <b-form-group label="Fecha de Inicio del Periodo*" label-for="ini" class="etiqueta">
-                <b-form-input type="date" id="ini" v-model="fechaIniPer"></b-form-input>
+                <b-form-input type="date" id="ini" v-model="fechaIni"></b-form-input>
               </b-form-group>
             </b-col>
             <b-col lg="12">
               <b-form-group label="Fecha de Terminación del Periodo*" label-for="fin" class="etiqueta">
-                <b-form-input type="date" id="fin" v-model="fechaFinPer"></b-form-input>
+                <b-form-input type="date" id="fin" v-model="fechaFin"></b-form-input>
               </b-form-group>
             </b-col>
             <b-col lg="12" md="12"><hr></b-col>
@@ -99,18 +99,18 @@
           { label: '', field: 'id', sortable: false }
         ],
         profesSeleccionados: [],
-        fechaIniPer: null,
-        fechaFinPer: null
+        fechaIni: null,
+        fechaFin: null
       }
     },
     methods: {
       async asignarFechas() {
         this.profesSeleccionados = []
         this.$refs.profes.selectedRows.forEach(element => {
-          this.profesSeleccionados.push({ 'id': element.id, 'fechaIniPer': this.fechaIniPer, 'fechaFinPer': this.fechaFinPer })
+          this.profesSeleccionados.push({ 'id': element.id, 'fechaIni': this.fechaIni, 'fechaFin': this.fechaFin })
         })
         await axios
-        .put(CONFIG.ROOT_PATH + 'academico/periodosdocente/recuperaciones', JSON.stringify(this.profesSeleccionados), { headers: {"Content-Type": "application/json; charset=utf-8" }})
+        .put(CONFIG.ROOT_PATH + 'academico/periodosdocente/superaciones', JSON.stringify(this.profesSeleccionados), { headers: {"Content-Type": "application/json; charset=utf-8" }})
         .then(response => {
           if (response.data.error){
             this.$refs['modalSeleccionarFechas'].hide()
@@ -169,8 +169,8 @@
     beforeMount() {
       if(this.$store.state.idRol == 1 || this.$store.state.idRol == 12) {
         let fechaHoy = new Date()
-        this.fechaIniPer = fechaHoy.toJSON().slice(0,10)
-        this.fechaFinPer = fechaHoy.toJSON().slice(0,10)
+        this.fechaIni = fechaHoy.toJSON().slice(0,10)
+        this.fechaFin = fechaHoy.toJSON().slice(0,10)
         this.cargueListaDocentes()
       } else {
         this.$router.push('/restringida')

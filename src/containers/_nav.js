@@ -171,7 +171,7 @@ jwt.verify(token, CONFIG.SECRET_KEY, (err, data) => {
       indice++   
       menu[0]._children[indice].items.push({ name: 'Evaluaciones por Periodo', to: '/periodos/evaluacionesperiodo'})
       menu[0]._children[indice].items.push({ name: 'Recuperaciones por Periodo', to: '/periodos/recuperacionesperiodo'})
-      menu[0]._children[indice].items.push({ name: 'Superaciones Finales', to: '/periodos/superacionesfinales'})
+      menu[0]._children[indice].items.push({ name: 'Superaciones Finales (Habilita)', to: '/periodos/superacionesfinales'})
     }
   }
 })

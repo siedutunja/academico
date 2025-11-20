@@ -92,7 +92,7 @@ export default {
       let cuerpo = `
         <div class="boletin">
           <div class="text-center mt-2">
-            <p style="text-align: center; font-size: 14px;">SECRETARÍA DE EDUCACIÓN TERRITORIAL DE TUNJA<br><b>${this.$store.state.nombreInstitucion}</b><br>TUNJA - BOYACÁ<br>BOLETIN DE EVALUACIONES DEFINITIVO</p>
+            <p style="text-align: center; font-size: 14px;">SECRETARÍA DE EDUCACIÓN TERRITORIAL DE TUNJA<br><b>${this.$store.state.nombreInstitucion}</b><br>TUNJA - BOYACÁ<br>BOLETIN DE EVALUACIONES POR PERIODO</p>
           </div>
           <div class="float-left" style="margin-top: -80px;">
               <img src="${this.escudo}" width="70px"></img>
@@ -510,68 +510,6 @@ export default {
         else if (promedioLetras <= this.umbralesA[3]) return this.letrasCompor[3]
         else return promedioLetras
       } else {
-        if (this.$store.state.idInstitucion == 'acaa36d0-fcb1-11ec-8267-536b07c743c4') { // Emiliani
-          const pesos = [20,20,30,30]
-          if( orden == 12) {
-            let cantidad = 0 
-            for (let p = 1; p <= 4; p++) {
-              const nota = asig.periodos[p] ?? 0
-              if (nota > 0) {
-                total += nota
-                cantidad++
-              }
-            }
-            if (total === 0) return ''
-            total = total / cantidad
-            return this.redondear(total).toFixed(1) > 0 ? this.redondear(total).toFixed(1) : ''
-          } else {
-            for (let p = 1; p <= 4; p++) {
-              const nota = asig.periodos[p] ?? 0
-              total += nota * pesos[p-1] / 100
-            }
-            return this.redondear(total).toFixed(1) > 0 ? this.redondear(total).toFixed(1) : '*'
-          }
-        } else if (this.$store.state.idInstitucion == 'eb58bf60-fc83-11ec-a1d1-1dc2835404e5') { // Inem
-          const pesos = [20,35,35]
-          if (orden == 55) {
-            let cantidad = 0
-            for (let p = 1; p <= 4; p++) {
-              const nota = asig.periodos[p] ?? 0
-              if (nota > 0) {
-                total += nota
-                cantidad++
-              }
-            }
-            if (total === 0) return ''
-            total = total / cantidad
-            return this.redondear(total).toFixed(1) > 0 ? this.redondear(total).toFixed(1) : ''
-          } else {
-            for (let p = 1; p <= 4; p++) {
-              const nota = asig.periodos[p] ?? 0
-              total += nota * pesos[p-1] / 100
-            }
-            return this.redondear(total).toFixed(1) > 0 ? this.redondear(total).toFixed(1) : total //''
-          }
-        } else if (this.$store.state.idInstitucion == 'c50f3d80-fca0-11ec-8267-536b07c743c4') { // Silvino
-          const nota = asig.periodos[5] ?? 0
-          return nota > 0 ? nota.toFixed(1) : ''
-        } else if (this.$store.state.idInstitucion == '8a1bd1e0-fcb2-11ec-8267-536b07c743c4') { // Libertador
-          const nota = asig.periodos[5] ?? 0
-          return nota > 0 ? nota.toFixed(1) : ''
-        } else {
-          let cantidad = 0 
-          for (let p = 1; p <= 4; p++) {
-            const nota = asig.periodos[p] ?? 0
-            if (nota > 0) {
-              total += nota
-              cantidad++
-            }
-          }
-          if (total === 0) return ''
-          const promedio = total / cantidad
-          return this.redondear(promedio).toFixed(1) > 0 ? this.redondear(promedio).toFixed(1) : ''
-        }
-/*
         for (const p in asig.periodos) {
           const nota = asig.periodos[p]
           if (typeof nota === 'number') {
@@ -580,7 +518,6 @@ export default {
           }
         }
         return cant > 0 ? this.redondear(total / cant).toFixed(1) : ''
-*/
       }
     },
     promedioArea(est, area) {
@@ -589,11 +526,19 @@ export default {
       const orden = est.areas?.[area]?.asignaturas?.[asigns]?.orden
       const asignatura = asigns.reduce((asig) => asig)
       if (orden == 99 && this.tipoValComp == 0) return this.promedioAsignatura(est, area, asignatura)
-      if (this.$store.state.idInstitucion == 'acaa36d0-fcb1-11ec-8267-536b07c743c4' && this.orden == 12) { // Emiliani
-        return '*'
-      } 
       const total = asigns.reduce((sum, asig) => sum + parseFloat(this.promedioAsignatura(est, area, asig) * est.areas?.[area]?.asignaturas?.[asig]?.porcentaje / 100), 0)
       return total > 0 ?  this.redondear(total).toFixed(1) : ''
+      //return this.redondear(total / asigns.length).toFixed(1)
+      /*
+      const asigns = Object.keys(est.areas?.[area]?.asignaturas || {})
+      if (!asigns.length) return '0.00'
+      let total = 0
+      asigns.forEach(asig => {
+        if (asig.orden === 99) return '-'
+        total += parseFloat((this.promedioAsignatura(est, area, asig) * asig.porcentaje) / 100)
+      })
+      return total > 0 ?  this.redondear(total).toFixed(1) : ''
+      */
     },
     promedioAreaPorPeriodo(est, area, periodo) {
       const asigns = Object.keys(est.areas?.[area]?.asignaturas || {})
@@ -602,14 +547,12 @@ export default {
       if (concep === "S") return ''
       const orden = est.areas?.[area]?.asignaturas?.[asigns]?.orden
       if (orden == 99 && this.tipoValComp == 0) return est.areas?.[area]?.asignaturas?.[asigns]?.periodos?.[periodo] || ''
-      if (this.$store.state.idInstitucion == 'acaa36d0-fcb1-11ec-8267-536b07c743c4' && this.orden == 12) { // Emiliani
-        return '*'
-      } 
       const total = asigns.reduce((sum, asig) => {
         const nota = est.areas?.[area]?.asignaturas?.[asig]?.periodos?.[periodo] * est.areas?.[area]?.asignaturas?.[asig]?.porcentaje / 100
         return sum + (typeof nota === 'number' ? nota : 0)
       }, 0)
       return total > 0 ?  this.redondear(total).toFixed(1) : ''
+      // return this.redondear(total / asigns.length).toFixed(1)
     },
     ausencias(est, area, asignatura, tipo) {
       return Number(est.areas?.[area]?.asignaturas?.[asignatura]?.[tipo]) || 0

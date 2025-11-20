@@ -270,11 +270,25 @@
         if (orden === 99 && this.datosSeccion.promCompor == 0) return '-'
         let total = 0
         if (this.$store.state.idInstitucion == 'acaa36d0-fcb1-11ec-8267-536b07c743c4') { // Emiliani
-          for (let p = 1; p <= 4; p++) {
-            const nota = periodos[p] ?? 0
-            total += nota * pesos[p] / 100
+          if( orden == 12) {
+            let cantidad = 0 
+            for (let p = 1; p <= 4; p++) {
+              const nota = periodos[p] ?? 0
+              if (nota > 0) {
+                total += nota
+                cantidad++
+              }
+            }
+            if (total === 0) return ''
+            total = total / cantidad
+            return this.redondear(total).toFixed(1) > 0 ? this.redondear(total).toFixed(1) : ''
+          } else {
+            for (let p = 1; p <= 4; p++) {
+              const nota = periodos[p] ?? 0
+              total += nota * pesos[p] / 100
+            }
+            return this.redondear(total).toFixed(1) > 0 ? this.redondear(total).toFixed(1) : ''
           }
-          return this.redondear(total).toFixed(1) > 0 ? this.redondear(total).toFixed(1) : ''
         } else if (this.$store.state.idInstitucion == 'eb58bf60-fc83-11ec-a1d1-1dc2835404e5') { // Inem
           if (orden == 55) {
             let cantidad = 0 // nuevo
