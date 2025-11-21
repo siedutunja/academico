@@ -379,7 +379,7 @@
                     <BoletinPeriodoInem v-if="mostrarBoletines" :estudiantesSeleccionados="estudiantesSeleccionados" :listaAreasAsignaturas="listaAreasAsignaturas" :listaDescriptores="listaDescriptores" :notas="notas" :datosEstudiantes="datosEstudiantes" :anio="Number($store.state.aLectivo)" :periodoActual="idPeriodo" :periodosVisibles="periodosVisibles" :nombreSede="nombreSede" :nombreCurso="nombreCurso" :nombrePeriodo="nombrePeriodo" :nombreJornada="nombreJornada" :nombreDirector="nombreDirector" :idNivel="idNivel" :umbralesA="umbralesA" :umbralesT="umbralesT" :pesosPeriodos="pesosPeriodos" :tipoValComp="tipoValComp" :promCompor="promCompor" :letrasCompor="letrasCompor" :firmasBoletin="firmasBoletin" :descC1="descC1" :descC2="descC2" :descC3="descC3" :idGrado="idGrado" />
                   </span>
                   <span v-else-if="$store.state.idInstitucion == '660fa760-fc83-11ec-a1d1-1dc2835404e5'"> <!-- GRANCOLOMBIANO -->
-                    <BoletinFinalGranColombiano v-if="mostrarBoletines" :estudiantesSeleccionados="estudiantesSeleccionados" :listaAreasAsignaturas="listaAreasAsignaturas" :listaDescriptores="listaDescriptores" :notas="notas" :datosEstudiantes="datosEstudiantes" :anio="Number($store.state.aLectivo)" :periodoActual="idPeriodo" :periodosVisibles="periodosVisibles" :nombreSede="nombreSede" :nombreCurso="nombreCurso" :nombrePeriodo="nombrePeriodo" :nombreJornada="nombreJornada" :nombreDirector="nombreDirector" :idNivel="idNivel" :umbralesA="umbralesA" :umbralesT="umbralesT" :pesosPeriodos="pesosPeriodos" :tipoValComp="tipoValComp" :promCompor="promCompor" :letrasCompor="letrasCompor" :firmasBoletin="firmasBoletin" :descC1="descC1" :descC2="descC2" :descC3="descC3" :idGrado="idGrado" />
+                    <BoletinFinalGranColombiano v-if="mostrarBoletines" :listaHabilitaciones="listaHabilitaciones" :estudiantesSeleccionados="estudiantesSeleccionados" :listaAreasAsignaturas="listaAreasAsignaturas" :listaDescriptores="listaDescriptores" :notas="notas" :datosEstudiantes="datosEstudiantes" :anio="Number($store.state.aLectivo)" :periodoActual="idPeriodo" :periodosVisibles="periodosVisibles" :nombreSede="nombreSede" :nombreCurso="nombreCurso" :nombrePeriodo="nombrePeriodo" :nombreJornada="nombreJornada" :nombreDirector="nombreDirector" :idNivel="idNivel" :umbralesA="umbralesA" :umbralesT="umbralesT" :pesosPeriodos="pesosPeriodos" :tipoValComp="tipoValComp" :promCompor="promCompor" :letrasCompor="letrasCompor" :firmasBoletin="firmasBoletin" :descC1="descC1" :descC2="descC2" :descC3="descC3" :idGrado="idGrado" />
                   </span>
                   <!--
                   <span v-else-if="$store.state.idInstitucion == 'f5529ba0-fcb3-11ec-8267-536b07c743c4'">  GUSTAVOROJAS 
@@ -513,6 +513,7 @@
         descC3: null,
         listaReportes: [],
         idGrado: null,
+        listaHabilitaciones: []
       }
     },
     methods: {
@@ -1127,6 +1128,7 @@
                 } else {
                   this.consultarNotas()
                   this.consultarAreasAsignaturas()
+                  this.consultarHabilitaciones()
                   //this.consultarDescriptores()
                 }
               }
@@ -1139,6 +1141,25 @@
         }
         //console.log(JSON.stringify(this.datosEstudiantes))
         this.btnCargando = false
+      },
+      consultarHabilitaciones() {
+        this.listaHabilitaciones = []
+        axios
+        .get(CONFIG.ROOT_PATH + 'boletines/habilitaciones/curso', {params: {vigencia: this.$store.state.aLectivo}})
+        .then(response => {
+          if (response.data.error){
+            this.mensajeEmergente('danger',CONFIG.TITULO_MSG,response.data.mensaje + ' - Consulta habilitacion')
+            this.btnCargando = false
+          } else{
+            if (response.data.datos != 0) {
+              this.listaHabilitaciones = response.data.datos
+              //console.log(JSON.stringify(response.data.datos))
+            }
+          }
+        })
+        .catch(err => {
+          this.mensajeEmergente('danger',CONFIG.TITULO_MSG,'Algo salio mal y no se pudo realizar: Consulta habilitacion. Intente más tarde.' + err)
+        })
       },
       async ocuparComboCursosSede() {
         this.comboCursosSede = []

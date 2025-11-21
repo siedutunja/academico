@@ -290,6 +290,7 @@ import AreasPerdidasVue from './AreasPerdidas.vue'
         return asig ? this.calcularPromedioAsignatura(asig) : ''
       },
       calcularPromedioAsignatura(asig) {
+        console.log(asig)
         const pesos = asig.pesos
         const periodos = asig.periodos
         const orden = asig.orden
