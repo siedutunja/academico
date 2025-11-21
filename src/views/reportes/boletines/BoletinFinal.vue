@@ -532,7 +532,7 @@ export default {
             return this.redondear(total).toFixed(1) > 0 ? this.redondear(total).toFixed(1) : '*'
           }
         } else if (this.$store.state.idInstitucion == 'eb58bf60-fc83-11ec-a1d1-1dc2835404e5') { // Inem
-          const pesos = [20,35,35]
+          const pesos = [20,35,35,0]
           if (orden == 55) {
             let cantidad = 0
             for (let p = 1; p <= 4; p++) {
@@ -550,7 +550,7 @@ export default {
               const nota = asig.periodos[p] ?? 0
               total += nota * pesos[p-1] / 100
             }
-            return this.redondear(total).toFixed(1) > 0 ? this.redondear(total).toFixed(1) : total //''
+            return this.redondear(total).toFixed(1) > 0 ? this.redondear(total).toFixed(1) : ''
           }
         } else if (this.$store.state.idInstitucion == 'c50f3d80-fca0-11ec-8267-536b07c743c4') { // Silvino
           const nota = asig.periodos[5] ?? 0

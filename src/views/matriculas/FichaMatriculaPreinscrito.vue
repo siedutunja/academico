@@ -15,7 +15,7 @@
                   <h5 class="mb-3">El número de documento corresponde a: {{ estudianteEncontrado }}.</h5>
                   <h5 class="mb-3">En el momento el estudiante NO SE ENCUENTRA VINCULADO a otra Institución Educativa Oficial de Tunja.</h5>
                   <h5 class="mb-3">Para matricularlo continue con el proceso.</h5>
-                  <b-button class="small mx-1 mt-2" variant="primary" @click="estadoDocumento=1">Continuar</b-button>
+                  <b-button class="mx-1 mt-2" variant="success" @click="estadoDocumento=0">Continuar</b-button>
                 </b-alert>
                 <b-alert show variant="primary" class="p-5" v-else-if="estadoDocumento==2">
                   <h5 class="mb-5"><b>¡Informamos que!</b></h5>
@@ -280,7 +280,7 @@
                       <b-col lg="3" md="6">
                         <b-form-group label="Número de Documento*" label-for="docA" class="etiqueta">
                           <b-input-group>
-                            <b-form-input id="docA" ref="docA" v-model="infoEstudiante.documentoA" :state="validateStateD('documentoA')" aria-describedby="feedDocA" autocomplete="off" maxlength="50" @keydown="soloNumerosLetras"></b-form-input>
+                            <b-form-input id="docA" ref="docA" v-model="$v.infoEstudiante.documentoA.$model" :state="validateStateD('documentoA')" aria-describedby="feedDocA" autocomplete="off" maxlength="50" @keydown="soloNumerosLetras"></b-form-input>
                             <b-input-group-append>
                               <b-button variant="primary" @click="buscarDocumentoAcudiente">Buscar</b-button>
                             </b-input-group-append>
@@ -560,6 +560,8 @@
         documentoBuscado: false,
         btnCargando: false,
         estudianteExistente: {},
+        existeRegistroEstudiante: 0,
+        existeRegistroAcudiente: 0,
         infoEstudiante: {
           idPreinscrito: null,
           idEstudiante: null,//
@@ -634,6 +636,8 @@
           telefono2A: null,
           correoA: null,
           id_parentesco: null,
+          id_papa: null,
+          id_mama: null,
           ocupacionA: null
         },
         comboTiposDoc: [],
@@ -669,7 +673,6 @@
         docEstudiante: null,
         ieVinculante: null,
         estudianteEncontrado: null,
-        acudienteEncontrado: 0
       }
     },
     validations: {
@@ -736,7 +739,6 @@
     },
     methods: {
       async buscarDocumentoAcudiente() {
-        this.acudienteEncontrado = 0
         await axios
         .get(CONFIG.ROOT_PATH + 'academico/matriculas/buscardocumentopersona', { params: { documento: this.infoEstudiante.documentoA }})
         .then(response => {
@@ -745,8 +747,8 @@
           } else{
             this.documentoBuscado = true
             if (response.data.datos != 0) {
-              this.acudienteEncontrado = 1
-              this.infoEstudiante.idAcudiente = response.data.id
+              this.existeRegistroAcudiente = 1
+              this.infoEstudiante.idAcudiente = response.data.datos.id
               this.infoEstudiante.apellido1A = response.data.datos.apellido1
               this.infoEstudiante.apellido2A = response.data.datos.apellido2
               this.infoEstudiante.nombre1A = response.data.datos.nombre1
@@ -795,13 +797,43 @@
               this.infoEstudiante.correoA = response.data.datos.correo
               this.infoEstudiante.id_parentesco = null
               this.infoEstudiante.ocupacionA = response.data.datos.ocupacion
-             }
-            //console.log(JSON.stringify(response.data.datos))
+             } else {
+              this.existeRegistroAcudiente = 0
+              this.infoEstudiante.idAcudiente = uuid.v1()
+              this.infoEstudiante.id_tipo_documentoA = 1
+              this.infoEstudiante.id_municipio_documentoA = '15001'
+              this.infoEstudiante.id_nacionalidadA = '170'
+              this.infoEstudiante.nombre1A = this.$store.state.datosPreinscrito.nombre1A
+              this.infoEstudiante.nombre2A = this.$store.state.datosPreinscrito.nombre2A
+              this.infoEstudiante.apellido1A = this.$store.state.datosPreinscrito.apellido1A
+              this.infoEstudiante.apellido2A = this.$store.state.datosPreinscrito.apellido2A
+              this.infoEstudiante.id_municipio_nacimientoA = '00000'
+              if (this.$store.state.datosPreinscrito.id_generoA == 1) {
+                this.infoEstudiante.id_generoA = 'M'
+              } else if (this.$store.state.datosPreinscrito.id_generoA == 2) {
+                this.infoEstudiante.id_generoA = 'F'
+              } else {
+                this.infoEstudiante.id_generoA = '-'
+              }
+              this.infoEstudiante.id_rhA = 9
+              this.infoEstudiante.id_estratoA = 9
+              this.infoEstudiante.id_sisbenA = 0
+              this.infoEstudiante.id_epsA = '000000'
+              this.infoEstudiante.direccionA = this.$store.state.datosPreinscrito.direccion
+              this.infoEstudiante.id_municipio_direccionA = this.$store.state.datosPreinscrito.id_municipio_direccion
+              this.infoEstudiante.id_zonaA = 1
+              this.infoEstudiante.telefono1A = this.$store.state.datosPreinscrito.telefono1
+              this.infoEstudiante.telefono2A = this.$store.state.datosPreinscrito.telefono2
+              this.infoEstudiante.correoA = this.$store.state.datosPreinscrito.correo
+              this.infoEstudiante.id_parentesco = null
+              this.infoEstudiante.ocupacionA = null
+            }
           }
         })
         .catch(err => {
             this.mensajeEmergente('danger',CONFIG.TITULO_MSG,'Algo salio mal y no se pudo realizar: Buscar documento persona. Intente más tarde. ' + err)
         })
+        //console.log(JSON.stringify(this.infoEstudiante))
       },
       validarDatosFormulario() {
         this.$v.infoEstudiante.$touch()
@@ -837,10 +869,6 @@
         return true
       },
       async guardarMatricula() {
-        this.estudianteEncontrado == null ? this.infoEstudiante.idEstudiante = uuid.v1() : this.infoEstudiante.idEstudiante = this.estudianteExistente.id
-        if (this.acudienteEncontrado == 0) {
-          this.infoEstudiante.idAcudiente = uuid.v1()
-        }
         this.infoEstudiante.apellido1 = this.infoEstudiante.apellido1.toUpperCase()
         if (this.infoEstudiante.apellido2 == '' || this.infoEstudiante.apellido2 == null) {
           this.infoEstudiante.apellido2 = null
@@ -908,10 +936,13 @@
         }
         this.infoEstudiante.barrioA = this.infoEstudiante.barrioA.toUpperCase()
         this.infoEstudiante.correoA = this.infoEstudiante.correoA.toLowerCase()
-        this.infoEstudiante.estudianteEncontrado = this.estudianteEncontrado
-        this.infoEstudiante.acudienteEncontrado = this.acudienteEncontrado
-        console.loh(JSON.stringify(this.infoEstudiante))
-        /*
+        this.infoEstudiante.existeRegistroEstudiante = this.existeRegistroEstudiante
+        this.infoEstudiante.existeRegistroAcudiente = this.existeRegistroAcudiente
+        if (this.infoEstudiante.id_parentesco == 1) {
+          this.infoEstudiante.id_papa = this.infoEstudiante.idAcudiente
+        } else {
+          this.infoEstudiante.id_mama = this.infoEstudiante.idAcudiente
+        }
         await axios
         .post(CONFIG.ROOT_PATH + 'academico/matriculas/preinscrito', JSON.stringify(this.infoEstudiante), { headers: {"Content-Type": "application/json; charset=utf-8" }})
         .then(response => {
@@ -971,7 +1002,6 @@
         .catch(err => {
           this.mensajeEmergente('danger',CONFIG.TITULO_MSG,'Algo salio mal y no se pudo realizar: Matricula Estudiante Preinscrito. Intente más tarde. ' + err)
         })
-        */
       },
       async validarDocumentoEstudiante() {
         await axios
@@ -990,15 +1020,17 @@
               this.estadoDocumento = 0
               this.estudianteEncontrado = null
               this.estudianteExistente = null
+              this.existeRegistroEstudiante = 0
             } else if (response.data.bandera == 1) {
               this.estadoDocumento = 1
               this.estudianteEncontrado = response.data.datos.estudiante
               this.estudianteExistente = response.data.datos
+              this.existeRegistroEstudiante = 1
               this.cargarCatalogos()
               this.llenarFormularioEstudianteExistente()
-              this.habilitaMunicipioNace()
-              this.habilitaMunicipioNaceA()
-              this.habilitaMunicipioExpulsor()
+              //this.habilitaMunicipioNace()
+              //this.habilitaMunicipioNaceA()
+              //this.habilitaMunicipioExpulsor()
               this.ocuparComboSedes()
             } else if (response.data.bandera == 2) {
               this.estadoDocumento = 2
@@ -1064,7 +1096,7 @@
       llenarFormulario() {
         //console.log('Preinscrito: '+JSON.stringify(this.$store.state.datosPreinscrito))
         this.infoEstudiante.idPreinscrito = this.$store.state.datosPreinscrito.id
-        this.infoEstudiante.idEstudiante = null
+        this.infoEstudiante.idEstudiante = uuid.v1()
         this.infoEstudiante.documento = this.$store.state.datosPreinscrito.documento        
         if (this.$store.state.datosPreinscrito.id_tipo_documento == 15) {
           this.infoEstudiante.id_tipo_documento = 13
@@ -1159,8 +1191,11 @@
         this.infoEstudiante.ocupacionA = null
       },
       llenarFormularioEstudianteExistente() {
+        //console.log(JSON.stringify(this.estudianteExistente))
+        this.deshabMunNace = false
+        this.infoEstudiante.idPreinscrito = this.$store.state.datosPreinscrito.id
         this.infoEstudiante.idEstudiante = this.estudianteExistente.id
-        this.infoEstudiante.documento = this.estudianteExistente.documento        
+        this.infoEstudiante.documento = this.estudianteExistente.documento     
         this.infoEstudiante.id_tipo_documento = this.estudianteExistente.id_tipo_documento
         this.infoEstudiante.id_municipio_documento = this.estudianteExistente.id_municipio_documento
         this.infoEstudiante.nombre1 = this.estudianteExistente.nombre1
@@ -1172,9 +1207,9 @@
         } else {
           this.infoEstudiante.fecha_nacimiento = null
         }
+        this.infoEstudiante.id_genero = this.estudianteExistente.id_genero
         this.infoEstudiante.id_nacionalidad = this.estudianteExistente.id_nacionalidad
         this.infoEstudiante.id_municipio_nacimiento = this.estudianteExistente.id_municipio_nacimiento
-        this.infoEstudiante.id_genero = this.estudianteExistente.id_genero
         this.infoEstudiante.id_rh = this.estudianteExistente.id_rh
         this.infoEstudiante.id_estrato = this.estudianteExistente.id_estrato
         this.infoEstudiante.id_sisben = this.estudianteExistente.id_sisben
@@ -1184,50 +1219,36 @@
         this.infoEstudiante.id_apoyo = this.estudianteExistente.id_apoyo
         this.infoEstudiante.id_etnia = this.estudianteExistente.id_etnia
         this.infoEstudiante.id_victima = this.estudianteExistente.id_victima
-        this.infoEstudiante.enfermedades = this.estudianteExistente.enfermedades
-        this.infoEstudiante.id_diversa = this.estudianteExistente.id_diversa
+        this.infoEstudiante.id_municipio_expulsor = this.estudianteExistente.id_municipio_expulsor
         this.infoEstudiante.id_eps = this.estudianteExistente.id_eps
+        this.infoEstudiante.id_seguro = this.estudianteExistente.id_seguro
+        this.infoEstudiante.aseguradora = this.estudianteExistente.aseguradora
+        this.infoEstudiante.enfermedades = this.estudianteExistente.enfermedades
+        this.infoEstudiante.id_papa = this.estudianteExistente.id_papa
+        this.infoEstudiante.id_mama = this.estudianteExistente.id_mama
+        this.infoEstudiante.idAcudiente = this.estudianteExistente.id_acudiente
+        this.infoEstudiante.id_parentesco = this.$store.state.datosPreinscrito.id_parentesco
         this.infoEstudiante.direccion = this.estudianteExistente.direccion
         this.infoEstudiante.id_municipio_direccion = this.estudianteExistente.id_municipio_direccion
+        this.infoEstudiante.barrio = this.estudianteExistente.barrio
         this.infoEstudiante.id_zona = this.estudianteExistente.id_zona
         this.infoEstudiante.telefono1 = this.estudianteExistente.telefono1
         this.infoEstudiante.telefono2 = this.estudianteExistente.telefono2
         this.infoEstudiante.correo = this.estudianteExistente.correo
         this.infoEstudiante.codigo = this.estudianteExistente.codigo
-        this.infoEstudiante.id_especialidad = this.estudianteExistente.id_especialidad
-        this.infoEstudiante.id_metodologia = this.estudianteExistente.id_metodologia
-        this.infoEstudiante.id_nuevo = this.estudianteExistente.id_nuevo
-        this.infoEstudiante.id_repitente = this.estudianteExistente.id_repitente
-        this.infoEstudiante.id_ruta = this.estudianteExistente.id_ruta
-        this.infoEstudiante.id_seguro = this.estudianteExistente.id_seguro
+        this.infoEstudiante.id_diversa = 'N'
+        this.infoEstudiante.id_especialidad = null
+        this.infoEstudiante.id_metodologia = 1
+        this.infoEstudiante.id_nuevo = 'S'
+        this.infoEstudiante.id_repitente = null
+        this.infoEstudiante.id_ruta = 1
         //------------------------- Información del Acudiente
-        this.infoEstudiante.documentoA = this.$store.state.datosPreinscrito.documentoA
-        this.infoEstudiante.id_tipo_documentoA = 1
-        this.infoEstudiante.id_nacionalidadA = '170'
-        this.infoEstudiante.nombre1A = this.$store.state.datosPreinscrito.nombre1A
-        this.infoEstudiante.nombre2A = this.$store.state.datosPreinscrito.nombre2A
-        this.infoEstudiante.apellido1A = this.$store.state.datosPreinscrito.apellido1A
-        this.infoEstudiante.apellido2A = this.$store.state.datosPreinscrito.apellido2A
-        this.infoEstudiante.id_municipio_nacimientoA = '00000'
-        if (this.$store.state.datosPreinscrito.id_generoA == 1) {
-          this.infoEstudiante.id_generoA = 'M'
-        } else if (this.$store.state.datosPreinscrito.id_generoA == 2) {
-          this.infoEstudiante.id_generoA = 'F'
+        if (this.$store.state.datosPreinscrito.documentoA == '9999999999') {
+          this.infoEstudiante.documentoA = null
         } else {
-          this.infoEstudiante.id_generoA = '-'
+          this.infoEstudiante.documentoA = this.$store.state.datosPreinscrito.documentoA
         }
-        this.infoEstudiante.id_rhA = 9
-        this.infoEstudiante.id_estratoA = 9
-        this.infoEstudiante.id_sisbenA = 0
-        this.infoEstudiante.id_epsA = '000000'
-        this.infoEstudiante.direccionA = this.$store.state.datosPreinscrito.direccion
-        this.infoEstudiante.id_municipio_direccionA = this.$store.state.datosPreinscrito.id_municipio_direccion
-        this.infoEstudiante.id_zonaA = 1
-        this.infoEstudiante.telefono1A = this.$store.state.datosPreinscrito.telefono1
-        this.infoEstudiante.telefono2A = this.$store.state.datosPreinscrito.telefono2
-        this.infoEstudiante.correoA = this.$store.state.datosPreinscrito.correo
-        this.infoEstudiante.id_parentesco = this.$store.state.datosPreinscrito.id_parentesco
-        this.infoEstudiante.ocupacionA = null
+        this.buscarDocumentoAcudiente()
       },
       //******************************************************* */
       async cargarCatalogos() {
