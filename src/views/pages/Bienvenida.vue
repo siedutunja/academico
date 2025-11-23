@@ -76,7 +76,7 @@
           location.replace(CONFIG.ROOT_WEBSITE)
         })
         let periodos
-        if (this.$store.state.idInstitucion == 'c50f3d80-fca0-11ec-8267-536b07c743c4' || this.$store.state.idInstitucion == '8a1bd1e0-fcb2-11ec-8267-536b07c743c4' || this.$store.state.idInstitucion == '54fd7440-fc81-11ec-a1d1-1dc2835404e5' || this.$store.state.idInstitucion == 'eb58bf60-fc83-11ec-a1d1-1dc2835404e5' || this.$store.state.idInstitucion == '097b7b10-fcaa-11ec-8267-536b07c743c4') { //Silvino || Simon Bolivar || Sandoval || Inem || Rural
+        if (this.$store.state.idInstitucion == 'c50f3d80-fca0-11ec-8267-536b07c743c4' || this.$store.state.idInstitucion == '8a1bd1e0-fcb2-11ec-8267-536b07c743c4' || this.$store.state.idInstitucion == '54fd7440-fc81-11ec-a1d1-1dc2835404e5' || this.$store.state.idInstitucion == 'eb58bf60-fc83-11ec-a1d1-1dc2835404e5' || this.$store.state.idInstitucion == '097b7b10-fcaa-11ec-8267-536b07c743c4' || this.$store.state.idInstitucion == 'bd226a20-fc82-11ec-a1d1-1dc2835404e5') { //Silvino || Simon Bolivar || Sandoval || Inem || Rural
           periodos = [{'id': 1, 'periodo': 'PRIMERO'},{'id': 2, 'periodo': 'SEGUNDO'},{'id': 3, 'periodo': 'TERCERO'},{'id': 4, 'periodo': 'CUARTO'},{'id': 5, 'periodo': 'FINAL'}]
         } else {
           periodos = [{'id': 1, 'periodo': 'PRIMERO'},{'id': 2, 'periodo': 'SEGUNDO'},{'id': 3, 'periodo': 'TERCERO'},{'id': 4, 'periodo': 'CUARTO'}]

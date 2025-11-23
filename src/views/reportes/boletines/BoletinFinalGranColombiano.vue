@@ -97,7 +97,7 @@ export default {
       let cuerpo = `
         <div class="boletin">
           <div class="text-center mt-2">
-            <p style="text-align: center; font-size: 14px;">SECRETARÍA DE EDUCACIÓN TERRITORIAL DE TUNJA<br><b>${this.$store.state.nombreInstitucion}</b><br>TUNJA - BOYACÁ<br>BOLETIN DE EVALUACIONES DEFINITIVO</p>
+            <p style="text-align: center; font-size: 14px;">SECRETARÍA DE EDUCACIÓN TERRITORIAL DE TUNJA<br><b>${this.$store.state.nombreInstitucion}</b><br>TUNJA - BOYACÁ<br>INFORME VALORATIVO DEFINITIVO</p>
           </div>
           <div class="float-left" style="margin-top: -80px;">
               <img src="${this.escudo}" width="70px"></img>
@@ -192,6 +192,8 @@ export default {
           this.orden = asig.orden
           const a = asig.asignatura
           this.asignatur = a
+          const tipoAsig = asig.idTipoEspecialidad
+          const tipoArea = asig.idTipoArea
           const nombreAsignatura = asig.nombreAsignatura
           const ih = this.orden !== 98 ? asig.ih : ''
           const notas = this.periodosVisibles.map(p => `<td>${this.orden !== 98 ? this.notaPeriodo(data, area, a, p) : ''}</td>`).join('')
@@ -202,7 +204,6 @@ export default {
           const def = this.orden !== 98 ? this.definitivaPeriodo(data, area, a, this.periodoActual) : ''
           const rec = this.orden !== 98 ? this.recuperacion(data, area, a, this.periodoActual) : ''
           const final = this.orden !== 98 ? this.notaFinal(data, area, a, this.periodoActual) : ''
-          const des = this.orden !== 98 ? this.desempeno(prom, area, a) : '' //this.desempeño(final)
           const ausJ = this.ausencias(data, area, a, 'ausJ')
           const ausS = this.ausencias(data, area, a, 'ausS')
           const ausJAsig = this.orden == 98 ? '' : ausJ > 0 ? ausJ : ''
@@ -210,6 +211,7 @@ export default {
           const docente = asig.docente != null ? asig.docente : ''
           const idAsignaturaCurso = asig.idAsignaturaCurso
           const habilit = this.mostrarHabilitacion(idMatricula,idAsignaturaCurso)
+          const des = this.orden !== 98 ? this.desempeno(habilit.habilitacion > prom ? habilit.habilitacion : prom, area, tipoAsig) : '' //this.desempeño(final)
           if (this.colDesem == 7) {
             return `
               <tr>
@@ -250,7 +252,7 @@ export default {
         const notasArea = this.periodosVisibles.map(p => `<td>${this.orden !== 98 ? this.promedioAreaPorPeriodo(data, area, p) : ''}</td>`).join('')
         const promArea = this.orden !== 98 ? this.promedioArea(data, area) : ''
         const finalArea = this.orden !== 98 && this.orden != 99 ? this.promedioFinalArea(data, area, idMatricula) : this.orden === 99 ? this.definitivaPeriodo(data, area, this.asignatur, this.periodoActual) : ''
-        const desArea = this.orden !== 98 ? this.desempeno(promArea, area, this.asignatur) : '' //this.desempeño(finalArea)
+        const desArea = this.orden !== 98 ? this.desempenoArea(finalArea, area, this.tipoArea) : '' //this.desempeño(finalArea)
         const ausJArea = this.orden == 98 ? '' : ausJ > 0 ? ausJ : ''
         const ausSArea = this.orden == 98 ? '' : ausS > 0 ? ausS : ''
         const ihArea = this.orden !== 98 ? this.intensidadHorariaArea(data, area) : ''
@@ -292,7 +294,8 @@ export default {
       if (!(meta === undefined)) {
         const valor = meta.habilitacion > 0 ? meta.habilitacion.toFixed(1) : ''
         const fechita = meta.fecha !== null && meta.fecha !== '' ? meta.fecha.substr(0,10) : ''
-        return {habilitacion: valor, acta: meta.acta, fecha: fechita }
+        const actica = meta.acta != null ? meta.acta : ''
+        return {habilitacion: valor, acta: actica, fecha: fechita }
       } else {
         return {habilitacion: '', acta: '', fecha: ''}
       }
@@ -351,11 +354,20 @@ export default {
       const descriptorObj = this.listaDescriptores.find(d => d.idAsignaturaCurso === meta.idAsignaturaCurso && d.id_concepto_valorativo === conceptoValorativo)
       return descriptorObj?.descriptor || ''
     },
-    desempeno(nota, area, asignatura) {
-      const meta = this.listaAreasAsignaturas.find(
-        a => a.area === area && a.asignatura === asignatura
-      )
-      const tipo = meta?.idTipoEspecialidad || 1
+    desempeno(nota, area, tipo) {
+      const valor = parseFloat(nota)
+      if (isNaN(valor)) return ''
+      const umbralBajo = tipo === 2 ? this.umbralesT[0] : this.umbralesA[0]
+      const umbralBasico = tipo === 2 ? this.umbralesT[1] : this.umbralesA[1]
+      const umbralAlto = tipo === 2 ? this.umbralesT[2] : this.umbralesA[2]
+      const umbralSuperior = tipo === 2 ? this.umbralesT[3] : this.umbralesA[3]
+      if (valor < umbralBajo) return 'Bajo'
+      if (valor < umbralBasico) return 'Básico'
+      if (valor < umbralAlto) return 'Alto'
+      if (valor <= umbralSuperior) return 'Superior'
+      return ''
+    },
+    desempenoArea(nota, area, tipo) {
       const valor = parseFloat(nota)
       if (isNaN(valor)) return ''
       const umbralBajo = tipo === 2 ? this.umbralesT[0] : this.umbralesA[0]
@@ -386,7 +398,7 @@ export default {
       let total = 0
       let cantidad = 0
       areasEvaluativas.forEach(area => {
-        const notaFinalArea = parseFloat(this.promedioFinalArea(est, area, idMatricula)) // parseFloat(this.notaFinalArea(est, area))
+        const notaFinalArea = parseFloat(this.promedioArea(est, area, idMatricula)) // parseFloat(this.notaFinalArea(est, area))
         if (!isNaN(notaFinalArea)) {
           total += notaFinalArea
           cantidad++
