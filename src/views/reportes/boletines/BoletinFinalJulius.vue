@@ -360,9 +360,9 @@ export default {
     },
     desempeno(nota, area, tipo, orden) {
       if (orden == 99) {
-        if (nota == 'I') return 'Insuficiente'
-        else if (nota == 'A') return 'Aceptable'
-        else if (nota == 'B') return 'Bueno'
+        if (nota == 'J') return 'Bajo'
+        else if (nota == 'B') return 'Básico'
+        else if (nota == 'S') return 'Sobresaliente'
         else if (nota == 'E') return 'Excelente'
         else return ''
       } else {
@@ -381,9 +381,9 @@ export default {
     },
     desempenoArea(nota, area, tipo, orden) {
       if (orden == 99) {
-        if (nota == 'I') return 'Insuficiente'
-        else if (nota == 'A') return 'Aceptable'
-        else if (nota == 'B') return 'Bueno'
+        if (nota == 'J') return 'Bajo'
+        else if (nota == 'B') return 'Básico'
+        else if (nota == 'S') return 'Sobresaliente'
         else if (nota == 'E') return 'Excelente'
         else return ''
       } else {

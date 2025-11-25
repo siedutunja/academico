@@ -56,6 +56,7 @@ export default {
       const asig = est.areas?.[area]?.asignaturas?.[asignatura]
       const orden = est.areas?.[area]?.asignaturas?.[asignatura]?.orden
       if (orden == 99) return true
+      if (orden == 90) return false
       if (!asig || !asig.periodos) return false
       return Object.values(asig.periodos).some(n => typeof n === 'number' && !isNaN(n) && n > 0)
     },
@@ -362,7 +363,7 @@ export default {
       if (orden == 99) {
         if (nota == 'I') return 'Insuficiente'
         else if (nota == 'A') return 'Aceptable'
-        else if (nota == 'B') return 'Bueno'
+        else if (nota == 'S') return 'Sobresaliente'
         else if (nota == 'E') return 'Excelente'
         else return ''
       } else {
@@ -383,7 +384,7 @@ export default {
       if (orden == 99) {
         if (nota == 'I') return 'Insuficiente'
         else if (nota == 'A') return 'Aceptable'
-        else if (nota == 'B') return 'Bueno'
+        else if (nota == 'S') return 'Sobresaliente'
         else if (nota == 'E') return 'Excelente'
         else return ''
       } else {
@@ -405,13 +406,13 @@ export default {
       if (this.promCompor == 1) { // Promedia comportamiento
         areasEvaluativas = [...new Set(
           this.listaAreasAsignaturas
-            .filter(a => a.orden !== 98)
+            .filter(a => a.orden !== 98 && a.orden !== 90)
             .map(a => a.area)
         )]
       } else {
         areasEvaluativas = [...new Set(
           this.listaAreasAsignaturas
-            .filter(a => a.orden !== 99 && a.orden !== 98)
+            .filter(a => a.orden !== 99 && a.orden !== 98 && a.orden !== 90)
             .map(a => a.area)
         )]
       }
@@ -431,13 +432,13 @@ export default {
       if (this.promCompor == 1) { // Promedia comportamiento
         areasEvaluativas = [...new Set(
           this.listaAreasAsignaturas
-            .filter(a => a.orden !== 98)
+            .filter(a => a.orden !== 98 && a.orden !== 90)
             .map(a => a.area)
         )]
       } else {
         areasEvaluativas = [...new Set(
           this.listaAreasAsignaturas
-            .filter(a => a.orden !== 99 && a.orden !== 98)
+            .filter(a => a.orden !== 99 && a.orden !== 98 && a.orden !== 90)
             .map(a => a.area)
         )]
       }
@@ -520,6 +521,7 @@ export default {
       if (concep === "S") return ''
       const orden = est.areas?.[area]?.asignaturas?.[asignatura]?.orden
       const asig = est.areas?.[area]?.asignaturas?.[asignatura]
+      const pesos = [30,35,35,0]
       if (!asig) return ''
       let total = 0
       let cant = 0
@@ -537,56 +539,8 @@ export default {
         else if (promedioLetras <= this.umbralesA[3]) return this.letrasCompor[3]
         else return promedioLetras
       } else {
-        if (this.$store.state.idInstitucion == 'acaa36d0-fcb1-11ec-8267-536b07c743c4') { // Emiliani
-          const pesos = [20,20,30,30]
-          if( orden == 12) {
-            let cantidad = 0 
-            for (let p = 1; p <= 4; p++) {
-              const nota = asig.periodos[p] ?? 0
-              if (nota > 0) {
-                total += nota
-                cantidad++
-              }
-            }
-            if (total === 0) return ''
-            total = total / cantidad
-            return this.redondear(total).toFixed(1) > 0 ? this.redondear(total).toFixed(1) : ''
-          } else {
-            for (let p = 1; p <= 4; p++) {
-              const nota = asig.periodos[p] ?? 0
-              total += nota * pesos[p-1] / 100
-            }
-            return this.redondear(total).toFixed(1) > 0 ? this.redondear(total).toFixed(1) : '*'
-          }
-        } else if (this.$store.state.idInstitucion == 'eb58bf60-fc83-11ec-a1d1-1dc2835404e5') { // Inem
-          const pesos = [20,35,35,0]
-          if (orden == 55) {
-            let cantidad = 0
-            for (let p = 1; p <= 4; p++) {
-              const nota = asig.periodos[p] ?? 0
-              if (nota > 0) {
-                total += nota
-                cantidad++
-              }
-            }
-            if (total === 0) return ''
-            total = total / cantidad
-            return this.redondear(total).toFixed(1) > 0 ? this.redondear(total).toFixed(1) : ''
-          } else {
-            for (let p = 1; p <= 4; p++) {
-              const nota = asig.periodos[p] ?? 0
-              total += nota * pesos[p-1] / 100
-            }
-            return this.redondear(total).toFixed(1) > 0 ? this.redondear(total).toFixed(1) : ''
-          }
-        } else if (this.$store.state.idInstitucion == 'c50f3d80-fca0-11ec-8267-536b07c743c4') { // Silvino
-          const nota = asig.periodos[5] ?? 0
-          return nota > 0 ? nota.toFixed(1) : ''
-        } else if (this.$store.state.idInstitucion == '8a1bd1e0-fcb2-11ec-8267-536b07c743c4') { // Libertador
-          const nota = asig.periodos[5] ?? 0
-          return nota > 0 ? nota.toFixed(1) : ''
-        } else {
-          let cantidad = 0 
+        if (orden == 55) {
+          let cantidad = 0
           for (let p = 1; p <= 4; p++) {
             const nota = asig.periodos[p] ?? 0
             if (nota > 0) {
@@ -595,8 +549,15 @@ export default {
             }
           }
           if (total === 0) return ''
-          const promedio = total / cantidad
-          return this.redondear(promedio).toFixed(1) > 0 ? this.redondear(promedio).toFixed(1) : ''
+          total = total / cantidad
+          return this.redondear(total).toFixed(1) > 0 ? this.redondear(total).toFixed(1) : ''
+        } else {
+          let total = 0
+          for (let p = 1; p <= 4; p++) {
+            const nota = asig.periodos[p] ?? 0
+            total += nota * pesos[p-1] / 100
+          }
+          return this.redondear(total).toFixed(1) > 0 ? this.redondear(total).toFixed(1) : ''
         }
       }
     },
@@ -649,56 +610,9 @@ export default {
         else if (promedioLetras <= this.umbralesA[3]) return this.letrasCompor[3]
         else return promedioLetras
       } else {
-        if (this.$store.state.idInstitucion == 'acaa36d0-fcb1-11ec-8267-536b07c743c4') { // Emiliani
-          const pesos = [20,20,30,30]
-          if( orden == 12) {
-            let cantidad = 0 
-            for (let p = 1; p <= 4; p++) {
-              const nota = asig.periodos[p] ?? 0
-              if (nota > 0) {
-                total += nota
-                cantidad++
-              }
-            }
-            if (total === 0) return ''
-            total = total / cantidad
-            return this.redondear(total).toFixed(1) > 0 ? this.redondear(total).toFixed(1) : ''
-          } else {
-            for (let p = 1; p <= 4; p++) {
-              const nota = asig.periodos[p] ?? 0
-              total += nota * pesos[p-1] / 100
-            }
-            return this.redondear(total).toFixed(1) > 0 ? this.redondear(total).toFixed(1) : '*'
-          }
-        } else if (this.$store.state.idInstitucion == 'eb58bf60-fc83-11ec-a1d1-1dc2835404e5') { // Inem
-          const pesos = [20,35,35,0]
-          if (orden == 55) {
-            let cantidad = 0
-            for (let p = 1; p <= 4; p++) {
-              const nota = asig.periodos[p] ?? 0
-              if (nota > 0) {
-                total += nota
-                cantidad++
-              }
-            }
-            if (total === 0) return ''
-            total = total / cantidad
-            return this.redondear(total).toFixed(1) > 0 ? this.redondear(total).toFixed(1) : ''
-          } else {
-            for (let p = 1; p <= 4; p++) {
-              const nota = asig.periodos[p] ?? 0
-              total += nota * pesos[p-1] / 100
-            }
-            return this.redondear(total).toFixed(1) > 0 ? this.redondear(total).toFixed(1) : ''
-          }
-        } else if (this.$store.state.idInstitucion == 'c50f3d80-fca0-11ec-8267-536b07c743c4') { // Silvino
-          const nota = asig.periodos[5] ?? 0
-          return nota > 0 ? nota.toFixed(1) : ''
-        } else if (this.$store.state.idInstitucion == '8a1bd1e0-fcb2-11ec-8267-536b07c743c4') { // Libertador
-          const nota = asig.periodos[5] ?? 0
-          return nota > 0 ? nota.toFixed(1) : ''
-        } else {
-          let cantidad = 0 
+        const pesos = [30,35,35,0]
+        if (orden == 55) {
+          let cantidad = 0
           for (let p = 1; p <= 4; p++) {
             const nota = asig.periodos[p] ?? 0
             if (nota > 0) {
@@ -707,8 +621,14 @@ export default {
             }
           }
           if (total === 0) return ''
-          const promedio = total / cantidad
-          return this.redondear(promedio).toFixed(1) > 0 ? habilitacion > this.redondear(promedio).toFixed(1) ? habilitacion : this.redondear(promedio).toFixed(1) : ''
+          total = total / cantidad
+          return this.redondear(total).toFixed(1) > 0 ? this.redondear(total).toFixed(1) : ''
+        } else {
+          for (let p = 1; p <= 4; p++) {
+            const nota = asig.periodos[p] ?? 0
+            total += nota * pesos[p-1] / 100
+          }
+          return this.redondear(total).toFixed(1) > 0 ? habilitacion > this.redondear(total).toFixed(1) ? habilitacion : this.redondear(total).toFixed(1) : ''
         }
       }
     },

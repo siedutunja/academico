@@ -1,6 +1,6 @@
 <template>
   <div>
-    <button class="btn btn-success float-right btn-block" @click="generarPDF">📄 {{ estudiantesSeleccionados.length }} boletines procesados... Imprimir Boletines o Generar Boletines en PDF</button>
+    <button class="btn btn-success float-right btn-block" @click="generarPDF">📄 {{ estudiantesSeleccionados.length }} boletines procesados... Imprimir Boletines o Generar Boletines en PDF - Promocionados</button>
   </div>
 </template>
 
@@ -513,7 +513,10 @@ export default {
           ausJ,
           ausS,
           obs_final,
-          fechaPromo
+          fechaPromo,
+          obsRetiro,
+          motivo,
+          fechaRetiro,
         } = nota
         if (!mapa[estudiante]) {
           mapa[estudiante] = {
@@ -547,7 +550,7 @@ export default {
             ausJ: 0,
             ausS: 0,
             obs_final: '',
-            fechaPromo: ''
+            fechaPromo: '',
           }
         }
         const asig = est.areas[area].asignaturas[asignatura]

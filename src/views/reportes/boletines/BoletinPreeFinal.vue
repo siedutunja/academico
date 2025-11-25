@@ -61,7 +61,7 @@ export default {
       const cuerpo = `
         <div class="boletin">
           <div class="text-center mt-2">
-            <p style="text-align: center; font-size: 14px;">SECRETARÍA DE EDUCACIÓN TERRITORIAL DE TUNJA<br><b>${this.$store.state.nombreInstitucion}</b><br>TUNJA - BOYACÁ<br>BOLETIN DE EVALUACIONES POR PERIODO</p>
+            <p style="text-align: center; font-size: 14px;">SECRETARÍA DE EDUCACIÓN TERRITORIAL DE TUNJA<br><b>${this.$store.state.nombreInstitucion}</b><br>TUNJA - BOYACÁ<br>INFORME VALORATIVO DEFINITIVO</p>
           </div>
           <div class="float-left" style="margin-top: -80px;">
               <img src="${this.escudo}" width="70px"></img>
@@ -182,8 +182,9 @@ export default {
         <table class="tabla-boletin">
           <thead>
             <tr>
-              <th style="width:20%; text-align: left">Aus.Justificadas: <strong>${est.ausJ}</strong></th>
-              <th style="width:20%; text-align: left">Aus.SinJustificar: <strong>${est.ausJ}</strong></th>
+              <th style="width:40%; text-align: left"><strong>PROMOVIDO AL SIGUIENTE GRADO</strong></th>
+              <th style="width:30%; text-align: left">Aus.Justificadas: <strong>${est.ausJ}</strong></th>
+              <th style="width:30%; text-align: left">Aus.SinJustificar: <strong>${est.ausJ}</strong></th>
             </tr>
           </thead>
         </table>
@@ -290,7 +291,7 @@ export default {
           d.idAsignaturaCurso === meta.idAsignaturaCurso &&
           d.id_concepto_valorativo === concepto.id_concepto_valorativo
       )
-      return descriptorObj?.descriptor || ''
+      return descriptorObj?.descriptor || '*'
     },
     promedioAreaPorPeriodo(est, area, periodo) {
       const asigns = this.listaAreasAsignaturas.filter(a => a.area === area && a.orden !== 99)

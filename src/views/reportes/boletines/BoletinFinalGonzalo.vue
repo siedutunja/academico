@@ -45,6 +45,7 @@ export default {
       escala: 0,
       tipoArea: 1,
       perdioPorHabilitacion: 0,
+      perdioPorFallas: 0,
     }
   },
   methods: {
@@ -94,6 +95,7 @@ export default {
       if (!data) return `<p>No hay datos para ${estudiante.nombre}</p>`
       const idMatricula = estudiante.idMatricula
       this.perdioPorHabilitacion = 0
+      this.perdioPorFallas = 0
       let cuerpo = `
         <div class="boletin">
           <div class="text-center mt-2">

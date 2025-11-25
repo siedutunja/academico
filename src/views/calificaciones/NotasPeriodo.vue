@@ -632,12 +632,14 @@
                 element.periodo = this.idPeriodo
               })
               this.notasPlanilla = response.data.datos
-              //console.log(JSON.stringify(this.notasPlanilla))
               setTimeout(()=>{
                 this.construirPlanillaNotas()
                 this.btnCargando = false
                 this.cambioActivo = false
               },5)
+              this.btnCargando = false
+            } else {
+              this.btnCargando = false
             }
           }
         })

@@ -44,6 +44,7 @@ export default {
       colDesem: 0,
       escala: 0,
       tipoArea: 1,
+      perdioPorHabilitacion: 0,
     }
   },
   methods: {
@@ -92,6 +93,7 @@ export default {
     renderBoletin(estudiante, data) {
       if (!data) return `<p>No hay datos para ${estudiante.nombre}</p>`
       const idMatricula = estudiante.idMatricula
+      this.perdioPorHabilitacion = 0
       let cuerpo = `
         <div class="boletin">
           <div class="text-center mt-2">
@@ -209,6 +211,10 @@ export default {
           const docente = asig.docente != null ? asig.docente : ''
           const idAsignaturaCurso = asig.idAsignaturaCurso
           const habilit = this.mostrarHabilitacion(idMatricula,idAsignaturaCurso)
+          const umbralBajo = tipoAsig === 2 ? this.umbralesT[0] : this.umbralesA[0]
+          if (habilit.habilitacion > 0 && habilit.habilitacion < umbralBajo) {
+             this.perdioPorHabilitacion = 1
+          }
           const des = this.orden !== 98 ? this.desempeno(habilit.habilitacion > prom ? habilit.habilitacion : prom, area, tipoAsig, this.orden) : '' //this.desempeño(final)
           if (this.colDesem == 7) {
             return `
@@ -448,6 +454,7 @@ export default {
           }
         }
       })
+      if (this.perdioPorHabilitacion == 1) cantPerdidas = 100
       return cantPerdidas == 0 ? 'EL ESTUDIANTE APROBÓ EL GRADO' : cantPerdidas < 3 ? 'ESTUDIANTE PENDIENTE DE PROMOCIÓN' : 'ESTUDIANTE REPROBADO'
     },
     generarRankingCurso(idMatricula) {

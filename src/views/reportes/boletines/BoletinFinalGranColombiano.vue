@@ -5,9 +5,6 @@
 </template>
 
 <script>
-  import axios from "axios"
-  import * as CONFIG from '@/assets/config.js'
-
 export default {
   name: 'BoletinPeriodo',
   props: {
@@ -46,6 +43,8 @@ export default {
       datosSeccion: {},
       colDesem: 0,
       escala: 0,
+      tipoArea: 1,
+      perdioPorHabilitacion: 0,
     }
   },
   methods: {
@@ -94,6 +93,7 @@ export default {
     renderBoletin(estudiante, data) {
       if (!data) return `<p>No hay datos para ${estudiante.nombre}</p>`
       const idMatricula = estudiante.idMatricula
+      this.perdioPorHabilitacion = 0
       let cuerpo = `
         <div class="boletin">
           <div class="text-center mt-2">
@@ -193,7 +193,7 @@ export default {
           const a = asig.asignatura
           this.asignatur = a
           const tipoAsig = asig.idTipoEspecialidad
-          const tipoArea = asig.idTipoArea
+          this.tipoArea = asig.idTipoArea
           const nombreAsignatura = asig.nombreAsignatura
           const ih = this.orden !== 98 ? asig.ih : ''
           const notas = this.periodosVisibles.map(p => `<td>${this.orden !== 98 ? this.notaPeriodo(data, area, a, p) : ''}</td>`).join('')
@@ -211,7 +211,11 @@ export default {
           const docente = asig.docente != null ? asig.docente : ''
           const idAsignaturaCurso = asig.idAsignaturaCurso
           const habilit = this.mostrarHabilitacion(idMatricula,idAsignaturaCurso)
-          const des = this.orden !== 98 ? this.desempeno(habilit.habilitacion > prom ? habilit.habilitacion : prom, area, tipoAsig) : '' //this.desempeño(final)
+          const umbralBajo = tipoAsig === 2 ? this.umbralesT[0] : this.umbralesA[0]
+          if (habilit.habilitacion > 0 && habilit.habilitacion < umbralBajo) {
+             this.perdioPorHabilitacion = 1
+          }
+          const des = this.orden !== 98 ? this.desempeno(habilit.habilitacion > prom ? habilit.habilitacion : prom, area, tipoAsig, this.orden) : '' //this.desempeño(final)
           if (this.colDesem == 7) {
             return `
               <tr>
@@ -227,7 +231,7 @@ export default {
                 <td>${ausJAsig}</td>
                 <td>${ausSAsig}</td>
               </tr>
-              <tr><td colspan="11" class="descriptor" style="text-align: left">${this.descriptorAsignatura(data, area, a, this.periodoActual,this.orden)}</td></tr>
+              <tr><td colspan="12" class="descriptor" style="text-align: left"></td></tr>
             `
           } else {
             return `
@@ -243,7 +247,7 @@ export default {
                 <td>${ausJAsig}</td>
                 <td>${ausSAsig}</td>
               </tr>
-              <tr><td colspan="${this.colDesem + 6}" class="descriptor" style="text-align: left">${this.descriptorAsignatura(data, area, a, this.periodoActual,this.orden)}</td></tr>
+              <tr><td colspan="${this.colDesem + 6}" class="descriptor" style="text-align: left">${this.descriptorAsignatura(data, area, a, 5,this.orden)}</td></tr>
             `
           }
         }).join('')
@@ -251,8 +255,8 @@ export default {
         const ausS = this.ausenciasArea(data, area, 'ausS')
         const notasArea = this.periodosVisibles.map(p => `<td>${this.orden !== 98 ? this.promedioAreaPorPeriodo(data, area, p) : ''}</td>`).join('')
         const promArea = this.orden !== 98 ? this.promedioArea(data, area) : ''
-        const finalArea = this.orden !== 98 && this.orden != 99 ? this.promedioFinalArea(data, area, idMatricula) : this.orden === 99 ? this.definitivaPeriodo(data, area, this.asignatur, this.periodoActual) : ''
-        const desArea = this.orden !== 98 ? this.desempenoArea(finalArea, area, this.tipoArea) : '' //this.desempeño(finalArea)
+        const finalArea = this.orden !== 98 && this.orden != 99 ? this.promedioFinalArea(data, area, idMatricula) : this.orden === 99 ? this.promedioArea(data, area) : ''
+        const desArea = this.orden !== 98 ? this.desempenoArea(finalArea, area, this.tipoArea,this.orden) : '' //this.desempeño(finalArea)
         const ausJArea = this.orden == 98 ? '' : ausJ > 0 ? ausJ : ''
         const ausSArea = this.orden == 98 ? '' : ausS > 0 ? ausS : ''
         const ihArea = this.orden !== 98 ? this.intensidadHorariaArea(data, area) : ''
@@ -354,31 +358,47 @@ export default {
       const descriptorObj = this.listaDescriptores.find(d => d.idAsignaturaCurso === meta.idAsignaturaCurso && d.id_concepto_valorativo === conceptoValorativo)
       return descriptorObj?.descriptor || ''
     },
-    desempeno(nota, area, tipo) {
-      const valor = parseFloat(nota)
-      if (isNaN(valor)) return ''
-      const umbralBajo = tipo === 2 ? this.umbralesT[0] : this.umbralesA[0]
-      const umbralBasico = tipo === 2 ? this.umbralesT[1] : this.umbralesA[1]
-      const umbralAlto = tipo === 2 ? this.umbralesT[2] : this.umbralesA[2]
-      const umbralSuperior = tipo === 2 ? this.umbralesT[3] : this.umbralesA[3]
-      if (valor < umbralBajo) return 'Bajo'
-      if (valor < umbralBasico) return 'Básico'
-      if (valor < umbralAlto) return 'Alto'
-      if (valor <= umbralSuperior) return 'Superior'
-      return ''
+    desempeno(nota, area, tipo, orden) {
+      if (orden == 99) {
+        if (nota == 'J') return 'Bajo'
+        else if (nota == 'B') return 'Básico'
+        else if (nota == 'A') return 'Alto'
+        else if (nota == 'S') return 'Superior'
+        else return ''
+      } else {
+        const valor = parseFloat(nota)
+        if (isNaN(valor)) return ''
+        const umbralBajo = tipo === 2 ? this.umbralesT[0] : this.umbralesA[0]
+        const umbralBasico = tipo === 2 ? this.umbralesT[1] : this.umbralesA[1]
+        const umbralAlto = tipo === 2 ? this.umbralesT[2] : this.umbralesA[2]
+        const umbralSuperior = tipo === 2 ? this.umbralesT[3] : this.umbralesA[3]
+        if (valor < umbralBajo) return 'Bajo'
+        if (valor < umbralBasico) return 'Básico'
+        if (valor < umbralAlto) return 'Alto'
+        if (valor <= umbralSuperior) return 'Superior'
+        return ''
+      }
     },
-    desempenoArea(nota, area, tipo) {
-      const valor = parseFloat(nota)
-      if (isNaN(valor)) return ''
-      const umbralBajo = tipo === 2 ? this.umbralesT[0] : this.umbralesA[0]
-      const umbralBasico = tipo === 2 ? this.umbralesT[1] : this.umbralesA[1]
-      const umbralAlto = tipo === 2 ? this.umbralesT[2] : this.umbralesA[2]
-      const umbralSuperior = tipo === 2 ? this.umbralesT[3] : this.umbralesA[3]
-      if (valor < umbralBajo) return 'Bajo'
-      if (valor < umbralBasico) return 'Básico'
-      if (valor < umbralAlto) return 'Alto'
-      if (valor <= umbralSuperior) return 'Superior'
-      return ''
+    desempenoArea(nota, area, tipo, orden) {
+      if (orden == 99) {
+        if (nota == 'J') return 'Bajo'
+        else if (nota == 'B') return 'Básico'
+        else if (nota == 'A') return 'Alto'
+        else if (nota == 'S') return 'Superior'
+        else return ''
+      } else {
+        const valor = parseFloat(nota)
+        if (isNaN(valor)) return ''
+        const umbralBajo = tipo === 2 ? this.umbralesT[0] : this.umbralesA[0]
+        const umbralBasico = tipo === 2 ? this.umbralesT[1] : this.umbralesA[1]
+        const umbralAlto = tipo === 2 ? this.umbralesT[2] : this.umbralesA[2]
+        const umbralSuperior = tipo === 2 ? this.umbralesT[3] : this.umbralesA[3]
+        if (valor < umbralBajo) return 'Bajo'
+        if (valor < umbralBasico) return 'Básico'
+        if (valor < umbralAlto) return 'Alto'
+        if (valor <= umbralSuperior) return 'Superior'
+        return ''
+      }
     },
     calcularPromedioGeneralPorAreasFinales(est,idMatricula) {
       let areasEvaluativas = ''
@@ -434,7 +454,8 @@ export default {
           }
         }
       })
-      return cantPerdidas == 0 ? 'EL ESTUDIANTE APROBÓ EL GRADO' : cantPerdidas < 3 ? 'ESTUDIANTE PENDIENTE DE PROMOCIÓN' : 'ESTUDIANTE REPROBADO'
+      if (this.perdioPorHabilitacion == 1) cantPerdidas = 100
+      return cantPerdidas == 0 ? 'PROMOVIDO AL SIGUIENTE GRADO' : cantPerdidas < 3 ? 'ESTUDIANTE PENDIENTE DE PROMOCIÓN' : 'REPROBADO, NO PROMOVIDO AL SIGUIENTE GRADO'
     },
     generarRankingCurso(idMatricula) {
       const ranking = []
@@ -516,14 +537,67 @@ export default {
         else if (promedioLetras <= this.umbralesA[3]) return this.letrasCompor[3]
         else return promedioLetras
       } else {
-        for (const p in asig.periodos) {
-          const nota = asig.periodos[p]
-          if (typeof nota === 'number') {
-            total += nota
-            cant++
+        if (this.$store.state.idInstitucion == 'acaa36d0-fcb1-11ec-8267-536b07c743c4') { // Emiliani
+          const pesos = [20,20,30,30]
+          if( orden == 12) {
+            let cantidad = 0 
+            for (let p = 1; p <= 4; p++) {
+              const nota = asig.periodos[p] ?? 0
+              if (nota > 0) {
+                total += nota
+                cantidad++
+              }
+            }
+            if (total === 0) return ''
+            total = total / cantidad
+            return this.redondear(total).toFixed(1) > 0 ? this.redondear(total).toFixed(1) : ''
+          } else {
+            for (let p = 1; p <= 4; p++) {
+              const nota = asig.periodos[p] ?? 0
+              total += nota * pesos[p-1] / 100
+            }
+            return this.redondear(total).toFixed(1) > 0 ? this.redondear(total).toFixed(1) : '*'
           }
+        } else if (this.$store.state.idInstitucion == 'eb58bf60-fc83-11ec-a1d1-1dc2835404e5') { // Inem
+          const pesos = [20,35,35,0]
+          if (orden == 55) {
+            let cantidad = 0
+            for (let p = 1; p <= 4; p++) {
+              const nota = asig.periodos[p] ?? 0
+              if (nota > 0) {
+                total += nota
+                cantidad++
+              }
+            }
+            if (total === 0) return ''
+            total = total / cantidad
+            return this.redondear(total).toFixed(1) > 0 ? this.redondear(total).toFixed(1) : ''
+          } else {
+            for (let p = 1; p <= 4; p++) {
+              const nota = asig.periodos[p] ?? 0
+              total += nota * pesos[p-1] / 100
+            }
+            return this.redondear(total).toFixed(1) > 0 ? this.redondear(total).toFixed(1) : ''
+          }
+        } else if (this.$store.state.idInstitucion == 'c50f3d80-fca0-11ec-8267-536b07c743c4') { // Silvino
+          const nota = asig.periodos[5] ?? 0
+          return nota > 0 ? nota.toFixed(1) : ''
+        } else if (this.$store.state.idInstitucion == '8a1bd1e0-fcb2-11ec-8267-536b07c743c4') { // Libertador
+          const nota = asig.periodos[5] ?? 0
+          return nota > 0 ? nota.toFixed(1) : ''
+        } else {
+          let cantidad = 0 
+          for (let p = 1; p <= 4; p++) {
+            const nota = asig.periodos[p] ?? 0
+            if (nota > 0) {
+              total += nota
+              cantidad++
+            }
+          }
+          if (total === 0) return ''
+          const promedio = total / cantidad
+          return this.redondear(promedio).toFixed(1) > 0 ? this.redondear(promedio).toFixed(1) : ''
         }
-        return cant > 0 ? this.redondear(total / cant).toFixed(1) : ''
       }
     },
     notaFinalArea(est, area) {
@@ -550,12 +624,15 @@ export default {
       // Aseguramos que el peso total sea > 0
       return total > 0 ? this.redondear(total).toFixed(1) : ''
     },
-    promedioAsignaturaDefinitivo(est, area, asignatura) {
+    promedioAsignaturaDefinitivo(est, area, asignatura,idMatricula) {
       const concep = est.areas?.[area]?.asignaturas?.[asignatura]?.concep
       if (concep === "S") return ''
       const orden = est.areas?.[area]?.asignaturas?.[asignatura]?.orden
       const asig = est.areas?.[area]?.asignaturas?.[asignatura]
-      if (!asig) return ''
+      const idAsignaturaCurso = est.areas?.[area]?.asignaturas?.[asignatura]?.idAsignaturaCurso
+      const habilit = this.mostrarHabilitacion(idMatricula,idAsignaturaCurso)
+      const habilitacion = habilit.habilitacion > 0 ? habilit.habilitacion : 0
+      if (!asig) return '' 
       let total = 0
       let cant = 0
       if (orden == 99 && this.tipoValComp == 0) {
@@ -572,14 +649,67 @@ export default {
         else if (promedioLetras <= this.umbralesA[3]) return this.letrasCompor[3]
         else return promedioLetras
       } else {
-        for (const p in asig.periodos) {
-          const nota = asig.periodos[p]
-          if (typeof nota === 'number') {
-            total += nota
-            cant++
+        if (this.$store.state.idInstitucion == 'acaa36d0-fcb1-11ec-8267-536b07c743c4') { // Emiliani
+          const pesos = [20,20,30,30]
+          if( orden == 12) {
+            let cantidad = 0 
+            for (let p = 1; p <= 4; p++) {
+              const nota = asig.periodos[p] ?? 0
+              if (nota > 0) {
+                total += nota
+                cantidad++
+              }
+            }
+            if (total === 0) return ''
+            total = total / cantidad
+            return this.redondear(total).toFixed(1) > 0 ? this.redondear(total).toFixed(1) : ''
+          } else {
+            for (let p = 1; p <= 4; p++) {
+              const nota = asig.periodos[p] ?? 0
+              total += nota * pesos[p-1] / 100
+            }
+            return this.redondear(total).toFixed(1) > 0 ? this.redondear(total).toFixed(1) : '*'
           }
+        } else if (this.$store.state.idInstitucion == 'eb58bf60-fc83-11ec-a1d1-1dc2835404e5') { // Inem
+          const pesos = [20,35,35,0]
+          if (orden == 55) {
+            let cantidad = 0
+            for (let p = 1; p <= 4; p++) {
+              const nota = asig.periodos[p] ?? 0
+              if (nota > 0) {
+                total += nota
+                cantidad++
+              }
+            }
+            if (total === 0) return ''
+            total = total / cantidad
+            return this.redondear(total).toFixed(1) > 0 ? this.redondear(total).toFixed(1) : ''
+          } else {
+            for (let p = 1; p <= 4; p++) {
+              const nota = asig.periodos[p] ?? 0
+              total += nota * pesos[p-1] / 100
+            }
+            return this.redondear(total).toFixed(1) > 0 ? this.redondear(total).toFixed(1) : ''
+          }
+        } else if (this.$store.state.idInstitucion == 'c50f3d80-fca0-11ec-8267-536b07c743c4') { // Silvino
+          const nota = asig.periodos[5] ?? 0
+          return nota > 0 ? nota.toFixed(1) : ''
+        } else if (this.$store.state.idInstitucion == '8a1bd1e0-fcb2-11ec-8267-536b07c743c4') { // Libertador
+          const nota = asig.periodos[5] ?? 0
+          return nota > 0 ? nota.toFixed(1) : ''
+        } else {
+          let cantidad = 0 
+          for (let p = 1; p <= 4; p++) {
+            const nota = asig.periodos[p] ?? 0
+            if (nota > 0) {
+              total += nota
+              cantidad++
+            }
+          }
+          if (total === 0) return ''
+          const promedio = total / cantidad
+          return this.redondear(promedio).toFixed(1) > 0 ? habilitacion > this.redondear(promedio).toFixed(1) ? habilitacion : this.redondear(promedio).toFixed(1) : ''
         }
-        return cant > 0 ? this.redondear(total / cant).toFixed(1) : ''
       }
     },
     promedioFinalArea(est, area, idMatricula) {
@@ -588,10 +718,11 @@ export default {
       const orden = est.areas?.[area]?.asignaturas?.[asigns]?.orden
       const asignatura = asigns.reduce((asig) => asig)
       if (orden == 99 && this.tipoValComp == 0) return this.promedioAsignaturaDefinitivo(est, area, asignatura, idMatricula)
-      const idAsigCurso = est.areas?.[area]?.asignaturas?.[asignatura]?.idAsignaturaCurso
-      const habilit = this.mostrarHabilitacion(idMatricula,idAsigCurso)
-      const total = asigns.reduce((sum, asig) => sum + parseFloat(this.promedioAsignaturaDefinitivo(est, area, asig) * est.areas?.[area]?.asignaturas?.[asig]?.porcentaje / 100), 0)
-      return habilit.habilitacion > total ? this.redondear(habilit.habilitacion).toFixed(1) : this.redondear(total).toFixed(1)
+      if (this.$store.state.idInstitucion == 'acaa36d0-fcb1-11ec-8267-536b07c743c4' && this.orden == 12) { // Emiliani
+        return '*'
+      } 
+      const total = asigns.reduce((sum, asig) => sum + parseFloat(this.promedioAsignaturaDefinitivo(est, area, asig, idMatricula) * est.areas?.[area]?.asignaturas?.[asig]?.porcentaje / 100), 0)
+      return total > 0 ?  this.redondear(total).toFixed(1) : ''
     },
     promedioArea(est, area) {
       const asigns = Object.keys(est.areas?.[area]?.asignaturas || {})
@@ -599,6 +730,9 @@ export default {
       const orden = est.areas?.[area]?.asignaturas?.[asigns]?.orden
       const asignatura = asigns.reduce((asig) => asig)
       if (orden == 99 && this.tipoValComp == 0) return this.promedioAsignatura(est, area, asignatura)
+      if (this.$store.state.idInstitucion == 'acaa36d0-fcb1-11ec-8267-536b07c743c4' && this.orden == 12) { // Emiliani
+        return '*'
+      } 
       const total = asigns.reduce((sum, asig) => sum + parseFloat(this.promedioAsignatura(est, area, asig) * est.areas?.[area]?.asignaturas?.[asig]?.porcentaje / 100), 0)
       return total > 0 ?  this.redondear(total).toFixed(1) : ''
     },
@@ -609,12 +743,14 @@ export default {
       if (concep === "S") return ''
       const orden = est.areas?.[area]?.asignaturas?.[asigns]?.orden
       if (orden == 99 && this.tipoValComp == 0) return est.areas?.[area]?.asignaturas?.[asigns]?.periodos?.[periodo] || ''
+      if (this.$store.state.idInstitucion == 'acaa36d0-fcb1-11ec-8267-536b07c743c4' && this.orden == 12) { // Emiliani
+        return '*'
+      } 
       const total = asigns.reduce((sum, asig) => {
         const nota = est.areas?.[area]?.asignaturas?.[asig]?.periodos?.[periodo] * est.areas?.[area]?.asignaturas?.[asig]?.porcentaje / 100
         return sum + (typeof nota === 'number' ? nota : 0)
       }, 0)
       return total > 0 ?  this.redondear(total).toFixed(1) : ''
-      // return this.redondear(total / asigns.length).toFixed(1)
     },
     ausencias(est, area, asignatura, tipo) {
       return Number(est.areas?.[area]?.asignaturas?.[asignatura]?.[tipo]) || 0
@@ -635,7 +771,7 @@ export default {
       if (concep === "S") return ''
       const orden = est.areas?.[area]?.asignaturas?.[asignatura]?.orden
       if (orden == 99 && this.tipoValComp == 0) return est.areas?.[area]?.asignaturas?.[asignatura]?.periodos?.[periodo] || ''
-      return est.areas?.[area]?.asignaturas?.[asignatura]?.periodos?.[periodo]?.toFixed(1) || ''
+      return est.areas?.[area]?.asignaturas?.[asignatura]?.periodos?.[periodo]?.toFixed(1) > 0 ? est.areas?.[area]?.asignaturas?.[asignatura]?.periodos?.[periodo]?.toFixed(1) : ''
     },
     criterio1Periodo(est, area, asignatura, periodo) {
       const concep = est.areas?.[area]?.asignaturas?.[asignatura]?.concep

@@ -362,7 +362,7 @@ export default {
       if (orden == 99) {
         if (nota == 'I') return 'Insuficiente'
         else if (nota == 'A') return 'Aceptable'
-        else if (nota == 'B') return 'Bueno'
+        else if (nota == 'S') return 'Sobresaliente'
         else if (nota == 'E') return 'Excelente'
         else return ''
       } else {
@@ -383,7 +383,7 @@ export default {
       if (orden == 99) {
         if (nota == 'I') return 'Insuficiente'
         else if (nota == 'A') return 'Aceptable'
-        else if (nota == 'B') return 'Bueno'
+        else if (nota == 'S') return 'Sobresaliente'
         else if (nota == 'E') return 'Excelente'
         else return ''
       } else {

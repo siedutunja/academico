@@ -360,10 +360,10 @@ export default {
     },
     desempeno(nota, area, tipo, orden) {
       if (orden == 99) {
-        if (nota == 'I') return 'Insuficiente'
-        else if (nota == 'A') return 'Aceptable'
-        else if (nota == 'B') return 'Bueno'
-        else if (nota == 'E') return 'Excelente'
+        if (nota == 'A') return 'Anormativo'
+        else if (nota == 'P') return 'Persistente'
+        else if (nota == 'E') return 'Empático'
+        else if (nota == 'I') return 'Integro'
         else return ''
       } else {
         const valor = parseFloat(nota)
@@ -381,10 +381,10 @@ export default {
     },
     desempenoArea(nota, area, tipo, orden) {
       if (orden == 99) {
-        if (nota == 'I') return 'Insuficiente'
-        else if (nota == 'A') return 'Aceptable'
-        else if (nota == 'B') return 'Bueno'
-        else if (nota == 'E') return 'Excelente'
+        if (nota == 'A') return 'Anormativo'
+        else if (nota == 'P') return 'Persistente'
+        else if (nota == 'E') return 'Empático'
+        else if (nota == 'I') return 'Integro'
         else return ''
       } else {
         const valor = parseFloat(nota)
@@ -537,55 +537,8 @@ export default {
         else if (promedioLetras <= this.umbralesA[3]) return this.letrasCompor[3]
         else return promedioLetras
       } else {
-        if (this.$store.state.idInstitucion == 'acaa36d0-fcb1-11ec-8267-536b07c743c4') { // Emiliani
-          const pesos = [20,20,30,30]
-          if( orden == 12) {
-            let cantidad = 0 
-            for (let p = 1; p <= 4; p++) {
-              const nota = asig.periodos[p] ?? 0
-              if (nota > 0) {
-                total += nota
-                cantidad++
-              }
-            }
-            if (total === 0) return ''
-            total = total / cantidad
-            return this.redondear(total).toFixed(1) > 0 ? this.redondear(total).toFixed(1) : ''
-          } else {
-            for (let p = 1; p <= 4; p++) {
-              const nota = asig.periodos[p] ?? 0
-              total += nota * pesos[p-1] / 100
-            }
-            return this.redondear(total).toFixed(1) > 0 ? this.redondear(total).toFixed(1) : '*'
-          }
-        } else if (this.$store.state.idInstitucion == 'eb58bf60-fc83-11ec-a1d1-1dc2835404e5') { // Inem
-          const pesos = [20,35,35,0]
-          if (orden == 55) {
-            let cantidad = 0
-            for (let p = 1; p <= 4; p++) {
-              const nota = asig.periodos[p] ?? 0
-              if (nota > 0) {
-                total += nota
-                cantidad++
-              }
-            }
-            if (total === 0) return ''
-            total = total / cantidad
-            return this.redondear(total).toFixed(1) > 0 ? this.redondear(total).toFixed(1) : ''
-          } else {
-            for (let p = 1; p <= 4; p++) {
-              const nota = asig.periodos[p] ?? 0
-              total += nota * pesos[p-1] / 100
-            }
-            return this.redondear(total).toFixed(1) > 0 ? this.redondear(total).toFixed(1) : ''
-          }
-        } else if (this.$store.state.idInstitucion == 'c50f3d80-fca0-11ec-8267-536b07c743c4') { // Silvino
-          const nota = asig.periodos[5] ?? 0
-          return nota > 0 ? nota.toFixed(1) : ''
-        } else if (this.$store.state.idInstitucion == '8a1bd1e0-fcb2-11ec-8267-536b07c743c4') { // Libertador
-          const nota = asig.periodos[5] ?? 0
-          return nota > 0 ? nota.toFixed(1) : ''
-        } else {
+        const pesos = [20,20,30,30]
+        if( orden == 12) {
           let cantidad = 0 
           for (let p = 1; p <= 4; p++) {
             const nota = asig.periodos[p] ?? 0
@@ -595,8 +548,14 @@ export default {
             }
           }
           if (total === 0) return ''
-          const promedio = total / cantidad
-          return this.redondear(promedio).toFixed(1) > 0 ? this.redondear(promedio).toFixed(1) : ''
+          total = total / cantidad
+          return this.redondear(total).toFixed(1) > 0 ? this.redondear(total).toFixed(1) : ''
+        } else {
+          for (let p = 1; p <= 4; p++) {
+            const nota = asig.periodos[p] ?? 0
+            total += nota * pesos[p-1] / 100
+          }
+          return this.redondear(total).toFixed(1) > 0 ? this.redondear(total).toFixed(1) : '*'
         }
       }
     },
@@ -649,55 +608,8 @@ export default {
         else if (promedioLetras <= this.umbralesA[3]) return this.letrasCompor[3]
         else return promedioLetras
       } else {
-        if (this.$store.state.idInstitucion == 'acaa36d0-fcb1-11ec-8267-536b07c743c4') { // Emiliani
-          const pesos = [20,20,30,30]
-          if( orden == 12) {
-            let cantidad = 0 
-            for (let p = 1; p <= 4; p++) {
-              const nota = asig.periodos[p] ?? 0
-              if (nota > 0) {
-                total += nota
-                cantidad++
-              }
-            }
-            if (total === 0) return ''
-            total = total / cantidad
-            return this.redondear(total).toFixed(1) > 0 ? this.redondear(total).toFixed(1) : ''
-          } else {
-            for (let p = 1; p <= 4; p++) {
-              const nota = asig.periodos[p] ?? 0
-              total += nota * pesos[p-1] / 100
-            }
-            return this.redondear(total).toFixed(1) > 0 ? this.redondear(total).toFixed(1) : '*'
-          }
-        } else if (this.$store.state.idInstitucion == 'eb58bf60-fc83-11ec-a1d1-1dc2835404e5') { // Inem
-          const pesos = [20,35,35,0]
-          if (orden == 55) {
-            let cantidad = 0
-            for (let p = 1; p <= 4; p++) {
-              const nota = asig.periodos[p] ?? 0
-              if (nota > 0) {
-                total += nota
-                cantidad++
-              }
-            }
-            if (total === 0) return ''
-            total = total / cantidad
-            return this.redondear(total).toFixed(1) > 0 ? this.redondear(total).toFixed(1) : ''
-          } else {
-            for (let p = 1; p <= 4; p++) {
-              const nota = asig.periodos[p] ?? 0
-              total += nota * pesos[p-1] / 100
-            }
-            return this.redondear(total).toFixed(1) > 0 ? this.redondear(total).toFixed(1) : ''
-          }
-        } else if (this.$store.state.idInstitucion == 'c50f3d80-fca0-11ec-8267-536b07c743c4') { // Silvino
-          const nota = asig.periodos[5] ?? 0
-          return nota > 0 ? nota.toFixed(1) : ''
-        } else if (this.$store.state.idInstitucion == '8a1bd1e0-fcb2-11ec-8267-536b07c743c4') { // Libertador
-          const nota = asig.periodos[5] ?? 0
-          return nota > 0 ? nota.toFixed(1) : ''
-        } else {
+        const pesos = [20,20,30,30]
+        if( orden == 12) {
           let cantidad = 0 
           for (let p = 1; p <= 4; p++) {
             const nota = asig.periodos[p] ?? 0
@@ -707,8 +619,14 @@ export default {
             }
           }
           if (total === 0) return ''
-          const promedio = total / cantidad
-          return this.redondear(promedio).toFixed(1) > 0 ? habilitacion > this.redondear(promedio).toFixed(1) ? habilitacion : this.redondear(promedio).toFixed(1) : ''
+          total = total / cantidad
+          return this.redondear(total).toFixed(1) > 0 ? this.redondear(total).toFixed(1) : ''
+        } else {
+          for (let p = 1; p <= 4; p++) {
+            const nota = asig.periodos[p] ?? 0
+            total += nota * pesos[p-1] / 100
+          }
+          return this.redondear(total).toFixed(1) > 0 ? habilitacion > this.redondear(total).toFixed(1) ? habilitacion : this.redondear(total).toFixed(1) : '*'
         }
       }
     },

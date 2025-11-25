@@ -43,8 +43,9 @@
                           <b-form-radio v-model="idConsolidado" :aria-describedby="ariaDescribedby" name="some-radios" value="30">Resumen Final por Estudiante</b-form-radio>
                           <b-form-radio v-model="idConsolidado" :aria-describedby="ariaDescribedby" name="some-radios" value="31">Resumen Final por Estudiante con Habilitaciones</b-form-radio>
                           -->
-                          <b-form-radio v-model="idConsolidado" :aria-describedby="ariaDescribedby" name="some-radios" value="34">Resumen Final Asignaturas Perdidas por Curso</b-form-radio>
-                          <b-form-radio v-model="idConsolidado" :aria-describedby="ariaDescribedby" name="some-radios" value="32">Resumen Final de Promoción por Curso</b-form-radio>
+                          <b-form-radio v-model="idConsolidado" :aria-describedby="ariaDescribedby" name="some-radios" value="34">Resumen Asignaturas Perdidas</b-form-radio>
+                          <b-form-radio v-model="idConsolidado" :aria-describedby="ariaDescribedby" name="some-radios" value="32">Resumen de Promoción</b-form-radio>
+                          <!--<b-form-radio v-model="idConsolidado" :aria-describedby="ariaDescribedby" name="some-radios" value="36">Resumen Definitivo de Promoción</b-form-radio>-->
                         </b-form-group>
                       </b-col>
                     </b-row>
@@ -99,7 +100,9 @@
                 <div v-if="idConsolidado==35">
                   <ConsolidadoFinalAreas/>
                 </div>
-                
+                <div v-if="idConsolidado==36">
+                  <ResumenPromocionAreasDefinitivo/>
+                </div>
               </b-col>
             </b-row>
           </b-card-text>
@@ -129,6 +132,7 @@
   import ConsolidadoFinalInem from '@/views/informes/consolidados/ConsolidadoFinalInem'
   import ResumenFinalAsigPerdidas from '@/views/informes/consolidados/ResumenFinalAsigPerdidas'
   import ConsolidadoFinalAreas from '@/views/informes/consolidados/ConsolidadoFinalAreas'
+  //import ResumenPromocionAreasDefinitivo from '@/views/informes/consolidados/ResumenPromocionAreasDefinitivo'
 
   export default {
     name: 'consolidados',
@@ -150,6 +154,7 @@
       ConsolidadoFinalInem,
       ResumenFinalAsigPerdidas,
       ConsolidadoFinalAreas,
+      //ResumenPromocionAreasDefinitivo,
     },
     data () {
       return {

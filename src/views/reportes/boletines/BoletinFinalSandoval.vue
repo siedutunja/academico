@@ -359,46 +359,30 @@ export default {
       return descriptorObj?.descriptor || ''
     },
     desempeno(nota, area, tipo, orden) {
-      if (orden == 99) {
-        if (nota == 'I') return 'Insuficiente'
-        else if (nota == 'A') return 'Aceptable'
-        else if (nota == 'B') return 'Bueno'
-        else if (nota == 'E') return 'Excelente'
-        else return ''
-      } else {
-        const valor = parseFloat(nota)
-        if (isNaN(valor)) return ''
-        const umbralBajo = tipo === 2 ? this.umbralesT[0] : this.umbralesA[0]
-        const umbralBasico = tipo === 2 ? this.umbralesT[1] : this.umbralesA[1]
-        const umbralAlto = tipo === 2 ? this.umbralesT[2] : this.umbralesA[2]
-        const umbralSuperior = tipo === 2 ? this.umbralesT[3] : this.umbralesA[3]
-        if (valor < umbralBajo) return 'Bajo'
-        if (valor < umbralBasico) return 'Básico'
-        if (valor < umbralAlto) return 'Alto'
-        if (valor <= umbralSuperior) return 'Superior'
-        return ''
-      }
+      const valor = parseFloat(nota)
+      if (isNaN(valor)) return ''
+      const umbralBajo = tipo === 2 ? this.umbralesT[0] : this.umbralesA[0]
+      const umbralBasico = tipo === 2 ? this.umbralesT[1] : this.umbralesA[1]
+      const umbralAlto = tipo === 2 ? this.umbralesT[2] : this.umbralesA[2]
+      const umbralSuperior = tipo === 2 ? this.umbralesT[3] : this.umbralesA[3]
+      if (valor < umbralBajo) return 'Bajo'
+      if (valor < umbralBasico) return 'Básico'
+      if (valor < umbralAlto) return 'Alto'
+      if (valor <= umbralSuperior) return 'Superior'
+      return ''
     },
     desempenoArea(nota, area, tipo, orden) {
-      if (orden == 99) {
-        if (nota == 'I') return 'Insuficiente'
-        else if (nota == 'A') return 'Aceptable'
-        else if (nota == 'B') return 'Bueno'
-        else if (nota == 'E') return 'Excelente'
-        else return ''
-      } else {
-        const valor = parseFloat(nota)
-        if (isNaN(valor)) return ''
-        const umbralBajo = tipo === 2 ? this.umbralesT[0] : this.umbralesA[0]
-        const umbralBasico = tipo === 2 ? this.umbralesT[1] : this.umbralesA[1]
-        const umbralAlto = tipo === 2 ? this.umbralesT[2] : this.umbralesA[2]
-        const umbralSuperior = tipo === 2 ? this.umbralesT[3] : this.umbralesA[3]
-        if (valor < umbralBajo) return 'Bajo'
-        if (valor < umbralBasico) return 'Básico'
-        if (valor < umbralAlto) return 'Alto'
-        if (valor <= umbralSuperior) return 'Superior'
-        return ''
-      }
+      const valor = parseFloat(nota)
+      if (isNaN(valor)) return ''
+      const umbralBajo = tipo === 2 ? this.umbralesT[0] : this.umbralesA[0]
+      const umbralBasico = tipo === 2 ? this.umbralesT[1] : this.umbralesA[1]
+      const umbralAlto = tipo === 2 ? this.umbralesT[2] : this.umbralesA[2]
+      const umbralSuperior = tipo === 2 ? this.umbralesT[3] : this.umbralesA[3]
+      if (valor < umbralBajo) return 'Bajo'
+      if (valor < umbralBasico) return 'Básico'
+      if (valor < umbralAlto) return 'Alto'
+      if (valor <= umbralSuperior) return 'Superior'
+      return ''
     },
     calcularPromedioGeneralPorAreasFinales(est,idMatricula) {
       let areasEvaluativas = ''

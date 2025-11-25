@@ -359,11 +359,11 @@ export default {
       return descriptorObj?.descriptor || ''
     },
     desempeno(nota, area, tipo, orden) {
-      if (orden == 99) {
-        if (nota == 'I') return 'Insuficiente'
-        else if (nota == 'A') return 'Aceptable'
-        else if (nota == 'B') return 'Bueno'
-        else if (nota == 'E') return 'Excelente'
+      if (orden == 999) {
+        if (nota == 'J') return 'Bajo'
+        else if (nota == 'B') return 'Básico'
+        else if (nota == 'A') return 'Alto'
+        else if (nota == 'S') return 'Superior'
         else return ''
       } else {
         const valor = parseFloat(nota)
@@ -380,11 +380,11 @@ export default {
       }
     },
     desempenoArea(nota, area, tipo, orden) {
-      if (orden == 99) {
-        if (nota == 'I') return 'Insuficiente'
-        else if (nota == 'A') return 'Aceptable'
-        else if (nota == 'B') return 'Bueno'
-        else if (nota == 'E') return 'Excelente'
+      if (orden == 999) {
+        if (nota == 'J') return 'Bajo'
+        else if (nota == 'B') return 'Básico'
+        else if (nota == 'A') return 'Alto'
+        else if (nota == 'S') return 'Superior'
         else return ''
       } else {
         const valor = parseFloat(nota)

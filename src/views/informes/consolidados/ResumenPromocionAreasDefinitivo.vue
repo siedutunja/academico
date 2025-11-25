@@ -4,7 +4,7 @@
       <b-col lg="12">
         <b-card>
           <template #header>
-            <h5 class="mb-0"><b-icon icon="card-checklist" aria-hidden="true"></b-icon> RESUMEN DE PROMOCIÓN POR AREAS</h5>
+            <h5 class="mb-0"><b-icon icon="card-checklist" aria-hidden="true"></b-icon> RESUMEN DE PROMOCIÓN DEFINITIVO POR AREAS</h5>
           </template>
           <b-card-text>
             <b-row>
@@ -183,7 +183,8 @@ import AreasPerdidasVue from './AreasPerdidas.vue'
         datosRaw: [],
         datosSeccion: {},
         listaAreasAsignaturas: [],
-        periodosVisibles: []
+        periodosVisibles: [],
+        listaHabilitaciones: [],
       }
     },
     methods: {
@@ -290,7 +291,6 @@ import AreasPerdidasVue from './AreasPerdidas.vue'
         return asig ? this.calcularPromedioAsignatura(asig) : ''
       },
       calcularPromedioAsignatura(asig) {
-        //console.log(asig)
         const pesos = asig.pesos
         const periodos = asig.periodos
         const orden = asig.orden
@@ -373,6 +373,11 @@ import AreasPerdidasVue from './AreasPerdidas.vue'
           if (!this.esAreaValida(area)) return
           const meta = this.listaAreasAsignaturas.find( a => a.area === area)
           const idTipoEspecialidadArea = meta?.idTipoArea
+          const idAsignaturaCurso = meta?.idAsignaturaCurso
+          const idMatricula = meta?.id_matricula
+          //const habilit = this.mostrarHabilitacion(idMatricula,idAsignaturaCurso)
+          //habilit.habilitacion != '' ? 'Hab: ' + console.log(habilit) : console.log('Hab: ' + '')
+
           const promedio = parseFloat(this.calcularPromedioArea(est.areas[area]))
           if (!isNaN(promedio)) {
             if (idTipoEspecialidadArea === 1) {
@@ -528,6 +533,36 @@ import AreasPerdidasVue from './AreasPerdidas.vue'
         if (nota <= this.datosSeccion.maxSup) return 'desempeno-superior'
         return 'desempeno-extra'
       },
+      mostrarHabilitacion(idMatricula,idAsignaturaCurso) {
+        const meta = this.listaHabilitaciones.find(h => h.id_matricula === idMatricula && h.id_asignatura_curso === idAsignaturaCurso)
+        if (!(meta === undefined)) {
+          const valor = meta.habilitacion > 0 ? meta.habilitacion.toFixed(1) : ''
+          const fechita = meta.fecha !== null && meta.fecha !== '' ? meta.fecha.substr(0,10) : ''
+          const actica = meta.acta != null ? meta.acta : ''
+          return {habilitacion: valor, acta: actica, fecha: fechita }
+        } else {
+          return {habilitacion: '', acta: '', fecha: ''}
+        }
+      },
+      async consultarHabilitaciones() {
+        this.listaHabilitaciones = []
+        await axios
+        .get(CONFIG.ROOT_PATH + 'boletines/habilitaciones/curso', {params: {vigencia: this.$store.state.aLectivo}})
+        .then(response => {
+          if (response.data.error){
+            this.mensajeEmergente('danger',CONFIG.TITULO_MSG,response.data.mensaje + ' - Consulta habilitacion')
+            this.btnCargando = false
+          } else{
+            if (response.data.datos != 0) {
+              this.listaHabilitaciones = response.data.datos
+              //console.log(JSON.stringify(response.data.datos))
+            }
+          }
+        })
+        .catch(err => {
+          this.mensajeEmergente('danger',CONFIG.TITULO_MSG,'Algo salio mal y no se pudo realizar: Consulta habilitacion. Intente más tarde.' + err)
+        })
+      },
       async consultarEstudiantes() {
         this.btnCargando = true
         if (this.idPeriodo == 1) this.periodosVisibles = [1]
@@ -676,9 +711,9 @@ import AreasPerdidasVue from './AreasPerdidas.vue'
       estudiantesNotas() {
         const mapa = {}
         this.datosRaw.forEach(row => {
-          const { estudiante, area, asignatura, periodo, definitiva, recuperacion, orden, definitivacompor, definitivapree, idTipoEspecialidad, ausJ, ausS, porcentaje, id_conceptual } = row
+          const { id_matricula, estudiante, area, asignatura, periodo, definitiva, recuperacion, orden, definitivacompor, definitivapree, idTipoEspecialidad, ausJ, ausS, porcentaje, id_conceptual } = row
           if (!mapa[estudiante]) {
-            mapa[estudiante] = { id_conceptual, ausJ: 0, ausS: 0, areas: {} }
+            mapa[estudiante] = { id_matricula, id_conceptual, ausJ: 0, ausS: 0, areas: {} }
           }
           if (!mapa[estudiante].areas[area]) {
             mapa[estudiante].areas[area] = { asignaturas: {} }
@@ -750,6 +785,7 @@ import AreasPerdidasVue from './AreasPerdidas.vue'
     beforeMount() {
       this.ocuparComboSedes()
       this.ocuparComboPeriodos()
+      this.consultarHabilitaciones()
       this.datosSeccion = this.$store.state.datosSecciones[this.$store.state.idSeccion - 1]
       //console.log(JSON.stringify(this.datosSeccion))
     }

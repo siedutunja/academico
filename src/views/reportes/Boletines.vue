@@ -378,23 +378,30 @@
                   <span v-if="$store.state.idInstitucion == '097b7b10-fcaa-11ec-8267-536b07c743c4'"> <!-- RURAL -->
                     <BoletinFinalRural v-if="mostrarBoletines" :listaHabilitaciones="listaHabilitaciones" :estudiantesSeleccionados="estudiantesSeleccionados" :listaAreasAsignaturas="listaAreasAsignaturas" :listaDescriptores="listaDescriptores" :notas="notas" :datosEstudiantes="datosEstudiantes" :anio="Number($store.state.aLectivo)" :periodoActual="idPeriodo" :periodosVisibles="periodosVisibles" :nombreSede="nombreSede" :nombreCurso="nombreCurso" :nombrePeriodo="nombrePeriodo" :nombreJornada="nombreJornada" :nombreDirector="nombreDirector" :idNivel="idNivel" :umbralesA="umbralesA" :umbralesT="umbralesT" :pesosPeriodos="pesosPeriodos" :tipoValComp="tipoValComp" :promCompor="promCompor" :letrasCompor="letrasCompor" :firmasBoletin="firmasBoletin" :descC1="descC1" :descC2="descC2" :descC3="descC3" />
                   </span>
-                  <span v-else-if="$store.state.idInstitucion == '660fa760-fc83-11ec-a1d1-1dc2835404e5'"> <!-- GRANCOLOMBIANO -->
+                  <span v-else-if="$store.state.idInstitucion == '660fa760-fc83-11ec-a1d1-1dc2835404e5'"> <!--GRANCOLOMBIANO -->
                     <BoletinFinalGranColombiano v-if="mostrarBoletines" :listaHabilitaciones="listaHabilitaciones" :estudiantesSeleccionados="estudiantesSeleccionados" :listaAreasAsignaturas="listaAreasAsignaturas" :listaDescriptores="listaDescriptores" :notas="notas" :datosEstudiantes="datosEstudiantes" :anio="Number($store.state.aLectivo)" :periodoActual="idPeriodo" :periodosVisibles="periodosVisibles" :nombreSede="nombreSede" :nombreCurso="nombreCurso" :nombrePeriodo="nombrePeriodo" :nombreJornada="nombreJornada" :nombreDirector="nombreDirector" :idNivel="idNivel" :umbralesA="umbralesA" :umbralesT="umbralesT" :pesosPeriodos="pesosPeriodos" :tipoValComp="tipoValComp" :promCompor="promCompor" :letrasCompor="letrasCompor" :firmasBoletin="firmasBoletin" :descC1="descC1" :descC2="descC2" :descC3="descC3" :idGrado="idGrado" />
                   </span>
-                  <!--
-                  <span v-else-if="$store.state.idInstitucion == 'eb58bf60-fc83-11ec-a1d1-1dc2835404e5X'"> INEM 
-                    <BoletinPeriodoInem v-if="mostrarBoletines" :estudiantesSeleccionados="estudiantesSeleccionados" :listaAreasAsignaturas="listaAreasAsignaturas" :listaDescriptores="listaDescriptores" :notas="notas" :datosEstudiantes="datosEstudiantes" :anio="Number($store.state.aLectivo)" :periodoActual="idPeriodo" :periodosVisibles="periodosVisibles" :nombreSede="nombreSede" :nombreCurso="nombreCurso" :nombrePeriodo="nombrePeriodo" :nombreJornada="nombreJornada" :nombreDirector="nombreDirector" :idNivel="idNivel" :umbralesA="umbralesA" :umbralesT="umbralesT" :pesosPeriodos="pesosPeriodos" :tipoValComp="tipoValComp" :promCompor="promCompor" :letrasCompor="letrasCompor" :firmasBoletin="firmasBoletin" :descC1="descC1" :descC2="descC2" :descC3="descC3" :idGrado="idGrado" />
+                  <span v-else-if="$store.state.idInstitucion == '54fd7440-fc81-11ec-a1d1-1dc2835404e5'"> <!--SANDOVAL -->
+                    <BoletinFinalSandoval v-if="mostrarBoletines" :listaHabilitaciones="listaHabilitaciones" :estudiantesSeleccionados="estudiantesSeleccionados" :listaAreasAsignaturas="listaAreasAsignaturas" :listaDescriptores="listaDescriptores" :notas="notas" :datosEstudiantes="datosEstudiantes" :anio="Number($store.state.aLectivo)" :periodoActual="idPeriodo" :periodosVisibles="periodosVisibles" :nombreSede="nombreSede" :nombreCurso="nombreCurso" :nombrePeriodo="nombrePeriodo" :nombreJornada="nombreJornada" :nombreDirector="nombreDirector" :idNivel="idNivel" :umbralesA="umbralesA" :umbralesT="umbralesT" :pesosPeriodos="pesosPeriodos" :tipoValComp="tipoValComp" :promCompor="promCompor" :letrasCompor="letrasCompor" :firmasBoletin="firmasBoletin" :descC1="descC1" :descC2="descC2" :descC3="descC3" :idGrado="idGrado" />
                   </span>
-                  <span v-else-if="$store.state.idInstitucion == 'f5529ba0-fcb3-11ec-8267-536b07c743c4'">  GUSTAVOROJAS 
-                    <BoletinPeriodoGustavoRojas v-if="mostrarBoletines" :estudiantesSeleccionados="estudiantesSeleccionados" :listaAreasAsignaturas="listaAreasAsignaturas" :listaDescriptores="listaDescriptores" :notas="notas" :datosEstudiantes="datosEstudiantes" :anio="Number($store.state.aLectivo)" :periodoActual="idPeriodo" :periodosVisibles="periodosVisibles" :nombreSede="nombreSede" :nombreCurso="nombreCurso" :nombrePeriodo="nombrePeriodo" :nombreJornada="nombreJornada" :nombreDirector="nombreDirector" :idNivel="idNivel" :umbralesA="umbralesA" :umbralesT="umbralesT" :pesosPeriodos="pesosPeriodos" :tipoValComp="tipoValComp" :promCompor="promCompor" :letrasCompor="letrasCompor" :firmasBoletin="firmasBoletin" :descC1="descC1" :descC2="descC2" :descC3="descC3" :idGrado="idGrado" />
+                  <span v-else-if="$store.state.idInstitucion == 'bd226a20-fc82-11ec-a1d1-1dc2835404e5'"> <!-- JULIUS -->
+                    <BoletinFinalJulius v-if="mostrarBoletines" :listaHabilitaciones="listaHabilitaciones" :estudiantesSeleccionados="estudiantesSeleccionados" :listaAreasAsignaturas="listaAreasAsignaturas" :listaDescriptores="listaDescriptores" :notas="notas" :datosEstudiantes="datosEstudiantes" :anio="Number($store.state.aLectivo)" :periodoActual="idPeriodo" :periodosVisibles="periodosVisibles" :nombreSede="nombreSede" :nombreCurso="nombreCurso" :nombrePeriodo="nombrePeriodo" :nombreJornada="nombreJornada" :nombreDirector="nombreDirector" :idNivel="idNivel" :umbralesA="umbralesA" :umbralesT="umbralesT" :pesosPeriodos="pesosPeriodos" :tipoValComp="tipoValComp" :promCompor="promCompor" :letrasCompor="letrasCompor" :firmasBoletin="firmasBoletin" :descC1="descC1" :descC2="descC2" :descC3="descC3" :idGrado="idGrado" />
                   </span>
-                  <span v-else-if="$store.state.idInstitucion == 'bd226a20-fc82-11ec-a1d1-1dc2835404e5'">  JULIUS 
-                    <BoletinPeriodoJulius v-if="mostrarBoletines" :estudiantesSeleccionados="estudiantesSeleccionados" :listaAreasAsignaturas="listaAreasAsignaturas" :listaDescriptores="listaDescriptores" :notas="notas" :datosEstudiantes="datosEstudiantes" :anio="Number($store.state.aLectivo)" :periodoActual="idPeriodo" :periodosVisibles="periodosVisibles" :nombreSede="nombreSede" :nombreCurso="nombreCurso" :nombrePeriodo="nombrePeriodo" :nombreJornada="nombreJornada" :nombreDirector="nombreDirector" :idNivel="idNivel" :umbralesA="umbralesA" :umbralesT="umbralesT" :pesosPeriodos="pesosPeriodos" :tipoValComp="tipoValComp" :promCompor="promCompor" :letrasCompor="letrasCompor" :firmasBoletin="firmasBoletin" :descC1="descC1" :descC2="descC2" :descC3="descC3" :idGrado="idGrado" />
+                  <span v-else-if="$store.state.idInstitucion == 'eb58bf60-fc83-11ec-a1d1-1dc2835404e5'"> <!--INEM --> 
+                    <BoletinFinalInem v-if="mostrarBoletines" :listaHabilitaciones="listaHabilitaciones" :estudiantesSeleccionados="estudiantesSeleccionados" :listaAreasAsignaturas="listaAreasAsignaturas" :listaDescriptores="listaDescriptores" :notas="notas" :datosEstudiantes="datosEstudiantes" :anio="Number($store.state.aLectivo)" :periodoActual="idPeriodo" :periodosVisibles="periodosVisibles" :nombreSede="nombreSede" :nombreCurso="nombreCurso" :nombrePeriodo="nombrePeriodo" :nombreJornada="nombreJornada" :nombreDirector="nombreDirector" :idNivel="idNivel" :umbralesA="umbralesA" :umbralesT="umbralesT" :pesosPeriodos="pesosPeriodos" :tipoValComp="tipoValComp" :promCompor="promCompor" :letrasCompor="letrasCompor" :firmasBoletin="firmasBoletin" :descC1="descC1" :descC2="descC2" :descC3="descC3" :idGrado="idGrado" />
                   </span>
-                  <span v-else-if="$store.state.idInstitucion == 'acaa36d0-fcb1-11ec-8267-536b07c743c4'">  EMILIANI 
-                    <BoletinPeriodoEmiliani v-if="mostrarBoletines" :estudiantesSeleccionados="estudiantesSeleccionados" :listaAreasAsignaturas="listaAreasAsignaturas" :listaDescriptores="listaDescriptores" :notas="notas" :datosEstudiantes="datosEstudiantes" :anio="Number($store.state.aLectivo)" :periodoActual="idPeriodo" :periodosVisibles="periodosVisibles" :nombreSede="nombreSede" :nombreCurso="nombreCurso" :nombrePeriodo="nombrePeriodo" :nombreJornada="nombreJornada" :nombreDirector="nombreDirector" :idNivel="idNivel" :umbralesA="umbralesA" :umbralesT="umbralesT" :pesosPeriodos="pesosPeriodos" :tipoValComp="tipoValComp" :promCompor="promCompor" :letrasCompor="letrasCompor" :firmasBoletin="firmasBoletin" :descC1="descC1" :descC2="descC2" :descC3="descC3" :idGrado="idGrado" />
+                  <span v-else-if="$store.state.idInstitucion == '17ee4f30-fc80-11ec-a1d1-1dc2835404e5'"> <!--ENSLAP --> 
+                    <BoletinFinalEnslap v-if="mostrarBoletines" :listaHabilitaciones="listaHabilitaciones" :estudiantesSeleccionados="estudiantesSeleccionados" :listaAreasAsignaturas="listaAreasAsignaturas" :listaDescriptores="listaDescriptores" :notas="notas" :datosEstudiantes="datosEstudiantes" :anio="Number($store.state.aLectivo)" :periodoActual="idPeriodo" :periodosVisibles="periodosVisibles" :nombreSede="nombreSede" :nombreCurso="nombreCurso" :nombrePeriodo="nombrePeriodo" :nombreJornada="nombreJornada" :nombreDirector="nombreDirector" :idNivel="idNivel" :umbralesA="umbralesA" :umbralesT="umbralesT" :pesosPeriodos="pesosPeriodos" :tipoValComp="tipoValComp" :promCompor="promCompor" :letrasCompor="letrasCompor" :firmasBoletin="firmasBoletin" :descC1="descC1" :descC2="descC2" :descC3="descC3" :idGrado="idGrado" />
                   </span>
-                  -->
+                  <span v-else-if="$store.state.idInstitucion == 'acaa36d0-fcb1-11ec-8267-536b07c743c4'"> <!--EMILIANI --> 
+                    <BoletinFinalEmiliani v-if="mostrarBoletines" :listaHabilitaciones="listaHabilitaciones" :estudiantesSeleccionados="estudiantesSeleccionados" :listaAreasAsignaturas="listaAreasAsignaturas" :listaDescriptores="listaDescriptores" :notas="notas" :datosEstudiantes="datosEstudiantes" :anio="Number($store.state.aLectivo)" :periodoActual="idPeriodo" :periodosVisibles="periodosVisibles" :nombreSede="nombreSede" :nombreCurso="nombreCurso" :nombrePeriodo="nombrePeriodo" :nombreJornada="nombreJornada" :nombreDirector="nombreDirector" :idNivel="idNivel" :umbralesA="umbralesA" :umbralesT="umbralesT" :pesosPeriodos="pesosPeriodos" :tipoValComp="tipoValComp" :promCompor="promCompor" :letrasCompor="letrasCompor" :firmasBoletin="firmasBoletin" :descC1="descC1" :descC2="descC2" :descC3="descC3" :idGrado="idGrado" />
+                  </span>
+                  <span v-else-if="$store.state.idInstitucion == '7c63ed50-fcb0-11ec-8267-536b07c743c4'"> <!--SANTIAGO --> 
+                    <BoletinFinalSantiago v-if="mostrarBoletines" :listaHabilitaciones="listaHabilitaciones" :estudiantesSeleccionados="estudiantesSeleccionados" :listaAreasAsignaturas="listaAreasAsignaturas" :listaDescriptores="listaDescriptores" :notas="notas" :datosEstudiantes="datosEstudiantes" :anio="Number($store.state.aLectivo)" :periodoActual="idPeriodo" :periodosVisibles="periodosVisibles" :nombreSede="nombreSede" :nombreCurso="nombreCurso" :nombrePeriodo="nombrePeriodo" :nombreJornada="nombreJornada" :nombreDirector="nombreDirector" :idNivel="idNivel" :umbralesA="umbralesA" :umbralesT="umbralesT" :pesosPeriodos="pesosPeriodos" :tipoValComp="tipoValComp" :promCompor="promCompor" :letrasCompor="letrasCompor" :firmasBoletin="firmasBoletin" :descC1="descC1" :descC2="descC2" :descC3="descC3" :idGrado="idGrado" />
+                  </span>
+                  <span v-else-if="$store.state.idInstitucion == 'f5529ba0-fcb3-11ec-8267-536b07c743c4'"> <!--GUSTAVOROJAS --> 
+                    <BoletinFinalGustavo v-if="mostrarBoletines" :listaHabilitaciones="listaHabilitaciones" :estudiantesSeleccionados="estudiantesSeleccionados" :listaAreasAsignaturas="listaAreasAsignaturas" :listaDescriptores="listaDescriptores" :notas="notas" :datosEstudiantes="datosEstudiantes" :anio="Number($store.state.aLectivo)" :periodoActual="idPeriodo" :periodosVisibles="periodosVisibles" :nombreSede="nombreSede" :nombreCurso="nombreCurso" :nombrePeriodo="nombrePeriodo" :nombreJornada="nombreJornada" :nombreDirector="nombreDirector" :idNivel="idNivel" :umbralesA="umbralesA" :umbralesT="umbralesT" :pesosPeriodos="pesosPeriodos" :tipoValComp="tipoValComp" :promCompor="promCompor" :letrasCompor="letrasCompor" :firmasBoletin="firmasBoletin" :descC1="descC1" :descC2="descC2" :descC3="descC3" :idGrado="idGrado" />
+                  </span>
                   <span v-else>
                     <BoletinFinal v-if="mostrarBoletines" :listaHabilitaciones="listaHabilitaciones" :estudiantesSeleccionados="estudiantesSeleccionados" :listaAreasAsignaturas="listaAreasAsignaturas" :listaDescriptores="listaDescriptores" :notas="notas" :datosEstudiantes="datosEstudiantes" :anio="Number($store.state.aLectivo)" :periodoActual="idPeriodo" :periodosVisibles="periodosVisibles" :nombreSede="nombreSede" :nombreCurso="nombreCurso" :nombrePeriodo="nombrePeriodo" :nombreJornada="nombreJornada" :nombreDirector="nombreDirector" :idNivel="idNivel" :umbralesA="umbralesA" :umbralesT="umbralesT" :pesosPeriodos="pesosPeriodos" :tipoValComp="tipoValComp" :promCompor="promCompor" :letrasCompor="letrasCompor" :firmasBoletin="firmasBoletin" :descC1="descC1" :descC2="descC2" :descC3="descC3" />
                   </span>
@@ -453,6 +460,13 @@
 
   import BoletinFinalRural from '@/views/reportes/boletines/BoletinFinalRural'
   import BoletinFinalGranColombiano from '@/views/reportes/boletines/BoletinFinalGranColombiano'
+  import BoletinFinalSandoval from '@/views/reportes/boletines/BoletinFinalSandoval'
+  import BoletinFinalJulius from '@/views/reportes/boletines/BoletinFinalJulius'
+  import BoletinFinalInem from '@/views/reportes/boletines/BoletinFinalInem'
+  import BoletinFinalEnslap from '@/views/reportes/boletines/BoletinFinalEnslap'
+  import BoletinFinalEmiliani from '@/views/reportes/boletines/BoletinFinalEmiliani'
+  import BoletinFinalSantiago from '@/views/reportes/boletines/BoletinFinalSantiago'
+  import BoletinFinalGustavo from '@/views/reportes/boletines/BoletinFinalGustavo'
   import BoletinFinal from '@/views/reportes/boletines/BoletinFinal'
 
   export default {
@@ -476,6 +490,13 @@
       BoletinFinal,
       BoletinFinalRural,
       BoletinFinalGranColombiano,
+      BoletinFinalSandoval,
+      BoletinFinalJulius,
+      BoletinFinalInem,
+      BoletinFinalEnslap,
+      BoletinFinalEmiliani,
+      BoletinFinalSantiago,
+      BoletinFinalGustavo,
     },
     data () {
       return {
@@ -527,18 +548,18 @@
       procesarBoletinesFinales() {
         if (this.idNivel == 1 && (this.$store.state.idInstitucion == '17ee4f30-fc80-11ec-a1d1-1dc2835404e5' || this.$store.state.idInstitucion == '097b7b10-fcaa-11ec-8267-536b07c743c4' || this.$store.state.idInstitucion == '8a1bd1e0-fcb2-11ec-8267-536b07c743c4')) {
           this.listaReportes = []
+          this.idPeriodo = this.$store.state.idInstitucion == '17ee4f30-fc80-11ec-a1d1-1dc2835404e5' ? 4 : 5
           this.$refs.estudiantes.selectedRows.forEach(element => {
             this.listaReportes.push({ 'id': element.idMatricula, 'estudiante': element.nombre, 'pue': element.puesto, 'pro': element.promedio })
           })
-          //console.log(JSON.stringify(this.listaReportes))
+          const periodo = 'DEFINITIVO'
           let sede = document.getElementById('sedes')[document.getElementById('sedes').selectedIndex].text
           let curso = document.getElementById('cursos')[document.getElementById('cursos').selectedIndex].text
-          let periodo = document.getElementById('periodo')[document.getElementById('periodo').selectedIndex].text
           let uri = "?datos=" + JSON.stringify(this.listaReportes) + "&ie=" + this.$store.state.nombreInstitucion + "&vigencia=" + this.$store.state.aLectivo + "&escudo=" + this.$store.state.escudoInstitucion + "&sede=" + sede + "&idCurso=" + this.idCurso + "&curso=" + curso + "&jornada=" + this.nombreJornada + "&director=" + this.nombreDirector + "&periodo=" + periodo + "&idPeriodo=" + this.idPeriodo + "&idIe=" + this.$store.state.idInstitucion + "&idNivel=" + this.idNivel + "&puesto=" + this.puesto +
           "&minBaj=" + this.$store.state.datosSecciones[0].minBaj + "&maxBaj=" + this.$store.state.datosSecciones[0].maxBaj + "&minBas=" + this.$store.state.datosSecciones[0].minBas + "&maxBas=" + this.$store.state.datosSecciones[0].maxBas + "&minAlt=" + this.$store.state.datosSecciones[0].minAlt + "&maxAlt=" + this.$store.state.datosSecciones[0].maxAlt + "&minSup=" + this.$store.state.datosSecciones[0].minSup + "&maxSup=" + this.$store.state.datosSecciones[0].maxSup
           let encoded = encodeURI(uri);
           //window.open("http://localhost/siedutunja/php/boletines/" + this.$store.state.daneInstitucion + "as.php" + encoded,"_blank")
-          window.open("https://siedutunja.gov.co/php/boletines/" + this.$store.state.daneInstitucion + "as.php" + encoded,"_blank")
+          window.open("https://siedutunja.gov.co/php/boletines/" + this.$store.state.daneInstitucion + "asFinal.php" + encoded,"_blank")
         } else {
           this.btnCargando = true
           this.mostrarBoletines = true
@@ -1082,7 +1103,7 @@
       async consultarDescriptores() {
         this.listaDescriptores = []
         await axios
-        .get(CONFIG.ROOT_PATH + 'boletines/descriptores/curso', {params: {idCurso: this.idCurso, periodo: this.idPeriodo}})
+        .get(CONFIG.ROOT_PATH + 'boletines/descriptores/curso', {params: {idCurso: this.idCurso, periodo: 5}})
         .then(response => {
           if (response.data.error){
             this.mensajeEmergente('danger',CONFIG.TITULO_MSG,response.data.mensaje + ' - Lista descriptores curso')
@@ -1136,7 +1157,7 @@
                   this.consultarNotas()
                   this.consultarAreasAsignaturas()
                   this.consultarHabilitaciones()
-                  //this.consultarDescriptores()
+                  this.consultarDescriptores()
                 }
               }
             }
