@@ -81,6 +81,7 @@
         } else {
           periodos = [{'id': 1, 'periodo': 'PRIMERO'},{'id': 2, 'periodo': 'SEGUNDO'},{'id': 3, 'periodo': 'TERCERO'},{'id': 4, 'periodo': 'CUARTO'}]
         }
+        periodos = [{'id': 1, 'periodo': 'PRIMERO'},{'id': 2, 'periodo': 'SEGUNDO'},{'id': 3, 'periodo': 'TERCERO'},{'id': 4, 'periodo': 'CUARTO'},{'id': 5, 'periodo': 'FINAL'}]
         this.$store.commit('set', ['periodos', periodos])
         this.$router.push('/')
       },

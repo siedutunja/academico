@@ -455,7 +455,7 @@ export default {
         }
       })
       if (this.perdioPorHabilitacion == 1) cantPerdidas = 100
-      return cantPerdidas == 0 ? 'PROMOVIDO AL SIGUIENTE GRADO' : cantPerdidas < 3 ? 'ESTUDIANTE PENDIENTE DE PROMOCIÓN' : 'REPROBADO, NO PROMOVIDO AL SIGUIENTE GRADO'
+      return cantPerdidas == 0 ? 'PROMOVIDO AL SIGUIENTE GRADO' : 'REPROBADO, NO PROMOVIDO AL SIGUIENTE GRADO'
     },
     generarRankingCurso(idMatricula) {
       const ranking = []

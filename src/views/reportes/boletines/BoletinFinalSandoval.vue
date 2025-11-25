@@ -439,7 +439,7 @@ export default {
         }
       })
       if (this.perdioPorHabilitacion == 1) cantPerdidas = 100
-      return cantPerdidas == 0 ? 'EL ESTUDIANTE APROBÓ EL GRADO' : cantPerdidas < 3 ? 'ESTUDIANTE PENDIENTE DE PROMOCIÓN' : 'ESTUDIANTE REPROBADO'
+      return cantPerdidas == 0 ? 'EL ESTUDIANTE APROBÓ EL GRADO' : 'ESTUDIANTE REPROBADO'
     },
     generarRankingCurso(idMatricula) {
       const ranking = []
