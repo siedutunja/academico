@@ -226,7 +226,7 @@ export default {
                 <td>${habilit.fecha}</td>
                 <td>${habilit.acta}</td>
                 <td>${habilit.habilitacion}</td>
-                <td>${habilit.habilitacion > prom ? habilit.habilitacion : prom}</td>
+                <td>${prom}</td>
                 <td>${des}</td>
                 <td>${ausJAsig}</td>
                 <td>${ausSAsig}</td>
@@ -242,7 +242,7 @@ export default {
                 <td>${prom}</td>
                 <td></td>
                 <td></td>
-                <td>${final > 0 ? final : final}</td>
+                <td>${prom}</td>
                 <td>${des}</td>
                 <td>${ausJAsig}</td>
                 <td>${ausSAsig}</td>
@@ -268,7 +268,7 @@ export default {
               ${notasArea}
               <td>${promArea}</td>
               <td></td><td></td><td></td>
-              <td>${finalArea > 0 ? finalArea : finalArea}</td>
+              <td>${promArea}</td>
               <td>${desArea}</td>
               <td>${ausJArea}</td>
               <td>${ausSArea}</td>

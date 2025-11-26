@@ -390,10 +390,10 @@
                   <span v-else-if="$store.state.idInstitucion == 'eb58bf60-fc83-11ec-a1d1-1dc2835404e5'"> <!--INEM --> 
                     <BoletinFinalInem v-if="mostrarBoletines" :listaHabilitaciones="listaHabilitaciones" :estudiantesSeleccionados="estudiantesSeleccionados" :listaAreasAsignaturas="listaAreasAsignaturas" :listaDescriptores="listaDescriptores" :notas="notas" :datosEstudiantes="datosEstudiantes" :anio="Number($store.state.aLectivo)" :periodoActual="idPeriodo" :periodosVisibles="periodosVisibles" :nombreSede="nombreSede" :nombreCurso="nombreCurso" :nombrePeriodo="nombrePeriodo" :nombreJornada="nombreJornada" :nombreDirector="nombreDirector" :idNivel="idNivel" :umbralesA="umbralesA" :umbralesT="umbralesT" :pesosPeriodos="pesosPeriodos" :tipoValComp="tipoValComp" :promCompor="promCompor" :letrasCompor="letrasCompor" :firmasBoletin="firmasBoletin" :descC1="descC1" :descC2="descC2" :descC3="descC3" :idGrado="idGrado" />
                   </span>
-                  <span v-else-if="$store.state.idInstitucion == '17ee4f30-fc80-11ec-a1d1-1dc2835404e5'"> <!--ENSLAP --> 
+                  <span v-else-if="$store.state.idInstitucion == '17ee4f30-fc80-11ec-a1d1-1dc2835404e5'"> <!--ENSLAP ok--> 
                     <BoletinFinalEnslap v-if="mostrarBoletines" :listaHabilitaciones="listaHabilitaciones" :estudiantesSeleccionados="estudiantesSeleccionados" :listaAreasAsignaturas="listaAreasAsignaturas" :listaDescriptores="listaDescriptores" :notas="notas" :datosEstudiantes="datosEstudiantes" :anio="Number($store.state.aLectivo)" :periodoActual="idPeriodo" :periodosVisibles="periodosVisibles" :nombreSede="nombreSede" :nombreCurso="nombreCurso" :nombrePeriodo="nombrePeriodo" :nombreJornada="nombreJornada" :nombreDirector="nombreDirector" :idNivel="idNivel" :umbralesA="umbralesA" :umbralesT="umbralesT" :pesosPeriodos="pesosPeriodos" :tipoValComp="tipoValComp" :promCompor="promCompor" :letrasCompor="letrasCompor" :firmasBoletin="firmasBoletin" :descC1="descC1" :descC2="descC2" :descC3="descC3" :idGrado="idGrado" />
                   </span>
-                  <span v-else-if="$store.state.idInstitucion == 'acaa36d0-fcb1-11ec-8267-536b07c743c4'"> <!--EMILIANI --> 
+                  <span v-else-if="$store.state.idInstitucion == 'acaa36d0-fcb1-11ec-8267-536b07c743c4'"> <!--EMILIANI ok--> 
                     <BoletinFinalEmiliani v-if="mostrarBoletines" :listaHabilitaciones="listaHabilitaciones" :estudiantesSeleccionados="estudiantesSeleccionados" :listaAreasAsignaturas="listaAreasAsignaturas" :listaDescriptores="listaDescriptores" :notas="notas" :datosEstudiantes="datosEstudiantes" :anio="Number($store.state.aLectivo)" :periodoActual="idPeriodo" :periodosVisibles="periodosVisibles" :nombreSede="nombreSede" :nombreCurso="nombreCurso" :nombrePeriodo="nombrePeriodo" :nombreJornada="nombreJornada" :nombreDirector="nombreDirector" :idNivel="idNivel" :umbralesA="umbralesA" :umbralesT="umbralesT" :pesosPeriodos="pesosPeriodos" :tipoValComp="tipoValComp" :promCompor="promCompor" :letrasCompor="letrasCompor" :firmasBoletin="firmasBoletin" :descC1="descC1" :descC2="descC2" :descC3="descC3" :idGrado="idGrado" />
                   </span>
                   <span v-else-if="$store.state.idInstitucion == '7c63ed50-fcb0-11ec-8267-536b07c743c4'"> <!--SANTIAGO --> 
@@ -404,6 +404,12 @@
                   </span>
                   <span v-else-if="$store.state.idInstitucion == '8a1bd1e0-fcb2-11ec-8267-536b07c743c4'"> <!--LIBERTADOR --> 
                     <BoletinFinalLibertador v-if="mostrarBoletines" :listaHabilitaciones="listaHabilitaciones" :estudiantesSeleccionados="estudiantesSeleccionados" :listaAreasAsignaturas="listaAreasAsignaturas" :listaDescriptores="listaDescriptores" :notas="notas" :datosEstudiantes="datosEstudiantes" :anio="Number($store.state.aLectivo)" :periodoActual="idPeriodo" :periodosVisibles="periodosVisibles" :nombreSede="nombreSede" :nombreCurso="nombreCurso" :nombrePeriodo="nombrePeriodo" :nombreJornada="nombreJornada" :nombreDirector="nombreDirector" :idNivel="idNivel" :umbralesA="umbralesA" :umbralesT="umbralesT" :pesosPeriodos="pesosPeriodos" :tipoValComp="tipoValComp" :promCompor="promCompor" :letrasCompor="letrasCompor" :firmasBoletin="firmasBoletin" :descC1="descC1" :descC2="descC2" :descC3="descC3" :idGrado="idGrado" />
+                  </span>
+                  <span v-else-if="$store.state.idInstitucion == 'c50f3d80-fca0-11ec-8267-536b07c743c4'"> <!--SILVINO --> 
+                    <BoletinFinalSilvino v-if="mostrarBoletines" :listaHabilitaciones="listaHabilitaciones" :estudiantesSeleccionados="estudiantesSeleccionados" :listaAreasAsignaturas="listaAreasAsignaturas" :listaDescriptores="listaDescriptores" :notas="notas" :datosEstudiantes="datosEstudiantes" :anio="Number($store.state.aLectivo)" :periodoActual="idPeriodo" :periodosVisibles="periodosVisibles" :nombreSede="nombreSede" :nombreCurso="nombreCurso" :nombrePeriodo="nombrePeriodo" :nombreJornada="nombreJornada" :nombreDirector="nombreDirector" :idNivel="idNivel" :umbralesA="umbralesA" :umbralesT="umbralesT" :pesosPeriodos="pesosPeriodos" :tipoValComp="tipoValComp" :promCompor="promCompor" :letrasCompor="letrasCompor" :firmasBoletin="firmasBoletin" :descC1="descC1" :descC2="descC2" :descC3="descC3" :idGrado="idGrado" />
+                  </span>
+                  <span v-else-if="$store.state.idInstitucion == 'f0491770-fca8-11ec-8267-536b07c743c4'"> <!--SILVINO --> 
+                    <BoletinFinalGonzalo v-if="mostrarBoletines" :listaHabilitaciones="listaHabilitaciones" :estudiantesSeleccionados="estudiantesSeleccionados" :listaAreasAsignaturas="listaAreasAsignaturas" :listaDescriptores="listaDescriptores" :notas="notas" :datosEstudiantes="datosEstudiantes" :anio="Number($store.state.aLectivo)" :periodoActual="idPeriodo" :periodosVisibles="periodosVisibles" :nombreSede="nombreSede" :nombreCurso="nombreCurso" :nombrePeriodo="nombrePeriodo" :nombreJornada="nombreJornada" :nombreDirector="nombreDirector" :idNivel="idNivel" :umbralesA="umbralesA" :umbralesT="umbralesT" :pesosPeriodos="pesosPeriodos" :tipoValComp="tipoValComp" :promCompor="promCompor" :letrasCompor="letrasCompor" :firmasBoletin="firmasBoletin" :descC1="descC1" :descC2="descC2" :descC3="descC3" :idGrado="idGrado" />
                   </span>
                   <span v-else>
                     <BoletinFinal v-if="mostrarBoletines" :listaHabilitaciones="listaHabilitaciones" :estudiantesSeleccionados="estudiantesSeleccionados" :listaAreasAsignaturas="listaAreasAsignaturas" :listaDescriptores="listaDescriptores" :notas="notas" :datosEstudiantes="datosEstudiantes" :anio="Number($store.state.aLectivo)" :periodoActual="idPeriodo" :periodosVisibles="periodosVisibles" :nombreSede="nombreSede" :nombreCurso="nombreCurso" :nombrePeriodo="nombrePeriodo" :nombreJornada="nombreJornada" :nombreDirector="nombreDirector" :idNivel="idNivel" :umbralesA="umbralesA" :umbralesT="umbralesT" :pesosPeriodos="pesosPeriodos" :tipoValComp="tipoValComp" :promCompor="promCompor" :letrasCompor="letrasCompor" :firmasBoletin="firmasBoletin" :descC1="descC1" :descC2="descC2" :descC3="descC3" />
@@ -471,6 +477,8 @@
   import BoletinFinalSantiago from '@/views/reportes/boletines/BoletinFinalSantiago'
   import BoletinFinalGustavo from '@/views/reportes/boletines/BoletinFinalGustavo'
   import BoletinFinalLibertador from '@/views/reportes/boletines/BoletinFinalLibertador'
+  import BoletinFinalSilvino from '@/views/reportes/boletines/BoletinFinalSilvino'
+  import BoletinFinalGonzalo from '@/views/reportes/boletines/BoletinFinalGonzalo'
   import BoletinFinal from '@/views/reportes/boletines/BoletinFinal'
 
   export default {
@@ -502,6 +510,8 @@
       BoletinFinalSantiago,
       BoletinFinalGustavo,
       BoletinFinalLibertador,
+      BoletinFinalSilvino,
+      BoletinFinalGonzalo
     },
     data () {
       return {
@@ -1058,7 +1068,7 @@
           })
         } else if (this.idBoletin == 10) {
           let apiRuta = 0
-          if (this.$store.state.idInstitucion == '8a1bd1e0-fcb2-11ec-8267-536b07c743c4') { // LIBERTADOR
+          if (this.$store.state.idInstitucion == '8a1bd1e0-fcb2-11ec-8267-536b07c743c4' || this.$store.state.idInstitucion == 'c50f3d80-fca0-11ec-8267-536b07c743c4') { // LIBERTADOR SILVINO
             this.idPeriodo = 5
             apiRuta = 'boletines/notas/curso/periodo5'
           } else if (this.$store.state.idInstitucion == '660fa760-fc83-11ec-a1d1-1dc2835404e5') {  // Gran Colombiano

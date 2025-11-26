@@ -45,7 +45,6 @@ export default {
       escala: 0,
       tipoArea: 1,
       perdioPorHabilitacion: 0,
-      perdioPorFallas: 0,
     }
   },
   methods: {
@@ -95,7 +94,6 @@ export default {
       if (!data) return `<p>No hay datos para ${estudiante.nombre}</p>`
       const idMatricula = estudiante.idMatricula
       this.perdioPorHabilitacion = 0
-      this.perdioPorFallas = 0
       let cuerpo = `
         <div class="boletin">
           <div class="text-center mt-2">
@@ -122,36 +120,12 @@ export default {
           <table class="tabla-boletin">
             <thead>
               <tr>
-                <th rowspan="2">Área / Asignatura</th>
-                <th rowspan="2">IH</th>
-                <th colspan="${this.periodosVisibles.length + 1}">Historial</th>
-                <th colspan="${this.colDesem}">Desempeño Definitivo</th>
-              </tr>
-              <tr>
-                ${this.periodosVisibles.map(p => `<th>P${p}</th>`).join('')}
-                <th>PR</th>
-        `
-        if (this.colDesem == 7) {
-          cuerpo += `
-                  <th>Fecha</th>
-                  <th>Acta</th>
-                  <th>Supera</th>
-                  <th>Def</th>
-                  <th>Desemp</th>
-                  <th>AJ</th>
-                  <th>AS</th>
-          `
-        } else {
-          cuerpo += `
-                  <th>EvP</th>
-                  <th>Rec</th>
-                  <th>Def</th>
-                  <th>Desemp</th>
-                  <th>AJ</th>
-                  <th>AS</th>
-          `
-        }
-        cuerpo += `
+                <th>Área / Asignatura</th>
+                <th>IH</th>
+                <th>Definitiva</th>
+                <th>Desempeño</th>
+                <th>AJ</th>
+                <th>AS</th>
               </tr>
             </thead>
             <tbody>
@@ -177,7 +151,7 @@ export default {
           <table class="tabla-boletin observacion-comportamiento">
             <thead>
               <tr>
-                <th style="text-align: left; height:100px; padding-left: 10px; vertical-align: top;"><h3>🧠 Observaciones:</h3>${ this.observacionComportamiento(data) }</th>
+                <th style="text-align: left; height:50px; padding-left: 10px; vertical-align: top;"><h3>🧠 Observaciones:</h3>${ this.observacionComportamiento(data) }</th>
               </tr>
             </thead>
           </table>
@@ -210,8 +184,6 @@ export default {
           const ausS = this.ausencias(data, area, a, 'ausS')
           const ausJAsig = this.orden == 98 ? '' : ausJ > 0 ? ausJ : ''
           const ausSAsig = this.orden == 98 ? '' : ausS > 0 ? ausS : ''
-          const minPierdeFallas = ih * 40 * .2 + 1
-          if (ausSAsig >= minPierdeFallas) this.perdioPorFallas = 1
           const docente = asig.docente != null ? asig.docente : ''
           const idAsignaturaCurso = asig.idAsignaturaCurso
           const habilit = this.mostrarHabilitacion(idMatricula,idAsignaturaCurso)
@@ -225,12 +197,7 @@ export default {
               <tr>
                 <td style="text-align: left"><strong>${nombreAsignatura}</strong> <br> <i style="font-size: 10px;">${docente}</i></td>
                 <td>${ih}</td>
-                ${notas}
                 <td>${prom}</td>
-                <td>${habilit.fecha}</td>
-                <td>${habilit.acta}</td>
-                <td>${habilit.habilitacion}</td>
-                <td>${habilit.habilitacion > prom ? habilit.habilitacion : prom}</td>
                 <td>${des}</td>
                 <td>${ausJAsig}</td>
                 <td>${ausSAsig}</td>
@@ -269,10 +236,7 @@ export default {
             <tr class="fila-area">
               <td style="text-align: left"><strong>${this.nombreDelArea(area)}</strong></td>
               <td>${ihArea}</td>
-              ${notasArea}
               <td>${promArea}</td>
-              <td></td><td></td><td></td>
-              <td>${finalArea > 0 ? finalArea : finalArea}</td>
               <td>${desArea}</td>
               <td>${ausJArea}</td>
               <td>${ausSArea}</td>
@@ -363,7 +327,7 @@ export default {
       return descriptorObj?.descriptor || ''
     },
     desempeno(nota, area, tipo, orden) {
-      if (orden == 99) {
+      if (orden == 999) {
         if (nota == 'I') return 'Insuficiente'
         else if (nota == 'A') return 'Aceptable'
         else if (nota == 'B') return 'Bueno'
@@ -384,7 +348,7 @@ export default {
       }
     },
     desempenoArea(nota, area, tipo, orden) {
-      if (orden == 99) {
+      if (orden == 999) {
         if (nota == 'I') return 'Insuficiente'
         else if (nota == 'A') return 'Aceptable'
         else if (nota == 'B') return 'Bueno'
@@ -459,8 +423,7 @@ export default {
         }
       })
       if (this.perdioPorHabilitacion == 1) cantPerdidas = 100
-      if (this.perdioPorFallas == 1) cantPerdidas = 999
-      return cantPerdidas == 0 ? 'EL ESTUDIANTE APROBÓ EL GRADO' : cantPerdidas == 999 ? 'ESTUDIANTE REPROBADO POR INASISTENCIA' : 'ESTUDIANTE REPROBADO'
+      return cantPerdidas == 0 ? 'EL ESTUDIANTE APROBÓ EL GRADO' : 'ESTUDIANTE REPROBADO'
     },
     generarRankingCurso(idMatricula) {
       const ranking = []
@@ -758,7 +721,6 @@ export default {
       return total > 0 ?  this.redondear(total).toFixed(1) : ''
     },
     ausencias(est, area, asignatura, tipo) {
-
       return Number(est.areas?.[area]?.asignaturas?.[asignatura]?.[tipo]) || 0
     },
     ausenciasArea(est, area, tipo) {
