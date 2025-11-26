@@ -54,7 +54,7 @@
                 </th>
               </template>
               -->
-              <th rowspan="3">Estado Final Promoción</th>
+              <th rowspan="3">Estado Sin Superación Final</th>
               <th rowspan="3">PRO GEN</th>
               <th rowspan="3">Tot<br>Area<br>Baj</th>
               <th rowspan="3">Tot<br>Area<br>Bas</th>
@@ -603,7 +603,7 @@ import AreasPerdidasVue from './AreasPerdidas.vue'
       },
       imprimir() {
         let fecha = 'Fecha: ' + new Date().toLocaleString()
-        let tituloInforme = 'RESUMEN DE PROMOCIÓN POR AREAS'
+        let tituloInforme = 'REPORTE DE ESTADOS SIN SUPERACIÓN FINAL'
         const contenido = document.querySelector('table').outerHTML
         const ventana = window.open("Consolidados", "_blank")
         ventana.document.write(`<html><head><title>Imprimir</title></head>

@@ -55,6 +55,7 @@
               </template>
               -->
               <th rowspan="3">Estado Final Promoción</th>
+              <!--
               <th rowspan="3">PRO GEN</th>
               <th rowspan="3">Tot<br>Area<br>Baj</th>
               <th rowspan="3">Tot<br>Area<br>Bas</th>
@@ -63,6 +64,7 @@
               <th rowspan="3">Tot<br>AuJ</th>
               <th rowspan="3">Tot<br>AuS</th>
               <th rowspan="3">Puesto</th>
+              -->
               <th rowspan="3">#</th>
             </tr>
             <!--
@@ -109,6 +111,7 @@
               </template>
               -->
               <td style="text-align: left">{{ est.id_conceptual=='N' ? mostrarEstadoPromocion(contarDesempenoEstudianteArea(est, 'bajo')) : '-' }}</td>
+              <!--
               <td>{{ est.id_conceptual=='N' ? calcularPromedioGeneral(est) : '-' }}</td>
               <td>{{ est.id_conceptual=='N' ? contarDesempenoEstudianteArea(est, 'bajo') : '-' }}</td>
               <td>{{ est.id_conceptual=='N' ? contarDesempenoEstudianteArea(est, 'basico') : '-' }}</td>
@@ -117,11 +120,12 @@
               <td>{{ est.id_conceptual=='N' ? est.ausJ : '-' }}</td>
               <td>{{ est.id_conceptual=='N' ? est.ausS : '-' }}</td>
               <td>{{ est.id_conceptual=='N' ? iconoPuesto(puestosPorEstudiante[nombre]) : '-' }} {{ est.id_conceptual=='N' ? puestosPorEstudiante[nombre] : '-' }}</td>
+              -->
               <td class="text-left">{{ i + 1 }}</td>
             </tr>
+            <!--
             <tr style="background-color: #f0f0f0; font-weight: bold;">
               <td colspan="2">Total Bajos</td>
-              <!--
               <template v-for="(asigs, area) in encabezadoPorArea">
                 <template v-for="asig in asigs">
                   <td v-for="p in periodosVisibles" :key="'bp' + area + asig + p">
@@ -135,7 +139,6 @@
                   {{ totalBajosPromedioArea(area) }}
                 </td>
               </template>
-              -->
               <td></td>
               <td></td>
               <td>{{ totales.bajo }}</td>
@@ -144,9 +147,10 @@
               <td>{{ totales.superior }}</td>
               <td>{{ totales.ausJ }}</td>
               <td>{{ totales.ausS }}</td>
-              <td></td> <!-- Puesto -->
+              <td></td>
               <td></td>
             </tr>
+            -->
           </tbody>
         </table>
         <div style="margin-bottom: 1rem">
@@ -192,16 +196,12 @@ import AreasPerdidasVue from './AreasPerdidas.vue'
         if ( this.$store.state.idInstitucion == 'f0491770-fca8-11ec-8267-536b07c743c4') { // Gonzalo
           if (areasPerdidas == 0) {
             return 'APROBÓ EL GRADO'
-          } else if (areasPerdidas >= 1 && areasPerdidas <= 2) {
-            return 'PENDIENTE DE PROMOCIÓN'
           } else {
             return 'REPROBADO'
           }
         } else {
           if (areasPerdidas == 0) {
             return 'APROBÓ EL GRADO'
-          } else if (areasPerdidas >= 1 && areasPerdidas <= 2) {
-            return 'PENDIENTE DE PROMOCIÓN'
           } else {
             return 'REPROBADO'
           }
@@ -362,7 +362,17 @@ import AreasPerdidasVue from './AreasPerdidas.vue'
         let total = 0
         asigns.forEach(asig => {
           if (asig.orden === 99 && this.datosSeccion.promCompor == 0) return '-'
-          total += parseFloat((this.calcularPromedioAsignatura(asig) * asig.porcentaje) / 100)
+          const idAsignaturaCurso = asig.idAsignaturaCurso
+          const idMatricula = asig.idMatricula
+          const habilit = this.mostrarHabilitacion(idMatricula,idAsignaturaCurso)
+          const promAsigna = parseFloat((this.calcularPromedioAsignatura(asig) * asig.porcentaje) / 100)
+          const valorSumar = habilit.habilitacion > promAsigna ? habilit.habilitacion : promAsigna
+          total += valorSumar //parseFloat((this.calcularPromedioAsignatura(asig) * asig.porcentaje) / 100)
+          /*
+          if ( idMatricula == 'f7207b67-ed37-11ef-9dd4-73826cf0db6f') {
+            console.log('Mat: ' + idMatricula + ' - Asig: ' + idAsignaturaCurso + ' - Nota: ' + promAsigna + ' - Hab: ' + habilit.habilitacion + ' ==' + valorSumar)
+          }
+          */
         })
         return total > 0 ? this.redondear(total).toFixed(1) : ''
       },
@@ -373,11 +383,6 @@ import AreasPerdidasVue from './AreasPerdidas.vue'
           if (!this.esAreaValida(area)) return
           const meta = this.listaAreasAsignaturas.find( a => a.area === area)
           const idTipoEspecialidadArea = meta?.idTipoArea
-          const idAsignaturaCurso = meta?.idAsignaturaCurso
-          const idMatricula = meta?.id_matricula
-          //const habilit = this.mostrarHabilitacion(idMatricula,idAsignaturaCurso)
-          //habilit.habilitacion != '' ? 'Hab: ' + console.log(habilit) : console.log('Hab: ' + '')
-
           const promedio = parseFloat(this.calcularPromedioArea(est.areas[area]))
           if (!isNaN(promedio)) {
             if (idTipoEspecialidadArea === 1) {
@@ -625,6 +630,7 @@ import AreasPerdidasVue from './AreasPerdidas.vue'
             } else{
               if (response.data.datos != 0) {
                 this.datosRaw = response.data.datos
+                //console.log(JSON.stringify(this.datosRaw))
               }
             }
           })
@@ -638,7 +644,7 @@ import AreasPerdidasVue from './AreasPerdidas.vue'
       },
       imprimir() {
         let fecha = 'Fecha: ' + new Date().toLocaleString()
-        let tituloInforme = 'RESUMEN DE PROMOCIÓN POR AREAS'
+        let tituloInforme = 'ESTADOS FINALES DE PROMOCIÓN ESCOLAR'
         const contenido = document.querySelector('table').outerHTML
         const ventana = window.open("Consolidados", "_blank")
         ventana.document.write(`<html><head><title>Imprimir</title></head>
@@ -711,15 +717,17 @@ import AreasPerdidasVue from './AreasPerdidas.vue'
       estudiantesNotas() {
         const mapa = {}
         this.datosRaw.forEach(row => {
-          const { id_matricula, estudiante, area, asignatura, periodo, definitiva, recuperacion, orden, definitivacompor, definitivapree, idTipoEspecialidad, ausJ, ausS, porcentaje, id_conceptual } = row
+          const { id_matricula, idAsignaturaCurso, estudiante, area, asignatura, periodo, definitiva, recuperacion, orden, definitivacompor, definitivapree, idTipoEspecialidad, ausJ, ausS, porcentaje, id_conceptual } = row
           if (!mapa[estudiante]) {
-            mapa[estudiante] = { id_matricula, id_conceptual, ausJ: 0, ausS: 0, areas: {} }
+            mapa[estudiante] = { id_conceptual, ausJ: 0, ausS: 0, areas: {} }
           }
           if (!mapa[estudiante].areas[area]) {
             mapa[estudiante].areas[area] = { asignaturas: {} }
           }
           if (!mapa[estudiante].areas[area].asignaturas[asignatura]) {
             mapa[estudiante].areas[area].asignaturas[asignatura] = {
+              idMatricula: id_matricula,
+              idAsignaturaCurso,
               periodos: {},
               orden,
               idTipoEspecialidad,

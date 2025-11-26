@@ -37,15 +37,15 @@
                       <b-col lg="4">
                         <h6>Finales</h6>
                         <b-form-group label="" v-slot="{ ariaDescribedby }">
-                          <b-form-radio v-model="idConsolidado" :aria-describedby="ariaDescribedby" name="some-radios" value="33">Consolidado Final de Asignaturas</b-form-radio>
-                          <b-form-radio v-model="idConsolidado" :aria-describedby="ariaDescribedby" name="some-radios" value="35">Consolidado Final de Areas</b-form-radio>
+                          <b-form-radio v-model="idConsolidado" :aria-describedby="ariaDescribedby" name="some-radios" value="33">Consolidado Evaluaciones Finales por Asignaturas</b-form-radio>
+                          <b-form-radio v-model="idConsolidado" :aria-describedby="ariaDescribedby" name="some-radios" value="35">Consolidado Evaluaciones Finales por Áreas</b-form-radio>
                           <!--
                           <b-form-radio v-model="idConsolidado" :aria-describedby="ariaDescribedby" name="some-radios" value="30">Resumen Final por Estudiante</b-form-radio>
                           <b-form-radio v-model="idConsolidado" :aria-describedby="ariaDescribedby" name="some-radios" value="31">Resumen Final por Estudiante con Habilitaciones</b-form-radio>
                           -->
-                          <b-form-radio v-model="idConsolidado" :aria-describedby="ariaDescribedby" name="some-radios" value="34">Resumen Asignaturas Perdidas</b-form-radio>
-                          <b-form-radio v-model="idConsolidado" :aria-describedby="ariaDescribedby" name="some-radios" value="32">Resumen de Promoción</b-form-radio>
-                          <!--<b-form-radio v-model="idConsolidado" :aria-describedby="ariaDescribedby" name="some-radios" value="36">Resumen Definitivo de Promoción</b-form-radio>-->
+                          <b-form-radio v-model="idConsolidado" :aria-describedby="ariaDescribedby" name="some-radios" value="34">Informe de Asignaturas Perdidas</b-form-radio>
+                          <b-form-radio v-model="idConsolidado" :aria-describedby="ariaDescribedby" name="some-radios" value="32">Reporte Estados sin Superación Final (Pendientes)</b-form-radio>
+                          <b-form-radio v-model="idConsolidado" :aria-describedby="ariaDescribedby" name="some-radios" value="36">Estados Finales de Promoción Escolar</b-form-radio>
                         </b-form-group>
                       </b-col>
                     </b-row>
@@ -132,7 +132,7 @@
   import ConsolidadoFinalInem from '@/views/informes/consolidados/ConsolidadoFinalInem'
   import ResumenFinalAsigPerdidas from '@/views/informes/consolidados/ResumenFinalAsigPerdidas'
   import ConsolidadoFinalAreas from '@/views/informes/consolidados/ConsolidadoFinalAreas'
-  //import ResumenPromocionAreasDefinitivo from '@/views/informes/consolidados/ResumenPromocionAreasDefinitivo'
+  import ResumenPromocionAreasDefinitivo from '@/views/informes/consolidados/ResumenPromocionAreasDefinitivo'
 
   export default {
     name: 'consolidados',
@@ -154,7 +154,7 @@
       ConsolidadoFinalInem,
       ResumenFinalAsigPerdidas,
       ConsolidadoFinalAreas,
-      //ResumenPromocionAreasDefinitivo,
+      ResumenPromocionAreasDefinitivo,
     },
     data () {
       return {
