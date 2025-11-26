@@ -1078,7 +1078,6 @@
             } else{
               if (response.data.datos != 0) {
                 this.notas = response.data.datos
-                console.log(JSON.stringify(this.notas))
               }
             }
           })

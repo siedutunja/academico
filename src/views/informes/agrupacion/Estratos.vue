@@ -201,9 +201,27 @@
         XLSX.writeFile(wb, 'EstudiantesPorEstrato.xlsx')
       },
       ocuparComboEspecial() {
-        this.comboEstratos = []
-        this.$store.state.datosTablas.estratos.forEach(element => {
-          this.comboEstratos.push({ 'value': element.id, 'text': element.estrato.toUpperCase() })
+        this.comboEstratos = [{'value': 0, 'text': '0'}, {'value': 1, 'text': '1'}, {'value': 2, 'text': '2'}, {'value': 3, 'text': '3'}, {'value': 4, 'text': '4'}, {'value': 5, 'text': '5'}, {'value': 6, 'text': '6'}, {'value': 7, 'text': '7'}, {'value': 8, 'text': '8'}, {'value': 9, 'text': 'NO ASIGNADO'}]
+      },
+      async cargarDataEstudiantes() {
+        this.btnCargando = true
+        this.dataConsultada = []
+        await axios
+        .get(CONFIG.ROOT_PATH + 'academico/data/estudiantes/estratos', { params: { idInstitucion: this.$store.state.idInstitucion, vigencia: this.$store.state.aLectivo }})
+        .then(response => {
+          if (response.data.error){
+            this.mensajeEmergente('danger',CONFIG.TITULO_MSG,response.data.mensaje + ' - Lista estudiantes agrupados')
+            this.btnCargando = false
+          } else{
+            if(response.data.datos != 0) {
+              this.dataConsultada = response.data.datos
+            }
+            this.btnCargando = false
+          }
+        })
+        .catch(err => {
+          this.mensajeEmergente('danger',CONFIG.TITULO_MSG,'Algo salio mal y no se pudo realizar: Lista estudiantes agrupados. Intente más tarde.' + err)
+          this.btnCargando = false
         })
       },
       mensajeEmergente(variante, titulo, contenido) {
@@ -213,14 +231,10 @@
     computed: {
     },
     beforeMount() {
-      this.btnCargando = true
-      this.dataConsultada = this.$store.state.datosDataEstudiantes
+      this.cargarDataEstudiantes()
       this.datosSeccion = this.$store.state.datosSecciones[this.$store.state.idSeccion - 1]
       this.fechaImpresion = 'Fecha: ' + new Date().toLocaleString()
       this.ocuparComboEspecial()
-      setTimeout(()=>{
-        this.btnCargando = false
-      },100)
     }
   }
 </script>

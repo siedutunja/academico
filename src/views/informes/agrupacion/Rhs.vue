@@ -200,10 +200,29 @@
         const wb = XLSX.utils.table_to_book(tabla)
         XLSX.writeFile(wb, 'EstudiantesPorRh.xlsx')
       },
-      ocuparComboEspecial() {
-        this.comboRhs = []
-        this.$store.state.datosTablas.rhs.forEach(element => {
-          this.comboRhs.push({ 'value': element.id, 'text': element.rh.toUpperCase() })
+      async ocuparComboEspecial() {
+        this.comboRhs = [{'value': 1, 'text': 'O+'}, {'value': 2, 'text': 'O-'}, {'value': 3, 'text': 'A+'}, {'value': 4, 'text': 'A-'}, {'value': 5, 'text': 'B+'}, {'value': 6, 'text': 'B-'}, {'value': 7, 'text': 'AB+'}, {'value': 8, 'text': 'AB-'}, {'value': 9, 'text': 'NO REPORTA'}]
+      },
+      async cargarDataEstudiantes() {
+        this.btnCargando = true
+        this.dataConsultada = []
+        await axios
+        .get(CONFIG.ROOT_PATH + 'academico/data/estudiantes/rhs', { params: { idInstitucion: this.$store.state.idInstitucion, vigencia: this.$store.state.aLectivo }})
+        .then(response => {
+          if (response.data.error){
+            this.mensajeEmergente('danger',CONFIG.TITULO_MSG,response.data.mensaje + ' - Lista estudiantes agrupados')
+            this.btnCargando = false
+          } else{
+            if(response.data.datos != 0) {
+              this.dataConsultada = response.data.datos
+              //console.log(this.dataConsultada)
+            }
+            this.btnCargando = false
+          }
+        })
+        .catch(err => {
+          this.mensajeEmergente('danger',CONFIG.TITULO_MSG,'Algo salio mal y no se pudo realizar: Lista estudiantes agrupados. Intente más tarde.' + err)
+          this.btnCargando = false
         })
       },
       mensajeEmergente(variante, titulo, contenido) {
@@ -213,14 +232,10 @@
     computed: {
     },
     beforeMount() {
-      this.btnCargando = true
-      this.dataConsultada = this.$store.state.datosDataEstudiantes
+      this.cargarDataEstudiantes()
       this.datosSeccion = this.$store.state.datosSecciones[this.$store.state.idSeccion - 1]
       this.fechaImpresion = 'Fecha: ' + new Date().toLocaleString()
       this.ocuparComboEspecial()
-      setTimeout(()=>{
-        this.btnCargando = false
-      },100)
     }
   }
 </script>
