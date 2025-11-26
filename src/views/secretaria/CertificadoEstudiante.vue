@@ -128,7 +128,7 @@
               font-size: 13px;
             }
             .encabezado {
-              text-align: center;
+              text-align: justify;
               margin-bottom: 20px;
               font-size: 13px;
             }
@@ -275,7 +275,7 @@
     margin-bottom: 10px;
   }
   .encabezado {
-    text-align: center;
+    text-align: justify;
     margin-bottom: 20px;
   }
   .certifican {

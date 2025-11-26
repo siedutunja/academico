@@ -159,14 +159,14 @@ export default {
           this.orden = orden
           const datos = est.areas?.[area]?.asignaturas?.[asignatura]
           if (!datos) return
-          const promedio = this.letraDesdeValor(this.promedioAsignaturaPreescolar(datos))
+          const promedio = this.letraDesdeValor(this.promedioAsignaturaPreescolar(datos,orden),orden)
           const notaActual = datos.periodos?.[this.periodoActual] || ''
           const desempeño = this.datosDesempenoPorLetra(promedio,orden)
           html += `
             <tr>
               <td style="text-align: left"><strong>${nombreAsignatura}</strong> <br> <i style="font-size: 10px;">${docente}</i></td>
               <td>${ih}</td>
-              ${periodos.map(p => `<td>${orden === 98 ? '' : datos.periodos?.[p] || ''}</td>`).join('')}
+              ${periodos.map(p => `<td>${orden === 98 ? '' : datos.periodos?.[p] != 0 ? datos.periodos?.[p] : '' || ''}</td>`).join('')}
               <td>${orden === 98 ? '' : promedio}</td>
               <td>${orden === 98 ? '' : desempeño.texto} </td>
               <td>${datos.ausJ || 0}</td>
@@ -194,20 +194,21 @@ export default {
     valorNumericoDesdeLetra(letra,orden) {
       if (orden==99) {
         if (this.$store.state.idInstitucion == 'bd226a20-fc82-11ec-a1d1-1dc2835404e5') { // Julius
-          if (letra == 'J') return 1
-          else if (letra == 'B') return 2
-          else if (letra == 'S') return 3
-          else if (letra == 'E') return 4
+          if (letra == 'J') return 2
+          else if (letra == 'B') return 3
+          else if (letra == 'S') return 4
+          else if (letra == 'E') return 5
+          
         } else if (this.$store.state.idInstitucion == 'f5529ba0-fcb3-11ec-8267-536b07c743c4') { // Gustavo Rojas
-          if (letra == 'I') return 1
-          else if (letra == 'A') return 2
-          else if (letra == 'S') return 3
-          else if (letra == 'E') return 4
-        } else {
-          if (letra == 'J') return 1
-          else if (letra == 'B') return 2
+          if (letra == 'I') return 2
           else if (letra == 'A') return 3
           else if (letra == 'S') return 4
+          else if (letra == 'E') return 5
+        } else {
+          if (letra == 'J') return 2
+          else if (letra == 'B') return 3
+          else if (letra == 'A') return 4
+          else if (letra == 'S') return 5
         }
       } else {
         const escala = this.nuevaEscalaPreescolar.find(e => e.letra === letra)
@@ -215,24 +216,56 @@ export default {
       }
     },
     //ok
-    conceptoDesdeValor(valor) {
-      for (let i = 0; i < this.nuevaEscalaPreescolar.length; i++) {
-        const actual = this.nuevaEscalaPreescolar[i]
-        const siguiente = this.nuevaEscalaPreescolar[i + 1]
+    conceptoDesdeValor(valor,orden) {
+      if (orden == 99) {
+        if (this.$store.state.idInstitucion == 'bd226a20-fc82-11ec-a1d1-1dc2835404e5') { // JULIUS
+          //console.log('* ' + valor)
+          if (valor < 3) {
+            return { id_concepto_valorativo: 1, letra: 'J', texto: 'BAJO' }
+          } else if (valor < 4) {
+            return { id_concepto_valorativo: 2, letra: 'B', texto: 'BÁSICO' }
+          } else if (valor < 5) {
+            return { id_concepto_valorativo: 3, letra: 'S', texto: 'SOBRESALIENTE' }
+          } else if (valor == 5) {
+            return { id_concepto_valorativo: 4, letra: 'E', texto: 'EXCELENTE' }
+          } else {
+            return ''
+          }
+        } else {
+          if (valor < 3) {
+            return { id_concepto_valorativo: 1, letra: 'J', texto: 'BAJO' }
+          } else if (valor < 4) {
+            return { id_concepto_valorativo: 2, letra: 'B', texto: 'BÁSICO' }
+          } else if (valor < 5) {
+            return { id_concepto_valorativo: 3, letra: 'S', texto: 'SOBRESALIENTE' }
+          } else if (valor == 5) {
+            return { id_concepto_valorativo: 4, letra: 'E', texto: 'EXCELENTE' }
+          } else {
+            return ''
+          }
+        }
+      } else {
+        for (let i = 0; i < this.nuevaEscalaPreescolar.length; i++) {
+          const actual = this.nuevaEscalaPreescolar[i]
+          const siguiente = this.nuevaEscalaPreescolar[i + 1]
 
-        // Valor menor al siguiente umbral, cae en el rango actual
-        if (!siguiente || valor < siguiente.umbral) {
-          return {
-            id_concepto_valorativo: i + 1, // 1=Bajo, 2=Básico, etc.
-            letra: actual.letra,
-            texto: actual.desempeno
+          // Valor menor al siguiente umbral, cae en el rango actual
+          if (!siguiente || valor < siguiente.umbral) {
+            return {
+              id_concepto_valorativo: i + 1, // 1=Bajo, 2=Básico, etc.
+              letra: actual.letra,
+              texto: actual.desempeno
+            }
           }
         }
       }
       return null
     },
-    letraDesdeValor(valor) {
-      const concepto = this.conceptoDesdeValor(valor)
+    letraDesdeValor(valor,orden) {
+      const concepto = this.conceptoDesdeValor(valor,orden)
+      if (orden == 99) {
+        //console.log(valor + '-' + concepto?.letra || '')
+      }
       return concepto?.letra || ''
     },
     datosDesempenoPorLetra(letra,orden) {
@@ -283,7 +316,7 @@ export default {
       const letra = datos.periodos?.[periodo] || ''
       const valor = this.valorNumericoDesdeLetra(letra,orden)
       if (valor === null) return ''
-      const concepto = this.conceptoDesdeValor(valor)
+      const concepto = this.conceptoDesdeValor(valor,orden)
       if (!concepto) return ''
 
       const descriptorObj = this.listaDescriptores.find(
@@ -334,10 +367,9 @@ export default {
 
       return pesoTotal > 0 ? total.toFixed(2) : ''
     },
-    promedioAsignaturaPreescolar(asig) {
+    promedioAsignaturaPreescolar(asig,orden) {
       const periodos = Object.values(asig.periodos || {})
-      const valores = periodos.map(p => this.valorNumericoDesdeLetra(p)).filter(v => v !== null)
-
+      const valores = periodos.map(p => this.valorNumericoDesdeLetra(p,orden)).filter(v => v !== null)
       if (!valores.length) return ''
       const prom = valores.reduce((a, b) => a + b, 0) / valores.length
       return prom.toFixed(2)
@@ -418,7 +450,7 @@ export default {
     },
     desempeno(nota, area, asignatura) {
       if (this.orden == 99) {
-        if (this.$store.state.idInstitucion == 'bd226a20-fc82-11ec-a1d1-1dc2835404e5') {
+        if (this.$store.state.idInstitucion == 'bd226a20-fc82-11ec-a1d1-1dc2835404e5') { // JULIUS
           if (nota == 'J') return 'BAJO'
           if (nota == 'B') return 'BÁSICO'
           if (nota == 'S') return 'SOBRESALIENTE'

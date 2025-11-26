@@ -188,8 +188,13 @@
             this.aquien = "Que el(la) estudiante " + this.nombreEstudiante + " identificado(a) con " + this.documentoEstudiante + ", cursó en ésta Institución Educativa los estudios correspondientes al " + this.grupo + " del Programa de Formación Complementaria durante el año " + this.vigencia + ", con la intensidad horaria referida y obteniendo las siguientes calificaciones."
           } else {
             this.tituloArea = "ÁREAS DE FORMACIÓN"
-            this.aquien = "Que el(la) estudiante " + this.nombreEstudiante + " identificado(a) con " + this.documentoEstudiante + ", cursó en ésta Institución Educativa los estudios correspondientes al grado " + this.grupo + " durante el año " + this.vigencia + ", con la intensidad horaria referida y obteniendo las siguientes calificaciones."
+            this.aquien = "Que " + this.nombreEstudiante + " identificado(a) con " + this.documentoEstudiante + ", cursó en ésta Institución Educativa los estudios correspondientes al grado " + this.grupo + " durante el año " + this.vigencia + ", con la intensidad horaria referida y obteniendo las siguientes calificaciones."
           }
+        } else {
+          this.encabezado = "La suscrita Rectora y Secretaria Académica de la Institución Educativa ANTONIO JOSÉ SANDOVAL GÓMEZ de Tunja, aprobada por resolución No. 01090 del 14/11/2018, que en su parte resolutiva dice: 'Autorizar a la institución Educativa INSTITUCIÓN EDUCATIVA ANTONIO JOSÉ SANDOVAL GÓMEZ de Tunja, de Educación Formal, Básica, Secundaria y Media Vocacional en Jornada Mañana y Tarde, para que otorgue certificados de Educación Básica, títulos de Bachillerato Académico, Bachiller Técnico'."
+          this.certifican = "CERTIFICAN"
+          this.tituloArea = "ÁREAS DE FORMACIÓN"
+          this.aquien = "Que el(la) estudiante " + this.nombreEstudiante + " identificado(a) con " + this.documentoEstudiante + ", cursó en ésta Institución Educativa los estudios correspondientes al grado " + this.grupo + " durante el año " + this.vigencia + ", con la intensidad horaria referida y obteniendo los siguientes desempeños:"
         }
         this.numCert = this.numCertificado
         this.mostrarCertificado = true

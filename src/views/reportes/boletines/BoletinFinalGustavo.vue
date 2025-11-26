@@ -159,7 +159,7 @@ export default {
           <table class="tabla-boletin">
             <thead>
               <tr>
-                <th style="width:30%; text-align: left">${this.estadosFinalesEstudiante(data,idMatricula)}</th>
+                <!--<th style="width:30%; text-align: left">${this.estadosFinalesEstudiante(data,idMatricula)}</th>-->
                 <th style="width:15%; text-align: left">Promedio: <strong>${this.calcularPromedioGeneralPorAreasFinales(data,idMatricula)}</strong></th>
                 <th style="width:15%; text-align: left">Puesto: <strong>${this.puestoEstudiante(estudiante.nombre,idMatricula)}</strong></th>
                 <th style="width:20%; text-align: left">Aus.Justificadas: <strong>${this.estudiantesNotas[estudiante.nombre].ausJ}</strong></th>
