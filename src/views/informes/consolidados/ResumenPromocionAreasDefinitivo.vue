@@ -45,8 +45,8 @@
         <table border="1" cellspacing="0" cellpadding="1" class="table-responsive">
           <thead>
             <tr>
-              <th rowspan="3">#</th>
-              <th rowspan="3">Estudiante</th>
+              <th>#</th>
+              <th>Estudiante</th>
               <!--
               <template v-for="(asigs, area) in encabezadoPorArea">
                 <th :colspan="colspanArea(area)" :key="area">
@@ -54,7 +54,7 @@
                 </th>
               </template>
               -->
-              <th rowspan="3">Estado Final Promoción</th>
+              <th>Estado Final Promoción</th>
               <!--
               <th rowspan="3">PRO GEN</th>
               <th rowspan="3">Tot<br>Area<br>Baj</th>
@@ -65,7 +65,7 @@
               <th rowspan="3">Tot<br>AuS</th>
               <th rowspan="3">Puesto</th>
               -->
-              <th rowspan="3">#</th>
+              <th>#</th>
             </tr>
             <!--
             <tr>
