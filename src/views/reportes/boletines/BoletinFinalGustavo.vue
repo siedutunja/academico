@@ -159,7 +159,7 @@ export default {
           <table class="tabla-boletin">
             <thead>
               <tr>
-                <!--<th style="width:30%; text-align: left">${this.estadosFinalesEstudiante(data,idMatricula)}</th>-->
+                <th style="width:30%; text-align: left">${this.observacionComision(estudiante.obs_comision) === null ? this.estadosFinalesEstudiante(data,idMatricula) : ''}</th>
                 <th style="width:15%; text-align: left">Promedio: <strong>${this.calcularPromedioGeneralPorAreasFinales(data,idMatricula)}</strong></th>
                 <th style="width:15%; text-align: left">Puesto: <strong>${this.puestoEstudiante(estudiante.nombre,idMatricula)}</strong></th>
                 <th style="width:20%; text-align: left">Aus.Justificadas: <strong>${this.estudiantesNotas[estudiante.nombre].ausJ}</strong></th>
@@ -175,7 +175,7 @@ export default {
           <table class="tabla-boletin observacion-comportamiento">
             <thead>
               <tr>
-                <th style="text-align: left; height:100px; padding-left: 10px; vertical-align: top;"><h3>🧠 Observaciones:</h3>${ this.observacionComportamiento(data) }<br>${ this.observacionComision(estudiante.obs_comision) }</th>
+                <th style="text-align: left; height:100px; padding-left: 10px; vertical-align: top;"><h3>🧠 Observaciones:</h3>${ this.observacionComportamiento(data) }<br>${ this.observacionComision(estudiante.obs_comision) === null ? '' : this.observacionComision(estudiante.obs_comision) }</th>
               </tr>
             </thead>
           </table>
@@ -231,7 +231,7 @@ export default {
                 <td>${ausJAsig}</td>
                 <td>${ausSAsig}</td>
               </tr>
-              <tr><td colspan="12" class="descriptor" style="text-align: left"></td></tr>
+              <tr><td colspan="14" class="descriptor" style="text-align: left">${'*' + this.descriptorAsignatura(data, area, a, 5,this.orden,prom)}</td></tr>
             `
           } else {
             return `
@@ -247,7 +247,7 @@ export default {
                 <td>${ausJAsig}</td>
                 <td>${ausSAsig}</td>
               </tr>
-              <tr><td colspan="${this.colDesem + 6}" class="descriptor" style="text-align: left">${this.descriptorAsignatura(data, area, a, 5,this.orden)}</td></tr>
+              <tr><td colspan="${this.colDesem + 6}" class="descriptor" style="text-align: left">${this.descriptorAsignatura(data, area, a, 5,this.orden,prom)}</td></tr>
             `
           }
         }).join('')
@@ -322,7 +322,7 @@ export default {
         }
       `
     },
-    descriptorAsignatura(est, area, asignatura, periodo, ordencito) {
+    descriptorAsignatura(est, area, asignatura, periodo, ordencito, prom) {
       const datos = est.areas?.[area]?.asignaturas?.[asignatura]
       const meta = this.listaAreasAsignaturas.find(
         a => a.area === area && a.asignatura === asignatura
@@ -338,7 +338,7 @@ export default {
         notaFinal = this.escala
       } else {
         // Obtener la nota final del estudiante
-        notaFinal = parseFloat(this.notaFinal(est, area, asignatura, periodo))
+        notaFinal = prom // parseFloat(this.notaFinal(est, area, asignatura, periodo))
       }
       //console.log(notaFinal)
       if (isNaN(notaFinal)) return ''
@@ -802,7 +802,7 @@ export default {
       return datos?.observaciones || ''
     },
     observacionComision(observacion) {
-      return observacion
+      return observacion === null || observacion === '' ? null : observacion
     },
     estructurarNotasPorEstudiante() {
       const mapa = {}
