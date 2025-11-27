@@ -505,6 +505,13 @@ function configRoutes () {
               name: 'Certificados',
               component: () => import('@/views/secretaria/Certificados')
             },
+            // 2025-06-16
+            {
+              path: 'comisionevaluacion',
+              beforeEnter: autenticar,
+              name: 'Comisión de Evaluación',
+              component: () => import('@/views/secretaria/ComisionEvaluacion')
+            },
           ]
         },
         // 2025-01-16

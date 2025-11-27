@@ -175,7 +175,7 @@ export default {
           <table class="tabla-boletin observacion-comportamiento">
             <thead>
               <tr>
-                <th style="text-align: left; height:100px; padding-left: 10px; vertical-align: top;"><h3>🧠 Observaciones:</h3>${ this.observacionComportamiento(data) }</th>
+                <th style="text-align: left; height:100px; padding-left: 10px; vertical-align: top;"><h3>🧠 Observaciones:</h3>${ this.observacionComportamiento(data) }<br>${ this.observacionComision(estudiante.obs_comision) }</th>
               </tr>
             </thead>
           </table>
@@ -801,7 +801,9 @@ export default {
       const datos = est.areas?.[compo.area]?.asignaturas?.[compo.asignatura]
       return datos?.observaciones || ''
     },
-
+    observacionComision(observacion) {
+      return observacion
+    },
     estructurarNotasPorEstudiante() {
       const mapa = {}
       this.notas.forEach(nota => {
@@ -920,6 +922,7 @@ export default {
     this.escudo = "https://siedutunja.gov.co/api/colegios/escudos/" + this.$store.state.escudoInstitucion
     this.colDesem = 7
     this.datosSeccion = this.$store.state.datosSecciones[this.$store.state.idSeccion - 1]
+    //console.log(this.estudiantesSeleccionados)
   }
 }
 </script>

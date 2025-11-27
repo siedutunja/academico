@@ -1,0 +1,209 @@
+<template>
+  <div>
+    <b-row class="mt-2">
+      <b-col lg="12">
+        <b-card>
+          <template #header>
+            <h5 class="mb-0"><b-icon icon="card-checklist" aria-hidden="true"></b-icon> OBSERVACIONES COMISIÓN DE EVALUACIÓN</h5>
+            <!--{{listaMatriculados}}-->
+            <!--{{$store.state.datosCursos}}-->
+          </template>
+          <b-card-text>
+            <b-row>
+              <b-col lg="6">
+                <b-form-group label="Seleccione la Sede:" label-for="sedes" class="etiqueta">
+                  <b-form-select  id="sedes" ref="sedes" v-model="idSede" :options="comboSedes" @change="idCurso=null,ocuparComboCursosSede()"></b-form-select>
+                </b-form-group>
+              </b-col>
+              <b-col lg="6">
+                <b-form-group label="Seleccione el Curso:" label-for="cursos" class="etiqueta">
+                  <b-form-select  id="cursos" ref="cursos" v-model="idCurso" :options="comboCursosSede" @change="consultarMatriculados(),ocuparComboCursosGrado()" :disabled="idSede!=null ? false : true"></b-form-select>
+                </b-form-group>
+              </b-col>
+            </b-row>
+            <b-row class="mt-2" v-if="idCurso!=null">
+              <b-col lg="12"><hr></b-col>
+              <b-col lg="12">
+                <div v-if="btnCargando">
+                  <div class="text-center m-5 text-primary">
+                    <b-spinner style="width: 3rem; height: 3rem;" label="Spinner"></b-spinner>
+                    <br><strong>Cargando planilla...</strong>
+                  </div>
+                </div>
+                <div v-else>
+                  <b-card header-bg-variant="secondary">
+                    <template #header>
+                      <h5 class="mb-0"><b-icon icon="card-checklist" aria-hidden="true"></b-icon> Lista de Estudiantes</h5>
+                    </template>
+                    <b-card-text>
+                      <b-col lg="12">
+                        <vue-good-table ref="tablaMatriculados" :columns="encabColumnasMatriculados" :rows="listaMatriculados" styleClass="vgt-table condensed bordered striped" :line-numbers="true">
+                          <template slot="table-row" slot-scope="props">
+                            <span v-if="props.column.field == 'id'">
+                              <b-form-textarea v-model.trim="props.row.obs_comision" @change="actualizarItem(props.row)" autocomplete="off" rows="2"></b-form-textarea>
+                            </span>
+                          </template>
+                          <div slot="emptystate">
+                            <h5 class="text-danger ml-5">No existen estudiantes matriculados</h5>
+                          </div>
+                        </vue-good-table>
+                      </b-col>
+                    </b-card-text>
+                    <template #footer>
+                      <b-button class="small mx-1 mt-2" variant="primary" @click="confirmarObservaciones" v-if="($store.state.idRol==1 || $store.state.idRol==12) && idSede!=null && listaMatriculados.length!=0">Actualizar Cursos</b-button>
+                      <b-button class="small mx-1 mt-2" variant="secondary" @click="cancelarFormulario">Cancelar</b-button>
+                    </template>
+                  </b-card>
+                </div>
+              </b-col>
+            </b-row>
+          </b-card-text>
+          <template #footer>
+            <em>Seleccione el Curso al que desea cambiar al Estudiante y haga clic en el botón Actualizar Cursos.</em>
+          </template>
+        </b-card>
+      </b-col>
+    </b-row>
+  </div>
+</template>
+
+<script>
+  import axios from "axios"
+  import * as CONFIG from '@/assets/config.js'
+  import 'vue-good-table/dist/vue-good-table.css'
+  import { VueGoodTable } from 'vue-good-table'
+
+  export default {
+    name: 'comisionevaluacion',
+    components: {
+      VueGoodTable
+    },
+    data () {
+      return {
+        comboSedes: [],
+        idSede: null,
+        comboCursosSede: [],
+        comboCursosGrado: [],
+        idCurso: null,
+        listaMatriculados: [],
+        encabColumnasMatriculados : [
+          { label: 'Apellidos y Nombres del Estudiante', field: 'estudiante', sortable: false },
+          { label: 'Documento', field: 'documento', sortable: false },
+          { label: 'Observación Comisión Evaluación', field: 'id', sortable: false },
+        ],
+        btnCargando: true,
+      }
+    },
+    methods: {
+      async confirmarObservaciones() {
+        //console.log(JSON.stringify(this.listaMatriculados))
+        let titulo = 'Asignar Observaciones Comisión de Evaluación'
+        let pregunta = '¿Esta seguro de asignar las Observaciones de la Comisión de Evaluación a los Estudiantes?'
+        this.$bvModal.msgBoxConfirm(pregunta, {
+          headerBgVariant: 'primary',
+          headerTextVariant: 'light',
+          bodyBgVariant: 'light',
+          bodyBgClass: 'text-center',
+          title: titulo,
+          size: '',
+          buttonSize: 'sm',
+          okVariant: 'primary',
+          okTitle: 'Si, ' + titulo,
+          cancelVariant: 'danger',
+          cancelTitle: 'Cancelar',
+          footerClass: 'p-2',
+          bodyClass: 'p-5',
+          hideHeaderClose: false,
+          centered: true
+        })
+        .then(value => {
+          if (value) {
+            this.guardarObservaciones()
+          }
+        })
+        return true
+      },
+      async guardarObservaciones() {
+        this.btnCargando = true
+        await axios
+        .put(CONFIG.ROOT_PATH + 'academico/matriculas/comisionevaluacion', JSON.stringify(this.listaMatriculados), { headers: {"Content-Type": "application/json; charset=utf-8" }})
+        .then(response => {
+          if (response.data.error){
+            this.mensajeEmergente('danger',CONFIG.TITULO_MSG,response.data.mensaje + ' - Observaciones Comisión')
+            this.btnCargando = false
+          } else{
+            this.consultarMatriculados()
+            this.mensajeEmergente('success',CONFIG.TITULO_MSG,'Los cambios en las observaciones se han realizado correctamente.')
+          }
+        })
+        .catch(err => {
+          this.mensajeEmergente('danger',CONFIG.TITULO_MSG,'Algo salio mal y no se pudo realizar: Observaciones Comisión. Intente más tarde. ' + err)
+          this.btnCargando = false
+        })
+      }, 
+      actualizarItem(item) {
+        let indice = this.listaMatriculados.findIndex(estudiante => estudiante.id === item.id)
+        this.listaMatriculados[indice].obs_comision = item.obs_comision
+      },
+      async consultarMatriculados() {
+        this.btnCargando = true
+        this.listaMatriculados = []
+        await axios
+        .get(CONFIG.ROOT_PATH + 'academico/matriculas/comisionevaluacion', {params: {idCurso: this.idCurso, vigencia: this.$store.state.aLectivo}})
+        .then(response => {
+          if (response.data.error){
+            this.mensajeEmergente('danger',CONFIG.TITULO_MSG,response.data.mensaje + ' - Cambiar curso')
+          } else{
+            if (response.data.datos != 0) {
+              this.listaMatriculados = response.data.datos
+            }
+          }
+        })
+        .catch(err => {
+          this.mensajeEmergente('danger',CONFIG.TITULO_MSG,'Algo salio mal y no se pudo realizar: Cambiar curso. Intente más tarde.' + err)
+        })
+        this.btnCargando = false
+      },
+      ocuparComboCursosGrado() {
+        this.comboCursosGrado = []
+        if (this.idCurso != null) {
+          let indice = this.$store.state.datosCursos.findIndex(cursos => cursos.id === this.idCurso)
+          let idGradoSede = this.$store.state.datosCursos[indice].id_grado_sede
+          this.$store.state.datosCursos.forEach(element => {
+            if (element.id_grado_sede == idGradoSede) {
+              this.comboCursosGrado.push({ 'value': element.id, 'text': element.nomenclatura.toUpperCase() })
+            }
+          })
+        }
+      },
+      async ocuparComboCursosSede() {
+        this.comboCursosSede = []
+        this.$store.state.datosCursos.forEach(element => {
+          if (element.id_sede == this.idSede) {
+            this.comboCursosSede.push({ 'value': element.id, 'text': element.nomenclatura.toUpperCase() })
+          }
+        })
+        //console.log(JSON.stringify(this.$store.state.datosCursos))
+      },
+      async ocuparComboSedes() {
+        this.comboSedes = []
+        this.$store.state.datosSedes.forEach(element => {
+          this.comboSedes.push({ 'value': element.id, 'text': element.sede.toUpperCase() })
+        })
+      },
+      cancelarFormulario() {
+        this.$router.push('/')
+      },
+      mensajeEmergente(variante, titulo, contenido) {
+        this.$bvToast.toast(contenido, { title: titulo, variant: variante, toaster: "b-toaster-top-center", solid: true, autoHideDelay: 4000, appendToast: false })
+      }
+    },
+    beforeMount() {
+      if(this.$store.state.idRol == 1 || this.$store.state.idRol == 12) {
+        this.ocuparComboSedes()
+      } else {
+        this.$router.push('/restringida')
+      }
+    }
+  }
+</script>

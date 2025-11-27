@@ -165,7 +165,7 @@
       }
     },
     beforeMount() {
-      if(this.$store.state.idRol == 1 || this.$store.state.idRol == 12) {
+      if(this.$store.state.idRol == 1 || this.$store.state.idRol == 12 || this.$store.state.perSecretaria == 1) {
       } else {
         this.$router.push('/restringida')
       }
