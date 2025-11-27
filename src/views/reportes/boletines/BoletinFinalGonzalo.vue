@@ -210,8 +210,6 @@ export default {
           const ausS = this.ausencias(data, area, a, 'ausS')
           const ausJAsig = this.orden == 98 ? '' : ausJ > 0 ? ausJ : ''
           const ausSAsig = this.orden == 98 ? '' : ausS > 0 ? ausS : ''
-          const minPierdeFallas = ih * 40 * .2 + 1
-          if (ausSAsig >= minPierdeFallas) this.perdioPorFallas = 1
           const docente = asig.docente != null ? asig.docente : ''
           const idAsignaturaCurso = asig.idAsignaturaCurso
           const habilit = this.mostrarHabilitacion(idMatricula,idAsignaturaCurso)
@@ -264,6 +262,8 @@ export default {
         const ausJArea = this.orden == 98 ? '' : ausJ > 0 ? ausJ : ''
         const ausSArea = this.orden == 98 ? '' : ausS > 0 ? ausS : ''
         const ihArea = this.orden !== 98 ? this.intensidadHorariaArea(data, area) : ''
+        const minPierdeFallas = (ihArea * 40 * .2) + 1
+        if (ausSArea >= minPierdeFallas) this.perdioPorFallas = 1
         if (this.colDesem == 7) {
           return `
             <tr class="fila-area">

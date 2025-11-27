@@ -431,13 +431,13 @@ export default {
       if (this.promCompor == 1) { // Promedia comportamiento
         areasEvaluativas = [...new Set(
           this.listaAreasAsignaturas
-            .filter(a => a.orden !== 98)
+            .filter(a => a.orden !== 98 && a.orden !== 12)
             .map(a => a.area)
         )]
       } else {
         areasEvaluativas = [...new Set(
           this.listaAreasAsignaturas
-            .filter(a => a.orden !== 99 && a.orden !== 98)
+            .filter(a => a.orden !== 99 && a.orden !== 98 && a.orden !== 12)
             .map(a => a.area)
         )]
       }
