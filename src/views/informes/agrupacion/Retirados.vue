@@ -61,7 +61,7 @@
                                   <td>{{ i + 1 }}</td>
                                   <td>{{ est.estudiante }}</td>
                                   <td>{{ est.documento }}</td>
-                                  <td>{{ est.curso }}</td>
+                                  <td>{{ '[' + est.curso + ']' }}</td>
                                   <td>{{ est.fechaRetiro }}</td>
                                   <td>{{ est.obsRetiro }}</td>
                                   <td>{{ est.usuarioRetiro }}</td>

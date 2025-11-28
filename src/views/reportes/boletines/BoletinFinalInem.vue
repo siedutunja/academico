@@ -33,6 +33,7 @@ export default {
     descC2: String,
     descC3: String,
     listaHabilitaciones: Array,
+    idGrado: String,
   },
   data () {
     return {
@@ -95,6 +96,12 @@ export default {
       if (!data) return `<p>No hay datos para ${estudiante.nombre}</p>`
       const idMatricula = estudiante.idMatricula
       this.perdioPorHabilitacion = 0
+      let convenciones = '-'
+      if (this.idGrado == '01' || this.idGrado == '02' || this.idGrado == '03') {
+        convenciones = 'J: BAJO | B: BASICO | A: ALTO | S: SUPERIOR'
+      } else {
+        convenciones =  'BAJO [' + this.datosSeccion.minBaj.toFixed(1) + ' : ' + this.datosSeccion.maxBaj.toFixed(1) + '] | BÁSICO [' + this.datosSeccion.minBas.toFixed(1) + ' : ' + this.datosSeccion.maxBas.toFixed(1) + '] | ALTO [' + this.datosSeccion.minAlt.toFixed(1) + ' : ' + this.datosSeccion.maxAlt.toFixed(1) + '] | SUPERIOR [' + this.datosSeccion.minSup.toFixed(1) + ' : ' + this.datosSeccion.maxSup.toFixed(1) + ']'
+      }
       let cuerpo = `
         <div class="boletin">
           <div class="text-center mt-2">
@@ -170,7 +177,7 @@ export default {
           </table>
           <table class="tabla-boletin">
             <tr>
-              <th>Desempeños: BAJO [${(this.datosSeccion.minBaj).toFixed(1)} : ${(this.datosSeccion.maxBaj).toFixed(1)}] | BÁSICO [${(this.datosSeccion.minBas).toFixed(1)} : ${(this.datosSeccion.maxBas).toFixed(1)}] | ALTO [${(this.datosSeccion.minAlt).toFixed(1)} : ${(this.datosSeccion.maxAlt).toFixed(1)}] | SUPERIOR [${(this.datosSeccion.minSup).toFixed(1)} : ${(this.datosSeccion.maxSup).toFixed(1)}]</th>
+              <th>Desempeños: ${convenciones}</th>
             </tr>
           </table>
           <table class="tabla-boletin observacion-comportamiento">
@@ -254,8 +261,8 @@ export default {
         }).join('')
         const ausJ = this.ausenciasArea(data, area, 'ausJ')
         const ausS = this.ausenciasArea(data, area, 'ausS')
-        const notasArea = this.periodosVisibles.map(p => `<td>${this.orden !== 98 ? this.promedioAreaPorPeriodo(data, area, p) : ''}</td>`).join('')
-        const promArea = this.orden !== 98 ? this.promedioArea(data, area) : ''
+        const notasArea = this.periodosVisibles.map(p => `<td>${this.idGrado == '01' || this.idGrado == '02' || this.idGrado == '03' ? '' : this.orden !== 98 ? this.promedioAreaPorPeriodo(data, area, p) : ''}</td>`).join('')
+        const promArea = this.idGrado == '01' || this.idGrado == '02' || this.idGrado == '03' ? '' : this.orden !== 98 ? this.promedioArea(data, area) : ''
         const finalArea = this.orden !== 98 && this.orden != 99 ? this.promedioFinalArea(data, area, idMatricula) : this.orden === 99 ? this.promedioArea(data, area) : ''
         const desArea = this.orden !== 98 ? this.desempenoArea(finalArea, area, this.tipoArea,this.orden) : '' //this.desempeño(finalArea)
         const ausJArea = this.orden == 98 ? '' : ausJ > 0 ? ausJ : ''
@@ -269,8 +276,8 @@ export default {
               ${notasArea}
               <td>${promArea}</td>
               <td></td><td></td><td></td>
-              <td>${finalArea > 0 ? finalArea : finalArea}</td>
-              <td>${desArea}</td>
+              <td>${this.idGrado == '01' || this.idGrado == '02' || this.idGrado == '03' ? '' :  finalArea > 0 ? finalArea : finalArea}</td>
+              <td>${this.idGrado == '01' || this.idGrado == '02' || this.idGrado == '03' ? '' : desArea}</td>
               <td>${ausJArea}</td>
               <td>${ausSArea}</td>
             </tr>
@@ -557,7 +564,16 @@ export default {
             const nota = asig.periodos[p] ?? 0
             total += nota * pesos[p-1] / 100
           }
-          return this.redondear(total).toFixed(1) > 0 ? this.redondear(total).toFixed(1) : ''
+          
+          if (this.idGrado == '01' || this.idGrado == '02' || this.idGrado == '03') {
+            const notaNumero = this.redondear(total).toFixed(1) > 0 ? this.redondear(total).toFixed(1) : ''
+            const letraNota = notaNumero == '' ? '' : notaNumero < this.umbralesA[0] ? 'J' : notaNumero < this.umbralesA[1] ? 'B' : notaNumero < this.umbralesA[2] ? 'A' : notaNumero < this.umbralesA[3] ? 'S' : ''
+            return letraNota
+          } else {
+            return this.redondear(total).toFixed(1) > 0 ? this.redondear(total).toFixed(1) : ''
+          }
+          
+          //return this.redondear(total).toFixed(1) > 0 ? this.redondear(total).toFixed(1) : ''
         }
       }
     },
@@ -691,7 +707,15 @@ export default {
       if (concep === "S") return ''
       const orden = est.areas?.[area]?.asignaturas?.[asignatura]?.orden
       if (orden == 99 && this.tipoValComp == 0) return est.areas?.[area]?.asignaturas?.[asignatura]?.periodos?.[periodo] || ''
-      return est.areas?.[area]?.asignaturas?.[asignatura]?.periodos?.[periodo]?.toFixed(1) > 0 ? est.areas?.[area]?.asignaturas?.[asignatura]?.periodos?.[periodo]?.toFixed(1) : ''
+
+      if (this.idGrado == '01' || this.idGrado == '02' || this.idGrado == '03') {
+        const notaNumero = est.areas?.[area]?.asignaturas?.[asignatura]?.periodos?.[periodo]?.toFixed(1) > 0 ? est.areas?.[area]?.asignaturas?.[asignatura]?.periodos?.[periodo]?.toFixed(1) : ''
+        const letraNota = notaNumero == '' ? '' : notaNumero < this.umbralesA[0] ? 'J' : notaNumero < this.umbralesA[1] ? 'B' : notaNumero < this.umbralesA[2] ? 'A' : notaNumero < this.umbralesA[3] ? 'S' : ''
+        return letraNota
+      } else {
+        return est.areas?.[area]?.asignaturas?.[asignatura]?.periodos?.[periodo]?.toFixed(1) > 0 ? est.areas?.[area]?.asignaturas?.[asignatura]?.periodos?.[periodo]?.toFixed(1) : ''
+      }
+
     },
     criterio1Periodo(est, area, asignatura, periodo) {
       const concep = est.areas?.[area]?.asignaturas?.[asignatura]?.concep

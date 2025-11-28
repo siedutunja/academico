@@ -61,7 +61,7 @@
                                   <td>{{ i + 1 }}</td>
                                   <td><span v-if="est.estadoActual == 2" style="color: #9C2007">[R] {{ est.estudiante }}</span><span v-else>{{ est.estudiante }}</span></td>
                                   <td>{{ est.documento }}</td>
-                                  <td>{{ est.curso }}</td>
+                                  <td>{{ '[' + est.curso + ']' }}</td>
                                   <td>{{ est.creado }}</td>
                                   <td>{{ est.procedencia }}</td>
                                   <td>{{ est.obs_matricula }}</td>

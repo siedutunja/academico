@@ -1167,7 +1167,6 @@
             } else{
               if (response.data.datos != 0) {
                 this.datosEstudiantes = response.data.datos
-                //console.log(JSON.stringify(this.datosEstudiantes))
                 if (this.idNivel == 1 && this.$store.state.idInstitucion == '17ee4f30-fc80-11ec-a1d1-1dc2835404e5') {
                   this.btnCargando = false
                 } else {
