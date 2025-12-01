@@ -189,6 +189,7 @@ import AreasPerdidasVue from './AreasPerdidas.vue'
         listaAreasAsignaturas: [],
         periodosVisibles: [],
         listaHabilitaciones: [],
+        pailas: 0,
       }
     },
     methods: {

@@ -45,6 +45,7 @@ export default {
       escala: 0,
       tipoArea: 1,
       perdioPorHabilitacion: 0,
+      siHabilito: 0,
     }
   },
   methods: {
@@ -94,6 +95,7 @@ export default {
       if (!data) return `<p>No hay datos para ${estudiante.nombre}</p>`
       const idMatricula = estudiante.idMatricula
       this.perdioPorHabilitacion = 0
+      this.siHabilito = 0
       let cuerpo = `
         <div class="boletin">
           <div class="text-center mt-2">
@@ -296,6 +298,7 @@ export default {
     mostrarHabilitacion(idMatricula,idAsignaturaCurso) {
       const meta = this.listaHabilitaciones.find(h => h.id_matricula === idMatricula && h.id_asignatura_curso === idAsignaturaCurso)
       if (!(meta === undefined)) {
+        this.siHabilito = 1
         const valor = meta.habilitacion > 0 ? meta.habilitacion.toFixed(1) : ''
         const fechita = meta.fecha !== null && meta.fecha !== '' ? meta.fecha.substr(0,10) : ''
         const actica = meta.acta != null ? meta.acta : ''
@@ -334,8 +337,13 @@ export default {
       }
       let notaFinal = 0
       if (ordencito === 99 && this.tipoValComp == 0) {
-        notaFinal = parseFloat(this.notaFinal(est, area, asignatura, periodo))
-        notaFinal = this.escala
+        //notaFinal = parseFloat(this.notaFinal(est, area, asignatura, periodo))
+        //notaFinal = this.escala
+        if (prom == 'I') notaFinal = 2
+        else if (prom == 'A') notaFinal = 3
+        else if (prom == 'S') notaFinal = 4
+        else if (prom == 'E') notaFinal = 5
+        else notaFinal = 2
       } else {
         // Obtener la nota final del estudiante
         notaFinal = prom // parseFloat(this.notaFinal(est, area, asignatura, periodo))
@@ -455,7 +463,7 @@ export default {
         }
       })
       if (this.perdioPorHabilitacion == 1) cantPerdidas = 100
-      return cantPerdidas == 0 ? 'EL ESTUDIANTE APROBÓ EL GRADO' : 'ESTUDIANTE REPROBADO'
+      return this.siHabilito == 1 && cantPerdidas == 0 ? 'PROMOVIDO' : cantPerdidas == 0 ? 'APROBÓ EL GRADO' : 'REPROBADO'
     },
     generarRankingCurso(idMatricula) {
       const ranking = []
@@ -799,6 +807,7 @@ export default {
       const compo = this.listaAreasAsignaturas.find(a => a.orden === 99)
       if (!compo) return ''
       const datos = est.areas?.[compo.area]?.asignaturas?.[compo.asignatura]
+      console.log(datos)
       return datos?.observaciones || ''
     },
     observacionComision(observacion) {

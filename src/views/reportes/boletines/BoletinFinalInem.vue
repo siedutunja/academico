@@ -638,7 +638,7 @@ export default {
           }
           if (total === 0) return ''
           total = total / cantidad
-          return this.redondear(total).toFixed(1) > 0 ? this.redondear(total).toFixed(1) : ''
+          return this.redondear(total).toFixed(1) > 0 ? habilitacion > this.redondear(total).toFixed(1) ? habilitacion : this.redondear(total).toFixed(1) : ''
         } else {
           for (let p = 1; p <= 4; p++) {
             const nota = asig.periodos[p] ?? 0
