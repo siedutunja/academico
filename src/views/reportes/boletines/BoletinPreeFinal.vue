@@ -231,6 +231,19 @@ export default {
           } else {
             return ''
           }
+        } else if (this.$store.state.idInstitucion == 'f5529ba0-fcb3-11ec-8267-536b07c743c4') { // GUSTAVO
+          //console.log('* ' + valor)
+          if (valor < 3) {
+            return { id_concepto_valorativo: 1, letra: 'I', texto: 'INSUFICIENTE' }
+          } else if (valor < 4) {
+            return { id_concepto_valorativo: 2, letra: 'A', texto: 'ACEPTABLE' }
+          } else if (valor < 5) {
+            return { id_concepto_valorativo: 3, letra: 'S', texto: 'SOBRESALIENTE' }
+          } else if (valor == 5) {
+            return { id_concepto_valorativo: 4, letra: 'E', texto: 'EXCELENTE' }
+          } else {
+            return ''
+          }
         } else {
           if (valor < 3) {
             return { id_concepto_valorativo: 1, letra: 'J', texto: 'BAJO' }
@@ -369,10 +382,12 @@ export default {
     },
     promedioAsignaturaPreescolar(asig,orden) {
       const periodos = Object.values(asig.periodos || {})
-      const valores = periodos.map(p => this.valorNumericoDesdeLetra(p,orden)).filter(v => v !== null)
-      if (!valores.length) return ''
-      const prom = valores.reduce((a, b) => a + b, 0) / valores.length
-      return prom.toFixed(2)
+      //const valores = periodos.map(p => this.valorNumericoDesdeLetra(p,orden)).filter(v => v !== null)
+      const valores = this.valorNumericoDesdeLetra(periodos[4],orden)
+      //if (!valores.length) return ''
+      //const prom = valores.reduce((a, b) => a + b, 0) / valores.length
+      //return prom.toFixed(2)
+      return valores
     },
     notaFinalAreaPreescolar(est, area) {
       const asigns = this.listaAreasAsignaturas.filter(
