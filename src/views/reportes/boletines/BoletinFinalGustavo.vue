@@ -46,6 +46,7 @@ export default {
       tipoArea: 1,
       perdioPorHabilitacion: 0,
       siHabilito: 0,
+      observaFinales: '',
     }
   },
   methods: {
@@ -532,6 +533,7 @@ export default {
       let total = 0
       let cant = 0
       if (orden == 99 && this.tipoValComp == 0) {
+        /*
         for (const p in asig.periodos) {
           const nota = asig.periodos[p]
           let encontrarLetra = this.letrasCompor.findIndex(valor => valor === nota)
@@ -544,6 +546,8 @@ export default {
         else if (promedioLetras <= this.umbralesA[2]) return this.letrasCompor[2]
         else if (promedioLetras <= this.umbralesA[3]) return this.letrasCompor[3]
         else return promedioLetras
+        */
+        return asig.periodos[5]
       } else {
         if (this.$store.state.idInstitucion == 'acaa36d0-fcb1-11ec-8267-536b07c743c4') { // Emiliani
           const pesos = [20,20,30,30]
@@ -649,6 +653,8 @@ export default {
           let encontrarLetra = this.letrasCompor.findIndex(valor => valor === nota)
           total += this.umbralesA[encontrarLetra]
           cant++
+          //this.observaFinales = p == 5 ? est.areas?.[area]?.asignaturas?.[asignatura]?.observaciones : ''
+          //console.log(this.observaFinales)
         }
         let promedioLetras = cant > 0 ? this.redondear(total / cant).toFixed(1): 0
         if (promedioLetras <= this.umbralesA[0]) return this.letrasCompor[0]
@@ -807,7 +813,6 @@ export default {
       const compo = this.listaAreasAsignaturas.find(a => a.orden === 99)
       if (!compo) return ''
       const datos = est.areas?.[compo.area]?.asignaturas?.[compo.asignatura]
-      console.log(datos)
       return datos?.observaciones || ''
     },
     observacionComision(observacion) {

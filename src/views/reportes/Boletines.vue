@@ -1074,6 +1074,9 @@
           } else if (this.$store.state.idInstitucion == '660fa760-fc83-11ec-a1d1-1dc2835404e5') {  // Gran Colombiano
             this.idPeriodo = 4
             apiRuta = 'boletines/notas/curso/finales/acumulado'
+          } else if (this.$store.state.idInstitucion == 'f5529ba0-fcb3-11ec-8267-536b07c743c4') {  // Gustavo Rojas
+            this.idPeriodo = 5
+            apiRuta = 'boletines/notas/curso/finales/acumulado'
           }
           else {
             this.idPeriodo = 4

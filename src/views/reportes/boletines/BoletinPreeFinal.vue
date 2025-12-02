@@ -182,7 +182,7 @@ export default {
         <table class="tabla-boletin">
           <thead>
             <tr>
-              <th style="width:40%; text-align: left"><strong>PROMOVIDO AL SIGUIENTE GRADO</strong></th>
+              <th style="width:40%; text-align: left"><strong>APROBÓ EL GRADO</strong></th>
               <th style="width:30%; text-align: left">Aus.Justificadas: <strong>${est.ausJ}</strong></th>
               <th style="width:30%; text-align: left">Aus.SinJustificar: <strong>${est.ausJ}</strong></th>
             </tr>
