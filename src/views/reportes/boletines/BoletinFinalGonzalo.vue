@@ -263,7 +263,7 @@ export default {
         const ausSArea = this.orden == 98 ? '' : ausS > 0 ? ausS : ''
         const ihArea = this.orden !== 98 ? this.intensidadHorariaArea(data, area) : ''
         const minPierdeFallas = (ihArea * 40 * .2) + 1
-        if (ausSArea >= minPierdeFallas) this.perdioPorFallas = 1
+        if ((this.orden !== 99) && (ausSArea >= minPierdeFallas)) this.perdioPorFallas = 1
         if (this.colDesem == 7) {
           return `
             <tr class="fila-area">

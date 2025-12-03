@@ -455,7 +455,10 @@ export default {
         }
       })
       if (this.perdioPorHabilitacion == 1) cantPerdidas = 100
-      return cantPerdidas == 0 ? 'EL ESTUDIANTE APROBÓ EL GRADO' : 'ESTUDIANTE REPROBADO'
+      if (this.$store.state.idSeccion == 1)
+        return cantPerdidas == 0 ? 'APROBÓ EL GRADO' : 'REPROBADO'
+      else
+        return cantPerdidas == 0 ? 'APROBÓ EL SEMESTRE' : 'REPROBADO EL SEMESTRE'
     },
     generarRankingCurso(idMatricula) {
       const ranking = []

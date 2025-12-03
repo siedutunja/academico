@@ -454,8 +454,11 @@ export default {
           }
         }
       })
-      if (this.perdioPorHabilitacion == 1) cantPerdidas = 100
-      return cantPerdidas == 0 ? 'EL ESTUDIANTE APROBÓ EL GRADO' : 'ESTUDIANTE REPROBADO'
+      //if (this.perdioPorHabilitacion == 1) cantPerdidas = 100
+      if (this.$store.state.idSeccion == 1)
+        return cantPerdidas == 0 ? 'APROBÓ EL GRADO' : 'REPROBADO'
+      else
+        return cantPerdidas == 0 ? 'APROBÓ EL SEMESTRE' : 'REPROBADO EL SEMESTRE'
     },
     generarRankingCurso(idMatricula) {
       const ranking = []
@@ -585,6 +588,18 @@ export default {
         } else if (this.$store.state.idInstitucion == '8a1bd1e0-fcb2-11ec-8267-536b07c743c4') { // Libertador
           const nota = asig.periodos[5] ?? 0
           return nota > 0 ? nota.toFixed(1) : ''
+        } else if (this.$store.state.idInstitucion == '17ee4f30-fc80-11ec-a1d1-1dc2835404e5') { // Enslap
+          let cantidad = 0 
+          for (let p = 1; p <= 4; p++) {
+            const nota = asig.periodos[p] ?? 0
+            if (nota > 0) {
+              total += nota
+              cantidad++
+            }
+          }
+          if (total === 0) return ''
+          const promedio = this.$store.state.idSeccion == 1 ? total / 4 : total
+          return this.redondear(promedio).toFixed(1) > 0 ? this.redondear(promedio).toFixed(1) : ''
         } else {
           let cantidad = 0 
           for (let p = 1; p <= 4; p++) {
@@ -697,6 +712,18 @@ export default {
         } else if (this.$store.state.idInstitucion == '8a1bd1e0-fcb2-11ec-8267-536b07c743c4') { // Libertador
           const nota = asig.periodos[5] ?? 0
           return nota > 0 ? nota.toFixed(1) : ''
+        } else if (this.$store.state.idInstitucion == '17ee4f30-fc80-11ec-a1d1-1dc2835404e5') { // Enslap
+          let cantidad = 0 
+          for (let p = 1; p <= 4; p++) {
+            const nota = asig.periodos[p] ?? 0
+            if (nota > 0) {
+              total += nota
+              cantidad++
+            }
+          }
+          if (total === 0) return ''
+          const promedio = this.$store.state.idSeccion == 1 ? total / 4 : total
+          return this.redondear(promedio).toFixed(1) > 0 ? habilitacion > this.redondear(promedio).toFixed(1) ? habilitacion : this.redondear(promedio).toFixed(1) : ''
         } else {
           let cantidad = 0 
           for (let p = 1; p <= 4; p++) {

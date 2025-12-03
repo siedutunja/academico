@@ -110,7 +110,7 @@
                 </td>
               </template>
               -->
-              <td style="text-align: left">{{ est.id_conceptual=='N' ? mostrarEstadoPromocion(contarDesempenoEstudianteArea(est, 'bajo')) : '-' }}</td>
+              <td style="text-align: left">{{ est.id_conceptual=='N' ? mostrarEstadoPromocion(est.obs_comision,contarDesempenoEstudianteArea(est, 'bajo'),est.idMatricula) : '-' }}</td>
               <!--
               <td>{{ est.id_conceptual=='N' ? calcularPromedioGeneral(est) : '-' }}</td>
               <td>{{ est.id_conceptual=='N' ? contarDesempenoEstudianteArea(est, 'bajo') : '-' }}</td>
@@ -189,12 +189,43 @@ import AreasPerdidasVue from './AreasPerdidas.vue'
         listaAreasAsignaturas: [],
         periodosVisibles: [],
         listaHabilitaciones: [],
-        pailas: 0,
       }
     },
     methods: {
-      mostrarEstadoPromocion(areasPerdidas) {
-        if ( this.$store.state.idInstitucion == 'f0491770-fca8-11ec-8267-536b07c743c4') { // Gonzalo
+      mostrarEstadoPromocion(obs_comision,areasPerdidas,idMatricula) {
+        let perdioHabilitacion = 0
+        let contHabilitaciones = 0
+        const meta = this.listaHabilitaciones.filter(h => h.id_matricula === idMatricula)
+        meta.forEach(element => {
+          if (element.habilitacion < 3) perdioHabilitacion++
+          contHabilitaciones++
+        })
+        if ( this.$store.state.idInstitucion == 'f5529ba0-fcb3-11ec-8267-536b07c743c4') { // GUSTAVO ROJAS
+          if (obs_comision === null || obs_comision === '') {
+            if (perdioHabilitacion > 0) return 'REPROBADO' // reprobo por perdida de habilitacion
+            if (areasPerdidas == 0) {
+              return contHabilitaciones == 0 ? 'APROBÓ EL GRADO' : 'PROMOVIDO'
+            } else {
+              return 'REPROBADO'
+            }
+          } else {
+            return 'PROMOVIDO POR COMISIÓN DE EVALUACIÓN'
+          }
+        } else if ( this.$store.state.idInstitucion == '17ee4f30-fc80-11ec-a1d1-1dc2835404e5') { // ENSLAP
+          if (this.$store.state.idSeccion == 1) {
+            if (areasPerdidas == 0) {
+              return 'APROBÓ EL GRADO'
+            } else {
+              return 'REPROBADO'
+            }
+          } else {
+            if (areasPerdidas == 0) {
+              return 'APROBÓ EL SEMESTRE'
+            } else {
+              return 'REPROBÓ EL SEMESTRE'
+            }
+          }
+        } else if ( this.$store.state.idInstitucion == 'f0491770-fca8-11ec-8267-536b07c743c4') { // GONZALO
           if (areasPerdidas == 0) {
             return 'APROBÓ EL GRADO'
           } else {
@@ -343,6 +374,30 @@ import AreasPerdidasVue from './AreasPerdidas.vue'
         } else if (this.$store.state.idInstitucion == '8a1bd1e0-fcb2-11ec-8267-536b07c743c4') { // Libertador
           const nota = periodos[5] ?? 0
           return nota > 0 ? nota.toFixed(1) : ''
+        } else if (this.$store.state.idInstitucion == '17ee4f30-fc80-11ec-a1d1-1dc2835404e5') { // Enslap
+          let cantidad = 0 
+          for (let p = 1; p <= 4; p++) {
+            const nota = asig.periodos[p] ?? 0
+            if (nota > 0) {
+              total += nota
+              cantidad++
+            }
+          }
+          if (total === 0) return ''
+          const promedio = this.$store.state.idSeccion == 1 ? total / 4 : total
+          return this.redondear(promedio).toFixed(1) > 0 ? this.redondear(promedio).toFixed(1) : ''
+        } else if (this.$store.state.idInstitucion == '7c63ed50-fcb0-11ec-8267-536b07c743c4') { // Santiago
+          let cantidad = 0 
+          for (let p = 1; p <= 4; p++) {
+            const nota = asig.periodos[p] ?? 0
+            if (nota > 0) {
+              total += nota
+              cantidad++
+            }
+          }
+          if (total === 0) return ''
+          const promedio = total / cantidad
+          return this.redondear(promedio).toFixed(1) > 0 ? this.redondear(promedio).toFixed(1) : ''
         } else {
           let cantidad = 0 
           for (let p = 1; p <= 4; p++) {
@@ -362,6 +417,7 @@ import AreasPerdidasVue from './AreasPerdidas.vue'
         if (!asigns.length) return '0.00'
         let total = 0
         asigns.forEach(asig => {
+          //console.log(asig)
           if (asig.orden === 99 && this.datosSeccion.promCompor == 0) return '-'
           const idAsignaturaCurso = asig.idAsignaturaCurso
           const idMatricula = asig.idMatricula
@@ -370,9 +426,10 @@ import AreasPerdidasVue from './AreasPerdidas.vue'
           const valorSumar = habilit.habilitacion > promAsigna ? habilit.habilitacion : promAsigna
           total += valorSumar //parseFloat((this.calcularPromedioAsignatura(asig) * asig.porcentaje) / 100)
           /*
-          if ( idMatricula == 'f7207b67-ed37-11ef-9dd4-73826cf0db6f') {
-            console.log('Mat: ' + idMatricula + ' - Asig: ' + idAsignaturaCurso + ' - Nota: ' + promAsigna + ' - Hab: ' + habilit.habilitacion + ' ==' + valorSumar)
-          }
+          const ausJArea = asig.orden == 98 || asig.orden == 99 ? '' : ausJ > 0 ? ausJ : ''
+          const ihArea = asig.ih
+          const minPierdeFallas = (ihArea * 40 * .2) + 1
+          if ((this.orden !== 99) && (ausSArea >= minPierdeFallas)) this.perdioPorFallas = 1
           */
         })
         return total > 0 ? this.redondear(total).toFixed(1) : ''
@@ -718,9 +775,9 @@ import AreasPerdidasVue from './AreasPerdidas.vue'
       estudiantesNotas() {
         const mapa = {}
         this.datosRaw.forEach(row => {
-          const { id_matricula, idAsignaturaCurso, estudiante, area, asignatura, periodo, definitiva, recuperacion, orden, definitivacompor, definitivapree, idTipoEspecialidad, ausJ, ausS, porcentaje, id_conceptual } = row
+          const { obs_comision, id_matricula, idAsignaturaCurso, estudiante, area, asignatura, ih, periodo, definitiva, recuperacion, orden, definitivacompor, definitivapree, idTipoEspecialidad, ausJ, ausS, porcentaje, id_conceptual } = row
           if (!mapa[estudiante]) {
-            mapa[estudiante] = { id_conceptual, ausJ: 0, ausS: 0, areas: {} }
+            mapa[estudiante] = { idMatricula: id_matricula, obs_comision, id_conceptual, ausJ: 0, ausS: 0, areas: {} }
           }
           if (!mapa[estudiante].areas[area]) {
             mapa[estudiante].areas[area] = { asignaturas: {} }
@@ -729,6 +786,7 @@ import AreasPerdidasVue from './AreasPerdidas.vue'
             mapa[estudiante].areas[area].asignaturas[asignatura] = {
               idMatricula: id_matricula,
               idAsignaturaCurso,
+              ih,
               periodos: {},
               orden,
               idTipoEspecialidad,
