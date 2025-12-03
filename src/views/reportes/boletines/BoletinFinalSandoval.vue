@@ -439,7 +439,7 @@ export default {
         }
       })
       if (this.perdioPorHabilitacion == 1) cantPerdidas = 100
-      return cantPerdidas == 0 ? 'EL ESTUDIANTE APROBÓ EL GRADO' : 'ESTUDIANTE REPROBADO'
+      return cantPerdidas == 0 ? 'APROBÓ EL GRADO' : 'ESTUDIANTE REPROBADO'
     },
     generarRankingCurso(idMatricula) {
       const ranking = []
@@ -579,7 +579,7 @@ export default {
             }
           }
           if (total === 0) return ''
-          const promedio = total / cantidad
+          const promedio = total / 4
           return this.redondear(promedio).toFixed(1) > 0 ? this.redondear(promedio).toFixed(1) : ''
         }
       }
@@ -691,7 +691,7 @@ export default {
             }
           }
           if (total === 0) return ''
-          const promedio = total / cantidad
+          const promedio = total / 4
           return this.redondear(promedio).toFixed(1) > 0 ? habilitacion > this.redondear(promedio).toFixed(1) ? habilitacion : this.redondear(promedio).toFixed(1) : ''
         }
       }

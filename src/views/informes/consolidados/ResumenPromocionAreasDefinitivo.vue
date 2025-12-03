@@ -416,6 +416,18 @@ import AreasPerdidasVue from './AreasPerdidas.vue'
           if (total === 0) return ''
           const promedio = total / cantidad
           return this.redondear(promedio).toFixed(1) > 0 ? this.redondear(promedio).toFixed(1) : ''
+        } else if (this.$store.state.idInstitucion == '54fd7440-fc81-11ec-a1d1-1dc2835404e5') { // Sandoval
+          let cantidad = 0 
+          for (let p = 1; p <= 4; p++) {
+            const nota = asig.periodos[p] ?? 0
+            if (nota > 0) {
+              total += nota
+              cantidad++
+            }
+          }
+          if (total === 0) return ''
+          const promedio = total / 4
+          return this.redondear(promedio).toFixed(1) > 0 ? this.redondear(promedio).toFixed(1) : ''
         } else {
           let cantidad = 0 
           for (let p = 1; p <= 4; p++) {
