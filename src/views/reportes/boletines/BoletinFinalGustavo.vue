@@ -347,7 +347,7 @@ export default {
         else notaFinal = 2
       } else {
         // Obtener la nota final del estudiante
-        notaFinal = prom // parseFloat(this.notaFinal(est, area, asignatura, periodo))
+        notaFinal = ordencito === 98 ? 5 : prom // parseFloat(this.notaFinal(est, area, asignatura, periodo))
       }
       //console.log(notaFinal)
       if (isNaN(notaFinal)) return ''

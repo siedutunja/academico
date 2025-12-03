@@ -46,7 +46,7 @@ jwt.verify(token, CONFIG.SECRET_KEY, (err, data) => {
       indice++
       menu[0]._children[indice].items.push({ name: 'Matricular Preinscrito', to: '/matriculas/preinscritos'})
       menu[0]._children[indice].items.push({ name: 'Renovar Matricula', to: '/matriculas/buscarrenovacion'})
-      //menu[0]._children[indice].items.push({ name: 'Estados Finales', to: '/matriculas/estadosfinales'})
+      //menu[0]._children[indice].items.push({ name: 'Promoción Escolar', to: '/matriculas/promocionescolar'})
       //menu[0]._children[indice].items.push({ name: 'Promoción', to: '/matriculas/promocion'})
       menu[0]._children[indice].items.push({ name: 'Promoción Anticipada', to: '/matriculas/promocionanticipada'})
       menu[0]._children[indice].items.push({ name: 'Ubicación o Reubicación', to: '/matriculas/reubicacion'})

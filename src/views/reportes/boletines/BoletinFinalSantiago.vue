@@ -442,11 +442,13 @@ export default {
         )]
       }
       let cantPerdidas = 0
+      let cantAreas = 0
       areasEvaluativas.forEach(area => {
         const meta = this.listaAreasAsignaturas.find( a => a.area === area)
         const idTipoEspecialidadArea = meta?.idTipoArea
         const notaFinalArea = parseFloat(this.promedioFinalArea(est, area, idMatricula)) // parseFloat(this.notaFinalArea(est, area))
         if (!isNaN(notaFinalArea)) {
+          cantAreas++
           if (idTipoEspecialidadArea === 1) {
             if (notaFinalArea < this.umbralesA[0]) cantPerdidas++
           } else {
@@ -454,11 +456,15 @@ export default {
           }
         }
       })
-      if (this.perdioPorHabilitacion == 1) cantPerdidas = 100
-      if (this.$store.state.idSeccion == 1)
-        return cantPerdidas == 0 ? 'APROBÓ EL GRADO' : 'REPROBADO'
-      else
-        return cantPerdidas == 0 ? 'APROBÓ EL SEMESTRE' : 'REPROBADO EL SEMESTRE'
+      if (cantAreas != 0) {
+        if (this.perdioPorHabilitacion == 1) cantPerdidas = 100
+        if (this.$store.state.idSeccion == 1)
+          return cantPerdidas == 0 ? 'APROBÓ EL GRADO' : 'REPROBÓ'
+        else
+          return cantPerdidas == 0 ? 'APROBÓ EL SEMESTRE' : 'REPROBÓ EL SEMESTRE'
+      } else {
+        return 'REPROBÓ (Sin Notas)'
+      }
     },
     generarRankingCurso(idMatricula) {
       const ranking = []

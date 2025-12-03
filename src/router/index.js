@@ -126,12 +126,12 @@ function configRoutes () {
               name: 'Promoción Anticipada',
               component: () => import('@/views/matriculas/PromocionAnticipada')
             },
-            // 2025-11-14
+            // 2025-12-03
             {
-              path: 'estadosfinales',
+              path: 'promocionescolar',
               beforeEnter: autenticar,
-              name: 'Gestión Estados Finales',
-              component: () => import('@/views/matriculas/EstadosFinales')
+              name: 'Promoción Escolar',
+              component: () => import('@/views/matriculas/PromocionEscolar')
             },
             // 2025-07-20
             {

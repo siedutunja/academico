@@ -4,17 +4,10 @@
       <b-col lg="12">
         <b-card>
           <template #header>
-            <h5 class="mb-0"><b-icon icon="card-checklist" aria-hidden="true"></b-icon> RESUMEN DE PROMOCIÓN DEFINITIVO POR AREAS</h5>
+            <h5 class="mb-0"><b-icon icon="card-checklist" aria-hidden="true"></b-icon> PROMOCIÓN ESCOLAR</h5>
           </template>
           <b-card-text>
             <b-row>
-              <!--
-              <b-col lg="2">
-                <b-form-group label="Periodo:" label-for="periodo" class="etiqueta">
-                  <b-form-select id="periodo" ref="periodo" v-model="idPeriodo" :options="comboPeriodos" @change="idSede=null,idCurso=null"></b-form-select>
-                </b-form-group>
-              </b-col>
-              -->
               <b-col lg="6">
                 <b-form-group label="Seleccione la Sede:" label-for="sedes" class="etiqueta">
                   <b-form-select  id="sedes" ref="sedes" v-model="idSede" :options="comboSedes" @change="idCurso=null,ocuparComboCursosSede()"></b-form-select>
@@ -41,6 +34,33 @@
       </b-col>
     </b-row>
     <b-row v-if="!btnCargando && idCurso!=null">
+      <b-col lg="12">
+        <vue-good-table ref="table" :columns="encabColumnas" :rows="estadoFinalPorEstudiante" styleClass="vgt-table condensed bordered striped" :line-numbers="true">
+          <template slot="table-row" slot-scope="props">
+            <span v-if="props.column.field == 'estudiante'">
+              <span>{{props.row.estudiante}}</span>
+            </span>
+            <span v-if="props.column.field == 'estado'">
+              <span><b>{{props.row.estado}}</b></span>
+            </span>
+            <span v-if="props.column.field == 'idEstadoFinal'">
+              <b-form-select v-model="props.row.idEstadoFinal" @change="actualizarItem(props.row)" :options="comboEstadosFinales"></b-form-select>
+            </span>
+            <span v-if="props.column.field == 'perdidas'">
+              <span><b>{{props.row.perdidas}}</b></span>
+            </span>
+            <span v-if="props.column.field == 'estadoPromocion'">
+              <span><b>{{props.row.estadoPromocion}}</b></span>
+            </span>
+          </template>
+          <div slot="emptystate">
+            <h5 class="text-danger ml-5">No existen estudiantes en la promoción</h5>
+          </div>
+        </vue-good-table>
+      </b-col>
+
+
+
       <b-col lg="12">
         <table border="1" cellspacing="0" cellpadding="1" class="table-responsive">
           <thead>
@@ -166,11 +186,13 @@
   import axios from "axios"
   import * as CONFIG from '@/assets/config.js'
   import * as XLSX from 'xlsx'
-import AreasPerdidasVue from './AreasPerdidas.vue'
+  import 'vue-good-table/dist/vue-good-table.css'
+  import { VueGoodTable } from 'vue-good-table'
 
   export default {
-    name: 'resumenpromocionareas',
+    name: 'promocionescolar',
     components: {
+      VueGoodTable,
     },
     data () {
       return {
@@ -189,72 +211,62 @@ import AreasPerdidasVue from './AreasPerdidas.vue'
         listaAreasAsignaturas: [],
         periodosVisibles: [],
         listaHabilitaciones: [],
+        encabColumnas: [
+          { label: 'Estudiante', field: 'estudiante', sortable: false },
+          { label: 'Matrícula', field: 'estado', sortable: false },
+          { label: 'Resultado Final', field: 'idEstadoFinal', sortable: false },
+          { label: 'Areas Perd.', field: 'perdidas', sortable: false },
+          { label: 'Estado', field: 'estadoPromocion', sortable: false },
+        ],
+        estadoFinalPorEstudiante: []
       }
     },
     methods: {
       mostrarEstadoPromocion(obs_comision,areasPerdidas,idMatricula) {
-        if (areasPerdidas != 9999) {
-          let perdioHabilitacion = 0
-          let contHabilitaciones = 0
-          const meta = this.listaHabilitaciones.filter(h => h.id_matricula === idMatricula)
-          meta.forEach(element => {
-            if (element.habilitacion < 3) perdioHabilitacion++
-            contHabilitaciones++
-          })
-          if ( this.$store.state.idInstitucion == 'f5529ba0-fcb3-11ec-8267-536b07c743c4') { // GUSTAVO ROJAS
-            if (obs_comision === null || obs_comision === '') {
-              if (perdioHabilitacion > 0) return 'REPROBADO' // reprobo por perdida de habilitacion
-              if (areasPerdidas == 0) {
-                return contHabilitaciones == 0 ? 'APROBÓ EL GRADO' : 'PROMOVIDO'
-              } else {
-                return 'REPROBADO'
-              }
+        let perdioHabilitacion = 0
+        let contHabilitaciones = 0
+        const meta = this.listaHabilitaciones.filter(h => h.id_matricula === idMatricula)
+        meta.forEach(element => {
+          if (element.habilitacion < 3) perdioHabilitacion++
+          contHabilitaciones++
+        })
+        if ( this.$store.state.idInstitucion == 'f5529ba0-fcb3-11ec-8267-536b07c743c4') { // GUSTAVO ROJAS
+          if (obs_comision === null || obs_comision === '') {
+            if (perdioHabilitacion > 0) return 'REPROBADO' // reprobo por perdida de habilitacion
+            if (areasPerdidas == 0) {
+              return contHabilitaciones == 0 ? 'APROBÓ EL GRADO' : 'PROMOVIDO'
             } else {
-              return 'PROMOVIDO POR COMISIÓN DE EVALUACIÓN'
+              return 'REPROBADO'
             }
-          } else if ( this.$store.state.idInstitucion == '17ee4f30-fc80-11ec-a1d1-1dc2835404e5') { // ENSLAP
-            if (this.$store.state.idSeccion == 1) {
-              if (areasPerdidas == 0) {
-                return 'APROBÓ EL GRADO'
-              } else {
-                return 'REPROBÓ'
-              }
-            } else {
-              if (areasPerdidas == 0) {
-                return 'APROBÓ EL SEMESTRE'
-              } else {
-                return 'REPROBÓ EL SEMESTRE'
-              }
-            }
-          } else if ( this.$store.state.idInstitucion == '7c63ed50-fcb0-11ec-8267-536b07c743c4') { // SANTIAGO
-            if (this.$store.state.idSeccion == 1) {
-              if (areasPerdidas == 0) {
-                return 'APROBÓ EL GRADO'
-              } else {
-                return 'REPROBÓ'
-              }
-            } else {
-              if (areasPerdidas == 0) {
-                return 'APROBÓ EL SEMESTRE'
-              } else {
-                return 'REPROBÓ EL SEMESTRE'
-              }
-            }
-          } else if ( this.$store.state.idInstitucion == 'f0491770-fca8-11ec-8267-536b07c743c4') { // GONZALO
+          } else {
+            return 'PROMOVIDO POR COMISIÓN DE EVALUACIÓN'
+          }
+        } else if ( this.$store.state.idInstitucion == '17ee4f30-fc80-11ec-a1d1-1dc2835404e5') { // ENSLAP
+          if (this.$store.state.idSeccion == 1) {
             if (areasPerdidas == 0) {
               return 'APROBÓ EL GRADO'
             } else {
-              return 'REPROBÓ'
+              return 'REPROBADO'
             }
           } else {
             if (areasPerdidas == 0) {
-              return 'APROBÓ EL GRADO'
+              return 'APROBÓ EL SEMESTRE'
             } else {
-              return 'REPROBÓ'
+              return 'REPROBÓ EL SEMESTRE'
             }
           }
+        } else if ( this.$store.state.idInstitucion == 'f0491770-fca8-11ec-8267-536b07c743c4') { // GONZALO
+          if (areasPerdidas == 0) {
+            return 'APROBÓ EL GRADO'
+          } else {
+            return 'REPROBADO'
+          }
         } else {
-          return 'REPROBÓ (Sin Notas)'
+          if (areasPerdidas == 0) {
+            return 'APROBÓ EL GRADO'
+          } else {
+            return 'REPROBADO'
+          }
         }
       },
       colspanArea(area) {
@@ -455,14 +467,12 @@ import AreasPerdidasVue from './AreasPerdidas.vue'
       contarDesempenoEstudianteArea(est, tipo) {
         const areas = Object.keys(est.areas || {})
         let contador = 0
-        let cuantasAreas = 0
         areas.forEach(area => {
           if (!this.esAreaValida(area)) return
           const meta = this.listaAreasAsignaturas.find( a => a.area === area)
           const idTipoEspecialidadArea = meta?.idTipoArea
           const promedio = parseFloat(this.calcularPromedioArea(est.areas[area]))
           if (!isNaN(promedio)) {
-            cuantasAreas++
             if (idTipoEspecialidadArea === 1) {
               if (tipo === 'bajo' && promedio < this.datosSeccion.minBas) contador++
               else if (tipo === 'basico' && promedio >= this.datosSeccion.minBas && promedio < this.datosSeccion.minAlt) contador++
@@ -476,7 +486,7 @@ import AreasPerdidasVue from './AreasPerdidas.vue'
             }
           }
         })
-        return cuantasAreas > 0 ? contador : 9999
+        return contador
       },
       calcularPromedioGeneral(est) {
         const areas = Object.keys(est.areas || {})
@@ -717,7 +727,15 @@ import AreasPerdidasVue from './AreasPerdidas.vue'
             this.btnCargando = false
           })
         }
-        //console.log(JSON.stringify(this.listaAreasAsignaturas))
+        console.log((this.estudiantesNotas))
+        Object.keys(this.estudiantesNotas).forEach((element) => {
+          const fila = this.estudiantesNotas?.[element]
+          console.log(fila)
+          this.estadoFinalPorEstudiante.push({'estudiante': element})
+        })
+        
+        //<td style="text-align: left">{{ est.id_conceptual=='N' ? mostrarEstadoPromocion(est.obs_comision,contarDesempenoEstudianteArea(est, 'bajo'),est.idMatricula) : '-' }}</td>
+
         this.btnCargando = false
       },
       imprimir() {
@@ -789,9 +807,6 @@ import AreasPerdidasVue from './AreasPerdidas.vue'
       }
     },
     computed: {
-      totales() {
-        return this.totalesGlobales()
-      },
       estudiantesNotas() {
         const mapa = {}
         this.datosRaw.forEach(row => {
@@ -833,6 +848,9 @@ import AreasPerdidasVue from './AreasPerdidas.vue'
           mapa[estudiante].ausS += ausS || 0
         })
         return mapa
+      },
+      totales() {
+        return this.totalesGlobales()
       },
       totalColumnasPromedioArea() {
         const areasUnicas = new Set(this.listaAreasAsignaturas.map(a => a.area))
