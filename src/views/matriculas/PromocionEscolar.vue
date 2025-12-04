@@ -146,7 +146,6 @@
               orden = asig.orden
               if (asig.orden === 99) {
                 comport = nota.definitivacompor || ''
-                console.log(comport)
               } else {
                 const base = parseFloat(nota.definitiva) || 0
                 const recu = parseFloat(nota.recuperacion)
@@ -183,7 +182,6 @@
             let notaFinal = ''
             let desempeno = ''
             if (asig.orden === 99) {
-              console.log(comport)
               promedioAsignatura = comport
               notaFinal = comport
             } else {

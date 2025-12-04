@@ -222,6 +222,9 @@
       },
       resumenPorArea() {
         const filtradas = this.dataConsultada.filter(d => d.id_matricula === this.idMatricula)
+        filtradas.sort(function(a, b) {
+          return a.orden - b.orden
+        })
         const agrupadas = {}
         filtradas.forEach(asig => {
           if (!agrupadas[asig.area]) agrupadas[asig.area] = []
@@ -261,16 +264,16 @@
                           : notaFinalArea == 'E' ? 'EXCELENTE'
                           : '*'
             } else if (this.$store.state.idInstitucion == 'eb58bf60-fc83-11ec-a1d1-1dc2835404e5') { //INEM
-              desempeno = notaFinalArea < this.umbrales[0] ? 'BAJO'
-                          : notaFinalArea < this.umbrales[1] ? 'BÁSICO'
-                          : notaFinalArea < this.umbrales[2] ? 'ALTO'
-                          : notaFinalArea < this.umbrales[3] ? 'SUPERIOR'
+              desempeno = notaFinalArea == 'I' ? 'INSUFICIENTE'
+                          : notaFinalArea == 'A' ? 'ACEPTABLE'
+                          : notaFinalArea == 'S' ? 'SOBRESALIENTE'
+                          : notaFinalArea == 'E' ? 'EXCELENTE'
                           : '*'
             } else {
-              desempeno = notaFinalArea < this.umbrales[0] ? 'BAJO'
-                          : notaFinalArea < this.umbrales[1] ? 'BÁSICO'
-                          : notaFinalArea < this.umbrales[2] ? 'ALTO'
-                          : notaFinalArea < this.umbrales[3] ? 'SUPERIOR'
+              desempeno = notaFinalArea == 'J' ? 'BAJO'
+                          : notaFinalArea == 'B' ? 'BÁSICO'
+                          : notaFinalArea == 'A' ? 'ALTO'
+                          : notaFinalArea == 'S' ? 'SUPERIOR'
                           : '*'
             }
           } else {

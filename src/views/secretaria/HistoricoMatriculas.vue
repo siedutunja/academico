@@ -200,6 +200,11 @@
           this.certifican = "CERTIFICAN"
           this.tituloArea = "ÁREAS DE FORMACIÓN"
           this.aquien = "Que el(la) estudiante " + this.nombreEstudiante + " identificado(a) con " + this.documentoEstudiante + ", cursó en ésta Institución Educativa los estudios correspondientes al grado " + this.grupo + " durante el año " + this.vigencia + ", con la intensidad horaria referida y obteniendo los siguientes desempeños:"
+        } else if (this.$store.state.daneInstitucion == '115001000367'){
+          this.encabezado = "El Coordinador del Instituto de Educación Media Diversificada 'INEM' CARLOS ARTURO TORRES, creado por decreto 1962 del 20 de Noviembre de 1969 y reglamentado por decreto 1085 del 8 de Junio de 1981, el decreto 1860 del 3 de Agosto de 1994 que reglamenta la ley 115 de 1994, decreto 1290 del 16 de Abril de 2009, acuerdo institucional 09 del 23 de Noviembre de 2022, aprobado por la resolución 0991 del 27 de Noviembre de 2024 de la Secretaría de Educación de Tunja, que en su parte resolutiva dice 'Autorizar al Instituto para que otorgue certificados de estudios correspondientes a la Educación Preescolar, Básica Primaria y Secundaria, Media Académica y Técnica'."
+          this.certifican = "CERTIFICA"
+          this.tituloArea = "ÁREAS DE FORMACIÓN"
+          this.aquien = "Que el(la) estudiante " + this.nombreEstudiante + " identificado(a) con " + this.documentoEstudiante + ", cursó en ésta Institución Educativa los estudios correspondientes al grado " + this.grupo + " durante el año " + this.vigencia + ", con la intensidad horaria referida y obteniendo los siguientes desempeños:"
         } else {
           this.encabezado = "Los suscritos...."
           this.certifican = "CERTIFICAN"
