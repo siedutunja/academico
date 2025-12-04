@@ -46,12 +46,12 @@ jwt.verify(token, CONFIG.SECRET_KEY, (err, data) => {
       indice++
       menu[0]._children[indice].items.push({ name: 'Matricular Preinscrito', to: '/matriculas/preinscritos'})
       menu[0]._children[indice].items.push({ name: 'Renovar Matricula', to: '/matriculas/buscarrenovacion'})
-      //menu[0]._children[indice].items.push({ name: 'Promoción Escolar', to: '/matriculas/promocionescolar'})
       //menu[0]._children[indice].items.push({ name: 'Promoción', to: '/matriculas/promocion'})
       menu[0]._children[indice].items.push({ name: 'Promoción Anticipada', to: '/matriculas/promocionanticipada'})
       menu[0]._children[indice].items.push({ name: 'Ubicación o Reubicación', to: '/matriculas/reubicacion'})
       //menu[0]._children[indice].items.push({ name: 'Matriculados Sin Curso', to: '/matriculas/matriculadossincurso'})
       //menu[0]._children[indice].items.push({ name: 'Renovación Masiva', to: '/matriculas/renovacionmasiva'})
+      menu[0]._children[indice].items.push({ name: 'Promoción Escolar', to: '/matriculas/promocionescolar'})
     }
     if (tokenDecodificado.id_rol == 1 || tokenDecodificado.id_rol == 12 || tokenPermisos.perSecretaria == 1) {
       menu[0]._children.push(

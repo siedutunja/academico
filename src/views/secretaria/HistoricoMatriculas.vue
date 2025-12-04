@@ -190,8 +190,18 @@
             this.tituloArea = "ÁREAS DE FORMACIÓN"
             this.aquien = "Que " + this.nombreEstudiante + " identificado(a) con " + this.documentoEstudiante + ", cursó en ésta Institución Educativa los estudios correspondientes al grado " + this.grupo + " durante el año " + this.vigencia + ", con la intensidad horaria referida y obteniendo las siguientes calificaciones."
           }
-        } else {
+        } else if (this.$store.state.daneInstitucion == '115001002602'){
           this.encabezado = "La suscrita Rectora y Secretaria Académica de la Institución Educativa ANTONIO JOSÉ SANDOVAL GÓMEZ de Tunja, aprobada por resolución No. 01090 del 14/11/2018, que en su parte resolutiva dice: 'Autorizar a la institución Educativa INSTITUCIÓN EDUCATIVA ANTONIO JOSÉ SANDOVAL GÓMEZ de Tunja, de Educación Formal, Básica, Secundaria y Media Vocacional en Jornada Mañana y Tarde, para que otorgue certificados de Educación Básica, títulos de Bachillerato Académico, Bachiller Técnico'."
+          this.certifican = "CERTIFICAN"
+          this.tituloArea = "ÁREAS DE FORMACIÓN"
+          this.aquien = "Que el(la) estudiante " + this.nombreEstudiante + " identificado(a) con " + this.documentoEstudiante + ", cursó en ésta Institución Educativa los estudios correspondientes al grado " + this.grupo + " durante el año " + this.vigencia + ", con la intensidad horaria referida y obteniendo los siguientes desempeños:"
+        } else if (this.$store.state.daneInstitucion == '115001002751'){
+          this.encabezado = "EL SUSCRITO RECTOR Y SECRETARIA DE LA INSTITUCIÓN EDUCATIVA JULIUS SIEBER DE TUNJA, APROBADA POR RESOLUCIÓN No. 01075 DEL 24 DE NOVIEMBRE DE 2017 DE LA SECRETARÍA DE EDUCACIÓN DE TUNJA. DANE115001002751."
+          this.certifican = "CERTIFICAN"
+          this.tituloArea = "ÁREAS DE FORMACIÓN"
+          this.aquien = "Que el(la) estudiante " + this.nombreEstudiante + " identificado(a) con " + this.documentoEstudiante + ", cursó en ésta Institución Educativa los estudios correspondientes al grado " + this.grupo + " durante el año " + this.vigencia + ", con la intensidad horaria referida y obteniendo los siguientes desempeños:"
+        } else {
+          this.encabezado = "Los suscritos...."
           this.certifican = "CERTIFICAN"
           this.tituloArea = "ÁREAS DE FORMACIÓN"
           this.aquien = "Que el(la) estudiante " + this.nombreEstudiante + " identificado(a) con " + this.documentoEstudiante + ", cursó en ésta Institución Educativa los estudios correspondientes al grado " + this.grupo + " durante el año " + this.vigencia + ", con la intensidad horaria referida y obteniendo los siguientes desempeños:"
@@ -219,7 +229,7 @@
           } else{
             if (response.data.datos != 0) {
               this.dataConsultada = response.data.datos
-              console.log(JSON.stringify(this.dataConsultada))
+              //console.log(JSON.stringify(this.dataConsultada))
             }
           }
         })

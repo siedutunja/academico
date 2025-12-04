@@ -29,7 +29,7 @@
               <th>{{ tituloArea }}</th>
               <th>IH</th>
               <th>DEFINITIVA</th>
-              <th>HABILITACIÓN</th>
+              <th>SUPERACIÓN</th>
               <th>FECHA</th>
               <th v-if="$store.state.idSeccion != 2">DESEMPEÑO</th>
             </tr>
@@ -38,14 +38,14 @@
             <tr v-for="area in resumenPorArea" :key="area.area">
               <td style="text-align: left">{{ area.area }}</td>
               <td>{{ area.ihArea }}</td>
-              <td>{{ area.notaFinalArea }} <span v-if="$store.state.daneInstitucion === '115001002017' && $store.state.idSeccion == 2"> - {{ area.notaFinalLetras }}</span></td>
-              <td>{{ area.habilitacion }}</td>
+              <td>{{ area.notaFinalArea > 0 ? area.notaFinalArea.toFixed(1) : area.notaFinalArea }} <span v-if="$store.state.daneInstitucion === '115001002017' && $store.state.idSeccion == 2"> - {{ area.notaFinalLetras }}</span></td>
+              <td>{{ area.habilitacion > 0 ? area.habilitacion.toFixed(1) : '' }}</td>
               <td>{{ area.fechaHabilitacion }}</td>
               <td v-if="$store.state.idSeccion != 2">{{ area.desempenoArea }}</td>
             </tr>
             <tr class="fila-promedio">
               <td colspan="2"><strong>Promedio General</strong></td>
-              <td><strong>{{ promedioGeneral }} <span v-if="$store.state.daneInstitucion === '115001002017' && $store.state.idSeccion == 2"> - {{ convertirALetras(promedioGeneral) }}</span></strong></td>
+              <td><strong>{{ promedioGeneral > 0 ? promedioGeneral.toFixed(1) : '' }} <span v-if="$store.state.daneInstitucion === '115001002017' && $store.state.idSeccion == 2"> - {{ convertirALetras(promedioGeneral) }}</span></strong></td>
               <td colspan="4"></td>
             </tr>
           </tbody>
@@ -216,9 +216,9 @@
     },
     computed: {
       promedioGeneral() {
-        const notas = this.resumenPorArea.map(a => a.notaFinalArea)
+        const notas = this.resumenPorArea.map(a => a.notaFinalArea > 0 ? a.notaFinalArea : 0)
         const sumatoria = notas.reduce((a, b) => a + b, 0)
-        return (notas.length > 0) ? +this.redondear(sumatoria / notas.length).toFixed(1) : '-'
+        return (notas.length > 0) ? +this.redondear(sumatoria / (notas.length - 1)).toFixed(1) : '-'
       },
       resumenPorArea() {
         const filtradas = this.dataConsultada.filter(d => d.id_matricula === this.idMatricula)
@@ -233,28 +233,59 @@
           let ihArea = 0
           let habilitacion = null
           let fecha = null
+          let orden = null
+          let notaFinalArea = null
+          let desempeno = null
+          let letra = null
           asignaturas.forEach(asig => {
             //notaAcumulada += asig.nota_final * (asig.porcentaje / 100)
-            notaAcumulada += asig.nota_definitiva * (asig.porcentaje / 100)
-            porcentajeAcumulado += asig.porcentaje
-            ihArea += asig.ih
-            if (asig.habilitacion && habilitacion === null) {
-              habilitacion = asig.habilitacion
-              fecha = asig.fecha !== null ? asig.fecha.substr(0,10) : ''
+            orden = asig.orden
+            if (asig.orden == 99) {
+              notaAcumulada = asig.nota_definitiva
+            } else {
+              notaAcumulada += asig.nota_definitiva * (asig.porcentaje / 100)
+              porcentajeAcumulado += asig.porcentaje
+              ihArea += asig.ih
+              if (asig.habilitacion && habilitacion === null) {
+                habilitacion = asig.habilitacion
+                fecha = asig.fecha !== null ? asig.fecha.substr(0,10) : ''
+              }
             }
           })
-          const notaFinalArea = notaAcumulada > 0 ? +this.redondear(notaAcumulada / (porcentajeAcumulado / 100)).toFixed(1) : 0
-          const letra = this.convertirALetras(notaFinalArea)
-          const desempeno = notaFinalArea < this.umbrales[0] ? 'BAJO'
-                            : notaFinalArea < this.umbrales[1] ? 'BÁSICO'
-                            : notaFinalArea < this.umbrales[2] ? 'ALTO'
-                            : notaFinalArea < this.umbrales[3] ? 'SUPERIOR'
-                            : ''
-
+          if (orden == 99) {
+            notaFinalArea = notaAcumulada
+            if (this.$store.state.idInstitucion == 'bd226a20-fc82-11ec-a1d1-1dc2835404e5') { //JULIUS
+              desempeno = notaFinalArea == 'J' ? 'BAJO'
+                          : notaFinalArea == 'B' ? 'BÁSICO'
+                          : notaFinalArea == 'S' ? 'SOBRESALIENTE'
+                          : notaFinalArea == 'E' ? 'EXCELENTE'
+                          : '*'
+            } else if (this.$store.state.idInstitucion == 'eb58bf60-fc83-11ec-a1d1-1dc2835404e5') { //INEM
+              desempeno = notaFinalArea < this.umbrales[0] ? 'BAJO'
+                          : notaFinalArea < this.umbrales[1] ? 'BÁSICO'
+                          : notaFinalArea < this.umbrales[2] ? 'ALTO'
+                          : notaFinalArea < this.umbrales[3] ? 'SUPERIOR'
+                          : '*'
+            } else {
+              desempeno = notaFinalArea < this.umbrales[0] ? 'BAJO'
+                          : notaFinalArea < this.umbrales[1] ? 'BÁSICO'
+                          : notaFinalArea < this.umbrales[2] ? 'ALTO'
+                          : notaFinalArea < this.umbrales[3] ? 'SUPERIOR'
+                          : '*'
+            }
+          } else {
+            notaFinalArea = notaAcumulada > 0 ? + this.redondear(notaAcumulada / (porcentajeAcumulado / 100)).toFixed(1) : 0
+            letra = this.convertirALetras(notaFinalArea)
+            desempeno = notaFinalArea < this.umbrales[0] ? 'BAJO'
+                              : notaFinalArea < this.umbrales[1] ? 'BÁSICO'
+                              : notaFinalArea < this.umbrales[2] ? 'ALTO'
+                              : notaFinalArea <= this.umbrales[3] ? 'SUPERIOR'
+                              : ''
+          }
           return {
             area,
             ihArea,
-            notaFinalArea,
+            notaFinalArea: notaFinalArea,
             notaFinalLetras: letra,
             habilitacion,
             fechaHabilitacion: fecha,
