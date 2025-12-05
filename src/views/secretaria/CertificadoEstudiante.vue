@@ -12,7 +12,7 @@
         </div>
         <div class="numero">
           <div v-if="$store.state.daneInstitucion === '115001002017' || $store.state.daneInstitucion === '115001000367' || $store.state.daneInstitucion === '315001000293'"><br><br><br><br><br><br><br></div>
-          Certificado No.: <b>{{ numCert }}</b>
+          <div v-if="numCert != '' && numCert != null">Certificado No.: <b>{{ numCert }}</b></div>
         </div>
         <div class="encabezado">
           {{ encabezado }}
@@ -38,7 +38,7 @@
             <tr v-for="area in resumenPorArea" :key="area.area">
               <td style="text-align: left">{{ area.area }}</td>
               <td>{{ area.ihArea }}</td>
-              <td>{{ area.notaFinalArea > 0 ? area.notaFinalArea.toFixed(1) : area.notaFinalArea }} <span v-if="$store.state.daneInstitucion === '115001002017' && $store.state.idSeccion == 2"> - {{ area.notaFinalLetras }}</span></td>
+              <td>{{ area.notaFinalArea > 0 ? Number(area.notaFinalArea).toFixed(1) : area.notaFinalArea }} <span v-if="$store.state.daneInstitucion === '115001002017' && $store.state.idSeccion == 2"> - {{ area.notaFinalLetras }}</span></td>
               <td>{{ area.habilitacion > 0 ? area.habilitacion.toFixed(1) : '' }}</td>
               <td>{{ area.fechaHabilitacion }}</td>
               <td v-if="$store.state.idSeccion != 2">{{ area.desempenoArea }}</td>
@@ -54,7 +54,7 @@
           <tr>
             <td style="text-align: left">
               <li v-if="idEstadoFinal == 11 && $store.state.idInstitucion === '17ee4f30-fc80-11ec-a1d1-1dc2835404e5'">Cumplió con la asistencia a los seminarios programados para el semestre.</li>
-              <li>Promoción: <b>{{ estadofinal }}</b></li>
+              <li>Estado Final de Promoción: <b>{{ estadofinal }}</b></li>
             </td>
           </tr>
         </table>
@@ -216,7 +216,7 @@
     },
     computed: {
       promedioGeneral() {
-        const notas = this.resumenPorArea.map(a => a.notaFinalArea > 0 ? a.notaFinalArea : 0)
+        const notas = this.resumenPorArea.map(a => a.notaFinalArea > 0 ? Number(a.notaFinalArea) : 0)
         const sumatoria = notas.reduce((a, b) => a + b, 0)
         return (notas.length > 0) ? +this.redondear(sumatoria / (notas.length - 1)).toFixed(1) : '-'
       },
@@ -245,6 +245,7 @@
             orden = asig.orden
             if (asig.orden == 99) {
               notaAcumulada = asig.nota_definitiva
+              console.log(notaAcumulada)
             } else {
               notaAcumulada += asig.nota_definitiva * (asig.porcentaje / 100)
               porcentajeAcumulado += asig.porcentaje
@@ -268,6 +269,60 @@
                           : notaFinalArea == 'A' ? 'ACEPTABLE'
                           : notaFinalArea == 'S' ? 'SOBRESALIENTE'
                           : notaFinalArea == 'E' ? 'EXCELENTE'
+                          : '*'
+            } else if (this.$store.state.idInstitucion == 'f0491770-fca8-11ec-8267-536b07c743c4') { //GONZALO
+              desempeno = notaFinalArea == 'D' ? 'DEFICIENTE'
+                          : notaFinalArea == 'A' ? 'ACEPTABLE'
+                          : notaFinalArea == 'S' ? 'SOBRESALIENTE'
+                          : notaFinalArea == 'E' ? 'EXCELENTE'
+                          : '*'
+            } else if (this.$store.state.idInstitucion == '660fa760-fc83-11ec-a1d1-1dc2835404e5') { //GIMNASIO
+              desempeno = notaFinalArea == 'J' ? 'BAJO'
+                          : notaFinalArea == 'B' ? 'BÁSICO'
+                          : notaFinalArea == 'A' ? 'ALTO'
+                          : notaFinalArea == 'S' ? 'SUPERIOR'
+                          : '*'
+            } else if (this.$store.state.idInstitucion == '54fd7440-fc81-11ec-a1d1-1dc2835404e5') { //SANDOVAL
+              desempeno = notaFinalArea < this.umbrales[0] ? 'BAJO'
+                          : notaFinalArea < this.umbrales[1] ? 'BÁSICO'
+                          : notaFinalArea < this.umbrales[2] ? 'ALTO'
+                          : notaFinalArea < this.umbrales[3] ? 'SUPERIOR'
+                          : '*'
+            } else if (this.$store.state.idInstitucion == '7c63ed50-fcb0-11ec-8267-536b07c743c4') { //SANTIAGO
+              desempeno = notaFinalArea < this.umbrales[0] ? 'BAJO'
+                          : notaFinalArea < this.umbrales[1] ? 'BÁSICO'
+                          : notaFinalArea < this.umbrales[2] ? 'ALTO'
+                          : notaFinalArea < this.umbrales[3] ? 'SUPERIOR'
+                          : '*'
+            } else if (this.$store.state.idInstitucion == 'f5529ba0-fcb3-11ec-8267-536b07c743c4') { //GUSTAVO
+              desempeno = notaFinalArea == 'I' ? 'INSUFICIENTE'
+                          : notaFinalArea == 'A' ? 'ACEPTABLE'
+                          : notaFinalArea == 'S' ? 'SOBRESALIENTE'
+                          : notaFinalArea == 'E' ? 'EXCELENTE'
+                          : '*'
+            } else if (this.$store.state.idInstitucion == '8a1bd1e0-fcb2-11ec-8267-536b07c743c4') { //LIBERTADOR
+              desempeno = notaFinalArea == 'I' ? 'BAJO'
+                          : notaFinalArea == 'A' ? 'BÁSICO'
+                          : notaFinalArea == 'B' ? 'ALTO'
+                          : notaFinalArea == 'E' ? 'SUPERIOR'
+                          : '*'
+            } else if (this.$store.state.idInstitucion == '097b7b10-fcaa-11ec-8267-536b07c743c4') { //RURAL
+              desempeno = notaFinalArea == 'I' ? 'INSUFICIENTE'
+                          : notaFinalArea == 'A' ? 'ACEPTABLE'
+                          : notaFinalArea == 'B' ? 'BUENO'
+                          : notaFinalArea == 'E' ? 'EXCELENTE'
+                          : '*'
+            } else if (this.$store.state.idInstitucion == '17ee4f30-fc80-11ec-a1d1-1dc2835404e5') { //ENSALP
+              desempeno = notaFinalArea == 'I' ? 'INSUFICIENTE'
+                          : notaFinalArea == 'B' ? 'BUENO'
+                          : notaFinalArea == 'S' ? 'SOBRESALIENTE'
+                          : notaFinalArea == 'E' ? 'EXCELENTE'
+                          : '*'
+            } else if (this.$store.state.idInstitucion == 'acaa36d0-fcb1-11ec-8267-536b07c743c4') { //EMILIANI
+              desempeno = notaFinalArea == 'A' ? 'ANORMATIVO'
+                          : notaFinalArea == 'P' ? 'PERSISTENTE'
+                          : notaFinalArea == 'E' ? 'EMPÁTICO'
+                          : notaFinalArea == 'I' ? 'INTEGRO'
                           : '*'
             } else {
               desempeno = notaFinalArea == 'J' ? 'BAJO'

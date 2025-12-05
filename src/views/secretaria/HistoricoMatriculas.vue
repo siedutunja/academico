@@ -205,6 +205,41 @@
           this.certifican = "CERTIFICAN"
           this.tituloArea = "ÁREAS DE FORMACIÓN"
           this.aquien = "Que el(la) estudiante " + this.nombreEstudiante + " identificado(a) con " + this.documentoEstudiante + ", cursó en ésta Institución Educativa los estudios correspondientes al grado " + this.grupo + " durante el año " + this.vigencia + ", con la intensidad horaria referida y obteniendo los siguientes desempeños:"
+        } else if (this.$store.state.daneInstitucion == '315001000293'){
+          this.encabezado = "El Rector y Auxiliar Administrativo de la Institución Educativa Gimnasio Gran Colombiano de Tunja."
+          this.certifican = "CERTIFICAN"
+          this.tituloArea = "ÁREAS DE FORMACIÓN"
+          this.aquien = "Que el(la) estudiante " + this.nombreEstudiante + " identificado(a) con " + this.documentoEstudiante + ", cursó en ésta Institución Educativa los estudios correspondientes al grado " + this.grupo + " durante el año " + this.vigencia + ", con la intensidad horaria referida y obteniendo los siguientes desempeños:"
+        } else if (this.$store.state.daneInstitucion == '115001002807'){
+          this.encabezado = "El Rector y Auxiliar Administrativo de la Institución Educativa Gustavo Rojas Pinilla de Tunja."
+          this.certifican = "CERTIFICAN"
+          this.tituloArea = "ÁREAS DE FORMACIÓN"
+          this.aquien = "Que el(la) estudiante " + this.nombreEstudiante + " identificado(a) con " + this.documentoEstudiante + ", cursó en ésta Institución Educativa los estudios correspondientes al grado " + this.grupo + " durante el año " + this.vigencia + ", con la intensidad horaria referida y obteniendo los siguientes desempeños:"
+        } else if (this.$store.state.daneInstitucion == '115001001061'){
+          this.encabezado = "El Rector y Auxiliar Administrativo de la Institución Educativa Libertador Simón Bolivar de Tunja."
+          this.certifican = "CERTIFICAN"
+          this.tituloArea = "ÁREAS DE FORMACIÓN"
+          this.aquien = "Que el(la) estudiante " + this.nombreEstudiante + " identificado(a) con " + this.documentoEstudiante + ", cursó en ésta Institución Educativa los estudios correspondientes al grado " + this.grupo + " durante el año " + this.vigencia + ", con la intensidad horaria referida y obteniendo los siguientes desempeños:"
+        } else if (this.$store.state.daneInstitucion == '215001001007'){
+          this.encabezado = "El Rector y Auxiliar Administrativo de la Institución Educativa Rural del Sur de Tunja."
+          this.certifican = "CERTIFICAN"
+          this.tituloArea = "ÁREAS DE FORMACIÓN"
+          this.aquien = "Que el(la) estudiante " + this.nombreEstudiante + " identificado(a) con " + this.documentoEstudiante + ", cursó en ésta Institución Educativa los estudios correspondientes al grado " + this.grupo + " durante el año " + this.vigencia + ", con la intensidad horaria referida y obteniendo los siguientes desempeños:"
+        } else if (this.$store.state.daneInstitucion == '315001001613'){
+          this.encabezado = "El Rector y Auxiliar Administrativo de la Institución Educativa San Jeronimo Emiliani de Tunja."
+          this.certifican = "CERTIFICAN"
+          this.tituloArea = "ÁREAS DE FORMACIÓN"
+          this.aquien = "Que el(la) estudiante " + this.nombreEstudiante + " identificado(a) con " + this.documentoEstudiante + ", cursó en ésta Institución Educativa los estudios correspondientes al grado " + this.grupo + " durante el año " + this.vigencia + ", con la intensidad horaria referida y obteniendo los siguientes desempeños:"
+        } else if (this.$store.state.daneInstitucion == '115001000065'){
+          this.encabezado = "El Rector y Auxiliar Administrativo de la Institución Educativa Silvino Rodríguez de Tunja."
+          this.certifican = "CERTIFICAN"
+          this.tituloArea = "ÁREAS DE FORMACIÓN"
+          this.aquien = "Que el(la) estudiante " + this.nombreEstudiante + " identificado(a) con " + this.documentoEstudiante + ", cursó en ésta Institución Educativa los estudios correspondientes al grado " + this.grupo + " durante el año " + this.vigencia + ", con la intensidad horaria referida y obteniendo los siguientes desempeños:"
+        } else if (this.$store.state.daneInstitucion == '315001001893'){
+          this.encabezado = "El Rector y Auxiliar Administrativo de la Institución Educativa Técnico Gonzálo Suárez Rendón de Tunja."
+          this.certifican = "CERTIFICAN"
+          this.tituloArea = "ÁREAS DE FORMACIÓN"
+          this.aquien = "Que el(la) estudiante " + this.nombreEstudiante + " identificado(a) con " + this.documentoEstudiante + ", cursó en ésta Institución Educativa los estudios correspondientes al grado " + this.grupo + " durante el año " + this.vigencia + ", con la intensidad horaria referida y obteniendo los siguientes desempeños:"
         } else {
           this.encabezado = "Los suscritos...."
           this.certifican = "CERTIFICAN"

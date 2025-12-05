@@ -125,8 +125,9 @@
         this.listaEstudiantes.forEach(est => {
           const notasEst = this.dataConsultada.filter(n => n.idMatricula === est.idMatricula)
           this.listaAreasAsignaturas.forEach(asig => {
+            //////////****  ASIGNATURAS QUE NO SE TIENEN EN CUENTA PARA EL CERTIFICADO ********************** */
             if (this.$store.state.idInstitucion == 'acaa36d0-fcb1-11ec-8267-536b07c743c4') { //EMILIANI
-              if (asig.orden === 12 || asig.orden === 90 || asig.orden === 98 || asig.orden === 99) return
+              if (asig.orden === 12 || asig.orden === 90 || asig.orden === 98) return
             } else {
               if (asig.orden === 90 || asig.orden === 98) return
             }
@@ -142,10 +143,15 @@
             let acta = null
             let comport = null
             let orden = ''
+            let contador = 0
             notasAsig.forEach(nota => {
               orden = asig.orden
               if (asig.orden === 99) {
-                comport = nota.definitivacompor || ''
+                if (this.$store.state.idInstitucion == '54fd7440-fc81-11ec-a1d1-1dc2835404e5' || this.$store.state.idInstitucion == '7c63ed50-fcb0-11ec-8267-536b07c743c4') { //SANDOVAL SANTIAGO
+                  comport = nota.definitiva || 0
+                } else {
+                  comport = nota.definitivacompor || ''
+                }
               } else {
                 const base = parseFloat(nota.definitiva) || 0
                 const recu = parseFloat(nota.recuperacion)
@@ -172,12 +178,14 @@
                   }
                 } else {
                   sumaNotas += parcial
+                  contador++
                 }
                 if (!isNaN(hab)) habilitacion = hab // solo tomamos habilitación disponible
                 if (fec !== null) fecha = fec // solo tomamos fecha disponible
                 if (act !== null) acta = act // solo tomamos acta disponible
               }
             })
+            /////****  Traemos sumaNotas con el valor promedio de los periodo de todo el año */
             let promedioAsignatura = ''
             let notaFinal = ''
             let desempeno = ''
@@ -185,12 +193,15 @@
               promedioAsignatura = comport
               notaFinal = comport
             } else {
+              ///**** se validan las areas que no tienen los 4 periodos */
               if (this.$store.state.idInstitucion == 'eb58bf60-fc83-11ec-a1d1-1dc2835404e5') { //INEM
                 if (asig.orden == 55) promedioAsignatura = sumaNotas > 0 ? this.redondear(sumaNotas / 4).toFixed(1) : 0
                 else promedioAsignatura = sumaNotas > 0 ? this.redondear(sumaNotas).toFixed(1) : 0
               } else if (this.$store.state.idInstitucion == 'acaa36d0-fcb1-11ec-8267-536b07c743c4') { //EMILIANI
                 if (asig.orden == 12) promedioAsignatura = sumaNotas > 0 ? this.redondear(sumaNotas / 2).toFixed(1) : 0
                 else promedioAsignatura = sumaNotas > 0 ? this.redondear(sumaNotas).toFixed(1) : 0
+              } else if (this.$store.state.idInstitucion == 'f5529ba0-fcb3-11ec-8267-536b07c743c4') { //GUSTAVO
+                promedioAsignatura = sumaNotas > 0 ? this.redondear(sumaNotas / contador).toFixed(1) : 0
               } else {
                 promedioAsignatura = sumaNotas > 0 ? this.redondear(sumaNotas / this.idPeriodosSeccion).toFixed(1) : 0
               }
@@ -422,6 +433,7 @@
           })
           let areasPerdidas = 0
           let noContar = 0
+          let siHabilito = 0
           Object.entries(areasAsignaturas).forEach(([area, asignaturas]) => {
             let sumaPonderada = 0
             let totalPorcentaje = 0
@@ -433,6 +445,7 @@
               if (!notasDeAsig.length) return
               let sumaNotas = 0
               let promedioAsignatura = 0
+              /////******** calcular promedios de los periodos ********************************************/////////////////
               if (this.$store.state.idInstitucion == 'eb58bf60-fc83-11ec-a1d1-1dc2835404e5') { //INEM
                 if (asig.orden == 90) noContar = 1
                 if (asig.orden == 55) {
@@ -478,6 +491,16 @@
                   })
                   promedioAsignatura = sumaNotas > 0 ? this.redondear(sumaNotas).toFixed(1) : 0
                 }
+              } else if (this.$store.state.idInstitucion == 'f5529ba0-fcb3-11ec-8267-536b07c743c4') { //GUSTAVO
+                let cont = 0
+                notasDeAsig.forEach(nota => {
+                  let base = parseFloat(nota.definitiva) || 0
+                  const recu = parseFloat(nota.recuperacion)
+                  let parcial = (!isNaN(recu) && recu > base) ? recu : base
+                  sumaNotas += parcial
+                  cont++
+                })
+                promedioAsignatura = sumaNotas > 0 ? this.redondear(sumaNotas / cont).toFixed(1) : 0
               } else {
                 notasDeAsig.forEach(nota => {
                   let base = parseFloat(nota.definitiva) || 0
@@ -487,22 +510,30 @@
                 })
                 promedioAsignatura = sumaNotas > 0 ? this.redondear(sumaNotas / this.idPeriodosSeccion).toFixed(1) : 0
               }
+
+              //////*****************   HABILITACIONES ********************************************* */
+              /*****  PIERDE POR HABILITACION ********/
               const notaHab = parseFloat(notasDeAsig[0].habilitacion) // por asignatura
+              if (!isNaN(notaHab)) siHabilito = 1
               if (this.$store.state.idInstitucion == 'eb58bf60-fc83-11ec-a1d1-1dc2835404e5') { //INEM
                 if (!isNaN(notaHab)) {
                   const tipoEsp = asignaturas[0].idTipoEspecialidad
                   const limiteBajo = tipoEsp === 2 ? this.datosSeccion.minBasT : this.datosSeccion.minBas
-                  if (notaHab < limiteBajo) areasPerdidas++
+                  if (notaHab < limiteBajo) areasPerdidas++  
                 }
               }
+              ////********** SI ES MAYOR LA HABILITACION REEMPLAZA LA NOTA */
               if (!isNaN(notaHab) && notaHab > promedioAsignatura) {
                 promedioAsignatura = notaHab
               }
+              ////**** SUMA EL PROMEDIO CON LOS PORCENTAJES DE CADA PERIODO */
               if (!isNaN(promedioAsignatura)) {
                 sumaPonderada += promedioAsignatura * (asig.porcentaje / 100)
                 totalPorcentaje += asig.porcentaje
               }
             })
+            //////*  CALCULA LAS AREAS PERDIDAS **********////
+            //////*  TIENE EN CUENTA SI EL AREA CUENTA PARA LAS PERDIDAS noContar   ****/////
             if (totalPorcentaje > 0) {
               const promedioArea = this.redondear(sumaPonderada).toFixed(1)
               const tipoEsp = asignaturas[0].idTipoEspecialidad
@@ -510,11 +541,18 @@
               if (promedioArea < limiteBajo && noContar == 0) areasPerdidas++
             }
           })
+          //////******  asigna el codigo del estado final   *********/
           let estadoFinal = 1
-          if (this.idNivel == 6) {
+          if (this.idNivel == 6) {  //// PFC
             areasPerdidas > 0 ? estadoFinal = 12 : estadoFinal = 11
           } else {
-            areasPerdidas > 0 ? estadoFinal = 2 : estadoFinal = 1
+            if (this.$store.state.idInstitucion == '660fa760-fc83-11ec-a1d1-1dc2835404e5') { //GIMNASIO
+              areasPerdidas > 0 ? estadoFinal = 2 : estadoFinal = 13
+            } else if (this.$store.state.idInstitucion == 'f5529ba0-fcb3-11ec-8267-536b07c743c4') { //GUSTAVO
+              areasPerdidas == 0 && siHabilito == 1 ? estadoFinal = 13 : areasPerdidas == 0 ? estadoFinal = 1 : estadoFinal = 2
+            } else {
+              areasPerdidas > 0 ? estadoFinal = 2 : estadoFinal = 1
+            }
           }
           return {
             idMatricula: est.idMatricula,
