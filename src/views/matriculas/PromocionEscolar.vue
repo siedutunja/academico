@@ -123,6 +123,7 @@
         const vigencia = this.$store.state.aLectivo
         const resultado = []
         this.listaEstudiantes.forEach(est => {
+          const observacionComi = est.obs_comision
           const notasEst = this.dataConsultada.filter(n => n.idMatricula === est.idMatricula)
           this.listaAreasAsignaturas.forEach(asig => {
             //////////****  ASIGNATURAS QUE NO SE TIENEN EN CUENTA PARA EL CERTIFICADO ********************** */
@@ -242,7 +243,7 @@
               acta: acta ?? null,
               notaFinal: notaFinal,
               desempeno,
-              observaciones: null,
+              observaciones: observacionComi ?? null,
               orden: orden
             })
           })
@@ -542,7 +543,6 @@
                 const limiteBajo = tipoEsp === 2 ? this.datosSeccion.minBasT : this.datosSeccion.minBas
                 if (promedioArea >= 1 && promedioArea < limiteBajo && noContar == 0) {
                   areasPerdidas++
-                  console.log(asignaturas[0].asignatura + ' - ' + sumaPonderada)
                 }
               } else {
                 const promedioArea = this.redondear(sumaPonderada).toFixed(1)

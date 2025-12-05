@@ -48,6 +48,11 @@
               <td><strong>{{ promedioGeneral > 0 ? promedioGeneral.toFixed(1) : '' }} <span v-if="$store.state.daneInstitucion === '115001002017' && $store.state.idSeccion == 2"> - {{ convertirALetras(promedioGeneral) }}</span></strong></td>
               <td colspan="4"></td>
             </tr>
+            <tr>
+              <td colspan="7" style="text-align: left">
+                Observaciones: <b>{{ obsComision }}</b>
+              </td>
+            </tr>
           </tbody>
         </table>
         <table class="tabla-certificado">
@@ -91,6 +96,7 @@
       tituloArea: String,
       umbrales: Array,
       estadofinal: String,
+      obsComision: String,
       idEstadoFinal: Number
     },
     components: {
@@ -240,7 +246,6 @@
           let notaFinalArea = null
           let desempeno = null
           let letra = null
-          let notaNota = 0
           asignaturas.forEach(asig => {
             //notaAcumulada += asig.nota_final * (asig.porcentaje / 100)
             orden = asig.orden
@@ -248,7 +253,6 @@
               notaAcumulada = asig.nota_definitiva
             } else {
               notaAcumulada += asig.nota_definitiva * (asig.porcentaje / 100)
-              notaNota += asig.nota_definitiva * (asig.porcentaje / 100)
               porcentajeAcumulado += asig.porcentaje
               ihArea += asig.ih
               if (asig.habilitacion && habilitacion === null) {
@@ -348,7 +352,7 @@
             notaFinalLetras: letra,
             habilitacion,
             fechaHabilitacion: fecha,
-            desempenoArea: desempeno
+            desempenoArea: desempeno,
           }
         })
       }

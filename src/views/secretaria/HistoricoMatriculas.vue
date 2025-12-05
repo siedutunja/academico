@@ -98,7 +98,8 @@
           :tituloArea="tituloArea"
           :umbrales="umbrales"
           :estadofinal="estadofinal"
-          :idEstadoFinal="idEstadoFinal"
+          :idEstaobsComisionoFinal="idEstadoFinal"
+          :obsComision="obsComision"
           @cerrar="mostrarCertificado = false"
         />
         <b-row>
@@ -165,6 +166,7 @@
         tituloArea: null,
         umbrales: [],
         estadofinal: null,
+        obsComision: null,
         idEstadoFinal: null,
       }
     },
@@ -211,7 +213,7 @@
           this.tituloArea = "ÁREAS DE FORMACIÓN"
           this.aquien = "Que el(la) estudiante " + this.nombreEstudiante + " identificado(a) con " + this.documentoEstudiante + ", cursó en ésta Institución Educativa los estudios correspondientes al grado " + this.grupo + " durante el año " + this.vigencia + ", con la intensidad horaria referida y obteniendo los siguientes desempeños:"
         } else if (this.$store.state.daneInstitucion == '115001002807'){
-          this.encabezado = "El Rector y Auxiliar Administrativo de la Institución Educativa Gustavo Rojas Pinilla de Tunja."
+          this.encabezado = "LA RECTORA Y SECRETARIA de la Institución Educativa GUSTAVO ROJAS PINILLA, Institución de educación formal mediante resolución de fusión No. 02418 del 30 de septiembre de 2002 por medio de la cual se le otorga la licencia de funcionamiento para ofrecer los niveles de educación: Preescolar, Básica y Media Técnica en jornadas: única, mañana y tarde, y , autorización de aprobación de estudios mediante Resoluciones 0197 del 27 de octubre de 2003, 0152 del 3 de noviembre de 2004, 0316 del 28 de noviembre de 2005, 986 del 8 de noviembre del 2006 , 504 del 24 de octubre de 2007, 0468 del 27 de noviembre de 2009, 0551 del 22 de agosto de 2012, para otorgar Certificado de Estudios de Básica y Título de Bachiller Técnico y Resolución No. 00642 del abril 15 de 2015, por medio de la cual se habilita los programas de Articulación y Modalidad de la Educación media Técnica en Comercio, Turismo y Gastronomía, Atención Integral en Primera Infancia, Ciencias Naturales y Medio Ambiente, Producción Artística y Artesanal."
           this.certifican = "CERTIFICAN"
           this.tituloArea = "ÁREAS DE FORMACIÓN"
           this.aquien = "Que el(la) estudiante " + this.nombreEstudiante + " identificado(a) con " + this.documentoEstudiante + ", cursó en ésta Institución Educativa los estudios correspondientes al grado " + this.grupo + " durante el año " + this.vigencia + ", con la intensidad horaria referida y obteniendo los siguientes desempeños:"
@@ -259,6 +261,7 @@
         this.vigencia = est.vigencia
         this.estadofinal = est.estadoFinal
         this.idEstadoFinal = est.idEstadoFinal
+        this.obsComision = est.obs_comision
         this.dataConsultada = []
         await axios
         .get(CONFIG.ROOT_PATH + 'academico/certificaciones/matricula', {params: {idMatricula: this.idMatricula}})
