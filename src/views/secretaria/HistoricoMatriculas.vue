@@ -268,7 +268,14 @@
             this.btnCargando = false
           } else{
             if (response.data.datos != 0) {
-              this.dataConsultada = response.data.datos
+              //this.dataConsultada = response.data.datos
+              response.data.datos.forEach(element => {
+                if (element.orden == 99) {
+                  this.dataConsultada.push(element)
+                } else {
+                  if (element.nota_final >= 1) this.dataConsultada.push(element)
+                }
+              })
               //console.log(JSON.stringify(this.dataConsultada))
             }
           }

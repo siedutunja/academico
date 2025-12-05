@@ -240,14 +240,15 @@
           let notaFinalArea = null
           let desempeno = null
           let letra = null
+          let notaNota = 0
           asignaturas.forEach(asig => {
             //notaAcumulada += asig.nota_final * (asig.porcentaje / 100)
             orden = asig.orden
             if (asig.orden == 99) {
               notaAcumulada = asig.nota_definitiva
-              console.log(notaAcumulada)
             } else {
               notaAcumulada += asig.nota_definitiva * (asig.porcentaje / 100)
+              notaNota += asig.nota_definitiva * (asig.porcentaje / 100)
               porcentajeAcumulado += asig.porcentaje
               ihArea += asig.ih
               if (asig.habilitacion && habilitacion === null) {

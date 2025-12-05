@@ -176,6 +176,11 @@
                     if (nota.periodo == 3) sumaNotas += parcial * 30 / 100
                     if (nota.periodo == 4) sumaNotas += parcial * 30 / 100
                   }
+                } else if (this.$store.state.idInstitucion == 'f5529ba0-fcb3-11ec-8267-536b07c743c44') { //GUSTAVO
+                  if (asig.orden !== 15 && asig.orden !== 16) {
+                    sumaNotas += parcial
+                    contador++
+                  }
                 } else {
                   sumaNotas += parcial
                   contador++
@@ -427,10 +432,11 @@
           // Agrupar asignaturas válidas por área
           const areasAsignaturas = {}
           this.listaAreasAsignaturas.forEach(asig => {
-            if (asig.orden === 98 || asig.orden === 99) return
+            if (asig.orden === 98 || asig.orden === 99 || (this.$store.state.idInstitucion == 'f5529ba0-fcb3-11ec-8267-536b07c743c4' && (asig.orden == 15 || asig.orden == 16))) return
             if (!areasAsignaturas[asig.area]) areasAsignaturas[asig.area] = []
             areasAsignaturas[asig.area].push(asig)
           })
+          const observacionComi = est.obs_comision
           let areasPerdidas = 0
           let noContar = 0
           let siHabilito = 0
@@ -491,24 +497,19 @@
                   })
                   promedioAsignatura = sumaNotas > 0 ? this.redondear(sumaNotas).toFixed(1) : 0
                 }
-              } else if (this.$store.state.idInstitucion == 'f5529ba0-fcb3-11ec-8267-536b07c743c4') { //GUSTAVO
-                let cont = 0
-                notasDeAsig.forEach(nota => {
-                  let base = parseFloat(nota.definitiva) || 0
-                  const recu = parseFloat(nota.recuperacion)
-                  let parcial = (!isNaN(recu) && recu > base) ? recu : base
-                  sumaNotas += parcial
-                  cont++
-                })
-                promedioAsignatura = sumaNotas > 0 ? this.redondear(sumaNotas / cont).toFixed(1) : 0
               } else {
+                let conta = 0
                 notasDeAsig.forEach(nota => {
                   let base = parseFloat(nota.definitiva) || 0
                   const recu = parseFloat(nota.recuperacion)
                   let parcial = (!isNaN(recu) && recu > base) ? recu : base
                   sumaNotas += parcial
+                  conta++
                 })
-                promedioAsignatura = sumaNotas > 0 ? this.redondear(sumaNotas / this.idPeriodosSeccion).toFixed(1) : 0
+                if (this.$store.state.idInstitucion == 'f5529ba0-fcb3-11ec-8267-536b07c743c4')  //GUSTAVO
+                  promedioAsignatura = sumaNotas > 0 ? this.redondear(sumaNotas / conta).toFixed(1) : 0
+                else
+                  promedioAsignatura = sumaNotas > 0 ? this.redondear(sumaNotas / this.idPeriodosSeccion).toFixed(1) : 0
               }
 
               //////*****************   HABILITACIONES ********************************************* */
@@ -535,10 +536,20 @@
             //////*  CALCULA LAS AREAS PERDIDAS **********////
             //////*  TIENE EN CUENTA SI EL AREA CUENTA PARA LAS PERDIDAS noContar   ****/////
             if (totalPorcentaje > 0) {
-              const promedioArea = this.redondear(sumaPonderada).toFixed(1)
-              const tipoEsp = asignaturas[0].idTipoEspecialidad
-              const limiteBajo = tipoEsp === 2 ? this.datosSeccion.minBasT : this.datosSeccion.minBas
-              if (promedioArea < limiteBajo && noContar == 0) areasPerdidas++
+              if (this.$store.state.idInstitucion == 'f5529ba0-fcb3-11ec-8267-536b07c743c4') {
+                const promedioArea = this.redondear(sumaPonderada).toFixed(1) >= 1 ? this.redondear(sumaPonderada).toFixed(1) : 0
+                const tipoEsp = asignaturas[0].idTipoEspecialidad
+                const limiteBajo = tipoEsp === 2 ? this.datosSeccion.minBasT : this.datosSeccion.minBas
+                if (promedioArea >= 1 && promedioArea < limiteBajo && noContar == 0) {
+                  areasPerdidas++
+                  console.log(asignaturas[0].asignatura + ' - ' + sumaPonderada)
+                }
+              } else {
+                const promedioArea = this.redondear(sumaPonderada).toFixed(1)
+                const tipoEsp = asignaturas[0].idTipoEspecialidad
+                const limiteBajo = tipoEsp === 2 ? this.datosSeccion.minBasT : this.datosSeccion.minBas
+                if (promedioArea < limiteBajo && noContar == 0) areasPerdidas++
+              }
             }
           })
           //////******  asigna el codigo del estado final   *********/
@@ -549,7 +560,11 @@
             if (this.$store.state.idInstitucion == '660fa760-fc83-11ec-a1d1-1dc2835404e5') { //GIMNASIO
               areasPerdidas > 0 ? estadoFinal = 2 : estadoFinal = 13
             } else if (this.$store.state.idInstitucion == 'f5529ba0-fcb3-11ec-8267-536b07c743c4') { //GUSTAVO
-              areasPerdidas == 0 && siHabilito == 1 ? estadoFinal = 13 : areasPerdidas == 0 ? estadoFinal = 1 : estadoFinal = 2
+              if (observacionComi != null && observacionComi != '') {
+                estadoFinal = 10
+              } else {
+                areasPerdidas == 0 && siHabilito == 1 ? estadoFinal = 13 : areasPerdidas == 0 ? estadoFinal = 1 : estadoFinal = 2
+              }
             } else {
               areasPerdidas > 0 ? estadoFinal = 2 : estadoFinal = 1
             }
