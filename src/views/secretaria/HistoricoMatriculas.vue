@@ -218,7 +218,7 @@
           this.tituloArea = "ÁREAS DE FORMACIÓN"
           this.aquien = "Que el(la) estudiante " + this.nombreEstudiante + " identificado(a) con " + this.documentoEstudiante + ", cursó en ésta Institución Educativa los estudios correspondientes al grado " + this.grupo + " durante el año " + this.vigencia + ", con la intensidad horaria referida y obteniendo los siguientes desempeños:"
         } else if (this.$store.state.daneInstitucion == '115001001061'){
-          this.encabezado = "El Rector y Auxiliar Administrativo de la Institución Educativa Libertador Simón Bolivar de Tunja."
+          this.encabezado = "La Suscrita Rectora de la Institución Educativa Libertador Simón Bolívar de Tunja; Aprobada por Resolución de Fusión No. 950 del 17 de abril del 2000, Resolución No 02419 del 30 de Septiembre del 2002, la cual se otorga Licencia de Funcionamiento por la Secretaria de Educación de Tunja,  que en su parte resolutiva dice : 'Autorizar a la  Institución Educativa para que otorgue constancias de estudios correspondientes a la Educación Preescolar, Básica Primaria y Secundaria, Media Académica y Técnica'."
           this.certifican = "CERTIFICAN"
           this.tituloArea = "ÁREAS DE FORMACIÓN"
           this.aquien = "Que el(la) estudiante " + this.nombreEstudiante + " identificado(a) con " + this.documentoEstudiante + ", cursó en ésta Institución Educativa los estudios correspondientes al grado " + this.grupo + " durante el año " + this.vigencia + ", con la intensidad horaria referida y obteniendo los siguientes desempeños:"

@@ -148,7 +148,7 @@
             notasAsig.forEach(nota => {
               orden = asig.orden
               if (asig.orden === 99) {
-                if (this.$store.state.idInstitucion == '54fd7440-fc81-11ec-a1d1-1dc2835404e5' || this.$store.state.idInstitucion == '7c63ed50-fcb0-11ec-8267-536b07c743c4') { //SANDOVAL SANTIAGO
+                if (this.$store.state.idInstitucion == '54fd7440-fc81-11ec-a1d1-1dc2835404e5' || this.$store.state.idInstitucion == '7c63ed50-fcb0-11ec-8267-536b07c743c4' || this.$store.state.idInstitucion == '8a1bd1e0-fcb2-11ec-8267-536b07c743c4' || this.$store.state.idInstitucion == 'c50f3d80-fca0-11ec-8267-536b07c743c4') { //SANDOVAL SANTIAGO LIBERTADOR SILVINO
                   comport = nota.definitiva || 0
                 } else {
                   comport = nota.definitivacompor || ''
@@ -177,6 +177,10 @@
                     if (nota.periodo == 3) sumaNotas += parcial * 30 / 100
                     if (nota.periodo == 4) sumaNotas += parcial * 30 / 100
                   }
+                } else if (this.$store.state.idInstitucion == 'c50f3d80-fca0-11ec-8267-536b07c743c4') { // Silvino
+                  if (nota.periodo == 5) sumaNotas = parcial
+                } else if (this.$store.state.idInstitucion == '8a1bd1e0-fcb2-11ec-8267-536b07c743c4') { // Libertador
+                  if (nota.periodo == 5) sumaNotas = parcial
                 } else if (this.$store.state.idInstitucion == 'f5529ba0-fcb3-11ec-8267-536b07c743c44') { //GUSTAVO
                   if (asig.orden !== 15 && asig.orden !== 16) {
                     sumaNotas += parcial
@@ -208,6 +212,10 @@
                 else promedioAsignatura = sumaNotas > 0 ? this.redondear(sumaNotas).toFixed(1) : 0
               } else if (this.$store.state.idInstitucion == 'f5529ba0-fcb3-11ec-8267-536b07c743c4') { //GUSTAVO
                 promedioAsignatura = sumaNotas > 0 ? this.redondear(sumaNotas / contador).toFixed(1) : 0
+              } else if (this.$store.state.idInstitucion == 'c50f3d80-fca0-11ec-8267-536b07c743c4') { // Silvino
+                promedioAsignatura = sumaNotas > 0 ? this.redondear(sumaNotas).toFixed(1) : 0
+              } else if (this.$store.state.idInstitucion == '8a1bd1e0-fcb2-11ec-8267-536b07c743c4') { // Libertador
+                promedioAsignatura = sumaNotas > 0 ? this.redondear(sumaNotas).toFixed(1) : 0
               } else {
                 promedioAsignatura = sumaNotas > 0 ? this.redondear(sumaNotas / this.idPeriodosSeccion).toFixed(1) : 0
               }
@@ -498,6 +506,16 @@
                   })
                   promedioAsignatura = sumaNotas > 0 ? this.redondear(sumaNotas).toFixed(1) : 0
                 }
+              } else if (this.$store.state.idInstitucion == 'c50f3d80-fca0-11ec-8267-536b07c743c4') { // Silvino
+                notasDeAsig.forEach(nota => {
+                  if (nota.periodo == 5) sumaNotas = parseFloat(nota.definitiva) || 0
+                })
+                promedioAsignatura = sumaNotas > 0 ? this.redondear(sumaNotas).toFixed(1) : 0
+              } else if (this.$store.state.idInstitucion == '8a1bd1e0-fcb2-11ec-8267-536b07c743c4') { // Libertador
+                notasDeAsig.forEach(nota => {
+                  if (nota.periodo == 5) sumaNotas = parseFloat(nota.definitiva) || 0
+                })
+                promedioAsignatura = sumaNotas > 0 ? this.redondear(sumaNotas).toFixed(1) : 0
               } else {
                 let conta = 0
                 notasDeAsig.forEach(nota => {

@@ -306,10 +306,16 @@
                           : notaFinalArea == 'E' ? 'EXCELENTE'
                           : '*'
             } else if (this.$store.state.idInstitucion == '8a1bd1e0-fcb2-11ec-8267-536b07c743c4') { //LIBERTADOR
-              desempeno = notaFinalArea == 'I' ? 'BAJO'
-                          : notaFinalArea == 'A' ? 'BÁSICO'
-                          : notaFinalArea == 'B' ? 'ALTO'
-                          : notaFinalArea == 'E' ? 'SUPERIOR'
+              desempeno = notaFinalArea < this.umbrales[0] ? 'BAJO'
+                          : notaFinalArea < this.umbrales[1] ? 'BÁSICO'
+                          : notaFinalArea < this.umbrales[2] ? 'ALTO'
+                          : notaFinalArea < this.umbrales[3] ? 'SUPERIOR'
+                          : '*'
+            } else if (this.$store.state.idInstitucion == 'c50f3d80-fca0-11ec-8267-536b07c743c4') { //SILVINO
+              desempeno = notaFinalArea < this.umbrales[0] ? 'BAJO'
+                          : notaFinalArea < this.umbrales[1] ? 'BÁSICO'
+                          : notaFinalArea < this.umbrales[2] ? 'ALTO'
+                          : notaFinalArea < this.umbrales[3] ? 'SUPERIOR'
                           : '*'
             } else if (this.$store.state.idInstitucion == '097b7b10-fcaa-11ec-8267-536b07c743c4') { //RURAL
               desempeno = notaFinalArea == 'I' ? 'INSUFICIENTE'
