@@ -228,7 +228,7 @@
           this.tituloArea = "ÁREAS DE FORMACIÓN"
           this.aquien = "Que el(la) estudiante " + this.nombreEstudiante + " identificado(a) con " + this.documentoEstudiante + ", cursó en ésta Institución Educativa los estudios correspondientes al grado " + this.grupo + " durante el año " + this.vigencia + ", con la intensidad horaria referida y obteniendo los siguientes desempeños:"
         } else if (this.$store.state.daneInstitucion == '315001001613'){
-          this.encabezado = "El Rector y Auxiliar Administrativo de la Institución Educativa San Jeronimo Emiliani de Tunja."
+          this.encabezado = "La República de Colombia, la Secretaría de Educación de Tunja - Boyacá, los suscritos Rector y Secretario de la Institución Educativa San Jeronimo Emiliani de Tunja, aprobada según resolución No. 960 de octubre 20 de 2006, de la Secretaría de Educación Cultura y Turismo de Tunja 'Para que otorgue Certificados de Estudio de Bachillerato Básico y Títulos de Bachiller' y con identificación DANE No. 315001001613 con registro del PEI No. 150011401030."
           this.certifican = "CERTIFICAN"
           this.tituloArea = "ÁREAS DE FORMACIÓN"
           this.aquien = "Que el(la) estudiante " + this.nombreEstudiante + " identificado(a) con " + this.documentoEstudiante + ", cursó en ésta Institución Educativa los estudios correspondientes al grado " + this.grupo + " durante el año " + this.vigencia + ", con la intensidad horaria referida y obteniendo los siguientes desempeños:"

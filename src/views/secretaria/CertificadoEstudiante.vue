@@ -2,16 +2,16 @@
   <div ref="certificado" class="certificado-institucional">
     <div class="modal-overlay" @click.self="cerrar">
       <div class="modal-certificado">
-        <div class="titulo" v-if="$store.state.daneInstitucion !== '115001002017' && $store.state.daneInstitucion !== '115001000367' && $store.state.daneInstitucion !== '315001000293'">
+        <div class="titulo" v-if="$store.state.daneInstitucion !== '115001002017' && $store.state.daneInstitucion !== '115001000367' && $store.state.daneInstitucion !== '315001000293' && $store.state.daneInstitucion !== '315001001613'">
           <div class="mt-2">
             <p style="font-size: 14px;">SECRETARÍA DE EDUCACIÓN TERRITORIAL DE TUNJA<br><b>{{$store.state.nombreInstitucion}}</b><br><span style="font-size: 12px;">DANE: {{$store.state.daneInstitucion}} | NIT: {{$store.state.nitInstitucion}}</span><br>TUNJA - BOYACÁ</p>
           </div>
         </div>
-        <div class="float-left" style="margin-top: -95px; margin-left: 20px;" v-if="$store.state.daneInstitucion !== '115001002017' && $store.state.daneInstitucion !== '115001000367' && $store.state.daneInstitucion !== '315001000293'">
+        <div class="float-left" style="margin-top: -95px; margin-left: 20px;" v-if="$store.state.daneInstitucion !== '115001002017' && $store.state.daneInstitucion !== '115001000367' && $store.state.daneInstitucion !== '315001000293' && $store.state.daneInstitucion !== '315001001613'">
             <img :src="escudoUrl" alt="Escudo" class="escudo" />
         </div>
         <div class="numero">
-          <div v-if="$store.state.daneInstitucion === '115001002017' || $store.state.daneInstitucion === '115001000367' || $store.state.daneInstitucion === '315001000293'"><br><br><br><br><br><br><br></div>
+          <div v-if="$store.state.daneInstitucion === '115001002017' || $store.state.daneInstitucion === '115001000367' || $store.state.daneInstitucion === '315001000293' || $store.state.daneInstitucion === '315001001613'"><br><br><br><br><br><br><br></div>
           <div v-if="numCert != '' && numCert != null">Certificado No.: <b>{{ numCert }}</b></div>
         </div>
         <div class="encabezado">
