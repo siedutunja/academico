@@ -238,7 +238,7 @@
           this.tituloArea = "ÁREAS DE FORMACIÓN"
           this.aquien = "Que el(la) estudiante " + this.nombreEstudiante + " identificado(a) con " + this.documentoEstudiante + ", cursó en ésta Institución Educativa los estudios correspondientes al grado " + this.grupo + " durante el año " + this.vigencia + ", con la intensidad horaria referida y obteniendo los siguientes desempeños:"
         } else if (this.$store.state.daneInstitucion == '315001001893'){
-          this.encabezado = "El Rector y Auxiliar Administrativo de la Institución Educativa Técnico Gonzálo Suárez Rendón de Tunja."
+          this.encabezado = "Los suscritos Rector y Secretaria del INSTITUTO TÉCNICO GONZALO SUÁREZ RENDÓN, autorizados por la Secretaria de Educación Territorial del municipio de Tunja, mediante Resolución No. 0987 del 25 de noviembre de 2024 para expedir certificados de estudio y otorgar título de Bachiller Técnico y para continuar ofreciendo el servicio educativo en los niveles de Educación Formal Preescolar (prejardín, jardín y preescolar), Básica Primaria y Secundaria, Media Académica y Media Técnica, con las modalidades en Turismo, Obras Civiles, Sistemas, Ciencias Naturales, en Jornada Única."
           this.certifican = "CERTIFICAN"
           this.tituloArea = "ÁREAS DE FORMACIÓN"
           this.aquien = "Que el(la) estudiante " + this.nombreEstudiante + " identificado(a) con " + this.documentoEstudiante + ", cursó en ésta Institución Educativa los estudios correspondientes al grado " + this.grupo + " durante el año " + this.vigencia + ", con la intensidad horaria referida y obteniendo los siguientes desempeños:"
