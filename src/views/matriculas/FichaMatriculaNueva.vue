@@ -1107,6 +1107,240 @@
           this.deshabMuniExpulsor = true
         }
       },
+      async cargarCatalogos() {
+        this.btnCargando = true
+        this.comboParentescos = []
+        await axios
+        .get(CONFIG.ROOT_PATH + 'academico/parentescos')
+        .then(response => {
+          if (response.data.error){
+            this.mensajeEmergente('danger',CONFIG.TITULO_MSG,response.data.mensaje + ' - Consulta datos Parentescos')
+            this.btnCargando = false
+          } else {
+            if(response.data.datos != 0) {
+              response.data.datos.forEach(element => {
+                this.comboParentescos.push({ 'value': element.id, 'text': element.parentesco.toUpperCase() })
+              })
+              console.log('Parentescos cargadas...')
+            }
+          }
+        })
+        .catch(err => {
+          this.mensajeEmergente('danger',CONFIG.TITULO_MSG,'Algo salio mal y no se pudo realizar: Consulta datos Parentescos. Intente más tarde. ' + err)
+          this.btnCargando = false
+        })
+        this.comboEspecialidades = []
+        await axios
+        .get(CONFIG.ROOT_PATH + 'academico/cargueespecialidades', {params: {idInstitucion: this.$store.state.idInstitucion}})
+        .then(response => {
+          if (response.data.error){
+            this.mensajeEmergente('danger',CONFIG.TITULO_MSG,response.data.mensaje + ' - Consulta datos especialidades')
+            this.btnCargando = false
+          } else {
+            if(response.data.datos != 0) {
+              response.data.datos.forEach(element => {
+                this.comboEspecialidades.push({ 'value': element.id, 'text': element.especialidad.toUpperCase() })
+              })
+              console.log('Especialidades cargadas...')
+            }
+          }
+        })
+        .catch(err => {
+          this.mensajeEmergente('danger',CONFIG.TITULO_MSG,'Algo salio mal y no se pudo realizar: Consulta datos especialidades. Intente más tarde. ' + err)
+          this.btnCargando = false
+        })
+        this.comboEps = []
+        await axios
+        .get(CONFIG.ROOT_PATH + 'academico/eps')
+        .then(response => {
+          if (response.data.error){
+            this.mensajeEmergente('danger',CONFIG.TITULO_MSG,response.data.mensaje + ' - Consulta datos eps')
+            this.btnCargando = false
+          } else {
+            if(response.data.datos != 0) {
+              response.data.datos.forEach(element => {
+                this.comboEps.push({ 'value': element.id, 'text': element.eps.toUpperCase() })
+              })
+              console.log('eps cargadas...')
+            }
+          }
+        })
+        .catch(err => {
+          this.mensajeEmergente('danger',CONFIG.TITULO_MSG,'Algo salio mal y no se pudo realizar: Consulta datos eps. Intente más tarde. ' + err)
+          this.btnCargando = false
+        })
+        this.comboEtnias = []
+        await axios
+        .get(CONFIG.ROOT_PATH + 'academico/etnias')
+        .then(response => {
+          if (response.data.error){
+            this.mensajeEmergente('danger',CONFIG.TITULO_MSG,response.data.mensaje + ' - Consulta datos etnias')
+            this.btnCargando = false
+          } else {
+            if(response.data.datos != 0) {
+              response.data.datos.forEach(element => {
+                this.comboEtnias.push({ 'value': element.id, 'text': element.etnia.toUpperCase() })
+              })
+              console.log('etnias cargadas...')
+            }
+          }
+        })
+        .catch(err => {
+          this.mensajeEmergente('danger',CONFIG.TITULO_MSG,'Algo salio mal y no se pudo realizar: Consulta datos etnias. Intente más tarde. ' + err)
+          this.btnCargando = false
+        })
+        this.comboVictimas = []
+        await axios
+        .get(CONFIG.ROOT_PATH + 'academico/victimas')
+        .then(response => {
+          if (response.data.error){
+            this.mensajeEmergente('danger',CONFIG.TITULO_MSG,response.data.mensaje + ' - Consulta datos victimas')
+            this.btnCargando = false
+          } else {
+            if(response.data.datos != 0) {
+              response.data.datos.forEach(element => {
+                this.comboVictimas.push({ 'value': element.id, 'text': element.victima.toUpperCase() })
+              })
+              console.log('victimas cargadas...')
+            }
+          }
+        })
+        .catch(err => {
+          this.mensajeEmergente('danger',CONFIG.TITULO_MSG,'Algo salio mal y no se pudo realizar: Consulta datos victimas. Intente más tarde. ' + err)
+          this.btnCargando = false
+        })
+        this.comboCapacidades = []
+        await axios
+        .get(CONFIG.ROOT_PATH + 'academico/capacidades')
+        .then(response => {
+          if (response.data.error){
+            this.mensajeEmergente('danger',CONFIG.TITULO_MSG,response.data.mensaje + ' - Consulta datos capacidades')
+            this.btnCargando = false
+          } else {
+            if(response.data.datos != 0) {
+              response.data.datos.forEach(element => {
+                this.comboCapacidades.push({ 'value': element.id, 'text': element.capacidad.toUpperCase() })
+              })
+              console.log('capacidades cargadas...')
+            }
+          }
+        })
+        .catch(err => {
+          this.mensajeEmergente('danger',CONFIG.TITULO_MSG,'Algo salio mal y no se pudo realizar: Consulta datos capacidades. Intente más tarde. ' + err)
+          this.btnCargando = false
+        })
+        this.comboDiscapacidades = []
+        await axios
+        .get(CONFIG.ROOT_PATH + 'academico/discapacidades')
+        .then(response => {
+          if (response.data.error){
+            this.mensajeEmergente('danger',CONFIG.TITULO_MSG,response.data.mensaje + ' - Consulta datos discapacidades')
+            this.btnCargando = false
+          } else {
+            if(response.data.datos != 0) {
+              response.data.datos.forEach(element => {
+                this.comboDiscapacidades.push({ 'value': element.id, 'text': element.discapacidad.toUpperCase() })
+              })
+              console.log('discapacidades cargadas...')
+            }
+          }
+        })
+        .catch(err => {
+          this.mensajeEmergente('danger',CONFIG.TITULO_MSG,'Algo salio mal y no se pudo realizar: Consulta datos discapacidades. Intente más tarde. ' + err)
+          this.btnCargando = false
+        })
+        this.comboSisben = []
+        await axios
+        .get(CONFIG.ROOT_PATH + 'academico/sisben')
+        .then(response => {
+          if (response.data.error){
+            this.mensajeEmergente('danger',CONFIG.TITULO_MSG,response.data.mensaje + ' - Consulta datos sisben')
+            this.btnCargando = false
+          } else {
+            if(response.data.datos != 0) {
+              response.data.datos.forEach(element => {
+                this.comboSisben.push({ 'value': element.id, 'text': element.subgrupo.toUpperCase() })
+              })
+              console.log('sisben cargadas...')
+            }
+          }
+        })
+        .catch(err => {
+          this.mensajeEmergente('danger',CONFIG.TITULO_MSG,'Algo salio mal y no se pudo realizar: Consulta datos sisben. Intente más tarde. ' + err)
+          this.btnCargando = false
+        })
+        this.comboTiposDoc = []
+        await axios
+        .get(CONFIG.ROOT_PATH + 'academico/tiposdocumentos')
+        .then(response => {
+          if (response.data.error){
+            this.mensajeEmergente('danger',CONFIG.TITULO_MSG,response.data.mensaje + ' - Consulta datos tiposdocumentos')
+            this.btnCargando = false
+          } else {
+            if(response.data.datos != 0) {
+              response.data.datos.forEach(element => {
+                this.comboTiposDoc.push({ 'value': element.id, 'text': element.tipodocumento.toUpperCase() })
+              })
+              console.log('tiposdocumentos cargadas...')
+            }
+          }
+        })
+        .catch(err => {
+          this.mensajeEmergente('danger',CONFIG.TITULO_MSG,'Algo salio mal y no se pudo realizar: Consulta datos tiposdocumentos. Intente más tarde. ' + err)
+          this.btnCargando = false
+        })
+        this.comboMunicipios = []
+        await axios
+        .get(CONFIG.ROOT_PATH + 'academico/municipios')
+        .then(response => {
+          if (response.data.error){
+            this.mensajeEmergente('danger',CONFIG.TITULO_MSG,response.data.mensaje + ' - Consulta datos municipios')
+            this.btnCargando = false
+          } else {
+            if(response.data.datos != 0) {
+              response.data.datos.forEach(element => {
+                this.comboMunicipios.push({ 'value': element.id, 'text': element.municipio.toUpperCase() + ' - ' + element.departamento.toUpperCase() })
+              })
+              console.log('municipios cargadas...')
+            }
+          }
+        })
+        .catch(err => {
+          this.mensajeEmergente('danger',CONFIG.TITULO_MSG,'Algo salio mal y no se pudo realizar: Consulta datos municipios. Intente más tarde. ' + err)
+          this.btnCargando = false
+        })
+        this.comboPaises = []
+        await axios
+        .get(CONFIG.ROOT_PATH + 'academico/paises') 
+        .then(response => {
+          if (response.data.error){
+            this.mensajeEmergente('danger',CONFIG.TITULO_MSG,response.data.mensaje + ' - Consulta datos paises')
+            this.btnCargando = false
+          } else {
+            if(response.data.datos != 0) {
+              response.data.datos.forEach(element => {
+                this.comboPaises.push({ 'value': element.id, 'text': element.pais.toUpperCase() })
+              })
+              console.log('paises cargadas...')
+            }
+          }
+        })
+        .catch(err => {
+          this.mensajeEmergente('danger',CONFIG.TITULO_MSG,'Algo salio mal y no se pudo realizar: Consulta datos paises. Intente más tarde. ' + err)
+          this.btnCargando = false
+        })
+
+        this.comboRepitente = [{'value': 'S', 'text': 'SI'}, {'value': 'N', 'text': 'NO'}]
+        this.comboNuevo = [{'value': 'S', 'text': 'SI'}, {'value': 'N', 'text': 'NO'}]
+        this.comboSeguro = [{'value': 'S', 'text': 'SI'}, {'value': 'N', 'text': 'NO'}]
+        this.comboDiversa = [{'value': 'S', 'text': 'SI'}, {'value': 'N', 'text': 'NO'}]
+        this.comboZonas = [{'value': '1', 'text': 'URBANA'}, {'value': '2', 'text': 'RURAL'}]
+        this.comboGeneros = [{'value': 'F', 'text': 'FEMENINO'}, {'value': 'M', 'text': 'MASCULINO'}]
+        this.comboRhs = [{'value': '1', 'text': 'O+'}, {'value': '2', 'text': 'O-'}, {'value': '3', 'text': 'A+'}, {'value': '4', 'text': 'A-'}, {'value': '5', 'text': 'B+'}, {'value': '6', 'text': 'B-'}, {'value': '7', 'text': 'AB+'}, {'value': '8', 'text': 'AB-'}, {'value': '9', 'text': 'NO REPORTA'}]
+        this.comboEstratos = [{'value': '0', 'text': '0'}, {'value': '1', 'text': '1'}, {'value': '2', 'text': '2'}, {'value': '3', 'text': '3'}, {'value': '4', 'text': '4'}, {'value': '5', 'text': '5'}, {'value': '6', 'text': '6'}, {'value': '7', 'text': '7'}, {'value': '8', 'text': '8'}, {'value': '9', 'text': 'NO ASIGNADO'}]
+
+        this.btnCargando = false
+      },
       mensajeEmergente(variante, titulo, contenido) {
         this.$bvToast.toast(contenido, { title: titulo, variant: variante, toaster: "b-toaster-top-center", solid: true, autoHideDelay: 4000, appendToast: false })
       }
@@ -1115,7 +1349,8 @@
       if(this.$store.state.idRol == 1 || this.$store.state.idRol == 12 || this.$store.state.perMatricular == 1) {
         //console.log(JSON.stringify(this.$store.state.datosEstudianteRenovar))
         this.llenarFormulario()
-        this.ocuparCombos()
+        //this.ocuparCombos()
+        this.cargarCatalogos()
         this.habilitaMunicipioNace()
         this.habilitaMunicipioNaceA()
         this.habilitaMunicipioExpulsor()
