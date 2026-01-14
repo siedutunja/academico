@@ -116,7 +116,7 @@ function configRoutes () {
             {
               path: 'renovacionmasiva',
               beforeEnter: autenticar,
-              name: 'Renovación Masiva Estudiantes',
+              name: 'Renovación Matricula Masiva',
               component: () => import('@/views/matriculas/RenovacionMasiva')
             },
             // 2025-05-05

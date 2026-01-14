@@ -596,6 +596,7 @@
             estadoPromocion: est.estadoPromocion
           }
         })
+        //console.log(JSON.stringify(agrupado))
         return agrupado
       },
     },
