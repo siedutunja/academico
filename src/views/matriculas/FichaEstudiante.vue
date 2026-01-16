@@ -201,6 +201,12 @@
                   <b-form-invalid-feedback id="feedCorreo" >Campo requerido.</b-form-invalid-feedback>
                 </b-form-group>
               </b-col>
+              <b-col lg="3" md="6">
+                <b-form-group label="Código" label-for="codigo" class="etiqueta">
+                  <b-form-input id="codigo" ref="codigo" v-model.trim="infoEstudiante.codigo" aria-describedby="feedCodigo" autocomplete="on" maxlength="5"></b-form-input>
+                  <b-form-invalid-feedback id="feedCodigo">Campo requerido.</b-form-invalid-feedback>
+                </b-form-group>
+              </b-col>
             </b-row>
           </b-card-text>
           <template #footer>

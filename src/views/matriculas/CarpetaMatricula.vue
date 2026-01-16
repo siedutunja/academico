@@ -11,7 +11,7 @@
               <b-col lg="12">
                 <b-alert class="text-center" :variant="datosFichaE.id_estado_actual==1 ? 'success' : datosFichaE.id_estado_actual==2 ? 'danger' : 'warning'" show>
                   <img :src="datosFichaE.foto" id="photo" alt="photo" width="7%" class="float-left">
-                  ESTUDIANTE<br><h4 class="mb-0"><b>{{ datosFichaE.estudiante }}</b></h4><span><b>ESTADO: {{ datosFichaE.estado }}</b></span><span v-if="codigo!='' && codigo!=null"><br><strong>CODIGO: {{ codigo }}</strong></span>
+                  ESTUDIANTE<br><h4 class="mb-0"><b>{{ datosFichaE.estudiante }}</b></h4><span><b>ESTADO: {{ datosFichaE.estado }}</b></span><span v-if="datosFichaE.codigo!='' && datosFichaE.codigo!=null"><br><strong>CODIGO: {{ datosFichaE.codigo }}</strong></span>
                 </b-alert>
               </b-col>
             </b-row>
@@ -54,6 +54,7 @@
                             <b-tr><b-th>Teléfono1</b-th><b-td>{{datosFichaE.telefono1}}</b-td></b-tr>
                             <b-tr><b-th>Teléfono2</b-th><b-td>{{datosFichaE.telefono2}}</b-td></b-tr>
                             <b-tr><b-th>Correo</b-th><b-td>{{datosFichaE.correo}}</b-td></b-tr>
+                            <b-tr><b-th>Código</b-th><b-td>{{datosFichaE.codigo}}</b-td></b-tr>
                             <b-tr><b-th>ID</b-th><b-td>{{datosFichaE.idEstudiante}}</b-td></b-tr>
                           </b-tbody>
                         </b-table-simple>
