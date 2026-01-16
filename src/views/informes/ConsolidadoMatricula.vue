@@ -220,7 +220,8 @@
           { label: 'Estado', field: 'estado' },
           { label: 'Nuevo', field: 'id_nuevo' },
           { label: 'Repitente', field: 'id_repitente' },
-          { label: 'Fecha Renovación', field: 'creado' }
+          { label: 'Fecha Renovación', field: 'creado' },
+          { label: 'Prematricula', field: 'prematricula' },
         ],
         encabColumnasDetalladoExcel : [
           { label: 'ANO', field: 'ano' },

@@ -95,7 +95,8 @@
         idCurso: null,
         idCursoA: null,
         encabColumnasAntiguos : [
-          { label: 'Estudiantes Antiguos para Renovar', field: 'estudiante', sortable: false },
+          { label: 'Estudiantes Antiguos para Renovar', field: 'estudiante', sortable: false, tdClass: this.tdClassFunc },
+          { label: 'Estado Final', field: 'estadoFinal', sortable: false, tdClass: this.tdClassFunc },
         ],
         encabColumnasMatriculados : [
           { label: 'Estudiantes Matriculados', field: 'estudiante', sortable: false },
@@ -171,20 +172,37 @@
       },
       async consultarAntiguos() {
         this.listaAntiguosSinMatricular = []
-        await axios
-        .get(CONFIG.ROOT_PATH + 'academico/matriculas/renovacion', {params: {idCursoA: this.idCursoA, vigencia: this.$store.state.aLectivo }})
-        .then(response => {
-          if (response.data.error){
-            this.mensajeEmergente('danger',CONFIG.TITULO_MSG,response.data.mensaje + ' - A renovar sin Matricular')
-          } else{
-            if (response.data.datos != 0) {
-              this.listaAntiguosSinMatricular = response.data.datos
+        if (this.$store.state.idInstitucion == '17ee4f30-fc80-11ec-a1d1-1dc2835404e5') { // ********* consulta solo prematriculados ENSLAP ********** //
+          await axios
+          .get(CONFIG.ROOT_PATH + 'academico/matriculas/renovacion/enslap', {params: {idCursoA: this.idCursoA, vigencia: this.$store.state.aLectivo }})
+          .then(response => {
+            if (response.data.error){
+              this.mensajeEmergente('danger',CONFIG.TITULO_MSG,response.data.mensaje + ' - A renovar sin Matricular')
+            } else{
+              if (response.data.datos != 0) {
+                this.listaAntiguosSinMatricular = response.data.datos
+              }
             }
-          }
-        })
-        .catch(err => {
-          this.mensajeEmergente('danger',CONFIG.TITULO_MSG,'Algo salio mal y no se pudo realizar: A renovar sin Matricular. Intente más tarde.' + err)
-        })
+          })
+          .catch(err => {
+            this.mensajeEmergente('danger',CONFIG.TITULO_MSG,'Algo salio mal y no se pudo realizar: A renovar sin Matricular. Intente más tarde.' + err)
+          })
+        } else {
+          await axios
+          .get(CONFIG.ROOT_PATH + 'academico/matriculas/renovacion', {params: {idCursoA: this.idCursoA, vigencia: this.$store.state.aLectivo }})
+          .then(response => {
+            if (response.data.error){
+              this.mensajeEmergente('danger',CONFIG.TITULO_MSG,response.data.mensaje + ' - A renovar sin Matricular')
+            } else{
+              if (response.data.datos != 0) {
+                this.listaAntiguosSinMatricular = response.data.datos
+              }
+            }
+          })
+          .catch(err => {
+            this.mensajeEmergente('danger',CONFIG.TITULO_MSG,'Algo salio mal y no se pudo realizar: A renovar sin Matricular. Intente más tarde.' + err)
+          })
+        }
       },
       async consultarMatriculados() {
         this.$store.state.datosCursos.forEach(element => {
@@ -231,6 +249,11 @@
           this.comboSedes.push({ 'value': element.id, 'text': element.sede.toUpperCase() })
           this.comboSedesA.push({ 'value': element.id, 'text': element.sede.toUpperCase() })
         })
+      },
+      tdClassFunc(row) {
+        if (row.id_estado_final == 2 || row.id_estado_final == 12) { 
+          return 'text-danger' 
+        }
       },
       mensajeEmergente(variante, titulo, contenido) {
         this.$bvToast.toast(contenido, { title: titulo, variant: variante, toaster: "b-toaster-top-center", solid: true, autoHideDelay: 4000, appendToast: false })
