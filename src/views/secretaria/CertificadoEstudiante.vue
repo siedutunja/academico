@@ -252,6 +252,11 @@
             if (asig.orden == 99) {
               notaAcumulada = asig.nota_definitiva
             } else {
+              //**** */
+              if (asig.habilitacion && habilitacion === null) {
+                asig.nota_definitiva = asig.habilitacion
+              }
+              //**** */
               notaAcumulada += asig.nota_definitiva * (asig.porcentaje / 100)
               porcentajeAcumulado += asig.porcentaje
               ihArea += asig.ih

@@ -25,7 +25,7 @@
                   <b-card-text>
                     <vue-good-table ref="tablaGrados" :columns="encabColumnas" :rows="listaGradosSede" styleClass="vgt-table condensed bordered striped " :line-numbers="true">
                       <template slot="table-row" slot-scope="props">
-                        <span v-if="props.column.field == 'id'">
+                        <span v-if="props.column.field == 'estado'">
                           <b-button size="sm" :variant="props.row.estado==0 ? 'success' : 'danger'" @click="actualizarFila(props.row)" :disabled="$store.state.idRol==1 ? false : true">{{ props.row.estado==0 ? 'Activar' : 'Desactivar'}}</b-button>
                         </span>
                       </template>

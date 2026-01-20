@@ -129,6 +129,8 @@
           return 'NUEVO'
         } else if (value == 4) {
           return 'ADULTOS'
+        } else if (value == 5) {
+          return 'TRASLADO'
         }
         return '-'
       },
