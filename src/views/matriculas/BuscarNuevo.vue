@@ -79,7 +79,10 @@
                 this.$store.commit('set', ['documentoEstudianteNuevo', this.buscarTexto.textoBusqueda])
                 this.$router.push('/matriculas/FichaMatriculaNueva')
               } else {
-                this.mensajeEmergente('info',CONFIG.TITULO_MSG,'El estudiantes ya se encuentra registrado en Siedutunja.')
+                //console.log(JSON.stringify(response.data.datos))
+                this.$store.commit('set', ['datosEstudianteRenovar', response.data.datos])
+                this.$router.push('/matriculas/FichaRenovacionMatricula')
+                //this.mensajeEmergente('info',CONFIG.TITULO_MSG,'El estudiantes ya se encuentra registrado en Siedutunja.')
               }
             }
           })
